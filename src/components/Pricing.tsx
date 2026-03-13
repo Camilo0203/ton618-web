@@ -43,14 +43,14 @@ export default function Pricing() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          viewport={{ once: true }}
+          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch"
         >
-          <motion.div variants={itemVariants} className="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-lg transition-transform hover:-translate-y-2">
+          <motion.div variants={itemVariants} className="flex flex-col h-full bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-lg transition-transform hover:-translate-y-2">
             <p className="text-sm uppercase tracking-wide text-purple-600 dark:text-purple-400 font-semibold mb-3">Free</p>
             <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">$0</h3>
             <p className="text-gray-600 dark:text-gray-400 mt-2">Core moderation, utility, and setup tools.</p>
-            <ul className="mt-6 space-y-2 text-gray-700 dark:text-gray-300">
+            <ul className="mt-6 space-y-2 text-gray-700 dark:text-gray-300 flex-grow">
               <li>Moderation + automod</li>
               <li>Slash commands</li>
               <li>Community features</li>
@@ -76,7 +76,7 @@ export default function Pricing() {
             )}
           </motion.div>
 
-          <motion.div variants={itemVariants} className="bg-gradient-to-br from-purple-600 to-pink-600 dark:from-purple-800 dark:to-pink-900 rounded-2xl p-8 text-white shadow-xl border border-purple-400/30 relative overflow-hidden transition-transform hover:-translate-y-2">
+          <motion.div variants={itemVariants} className="flex flex-col h-full bg-gradient-to-br from-purple-600 to-pink-600 dark:from-purple-800 dark:to-pink-900 rounded-2xl p-8 text-white shadow-xl border border-purple-400/30 relative overflow-hidden transition-transform hover:-translate-y-2">
             <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold">Popular</div>
             <p className="text-sm uppercase tracking-wide text-white/80 font-semibold mb-3">Premium</p>
             <h3 className="text-3xl font-bold flex items-center gap-2">
@@ -84,7 +84,7 @@ export default function Pricing() {
               $9/mo
             </h3>
             <p className="text-white/90 mt-2">Advanced analytics, priority support, and pro automation.</p>
-            <ul className="mt-6 space-y-2 text-white/90">
+            <ul className="mt-6 space-y-2 text-white/90 flex-grow">
               <li>Premium dashboards</li>
               <li>Advanced logging + insights</li>
               <li>Priority support queue</li>

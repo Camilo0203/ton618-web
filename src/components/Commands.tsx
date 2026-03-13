@@ -88,8 +88,9 @@ export default function Commands() {
   };
 
   return (
-    <section id="commands" className="py-24 bg-white dark:bg-gray-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="commands" className="py-24 bg-white dark:bg-gray-800 transition-colors duration-300 relative">
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-gray-900/10 to-transparent dark:from-gray-900/40 pointer-events-none"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -114,7 +115,7 @@ export default function Commands() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {commandCategories.map((category, categoryIndex) => {

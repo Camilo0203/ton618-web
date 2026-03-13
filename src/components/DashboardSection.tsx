@@ -6,7 +6,7 @@ export default function DashboardSection() {
   const hasDashboard = Boolean(config.dashboardUrl);
 
   return (
-    <section id="dashboard" className="py-24 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <section id="dashboard" className="pt-32 pb-24 bg-white dark:bg-gray-800 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div

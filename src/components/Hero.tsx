@@ -48,7 +48,7 @@ export default function Hero() {
         <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold text-white mb-6">
           {t('hero.title', 'The Ultimate Discord Bot')}
           <br />
-          <span className="bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-yellow-400 to-pink-500 dark:from-yellow-200 dark:to-pink-200 bg-clip-text text-transparent">
             {t('hero.subtitle', 'for Your Community')}
           </span>
         </motion.h1>
