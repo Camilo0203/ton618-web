@@ -11,14 +11,13 @@ export default function Footer({ onOpenLegal }: FooterProps) {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white transition-colors duration-300">
+    <footer className="bg-brand-50 dark:bg-surface-900 border-t border-brand-200 dark:border-surface-700 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           variants={containerVariants}
@@ -29,121 +28,65 @@ export default function Footer({ onOpenLegal }: FooterProps) {
         >
           <motion.div variants={itemVariants}>
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg">
-                <Bot className="w-6 h-6 text-white" />
+              <div className="p-2 bg-gradient-to-br from-brand-500 to-violet-600 rounded-lg shadow-sm">
+                <Bot className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">{config.botName}</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">{config.botName}</span>
             </div>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-gray-500 dark:text-slate-400 leading-relaxed text-sm">
               The ultimate Discord bot for community management, engagement, and automation.
             </p>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">Product</h3>
-            <ul className="space-y-2">
-              <li><a href="#features" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Features</a></li>
-              <li><a href="#commands" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Commands</a></li>
-              <li><a href="#pricing" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Pricing</a></li>
-              <li><a href="#dashboard" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Dashboard</a></li>
+            <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white">Product</h3>
+            <ul className="space-y-2 text-sm">
+              {['features','commands','pricing','dashboard'].map((href) => (
+                <li key={href}><a href={`#${href}`} className="text-gray-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors capitalize">{href}</a></li>
+              ))}
             </ul>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">Resources</h3>
-            <ul className="space-y-2">
-              <li><a href="#docs" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Documentation</a></li>
-              <li><a href="#guide" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Setup Guide</a></li>
-              <li><a href="#support" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Support</a></li>
-              <li><a href="#status" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Status</a></li>
-              <li><a href="#faq" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">FAQ</a></li>
+            <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white">Resources</h3>
+            <ul className="space-y-2 text-sm">
+              {[['docs','Documentation'],['guide','Setup Guide'],['support','Support'],['status','Status'],['faq','FAQ']].map(([href, label]) => (
+                <li key={href}><a href={`#${href}`} className="text-gray-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{label}</a></li>
+              ))}
             </ul>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">Legal</h3>
-            <ul className="space-y-2">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('terms')}
-                  className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors"
-                >
-                  Terms
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('privacy')}
-                  className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors"
-                >
-                  Privacy
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => onOpenLegal('cookies')}
-                  className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors"
-                >
-                  Cookies
-                </button>
-              </li>
-              <li><a href="#top" className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-white transition-colors">Back to Top</a></li>
+            <h3 className="font-bold text-base mb-4 text-gray-900 dark:text-white">Legal</h3>
+            <ul className="space-y-2 text-sm">
+              {(['terms','privacy','cookies'] as const).map((type) => (
+                <li key={type}><button type="button" onClick={() => onOpenLegal(type)}
+                  className="text-gray-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors capitalize">{type}</button></li>
+              ))}
+              <li><a href="#top" className="text-gray-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Back to Top</a></li>
             </ul>
           </motion.div>
         </motion.div>
 
-        <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
+        <div className="border-t border-brand-100 dark:border-surface-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <p className="text-gray-500 dark:text-slate-400 text-sm">
               &copy; {new Date().getFullYear()} {config.botName}. All rights reserved.
             </p>
-
-            <div className="flex gap-4">
-              {config.twitterUrl && (
-                <a
-                  href={config.twitterUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-5 h-5" />
+            <div className="flex gap-3">
+              {[
+                { url: config.twitterUrl,      Icon: Twitter,        label: 'Twitter' },
+                { url: config.githubUrl,       Icon: Github,         label: 'GitHub' },
+                { url: config.supportServerUrl,Icon: MessageCircle,  label: 'Discord' },
+                { url: config.contactEmail ? `mailto:${config.contactEmail}` : null, Icon: Mail, label: 'Email' },
+              ].filter(s => s.url).map(({ url, Icon, label }) => (
+                <a key={label} href={url!} target={label !== 'Email' ? '_blank' : undefined}
+                  rel={label !== 'Email' ? 'noopener noreferrer' : undefined}
+                  className="p-2 bg-brand-50 dark:bg-surface-700 rounded-lg hover:bg-brand-100 dark:hover:bg-surface-600 text-brand-600 dark:text-brand-400 transition-colors"
+                  aria-label={label}>
+                  <Icon className="w-5 h-5" />
                 </a>
-              )}
-              {config.githubUrl && (
-                <a
-                  href={config.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
-                  aria-label="GitHub"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-              )}
-              {config.supportServerUrl && (
-                <a
-                  href={config.supportServerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
-                  aria-label="Discord"
-                >
-                  <MessageCircle className="w-5 h-5" />
-                </a>
-              )}
-              {config.contactEmail && (
-                <a
-                  href={`mailto:${config.contactEmail}`}
-                  className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
-                  aria-label="Email"
-                >
-                  <Mail className="w-5 h-5" />
-                </a>
-              )}
+              ))}
             </div>
           </div>
         </div>
