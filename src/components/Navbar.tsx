@@ -78,7 +78,7 @@ export default function Navbar() {
                   event.preventDefault();
                 }
               }}
-              className={`px-5 py-2 rounded-lg font-semibold transition-all duration-300 text-sm ${
+              className={`inline-flex items-center justify-center px-5 h-9 rounded-lg font-semibold transition-all duration-300 text-sm ${
                 inviteEnabled
                   ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-lg hover:scale-105'
                   : 'bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed opacity-70'

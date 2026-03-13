@@ -124,7 +124,7 @@ export default function Commands() {
               <motion.div
                 key={categoryIndex}
                 variants={itemVariants}
-                className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-xl"
+                className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all duration-300 hover:shadow-xl flex flex-col h-full"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className={`p-2 rounded-lg bg-gradient-to-br ${category.gradient}`}>
@@ -133,7 +133,7 @@ export default function Commands() {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white">{category.name}</h3>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 flex-grow flex flex-col justify-start">
                   {category.commands.map((command, commandIndex) => (
                     <div
                       key={commandIndex}
@@ -156,7 +156,7 @@ export default function Commands() {
                         </button>
                       </div>
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{command.description}</p>
-                      <code className="text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded">
+                      <code className="block text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-lg whitespace-nowrap overflow-x-auto scrolbar-hide">
                         {command.usage}
                       </code>
                     </div>

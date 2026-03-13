@@ -77,8 +77,10 @@ export default function Pricing() {
           </motion.div>
 
           <motion.div variants={itemVariants} className="flex flex-col h-full bg-gradient-to-br from-purple-600 to-pink-600 dark:from-purple-800 dark:to-pink-900 rounded-2xl p-8 text-white shadow-xl border border-purple-400/30 relative overflow-hidden transition-transform hover:-translate-y-2">
-            <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold">Popular</div>
-            <p className="text-sm uppercase tracking-wide text-white/80 font-semibold mb-3">Premium</p>
+            <div className="flex justify-between items-start mb-3">
+              <p className="text-sm uppercase tracking-wide text-white/80 font-semibold">Premium</p>
+              <span className="px-3 py-1 rounded-full bg-white/20 text-xs font-semibold">Popular</span>
+            </div>
             <h3 className="text-3xl font-bold flex items-center gap-2">
               <Crown className="w-7 h-7" />
               $9/mo

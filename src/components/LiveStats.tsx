@@ -96,8 +96,8 @@ export default function LiveStats() {
   };
 
   return (
-    <section id="stats" className="py-24 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djYuOTEzYzAtLjUtLjItLjktLjYtMS4ybC00LTQuMGMtLjQtLjQtLjktLjYtMS40LS42SDI0Yy0xLjEgMC0yIC45LTIgMnYxMmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjM2YzAtMS4xLS45LTItMi0yem0tNiAxOGgtNHYtNGg0djR6bTAtOGgtNHYtNGg0djR6bTggOGgtNHYtNGg0djR6bTAtOGgtNHYtNGg0djR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30"></div>
+    <section id="stats" className="py-24 bg-gradient-to-br from-purple-50 via-white to-purple-50 dark:from-gray-900 dark:via-purple-900 dark:to-gray-900 relative overflow-hidden transition-colors duration-300">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djYuOTEzYzAtLjUtLjItLjktLjYtMS4ybC00LTQuMGMtLjQtLjQtLjktLjYtMS40LS42SDI0Yy0xLjEgMC0yIC45LTIgMnYxMmMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0yVjM2YzAtMS4xLS45LTItMi0yem0tNiAxOGgtNHYtNGg0djR6bTAtOGgtNHYtNGg0djR6bTggOGgtNHYtNGg0djR6bTAtOGgtNHYtNGg0djR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-10 dark:opacity-30"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -106,20 +106,20 @@ export default function LiveStats() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/50 dark:bg-white/10 backdrop-blur-xl rounded-full border border-gray-200 dark:border-white/20 mb-6 shadow-sm">
             <div className={`w-2 h-2 rounded-full ${liveUnavailable ? 'bg-red-400' : 'bg-green-400 animate-pulse'}`}></div>
-            <span className="text-white font-medium">{liveUnavailable ? 'Fallback Statistics' : 'Live Statistics'}</span>
+            <span className="text-gray-900 dark:text-white font-medium">{liveUnavailable ? 'Fallback Statistics' : 'Live Statistics'}</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Trusted by Thousands</h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Trusted by Thousands</h2>
+          <p className="text-xl text-gray-700 dark:text-white/80 max-w-3xl mx-auto">
             Join the growing community of Discord servers using our bot every day.
           </p>
           {!loading && liveUnavailable && (
-            <p className="mt-4 text-sm text-white/65">Live stats unavailable. Showing latest fallback values.</p>
+            <p className="mt-4 text-sm text-gray-600 dark:text-white/65">Live stats unavailable. Showing latest fallback values.</p>
           )}
           {!loading && !liveUnavailable && lastUpdated && (
-            <p className="mt-4 text-sm text-white/65">Last updated {formatDate(lastUpdated)}</p>
+            <p className="mt-4 text-sm text-gray-600 dark:text-white/65">{t('stats.lastUpdated', 'Last updated')} {formatDate(lastUpdated)}</p>
           )}
         </motion.div>
 
@@ -136,14 +136,14 @@ export default function LiveStats() {
               <motion.div variants={itemVariants} key={stat.label} className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br opacity-20 group-hover:opacity-30 transition-opacity duration-300 rounded-2xl blur-xl from-purple-500 to-pink-500"></div>
 
-                <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 hover:border-white/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-gray-200 dark:border-white/20 hover:border-purple-300 dark:hover:border-white/40 transition-all duration-300 hover:transform hover:scale-105 shadow-sm">
                   <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${stat.gradient} mb-4`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
 
-                  <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
+                  <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">{stat.value}</div>
 
-                  <div className="text-white/70">{stat.label}</div>
+                  <div className="text-gray-600 dark:text-white/70 font-medium">{stat.label}</div>
                 </div>
               </motion.div>
             );
