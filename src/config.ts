@@ -16,7 +16,15 @@ export const config = {
   authCallbackPath: '/auth/callback',
 };
 
+function isLocalOrigin(origin: string): boolean {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+}
+
 export function getSiteOrigin(): string {
+  if (typeof window !== 'undefined' && isLocalOrigin(window.location.origin)) {
+    return window.location.origin;
+  }
+
   if (config.siteUrl) {
     return config.siteUrl.replace(/\/$/, '');
   }
