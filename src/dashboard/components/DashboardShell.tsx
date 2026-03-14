@@ -1,26 +1,30 @@
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Bot,
-  ExternalLink,
   LogOut,
   Menu,
   Moon,
   RefreshCcw,
+  ShieldCheck,
+  Sparkles,
   Sun,
+  Users,
   X,
 } from 'lucide-react';
 import { dashboardSections } from '../constants';
-import type { DashboardGuild, DashboardSectionId } from '../types';
+import { drawerVariants, fadeInVariants, fadeUpVariants, staggerContainerVariants } from '../motion';
+import type { DashboardGuild, DashboardSectionId, GuildSyncStatus } from '../types';
 import {
   formatDateTime,
   formatRelativeTime,
+  getHealthLabel,
   resolveGuildIconUrl,
   resolveGuildInitials,
   resolveUserAvatarUrl,
 } from '../utils';
-import { getDiscordInviteUrl } from '../../config';
 import { useTheme } from '../../components/ThemeProvider';
 
 interface DashboardShellProps {
@@ -34,6 +38,9 @@ interface DashboardShellProps {
   onLogout: () => void;
   isSyncing: boolean;
   syncError?: string;
+  syncStatus: GuildSyncStatus | null;
+  pendingMutations: number;
+  failedMutations: number;
   children: ReactNode;
 }
 
@@ -46,6 +53,7 @@ interface SidebarProps {
   onSync: () => void;
   onLogout: () => void;
   isSyncing: boolean;
+  closeOnNavigate?: () => void;
 }
 
 function SidebarContent({
@@ -57,129 +65,141 @@ function SidebarContent({
   onSync,
   onLogout,
   isSyncing,
+  closeOnNavigate,
 }: SidebarProps) {
-  const inviteUrl = selectedGuild ? getDiscordInviteUrl(selectedGuild.guildId) : '';
-
   return (
-    <div className="flex h-full flex-col gap-6">
-      <div className="rounded-[1.75rem] border border-white/10 bg-white/80 p-5 shadow-xl dark:bg-surface-800/85">
-        <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-lg">
-            <Bot className="h-6 w-6" />
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-brand-600 dark:text-brand-300">
-              Dashboard
-            </p>
-            <p className="text-lg font-semibold text-slate-950 dark:text-white">
-              Control center
-            </p>
-          </div>
-        </Link>
+    <motion.div
+      variants={fadeUpVariants}
+      initial="hidden"
+      animate="show"
+      className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[2.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(7,12,24,0.92),rgba(10,17,31,0.96))] p-5 text-white shadow-[0_28px_80px_rgba(2,6,23,0.45)] backdrop-blur-2xl"
+    >
+      <div className="pointer-events-none absolute -right-12 top-0 h-44 w-44 rounded-full bg-brand-500/18 blur-3xl" />
 
-        <div className="mt-5">
-          <label htmlFor="guild-select" className="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-            Servidor
-          </label>
-          <select
-            id="guild-select"
-            value={selectedGuild?.guildId ?? ''}
-            onChange={(event) => onGuildChange(event.target.value)}
-            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-950 outline-none transition focus:border-brand-400 dark:border-surface-600 dark:bg-surface-700 dark:text-white"
-          >
-            {guilds.map((guild) => (
-              <option key={guild.guildId} value={guild.guildId}>
-                {guild.guildName}
-                {guild.botInstalled ? ' · instalado' : ' · pendiente'}
-              </option>
-            ))}
-          </select>
+      <Link to="/" className="relative z-[1] flex items-center gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-[1.35rem] bg-[linear-gradient(135deg,_#5865f2_0%,_#7c6af7_55%,_#14b8a6_100%)] text-white shadow-[0_18px_45px_rgba(88,101,242,0.4)]">
+          <Bot className="h-7 w-7" />
         </div>
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-200">
+            Pando Bot
+          </p>
+          <p className="mt-1 text-[1.4rem] font-bold tracking-[-0.04em] text-white">
+            Control Deck
+          </p>
+        </div>
+      </Link>
+
+      <div className="relative z-[1] mt-8 rounded-[1.75rem] border border-white/10 bg-white/5 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">
+              Servidor activo
+            </p>
+            <p className="mt-2 break-words text-lg font-semibold text-white">
+              {selectedGuild?.guildName ?? 'Selecciona un servidor'}
+            </p>
+          </div>
+          <span className={`dashboard-status-pill-compact min-w-[8rem] justify-center whitespace-nowrap px-4 py-2 text-center tracking-[0.13em] ${
+            selectedGuild?.botInstalled
+              ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100'
+              : 'border-amber-400/25 bg-amber-400/10 text-amber-100'
+          }`}>
+            {selectedGuild?.botInstalled ? 'Instalado' : 'Pendiente'}
+          </span>
+        </div>
+
+        <label
+          htmlFor="guild-select"
+          className="mt-5 block text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45"
+        >
+          Cambiar servidor
+        </label>
+        <select
+          id="guild-select"
+          value={selectedGuild?.guildId ?? ''}
+          onChange={(event) => {
+            onGuildChange(event.target.value);
+            closeOnNavigate?.();
+          }}
+          className="mt-2 w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-medium text-white outline-none transition focus:border-brand-300 focus:bg-white/[0.14]"
+        >
+          {guilds.map((guild) => (
+            <option key={guild.guildId} value={guild.guildId} className="bg-surface-800 text-white">
+              {guild.guildName}
+              {guild.botInstalled ? ' - listo' : ' - invitar'}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <nav className="rounded-[1.75rem] border border-white/10 bg-white/80 p-4 shadow-xl dark:bg-surface-800/85">
-        <p className="px-3 pb-3 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
+      <div className="dashboard-sidebar-scroll relative z-[1] mt-6 min-h-0 flex-1 overflow-y-auto pr-2">
+        <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.26em] text-white/40">
           Modulos
         </p>
-        <div className="space-y-2">
+        <motion.nav variants={staggerContainerVariants} initial="hidden" animate="show" className="mt-3 space-y-2 pb-6">
           {dashboardSections.map((section) => {
             const Icon = section.icon;
             const active = activeSection === section.id;
 
             return (
-              <button
+              <motion.button
                 key={section.id}
                 type="button"
-                onClick={() => onSectionChange(section.id)}
-                className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
+                variants={fadeInVariants}
+                whileHover={{ x: 4 }}
+                whileTap={{ scale: 0.99 }}
+                onClick={() => {
+                  onSectionChange(section.id);
+                  closeOnNavigate?.();
+                }}
+                className={`group w-full rounded-[1.45rem] border px-4 py-3 text-left transition ${
                   active
-                    ? 'border-brand-300 bg-brand-50 text-brand-700 shadow-sm dark:border-brand-700 dark:bg-brand-900/30 dark:text-brand-200'
-                    : 'border-transparent bg-transparent text-slate-600 hover:border-slate-200 hover:bg-slate-100 dark:text-slate-300 dark:hover:border-surface-600 dark:hover:bg-surface-700/80'
+                    ? 'border-brand-300/30 bg-[linear-gradient(135deg,rgba(88,101,242,0.24),rgba(20,184,166,0.14))] text-white shadow-[0_16px_30px_rgba(88,101,242,0.18)]'
+                    : 'border-transparent bg-white/[0.035] text-white/72 hover:border-white/10 hover:bg-white/[0.07] hover:text-white'
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <Icon className="mt-0.5 h-5 w-5 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold">{section.label}</p>
-                    <p className="mt-1 text-sm opacity-80">{section.description}</p>
+                  <div className={`mt-0.5 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl border ${
+                    active
+                      ? 'border-white/10 bg-white/10 text-white'
+                      : 'border-white/[0.08] bg-white/5 text-white/70 group-hover:text-white'
+                  }`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold tracking-[-0.02em]">{section.label}</p>
+                    <p className="mt-1 text-sm leading-6 text-white/55 group-hover:text-white/72">
+                      {section.description}
+                    </p>
                   </div>
                 </div>
-              </button>
+              </motion.button>
             );
           })}
-        </div>
-      </nav>
+        </motion.nav>
+      </div>
 
-      {selectedGuild ? (
-        <div className="rounded-[1.75rem] border border-white/10 bg-slate-950 p-5 text-white shadow-xl">
-          <p className="text-xs uppercase tracking-[0.22em] text-brand-300">
-            Estado del bot
-          </p>
-          <div className="mt-4 flex items-center gap-3">
-            <div className={`h-3 w-3 rounded-full ${selectedGuild.botInstalled ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-            <p className="text-lg font-semibold">
-              {selectedGuild.botInstalled ? 'Instalado y sincronizado' : 'Instalacion pendiente'}
-            </p>
-          </div>
-          <p className="mt-3 text-sm text-slate-300">
-            Ultima sincronizacion {formatRelativeTime(selectedGuild.lastSyncedAt)}
-          </p>
-          <p className="mt-1 text-sm text-slate-400">
-            Heartbeat del bot {formatDateTime(selectedGuild.botLastSeenAt)}
-          </p>
-          <div className="mt-5 flex flex-col gap-3">
-            <button
-              type="button"
-              onClick={onSync}
-              disabled={isSyncing}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3 font-semibold text-slate-950 transition hover:bg-slate-100 disabled:cursor-wait disabled:opacity-60"
-            >
-              <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-              {isSyncing ? 'Sincronizando...' : 'Re-sincronizar acceso'}
-            </button>
-            {!selectedGuild.botInstalled && inviteUrl ? (
-              <a
-                href={inviteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/15"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Invitar bot a este servidor
-              </a>
-            ) : null}
-            <button
-              type="button"
-              onClick={onLogout}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-transparent px-4 py-3 font-semibold text-white transition hover:bg-white/10"
-            >
-              <LogOut className="h-4 w-4" />
-              Cerrar sesion
-            </button>
-          </div>
-        </div>
-      ) : null}
-    </div>
+      <div className="relative z-[1] mt-4 space-y-3 pt-3">
+        <button
+          type="button"
+          onClick={onSync}
+          disabled={isSyncing}
+          className="dashboard-primary-button w-full"
+        >
+          <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
+          Re-sincronizar acceso
+        </button>
+        <button
+          type="button"
+          onClick={onLogout}
+          className="dashboard-secondary-button w-full border-white/10 bg-white/[0.06] text-white hover:border-rose-300/30 hover:text-rose-100 dark:border-white/10 dark:bg-white/[0.06]"
+        >
+          <LogOut className="h-4 w-4" />
+          Cerrar sesion
+        </button>
+      </div>
+    </motion.div>
   );
 }
 
@@ -194,144 +214,235 @@ export default function DashboardShell({
   onLogout,
   isSyncing,
   syncError,
+  syncStatus,
+  pendingMutations,
+  failedMutations,
   children,
 }: DashboardShellProps) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { theme, setTheme } = useTheme();
-  const sectionMeta = dashboardSections.find((section) => section.id === activeSection);
-  const guildIconUrl = selectedGuild ? resolveGuildIconUrl(selectedGuild) : null;
   const userAvatarUrl = resolveUserAvatarUrl(user);
+  const guildIconUrl = selectedGuild ? resolveGuildIconUrl(selectedGuild) : null;
+
+  const statusPills = [
+    {
+      label: selectedGuild?.botInstalled ? 'Bot activo en el servidor' : 'Bot sin instalar',
+      className: selectedGuild?.botInstalled
+        ? 'border-emerald-200/70 bg-emerald-50/90 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/25 dark:text-emerald-200'
+        : 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/25 dark:text-amber-200',
+    },
+    {
+      label: getHealthLabel(syncStatus),
+      className:
+        syncStatus?.bridgeStatus === 'error'
+          ? 'border-rose-200/70 bg-rose-50/90 text-rose-800 dark:border-rose-800/60 dark:bg-rose-950/25 dark:text-rose-200'
+          : syncStatus?.bridgeStatus === 'degraded'
+            ? 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/25 dark:text-amber-200'
+            : 'border-sky-200/70 bg-sky-50/90 text-sky-800 dark:border-sky-800/60 dark:bg-sky-950/25 dark:text-sky-200',
+    },
+    {
+      label: `${pendingMutations} en cola`,
+      className: 'border-slate-200/80 bg-white/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/80 dark:text-slate-200',
+    },
+    {
+      label: `${failedMutations} fallidas`,
+      className:
+        failedMutations > 0
+          ? 'border-rose-200/70 bg-rose-50/90 text-rose-800 dark:border-rose-800/60 dark:bg-rose-950/25 dark:text-rose-200'
+          : 'border-slate-200/80 bg-white/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/80 dark:text-slate-200',
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(88,101,242,0.18),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_30%),linear-gradient(180deg,_#f6f8ff_0%,_#eef2ff_100%)] text-slate-950 transition-colors dark:bg-[radial-gradient(circle_at_top_left,_rgba(88,101,242,0.2),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_30%),linear-gradient(180deg,_#101323_0%,_#151933_100%)] dark:text-white">
-      <div className="mx-auto grid min-h-screen max-w-[1600px] gap-6 px-4 py-4 lg:grid-cols-[320px_minmax(0,1fr)] lg:px-6">
+    <div className="dashboard-shell text-slate-950 dark:text-white">
+      <div className="relative z-[1] mx-auto grid max-w-[1720px] gap-5 px-4 py-5 lg:grid-cols-[330px_minmax(0,1fr)] lg:px-6">
         <aside className="hidden lg:block">
-          <SidebarContent
-            guilds={guilds}
-            selectedGuild={selectedGuild}
-            activeSection={activeSection}
-            onSectionChange={onSectionChange}
-            onGuildChange={onGuildChange}
-            onSync={onSync}
-            onLogout={onLogout}
-            isSyncing={isSyncing}
-          />
-        </aside>
-
-        {isSidebarOpen ? (
-          <div className="fixed inset-0 z-40 bg-slate-950/60 lg:hidden" onClick={() => setIsSidebarOpen(false)} aria-hidden="true" />
-        ) : null}
-
-        <div className={`fixed inset-y-0 left-0 z-50 w-[88vw] max-w-sm overflow-y-auto px-4 py-4 transition-transform duration-300 lg:hidden ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="h-full rounded-[2rem] border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur-xl">
-            <div className="mb-4 flex justify-end">
-              <button
-                type="button"
-                onClick={() => setIsSidebarOpen(false)}
-                className="rounded-xl border border-white/10 p-2 text-white"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+          <div className="sticky top-5 h-[calc(100vh-2.5rem)]">
             <SidebarContent
               guilds={guilds}
               selectedGuild={selectedGuild}
               activeSection={activeSection}
-              onSectionChange={(section) => {
-                onSectionChange(section);
-                setIsSidebarOpen(false);
-              }}
-              onGuildChange={(guildId) => {
-                onGuildChange(guildId);
-                setIsSidebarOpen(false);
-              }}
+              onSectionChange={onSectionChange}
+              onGuildChange={onGuildChange}
               onSync={onSync}
               onLogout={onLogout}
               isSyncing={isSyncing}
             />
           </div>
-        </div>
+        </aside>
 
-        <main className="min-w-0">
-          <header className="sticky top-4 z-30 rounded-[2rem] border border-white/10 bg-white/75 px-4 py-4 shadow-xl backdrop-blur-xl dark:bg-surface-800/80 sm:px-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex items-start gap-3">
+        <div className="min-w-0">
+          <motion.header
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="show"
+            className="dashboard-surface sticky top-5 z-30 overflow-hidden px-4 py-5 lg:px-6"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,0.16),transparent_24%),linear-gradient(135deg,rgba(88,101,242,0.16),transparent_55%)]" />
+            <div className="relative z-[1] flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+              <div className="flex items-start gap-3 lg:gap-4">
                 <button
                   type="button"
-                  onClick={() => setIsSidebarOpen(true)}
-                  className="mt-1 inline-flex rounded-xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm lg:hidden dark:border-surface-600 dark:bg-surface-700 dark:text-white"
+                  onClick={() => setMobileOpen(true)}
+                  className="dashboard-secondary-button h-11 w-11 p-0 lg:hidden"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 text-lg font-bold text-white shadow-lg">
+
+                <div className="flex h-14 w-14 items-center justify-center rounded-[1.35rem] bg-[linear-gradient(135deg,_#5865f2_0%,_#7c6af7_55%,_#14b8a6_100%)] p-[3px] text-white shadow-[0_18px_45px_rgba(88,101,242,0.4)]">
+                  <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[1.08rem] bg-[rgba(7,12,24,0.82)]">
                     {guildIconUrl ? (
-                      <img src={guildIconUrl} alt={selectedGuild?.guildName ?? 'Guild icon'} className="h-full w-full object-cover" />
+                      <img
+                        src={guildIconUrl}
+                        alt={selectedGuild?.guildName ?? 'Servidor'}
+                        className="h-full w-full rounded-[1.08rem] object-cover"
+                      />
                     ) : (
-                      <span>{resolveGuildInitials(selectedGuild?.guildName ?? 'Dashboard')}</span>
+                      <span className="text-base font-bold">
+                        {selectedGuild ? resolveGuildInitials(selectedGuild.guildName) : 'DB'}
+                      </span>
                     )}
                   </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-                      {sectionMeta?.label ?? 'Dashboard'}
-                    </p>
-                    <h1 className="text-2xl font-bold text-slate-950 dark:text-white">
-                      {selectedGuild?.guildName ?? 'Selecciona un servidor'}
-                    </h1>
-                    <p className="text-sm text-slate-600 dark:text-slate-300">
-                      {sectionMeta?.description ?? 'Gestion centralizada para tu bot de Discord.'}
-                    </p>
+                </div>
+
+                <div className="min-w-0">
+                  <p className="dashboard-panel-label">Operacion del servidor</p>
+                  <h1 className="mt-2 break-words text-[1.85rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white lg:text-[2rem]">
+                    {selectedGuild?.guildName ?? 'Sin seleccion'}
+                  </h1>
+                  <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
+                    Panel admin-only conectado al bot real. Editas desde web, el bot aplica sobre Mongo y luego confirma el estado publicado en esta misma vista.
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="dashboard-status-pill-compact border-slate-200/80 bg-white/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/80 dark:text-slate-200">
+                      <Users className="h-3.5 w-3.5" />
+                      {selectedGuild?.memberCount?.toLocaleString() ?? '0'} miembros
+                    </span>
+                    <span className="dashboard-status-pill-compact border-slate-200/80 bg-white/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/80 dark:text-slate-200">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Plan {selectedGuild?.premiumTier ?? 'free'}
+                    </span>
+                    <span className="dashboard-status-pill-compact border-slate-200/80 bg-white/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/80 dark:text-slate-200">
+                      <ShieldCheck className="h-3.5 w-3.5" />
+                      Ultimo heartbeat {formatRelativeTime(syncStatus?.lastHeartbeatAt ?? selectedGuild?.botLastSeenAt ?? null)}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-surface-600 dark:bg-surface-700 dark:text-white dark:hover:bg-surface-600"
-                >
-                  {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                  {theme === 'dark' ? 'Claro' : 'Oscuro'}
-                </button>
-                <Link
-                  to="/"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-surface-600 dark:bg-surface-700 dark:text-white dark:hover:bg-surface-600"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Sitio web
-                </Link>
-                <div className="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 dark:border-surface-600 dark:bg-surface-700">
-                  <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-surface-600">
-                    {userAvatarUrl ? (
-                      <img src={userAvatarUrl} alt={user.email ?? 'User avatar'} className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="text-sm font-bold">{(user.email ?? 'A').slice(0, 1).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-slate-950 dark:text-white">
-                      {user.email ?? 'Administrador'}
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Solo acceso administrativo
-                    </p>
+              <div className="flex min-w-0 flex-col gap-4 xl:max-w-[40rem] xl:items-end">
+                <div className="flex flex-wrap gap-2 xl:justify-end">
+                  {statusPills.map((pill) => (
+                    <span key={pill.label} className={`dashboard-status-pill-compact ${pill.className}`}>
+                      {pill.label}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 xl:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                    className="dashboard-secondary-button h-11 w-11 p-0"
+                    aria-label="Cambiar tema"
+                  >
+                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={onSync}
+                    disabled={isSyncing}
+                    className="dashboard-primary-button"
+                  >
+                    <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                    Re-sincronizar
+                  </button>
+
+                  <div className="dashboard-surface-soft flex min-w-0 items-center gap-3 px-3 py-2.5">
+                    <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-surface-600">
+                      {userAvatarUrl ? (
+                        <img
+                          src={userAvatarUrl}
+                          alt={user.email ?? 'Usuario'}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="font-semibold text-slate-700 dark:text-white">
+                          {user.email?.[0]?.toUpperCase() ?? 'U'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="hidden min-w-0 text-left sm:block">
+                      <p className="truncate text-sm font-semibold text-slate-950 dark:text-white">
+                        {user.user_metadata?.full_name
+                          || user.user_metadata?.name
+                          || user.email
+                          || 'Administrador'}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        Ultima sincronizacion {formatDateTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null)}
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                {syncError ? (
+                  <div className="rounded-[1.35rem] border border-rose-200/70 bg-rose-50/90 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-200">
+                    {syncError}
+                  </div>
+                ) : null}
               </div>
             </div>
-            {syncError ? (
-              <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-                {syncError}
-              </div>
-            ) : null}
-          </header>
+          </motion.header>
 
-          <div className="pb-6 pt-6">
-            {children}
-          </div>
-        </main>
+          <main className="mt-6 pb-10">{children}</main>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {mobileOpen ? (
+          <div className="fixed inset-0 z-40 lg:hidden">
+            <motion.button
+              type="button"
+              aria-label="Cerrar menu"
+              className="absolute inset-0 bg-slate-950/72 backdrop-blur-md"
+              variants={fadeInVariants}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+            <motion.div
+              className="absolute inset-y-0 left-0 w-[92vw] max-w-[360px] p-4"
+              variants={drawerVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+            >
+              <SidebarContent
+                guilds={guilds}
+                selectedGuild={selectedGuild}
+                activeSection={activeSection}
+                onSectionChange={onSectionChange}
+                onGuildChange={onGuildChange}
+                onSync={onSync}
+                onLogout={onLogout}
+                isSyncing={isSyncing}
+                closeOnNavigate={() => setMobileOpen(false)}
+              />
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="absolute right-8 top-8 flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.08] text-white"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </motion.div>
+          </div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,7 +18,144 @@ interface DiscordGuild {
   permissions_new?: string;
 }
 
-Deno.serve(async (request) => {
+interface InstalledGuildRow {
+  guild_id: string;
+  guild_name: string;
+  guild_icon: string | null;
+  member_count: number | null;
+  premium_tier: string | null;
+  last_heartbeat_at: string | null;
+}
+
+interface ExistingAccessRow {
+  id: string;
+  guild_id: string;
+}
+
+type BotGuildRow = InstalledGuildRow;
+
+interface DiscordGuildDetails {
+  id: string;
+  name: string;
+  icon: string | null;
+  owner_id: string;
+}
+
+interface DiscordGuildMember {
+  roles: string[];
+}
+
+interface DiscordRole {
+  id: string;
+  permissions: string;
+}
+
+function hasManageablePermissions(permissionsRaw: string | null | undefined, isOwner = false): boolean {
+  if (isOwner) {
+    return true;
+  }
+
+  try {
+    const permissions = BigInt(permissionsRaw ?? '0');
+    return (
+      (permissions & DISCORD_ADMINISTRATOR) === DISCORD_ADMINISTRATOR
+      || (permissions & DISCORD_MANAGE_GUILD) === DISCORD_MANAGE_GUILD
+    );
+  } catch {
+    return false;
+  }
+}
+
+function resolveDiscordUserId(user: { user_metadata?: Record<string, unknown> | null }): string | null {
+  const metadata = user.user_metadata && typeof user.user_metadata === 'object'
+    ? user.user_metadata
+    : {};
+
+  const providerId = typeof metadata.provider_id === 'string' ? metadata.provider_id : null;
+  const subject = typeof metadata.sub === 'string' ? metadata.sub : null;
+
+  return providerId ?? subject;
+}
+
+async function fetchDiscordResource<T>(
+  path: string,
+  token: string,
+  authScheme: 'Bearer' | 'Bot' = 'Bearer',
+): Promise<T | null> {
+  const response = await fetch(`https://discord.com/api/v10${path}`, {
+    headers: {
+      Authorization: `${authScheme} ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json() as T;
+}
+
+async function resolveManageableGuildsWithBotToken(
+  adminClient: ReturnType<typeof createClient>,
+  discordUserId: string,
+  botToken: string,
+): Promise<DiscordGuild[]> {
+  const { data: botGuilds, error } = await adminClient
+    .from('bot_guilds')
+    .select('guild_id, guild_name, guild_icon, member_count, premium_tier, last_heartbeat_at')
+    .returns<BotGuildRow[]>();
+
+  if (error) {
+    throw error;
+  }
+
+  const manageableGuilds: DiscordGuild[] = [];
+
+  for (const installedGuild of botGuilds ?? []) {
+    const [guild, member, roles] = await Promise.all([
+      fetchDiscordResource<DiscordGuildDetails>(`/guilds/${installedGuild.guild_id}`, botToken, 'Bot'),
+      fetchDiscordResource<DiscordGuildMember>(`/guilds/${installedGuild.guild_id}/members/${discordUserId}`, botToken, 'Bot'),
+      fetchDiscordResource<DiscordRole[]>(`/guilds/${installedGuild.guild_id}/roles`, botToken, 'Bot'),
+    ]);
+
+    if (!guild || !member || !roles) {
+      continue;
+    }
+
+    const roleMap = new Map(roles.map((role) => [role.id, role] as const));
+    let permissions = 0n;
+
+    for (const roleId of member.roles ?? []) {
+      const role = roleMap.get(roleId);
+      if (role?.permissions) {
+        permissions |= BigInt(role.permissions);
+      }
+    }
+
+    const everyoneRole = roleMap.get(guild.id);
+    if (everyoneRole?.permissions) {
+      permissions |= BigInt(everyoneRole.permissions);
+    }
+
+    const isOwner = guild.owner_id === discordUserId;
+    const permissionsRaw = permissions.toString();
+    if (!hasManageablePermissions(permissionsRaw, isOwner)) {
+      continue;
+    }
+
+    manageableGuilds.push({
+      id: guild.id,
+      name: guild.name || installedGuild.guild_name,
+      icon: guild.icon ?? installedGuild.guild_icon,
+      owner: isOwner,
+      permissions_new: permissionsRaw,
+    });
+  }
+
+  return manageableGuilds;
+}
+
+Deno.serve(async (request: Request) => {
   if (request.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -81,14 +219,26 @@ Deno.serve(async (request) => {
     }
 
     const discordGuilds = (await discordResponse.json()) as DiscordGuild[];
-    const manageableGuilds = discordGuilds.filter((guild) => {
+    let manageableGuilds = discordGuilds.filter((guild) => {
       const permissionsRaw = guild.permissions_new ?? guild.permissions ?? '0';
-      const permissions = BigInt(permissionsRaw);
-      return Boolean(guild.owner) || (permissions & DISCORD_ADMINISTRATOR) === DISCORD_ADMINISTRATOR || (permissions & DISCORD_MANAGE_GUILD) === DISCORD_MANAGE_GUILD;
+      return hasManageablePermissions(permissionsRaw, Boolean(guild.owner));
     });
 
     const adminClient = createClient(supabaseUrl, supabaseServiceRoleKey);
     const nowIso = new Date().toISOString();
+
+    if (!manageableGuilds.length) {
+      const discordUserId = resolveDiscordUserId(user);
+      const discordBotToken = Deno.env.get('DISCORD_BOT_TOKEN');
+
+      if (discordUserId && discordBotToken) {
+        manageableGuilds = await resolveManageableGuildsWithBotToken(
+          adminClient,
+          discordUserId,
+          discordBotToken,
+        );
+      }
+    }
 
     if (!manageableGuilds.length) {
       await adminClient.from('user_guild_access').delete().eq('user_id', user.id);
@@ -108,14 +258,15 @@ Deno.serve(async (request) => {
     const { data: installedGuilds, error: installedError } = await adminClient
       .from('bot_guilds')
       .select('guild_id, guild_name, guild_icon, member_count, premium_tier, last_heartbeat_at')
-      .in('guild_id', guildIds);
+      .in('guild_id', guildIds)
+      .returns<InstalledGuildRow[]>();
 
     if (installedError) {
       throw installedError;
     }
 
     const installedById = new Map(
-      (installedGuilds ?? []).map((guild) => [guild.guild_id, guild]),
+      (installedGuilds ?? []).map((guild: InstalledGuildRow) => [guild.guild_id, guild] as const),
     );
 
     const accessRows = manageableGuilds.map((guild) => {
@@ -150,11 +301,12 @@ Deno.serve(async (request) => {
     const { data: existingRows } = await adminClient
       .from('user_guild_access')
       .select('id, guild_id')
-      .eq('user_id', user.id);
+      .eq('user_id', user.id)
+      .returns<ExistingAccessRow[]>();
 
     const staleIds = (existingRows ?? [])
-      .filter((row) => !guildIdSet.has(row.guild_id))
-      .map((row) => row.id);
+      .filter((row: ExistingAccessRow) => !guildIdSet.has(row.guild_id))
+      .map((row: ExistingAccessRow) => row.id);
 
     if (staleIds.length) {
       await adminClient.from('user_guild_access').delete().in('id', staleIds);

@@ -1,16 +1,21 @@
-import { ExternalLink, LayoutTemplate, ShieldCheck, Sparkles } from 'lucide-react';
-import { getDiscordInviteUrl } from '../../config';
+import { ArrowRight, Clock3, HardDriveDownload, ShieldCheck, Sparkles } from 'lucide-react';
+import PanelCard from '../components/PanelCard';
 import type {
   DashboardGuild,
   DashboardSectionId,
+  GuildBackupManifest,
   GuildConfig,
+  GuildConfigMutation,
   GuildEvent,
   GuildMetricsDaily,
+  GuildSyncStatus,
 } from '../types';
 import {
   formatDateTime,
   formatRelativeTime,
+  getActiveModules,
   getMetricsSummary,
+  getSetupCompletion,
 } from '../utils';
 
 interface OverviewModuleProps {
@@ -18,6 +23,9 @@ interface OverviewModuleProps {
   config: GuildConfig;
   events: GuildEvent[];
   metrics: GuildMetricsDaily[];
+  mutations: GuildConfigMutation[];
+  backups: GuildBackupManifest[];
+  syncStatus: GuildSyncStatus | null;
   onSectionChange: (section: DashboardSectionId) => void;
 }
 
@@ -26,189 +34,218 @@ export default function OverviewModule({
   config,
   events,
   metrics,
+  mutations,
+  backups,
+  syncStatus,
   onSectionChange,
 }: OverviewModuleProps) {
   const summary = getMetricsSummary(metrics);
-  const activeModules = [
-    config.moderationSettings.antiSpamEnabled,
-    config.moderationSettings.linkFilterEnabled,
-    config.moderationSettings.capsFilterEnabled,
-    config.moderationSettings.duplicateFilterEnabled,
-    config.moderationSettings.raidProtectionEnabled,
-  ].filter(Boolean).length;
-  const inviteUrl = getDiscordInviteUrl(guild.guildId);
+  const setup = getSetupCompletion(config);
+  const activeModules = getActiveModules(config);
+  const pendingMutations = mutations.filter((mutation) => mutation.status === 'pending');
+  const failedMutations = mutations.filter((mutation) => mutation.status === 'failed');
+  const latestBackup = backups[0] ?? null;
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1.55fr_1fr]">
-      <section className="rounded-[2rem] border border-white/10 bg-white/85 p-8 shadow-xl dark:bg-surface-800/85">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-brand-700 dark:bg-brand-900/30 dark:text-brand-200">
-              <Sparkles className="h-3.5 w-3.5" />
-              Panel v1
-            </div>
-            <h2 className="mt-4 text-3xl font-bold text-slate-950 dark:text-white">
-              {guild.guildName}
-            </h2>
-            <p className="mt-3 max-w-2xl text-slate-600 dark:text-slate-300">
-              Vista ejecutiva del servidor. Aqui ves el estado de instalacion, el ultimo guardado y la salud de los modulos clave.
-            </p>
+    <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
+      <div className="space-y-6">
+        <PanelCard
+          eyebrow="Resumen"
+          title={guild.guildName}
+          description="Centro operativo del servidor. Aqui ves el setup, las solicitudes pendientes y la salud real del bridge entre Discord, Mongo y Supabase."
+          variant="highlight"
+        >
+          <div className="dashboard-grid-fit-standard">
+            {[
+              {
+                label: 'Setup',
+                value: `${setup.completed}/${setup.total}`,
+                note: `${Math.round(setup.ratio * 100)}% de completitud`,
+              },
+              {
+                label: 'Pendientes',
+                value: pendingMutations.length.toLocaleString(),
+                note: pendingMutations.length ? 'Esperando al bot' : 'Sin cola activa',
+              },
+              {
+                label: 'Fallidas',
+                value: failedMutations.length.toLocaleString(),
+                note: failedMutations.length ? 'Requieren revision' : 'Sin errores visibles',
+              },
+              {
+                label: 'Ultimo backup',
+                value: latestBackup ? formatRelativeTime(latestBackup.createdAt) : 'Nunca',
+                note: latestBackup ? latestBackup.source : 'Aun no existe snapshot',
+              },
+            ].map((card) => (
+              <article key={card.label} className="dashboard-kpi-card">
+                <p className="dashboard-data-label">{card.label}</p>
+                <p className="mt-3 text-[2rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white">
+                  {card.value}
+                </p>
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{card.note}</p>
+              </article>
+            ))}
           </div>
-          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ${
-            guild.botInstalled
-              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300'
-              : 'bg-amber-50 text-amber-800 dark:bg-amber-950/30 dark:text-amber-200'
-          }`}>
-            <div className={`h-2.5 w-2.5 rounded-full ${guild.botInstalled ? 'bg-emerald-500' : 'bg-amber-500'}`} />
-            {guild.botInstalled ? 'Bot instalado' : 'Invitacion pendiente'}
-          </div>
-        </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            {
-              label: 'Comandos 7 dias',
-              value: summary.totals.commandsExecuted.toLocaleString(),
-              note: metrics.length ? 'Acumulado reciente' : 'Sin datos aun',
-            },
-            {
-              label: 'Acciones moderadas',
-              value: summary.totals.moderatedMessages.toLocaleString(),
-              note: metrics.length ? 'Ultimos 7 dias' : 'Sin datos aun',
-            },
-            {
-              label: 'Miembros activos',
-              value: (summary.latest?.activeMembers ?? guild.memberCount ?? 0).toLocaleString(),
-              note: guild.memberCount ? 'Capacidad visible' : 'Esperando telemetria',
-            },
-            {
-              label: 'Uptime medio',
-              value: `${summary.averageUptime.toFixed(2)}%`,
-              note: metrics.length ? 'Promedio semanal' : 'Sin medicion',
-            },
-          ].map((card) => (
-            <article key={card.label} className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-surface-600 dark:bg-surface-700/70">
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                {card.label}
-              </p>
-              <p className="mt-2 text-3xl font-bold text-slate-950 dark:text-white">
-                {card.value}
-              </p>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                {card.note}
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <article className="dashboard-surface-soft p-6">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
+                <ShieldCheck className="h-4 w-4" />
+                Estado aplicado
+              </div>
+              <dl className="dashboard-grid-fit-compact mt-5">
+                <div className="dashboard-data-card">
+                  <dt className="dashboard-data-label">Idioma</dt>
+                  <dd className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                    {config.generalSettings.language.toUpperCase()}
+                  </dd>
+                </div>
+                <div className="dashboard-data-card">
+                  <dt className="dashboard-data-label">Comandos</dt>
+                  <dd className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                    {config.generalSettings.commandMode === 'prefix'
+                      ? `Prefijo ${config.generalSettings.prefix}`
+                      : 'Mencion'}
+                  </dd>
+                </div>
+                <div className="dashboard-data-card">
+                  <dt className="dashboard-data-label">Zona horaria</dt>
+                  <dd className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                    {config.generalSettings.timezone}
+                  </dd>
+                </div>
+                <div className="dashboard-data-card">
+                  <dt className="dashboard-data-label">Modulos activos</dt>
+                  <dd className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                    {activeModules.length || summary.modulesActive.length
+                      ? (activeModules.length || summary.modulesActive.length).toString()
+                      : '0'}
+                  </dd>
+                </div>
+              </dl>
+              <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
+                Ultimo estado aplicado {formatRelativeTime(config.updatedAt)}.
               </p>
             </article>
-          ))}
-        </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <article className="rounded-3xl border border-slate-200 bg-white p-6 dark:border-surface-600 dark:bg-surface-700/70">
-            <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
-              <ShieldCheck className="h-4 w-4" />
-              Configuracion actual
-            </div>
-            <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-              <div>
-                <dt className="text-xs uppercase tracking-[0.16em] text-slate-400">Idioma</dt>
-                <dd className="mt-2 text-lg font-semibold">{config.generalSettings.language.toUpperCase()}</dd>
+            <article className="relative overflow-hidden rounded-[1.7rem] border border-white/10 bg-[linear-gradient(135deg,rgba(8,12,23,0.98),rgba(21,31,54,0.96))] p-6 text-white shadow-[0_24px_64px_rgba(15,23,42,0.28)]">
+              <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-brand-500/18 blur-3xl" />
+              <div className="relative z-[1] flex items-center gap-2 text-sm font-semibold text-brand-200">
+                <Sparkles className="h-4 w-4" />
+                Acciones rapidas
               </div>
-              <div>
-                <dt className="text-xs uppercase tracking-[0.16em] text-slate-400">Modo de comando</dt>
-                <dd className="mt-2 text-lg font-semibold capitalize">{config.generalSettings.commandMode}</dd>
+              <div className="relative z-[1] mt-6 grid gap-3">
+                {[
+                  ['server_roles', 'Completar canales y roles base'],
+                  ['tickets', 'Ajustar limites, SLA y autoasignacion'],
+                  ['system', 'Crear backup o revisar mantenimiento'],
+                ].map(([section, label]) => (
+                  <button
+                    key={section}
+                    type="button"
+                    onClick={() => onSectionChange(section as DashboardSectionId)}
+                    className="inline-flex items-center justify-between rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-left font-semibold text-white transition hover:border-white/20 hover:bg-white/12"
+                  >
+                    {label}
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                ))}
               </div>
-              <div>
-                <dt className="text-xs uppercase tracking-[0.16em] text-slate-400">Zona horaria</dt>
-                <dd className="mt-2 text-lg font-semibold">{config.generalSettings.timezone}</dd>
-              </div>
-              <div>
-                <dt className="text-xs uppercase tracking-[0.16em] text-slate-400">Modulos activos</dt>
-                <dd className="mt-2 text-lg font-semibold">{activeModules} / 5</dd>
-              </div>
-            </dl>
-            <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
-              Ultimo guardado {formatRelativeTime(config.updatedAt)}.
-            </p>
-          </article>
+            </article>
+          </div>
+        </PanelCard>
 
-          <article className="rounded-3xl border border-slate-200 bg-slate-950 p-6 text-white dark:border-white/10">
-            <div className="flex items-center gap-2 text-sm font-semibold text-brand-200">
-              <LayoutTemplate className="h-4 w-4" />
-              Quick actions
-            </div>
-            <div className="mt-6 grid gap-3">
-              <button
-                type="button"
-                onClick={() => onSectionChange('general')}
-                className="rounded-2xl bg-white px-4 py-3 text-left font-semibold text-slate-950 transition hover:bg-slate-100"
-              >
-                Ajustes generales y preferencias del panel
-              </button>
-              <button
-                type="button"
-                onClick={() => onSectionChange('moderation')}
-                className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-left font-semibold text-white transition hover:bg-white/15"
-              >
-                Afinar reglas de moderacion
-              </button>
-              <button
-                type="button"
-                onClick={() => onSectionChange('activity')}
-                className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-left font-semibold text-white transition hover:bg-white/15"
-              >
-                Revisar auditoria reciente
-              </button>
-              {!guild.botInstalled && inviteUrl ? (
-                <a
-                  href={inviteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-brand-400/50 bg-brand-500/20 px-4 py-3 font-semibold text-white transition hover:bg-brand-500/30"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Invitar bot a este servidor
-                </a>
-              ) : null}
-            </div>
-          </article>
-        </div>
-      </section>
+        <PanelCard
+          title="Tendencia reciente"
+          description="KPIs diarios publicados por el bot para este guild."
+          variant="soft"
+        >
+          <div className="dashboard-grid-fit-standard">
+            {[
+              ['Comandos', summary.totals.commandsExecuted.toLocaleString()],
+              ['Tickets abiertos', summary.totals.ticketsOpened.toLocaleString()],
+              ['Tickets cerrados', summary.totals.ticketsClosed.toLocaleString()],
+              ['Brechas SLA', summary.totals.slaBreaches.toLocaleString()],
+            ].map(([label, value]) => (
+              <article key={label} className="dashboard-kpi-card">
+                <p className="dashboard-data-label">{label}</p>
+                <p className="mt-3 text-[2rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white">
+                  {value}
+                </p>
+              </article>
+            ))}
+          </div>
+        </PanelCard>
+      </div>
 
-      <section className="space-y-6">
-        <article className="rounded-[2rem] border border-white/10 bg-white/85 p-6 shadow-xl dark:bg-surface-800/85">
-          <h3 className="text-xl font-bold text-slate-950 dark:text-white">Actividad reciente</h3>
-          <div className="mt-5 space-y-4">
-            {events.length ? events.slice(0, 4).map((event) => (
-              <div key={event.id} className="rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70">
-                <p className="font-semibold text-slate-950 dark:text-white">{event.title}</p>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{event.description}</p>
-                <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">{formatDateTime(event.createdAt)}</p>
+      <div className="space-y-6">
+        <PanelCard title="Salud del bridge" description="Ultimos puntos de sincronizacion confirmados." variant="soft">
+          <div className="space-y-4">
+            {[
+              ['Bridge', syncStatus?.bridgeStatus ?? 'unknown'],
+              ['Heartbeat', formatDateTime(syncStatus?.lastHeartbeatAt ?? guild.botLastSeenAt ?? null)],
+              ['Inventario', formatDateTime(syncStatus?.lastInventoryAt ?? null)],
+              ['Config aplicada', formatDateTime(syncStatus?.lastConfigSyncAt ?? config.updatedAt ?? null)],
+              ['Backups', formatDateTime(syncStatus?.lastBackupAt ?? latestBackup?.createdAt ?? null)],
+            ].map(([label, value]) => (
+              <div key={label} className="dashboard-data-card">
+                <p className="dashboard-data-label">{label}</p>
+                <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{value}</p>
               </div>
-            )) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-6 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+            ))}
+          </div>
+        </PanelCard>
+
+        <PanelCard title="Ultimos eventos" description="Actividad reciente del panel y del bot." variant="soft">
+          <div className="space-y-4">
+            {events.length ? (
+              events.slice(0, 5).map((event) => (
+                <article key={event.id} className="dashboard-data-card">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="break-words font-semibold text-slate-950 dark:text-white">{event.title}</p>
+                      <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                        {event.description}
+                      </p>
+                    </div>
+                    <Clock3 className="h-4 w-4 flex-shrink-0 text-slate-400" />
+                  </div>
+                  <p className="mt-3 text-xs uppercase tracking-[0.16em] text-slate-400">
+                    {formatDateTime(event.createdAt)}
+                  </p>
+                </article>
+              ))
+            ) : (
+              <div className="dashboard-empty-state">
                 Aun no hay eventos registrados para este servidor.
               </div>
             )}
           </div>
-        </article>
+        </PanelCard>
 
-        <article className="rounded-[2rem] border border-white/10 bg-white/85 p-6 shadow-xl dark:bg-surface-800/85">
-          <h3 className="text-xl font-bold text-slate-950 dark:text-white">Salud operativa</h3>
-          <div className="mt-5 space-y-4">
-            <div className="rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70">
-              <p className="text-sm text-slate-500 dark:text-slate-400">Ultima sincronizacion</p>
-              <p className="mt-2 text-lg font-semibold">{formatDateTime(guild.lastSyncedAt)}</p>
-            </div>
-            <div className="rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70">
-              <p className="text-sm text-slate-500 dark:text-slate-400">Heartbeat del bot</p>
-              <p className="mt-2 text-lg font-semibold">{formatDateTime(guild.botLastSeenAt)}</p>
-            </div>
-            <div className="rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70">
-              <p className="text-sm text-slate-500 dark:text-slate-400">Nivel premium</p>
-              <p className="mt-2 text-lg font-semibold capitalize">{guild.premiumTier ?? 'free'}</p>
-            </div>
+        <PanelCard title="Backups" description="Ultimos snapshots disponibles para restauracion." variant="soft">
+          <div className="space-y-3">
+            {backups.length ? (
+              backups.slice(0, 4).map((backup) => (
+                <div key={backup.backupId} className="dashboard-data-card flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="break-words font-semibold text-slate-950 dark:text-white">{backup.source}</p>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      {formatDateTime(backup.createdAt)}
+                    </p>
+                  </div>
+                  <HardDriveDownload className="h-5 w-5 flex-shrink-0 text-slate-400" />
+                </div>
+              ))
+            ) : (
+              <div className="dashboard-empty-state">
+                Todavia no hay backups registrados por el bot.
+              </div>
+            )}
           </div>
-        </article>
-      </section>
+        </PanelCard>
+      </div>
     </div>
   );
 }

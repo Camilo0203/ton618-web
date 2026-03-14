@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -37,6 +39,257 @@
     color: var(--color-text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+
+  ::selection {
+    background: rgba(88, 101, 242, 0.28);
+    color: inherit;
+  }
+}
+
+@layer components {
+  .dashboard-shell {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    font-family: 'Sora', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(88, 101, 242, 0.32), transparent 30%),
+      radial-gradient(circle at 88% 12%, rgba(34, 211, 238, 0.18), transparent 24%),
+      radial-gradient(circle at 50% 100%, rgba(249, 115, 22, 0.12), transparent 26%),
+      linear-gradient(180deg, #090d18 0%, #0d1325 38%, #121b31 100%);
+  }
+
+  .dashboard-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 88%);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  .dashboard-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(5, 9, 19, 0) 0%, rgba(5, 9, 19, 0.34) 100%);
+    pointer-events: none;
+  }
+
+  .dashboard-surface {
+    @apply relative overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_28px_80px_rgba(2,6,23,0.18)] backdrop-blur-2xl transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out dark:bg-surface-800;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .dark .dashboard-surface {
+    background-color: rgba(30, 32, 53, 0.78);
+  }
+
+  .dashboard-surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top right, rgba(88, 101, 242, 0.14), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 22%);
+    pointer-events: none;
+  }
+
+  .dashboard-surface-soft {
+    @apply rounded-[1.5rem] border border-slate-200/80 bg-slate-50/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)] transition-[transform,box-shadow,border-color,background-color] duration-300 ease-out dark:border-surface-600/80;
+    background-color: rgba(248, 250, 252, 0.75);
+  }
+
+  .dark .dashboard-surface-soft {
+    background-color: rgba(37, 40, 64, 0.72);
+  }
+
+  .dashboard-panel-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.26em] text-brand-600 dark:text-brand-300;
+  }
+
+  .dashboard-kpi-card {
+    @apply dashboard-surface-soft min-w-0 rounded-[1.6rem] border border-white/10 p-5;
+  }
+
+  .dashboard-empty-state {
+    @apply rounded-[1.5rem] border border-dashed border-slate-300/90 bg-slate-50/70 p-6 text-sm text-slate-500 dark:border-surface-600 dark:text-slate-400;
+    background-color: rgba(248, 250, 252, 0.7);
+  }
+
+  .dark .dashboard-empty-state {
+    background-color: rgba(37, 40, 64, 0.38);
+  }
+
+  .dashboard-primary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,_#5865f2_0%,_#7c6af7_44%,_#14b8a6_100%)] px-5 py-3 font-semibold text-white shadow-[0_18px_40px_rgba(88,101,242,0.35)] transition duration-200 hover:translate-y-[-2px] hover:shadow-[0_22px_52px_rgba(88,101,242,0.42)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-200/70 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .dashboard-secondary-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200/90 px-4 py-3 font-semibold text-slate-700 transition duration-200 hover:translate-y-[-1px] hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-100/70 dark:border-surface-600 dark:text-white dark:hover:border-brand-700 dark:hover:text-brand-200;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  .dark .dashboard-secondary-button {
+    background-color: rgba(37, 40, 64, 0.92);
+  }
+
+  .dashboard-status-pill {
+    @apply inline-flex max-w-full items-center gap-2 rounded-[1.1rem] border border-white/10 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)];
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .dashboard-status-pill-compact {
+    @apply inline-flex max-w-full items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em];
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-form-field {
+    @apply w-full rounded-2xl border border-slate-200/90 px-4 py-3 text-slate-900 outline-none transition duration-200 focus:border-brand-400 focus:ring-4 focus:ring-brand-100/80 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:text-white dark:focus:border-brand-500 dark:focus:ring-brand-900/45;
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  .dark .dashboard-form-field {
+    background-color: rgba(37, 40, 64, 0.92);
+  }
+
+  .dashboard-toggle-card {
+    @apply rounded-[1.5rem] border border-slate-200/85 p-4 transition duration-200 hover:border-brand-200 hover:bg-white dark:border-surface-600 dark:hover:border-brand-800 dark:hover:bg-surface-700;
+    background-color: rgba(248, 250, 252, 0.85);
+  }
+
+  .dark .dashboard-toggle-card {
+    background-color: rgba(37, 40, 64, 0.72);
+  }
+
+  .dashboard-grid-fit-compact {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  }
+
+  .dashboard-grid-fit-standard {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+
+  .dashboard-grid-fit-wide {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .dashboard-data-card {
+    @apply dashboard-surface-soft min-w-0 rounded-[1.4rem] border border-slate-200/80 p-4 dark:border-surface-600;
+  }
+
+  .dashboard-data-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400;
+  }
+
+  .dashboard-data-value {
+    @apply mt-2 text-sm font-semibold text-slate-950 dark:text-white;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .dashboard-muted-copy {
+    @apply text-sm leading-6 text-slate-600 dark:text-slate-300;
+  }
+
+  .dashboard-interactive-card {
+    @apply relative overflow-hidden transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out;
+  }
+
+  .dashboard-interactive-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .dashboard-scroll-panel {
+    max-height: min(70vh, 58rem);
+    overflow: auto;
+    padding-right: 0.25rem;
+  }
+
+  .dashboard-sidebar-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(107, 120, 252, 0.72) transparent;
+  }
+
+  .dashboard-sidebar-scroll::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .dashboard-sidebar-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .dashboard-sidebar-scroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background:
+      linear-gradient(180deg, rgba(124, 106, 247, 0.92), rgba(34, 211, 238, 0.82));
+    background-clip: padding-box;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .dashboard-sidebar-scroll::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .dashboard-sidebar-scroll::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .dashboard-scroll-panel::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  .dashboard-scroll-panel::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background: rgba(148, 163, 184, 0.42);
+    background-clip: padding-box;
+  }
+
+  .dashboard-skeleton {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 40%,
+      transparent 100%
+    );
+    animation: dashboard-shimmer 1.8s ease-in-out infinite;
+  }
+
+  .dark .dashboard-skeleton::after {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.12) 40%,
+      transparent 100%
+    );
+  }
 }
 
 @layer utilities {
@@ -48,6 +301,10 @@
   @keyframes fade-in {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes dashboard-shimmer {
+    100% { transform: translateX(100%); }
   }
 
   .animate-gradient {
@@ -65,5 +322,26 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .dashboard-interactive-card:hover,
+    .dashboard-primary-button:hover,
+    .dashboard-secondary-button:hover {
+      transform: none !important;
+    }
   }
 }

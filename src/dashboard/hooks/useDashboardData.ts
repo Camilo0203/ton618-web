@@ -1,24 +1,20 @@
 import { useEffect } from 'react';
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabaseClient';
 import {
   exchangeDashboardCodeForSession,
   fetchDashboardGuilds,
-  fetchGuildActivity,
-  fetchGuildConfig,
-  fetchGuildMetrics,
+  fetchGuildDashboardSnapshot,
   getDashboardSession,
-  saveGuildConfig,
+  requestGuildBackupAction,
+  requestGuildConfigChange,
+  requestTicketDashboardAction,
   signInWithDiscord,
   signOutDashboard,
   syncDiscordGuilds,
 } from '../api';
 import { dashboardQueryKeys } from '../constants';
-import type { GuildConfig } from '../types';
+import type { ConfigMutationSectionId, TicketDashboardActionId } from '../types';
 
 export function useDashboardAuth() {
   const queryClient = useQueryClient();
@@ -54,27 +50,32 @@ export function useDashboardGuilds(enabled: boolean) {
   });
 }
 
-export function useGuildConfig(guildId: string | null, enabled: boolean) {
+export function useGuildDashboardSnapshot(guildId: string | null, enabled: boolean) {
   return useQuery({
-    queryKey: dashboardQueryKeys.config(guildId ?? 'idle'),
-    queryFn: () => fetchGuildConfig(guildId ?? ''),
+    queryKey: dashboardQueryKeys.snapshot(guildId ?? 'idle'),
+    queryFn: () => fetchGuildDashboardSnapshot(guildId ?? ''),
     enabled: enabled && Boolean(guildId),
-  });
-}
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => {
+      const snapshot = query.state.data;
+      const hasPendingMutation = snapshot?.mutations.some((mutation) => mutation.status === 'pending');
+      const hasOpenTickets = snapshot?.ticketWorkspace.inbox.some((ticket) => ticket.isOpen);
+      const hasTicketHistory = (snapshot?.ticketWorkspace.inbox.length ?? 0) > 0;
 
-export function useGuildActivity(guildId: string | null, enabled: boolean) {
-  return useQuery({
-    queryKey: dashboardQueryKeys.activity(guildId ?? 'idle'),
-    queryFn: () => fetchGuildActivity(guildId ?? ''),
-    enabled: enabled && Boolean(guildId),
-  });
-}
+      if (hasPendingMutation) {
+        return 5_000;
+      }
 
-export function useGuildMetrics(guildId: string | null, enabled: boolean) {
-  return useQuery({
-    queryKey: dashboardQueryKeys.metrics(guildId ?? 'idle'),
-    queryFn: () => fetchGuildMetrics(guildId ?? ''),
-    enabled: enabled && Boolean(guildId),
+      if (hasOpenTickets) {
+        return 10_000;
+      }
+
+      if (hasTicketHistory) {
+        return 20_000;
+      }
+
+      return 30_000;
+    },
   });
 }
 
@@ -118,21 +119,52 @@ export function useSyncDashboardGuilds() {
   });
 }
 
-export function useSaveGuildConfig(guildId: string | null) {
+export function useRequestGuildConfigChange(guildId: string | null) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: Pick<GuildConfig, 'generalSettings' | 'moderationSettings' | 'dashboardPreferences'>) =>
-      saveGuildConfig(guildId ?? '', payload),
+    mutationFn: (payload: { section: ConfigMutationSectionId; payload: unknown }) =>
+      requestGuildConfigChange(guildId ?? '', payload.section, payload.payload),
     onSuccess: async () => {
       if (!guildId) {
         return;
       }
 
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: dashboardQueryKeys.config(guildId) }),
-        queryClient.invalidateQueries({ queryKey: dashboardQueryKeys.activity(guildId) }),
-      ]);
+      await queryClient.invalidateQueries({ queryKey: dashboardQueryKeys.snapshot(guildId) });
+    },
+  });
+}
+
+export function useRequestGuildBackupAction(guildId: string | null) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: {
+      action: 'create_backup' | 'restore_backup';
+      payload: Record<string, unknown>;
+    }) => requestGuildBackupAction(guildId ?? '', payload.action, payload.payload),
+    onSuccess: async () => {
+      if (!guildId) {
+        return;
+      }
+
+      await queryClient.invalidateQueries({ queryKey: dashboardQueryKeys.snapshot(guildId) });
+    },
+  });
+}
+
+export function useRequestTicketDashboardAction(guildId: string | null) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: { action: TicketDashboardActionId; payload: Record<string, unknown> }) =>
+      requestTicketDashboardAction(guildId ?? '', payload.action, payload.payload),
+    onSuccess: async () => {
+      if (!guildId) {
+        return;
+      }
+
+      await queryClient.invalidateQueries({ queryKey: dashboardQueryKeys.snapshot(guildId) });
     },
   });
 }

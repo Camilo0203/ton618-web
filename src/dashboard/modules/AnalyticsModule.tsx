@@ -1,7 +1,8 @@
 import { BarChart3 } from 'lucide-react';
+import PanelCard from '../components/PanelCard';
+import StateCard from '../components/StateCard';
 import type { DashboardGuild, GuildMetricsDaily } from '../types';
 import { formatMetricDate, getMetricsSummary } from '../utils';
-import StateCard from '../components/StateCard';
 
 interface AnalyticsModuleProps {
   guild: DashboardGuild;
@@ -15,9 +16,9 @@ export default function AnalyticsModule({
   if (!guild.botInstalled) {
     return (
       <StateCard
-        eyebrow="Onboarding"
-        title="La analitica se activara cuando el bot entre al servidor"
-        description="Tu bot debe escribir en guild_metrics_daily para que este modulo muestre comandos, acciones de moderacion, actividad y uptime real."
+        eyebrow="Instalacion"
+        title="La analitica se activara cuando el bot este dentro del servidor"
+        description="El bot debe publicar snapshots diarios en guild_metrics_daily para mostrar comandos, tickets, SLA y uptime reales."
         icon={BarChart3}
         tone="warning"
       />
@@ -28,8 +29,8 @@ export default function AnalyticsModule({
     return (
       <StateCard
         eyebrow="Sin metricas"
-        title="Todavia no hay telemetria por servidor"
-        description="La dashboard ya esta lista. Solo falta que tu bot escriba snapshots diarios en guild_metrics_daily para llenar estas vistas."
+        title="Todavia no hay telemetria diaria"
+        description="La dashboard ya esta lista. Solo falta que el bridge publique snapshots de actividad para este guild."
         icon={BarChart3}
       />
     );
@@ -40,81 +41,87 @@ export default function AnalyticsModule({
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-      <section className="rounded-[2rem] border border-white/10 bg-white/85 p-8 shadow-xl dark:bg-surface-800/85">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-600 dark:text-brand-300">
-          Analytics
-        </p>
-        <h2 className="mt-3 text-3xl font-bold text-slate-950 dark:text-white">
-          Tendencia de los ultimos {metrics.length} dias
-        </h2>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <PanelCard
+        eyebrow="Analitica"
+        title={`Tendencia de los ultimos ${metrics.length} dias`}
+        description="Comandos, tickets, SLA y actividad del guild publicados por el bot."
+        variant="highlight"
+      >
+        <div className="dashboard-grid-fit-standard">
           {[
             ['Comandos', summary.totals.commandsExecuted.toLocaleString()],
-            ['Moderacion', summary.totals.moderatedMessages.toLocaleString()],
-            ['Activos max', summary.totals.activeMembers.toLocaleString()],
-            ['Uptime prom', `${summary.averageUptime.toFixed(2)}%`],
+            ['Tickets abiertos', summary.totals.ticketsOpened.toLocaleString()],
+            ['Tickets cerrados', summary.totals.ticketsClosed.toLocaleString()],
+            ['Brechas SLA', summary.totals.slaBreaches.toLocaleString()],
+            ['Activos maximos', summary.totals.activeMembers.toLocaleString()],
+            ['Uptime promedio', `${summary.averageUptime.toFixed(2)}%`],
+            [
+              'FRT promedio',
+              summary.averageFirstResponseMinutes !== null
+                ? `${summary.averageFirstResponseMinutes.toFixed(1)} min`
+                : 'Sin dato',
+            ],
+            ['Tickets abiertos hoy', String(summary.latest?.openTickets ?? 0)],
           ].map(([label, value]) => (
-            <article key={label} className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-surface-600 dark:bg-surface-700/70">
-              <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+            <article key={label} className="dashboard-kpi-card">
+              <p className="dashboard-data-label">{label}</p>
               <p className="mt-2 text-3xl font-bold text-slate-950 dark:text-white">{value}</p>
             </article>
           ))}
         </div>
 
         <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50/90 p-6 dark:border-surface-600 dark:bg-surface-700/70">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             <h3 className="text-xl font-bold text-slate-950 dark:text-white">Comandos ejecutados</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">Serie diaria</p>
           </div>
           <div className="mt-8 grid h-64 grid-cols-7 items-end gap-3">
-            {summary.series.map((metric) => (
-              <div key={metric.metricDate} className="flex h-full flex-col justify-end">
+            {summary.series.slice(-7).map((metric) => (
+              <div key={metric.metricDate} className="flex h-full min-w-0 flex-col justify-end">
                 <div
-                  className="rounded-t-3xl bg-gradient-to-t from-brand-600 via-brand-500 to-sky-400"
+                  className="rounded-t-3xl bg-gradient-to-t from-brand-600 via-brand-500 to-sky-400 shadow-[0_18px_40px_rgba(88,101,242,0.28)]"
                   style={{ height: `${Math.max((metric.commandsExecuted / maxCommands) * 100, 8)}%` }}
                 />
-                <p className="mt-3 text-center text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                <p className="mt-3 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
                   {formatMetricDate(metric.metricDate)}
                 </p>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </PanelCard>
 
-      <section className="rounded-[2rem] border border-white/10 bg-white/85 p-8 shadow-xl dark:bg-surface-800/85">
-        <h3 className="text-2xl font-bold text-slate-950 dark:text-white">Detalle por dia</h3>
-        <div className="mt-6 space-y-4">
+      <PanelCard title="Detalle diario" description="Lectura rapida de cada snapshot publicado." variant="soft">
+        <div className="space-y-4">
           {summary.series.map((metric) => (
-            <article key={metric.metricDate} className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-surface-600 dark:bg-surface-700/70">
+            <article key={metric.metricDate} className="dashboard-data-card">
               <div className="flex items-start justify-between gap-4">
-                <div>
+                <div className="min-w-0">
                   <p className="text-lg font-semibold text-slate-950 dark:text-white">{formatMetricDate(metric.metricDate)}</p>
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Snapshot diario del guild</p>
                 </div>
-                <div className="rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:bg-surface-800 dark:text-slate-300">
+                <div className="dashboard-status-pill-compact border-slate-200/80 bg-white text-slate-700 dark:border-surface-600 dark:bg-surface-800 dark:text-slate-300">
                   {metric.uptimePercentage.toFixed(2)}% uptime
                 </div>
               </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="dashboard-grid-fit-compact mt-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Comandos</p>
+                  <p className="dashboard-data-label">Comandos</p>
                   <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.commandsExecuted.toLocaleString()}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Moderacion</p>
-                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.moderatedMessages.toLocaleString()}</p>
+                  <p className="dashboard-data-label">Tickets</p>
+                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.ticketsOpened.toLocaleString()} abiertos / {metric.ticketsClosed.toLocaleString()} cerrados</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-slate-400">Activos</p>
-                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.activeMembers.toLocaleString()}</p>
+                  <p className="dashboard-data-label">SLA</p>
+                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.slaBreaches.toLocaleString()} brechas</p>
                 </div>
               </div>
             </article>
           ))}
         </div>
-      </section>
+      </PanelCard>
     </div>
   );
 }

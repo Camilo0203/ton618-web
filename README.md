@@ -41,7 +41,7 @@ Apply the dashboard migration in `supabase/migrations/20260313183000_create_dash
 Required Supabase / Discord setup:
 1. Enable Discord as a Supabase Auth provider.
 2. Add redirect URLs for local and production ending in `/auth/callback`.
-3. Deploy the `sync-discord-guilds` Edge Function with access to `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`.
+3. Deploy the `sync-discord-guilds` Edge Function with access to `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `DISCORD_BOT_TOKEN` (used as a fallback when Discord OAuth does not return manageable guilds correctly).
 4. Keep your bot backend as the writer for `bot_guilds` and `guild_metrics_daily`.
 
 The frontend dashboard:

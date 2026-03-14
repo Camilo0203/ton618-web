@@ -37,7 +37,7 @@ export default function AuthCard({
           type="button"
           onClick={onLogin}
           disabled={isLoading}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 to-violet-600 px-5 py-3 font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] disabled:cursor-wait disabled:opacity-70"
+          className="dashboard-primary-button"
         >
           <LogIn className="h-4 w-4" />
           {isLoading ? 'Conectando...' : 'Continuar con Discord'}

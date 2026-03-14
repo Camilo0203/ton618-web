@@ -1,10 +1,6 @@
-import { Suspense, lazy, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import {
-  AlertTriangle,
-  RefreshCcw,
-  ServerCrash,
-} from 'lucide-react';
+import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { config } from '../config';
 import AuthCard from './components/AuthCard';
 import DashboardShell from './components/DashboardShell';
@@ -12,24 +8,33 @@ import StateCard from './components/StateCard';
 import {
   useDashboardAuth,
   useDashboardGuilds,
-  useSaveGuildConfig,
+  useGuildDashboardSnapshot,
+  useRequestGuildBackupAction,
+  useRequestGuildConfigChange,
+  useRequestTicketDashboardAction,
   useSignInWithDiscord,
   useSignOutDashboard,
   useSyncDashboardGuilds,
-  useGuildActivity,
-  useGuildConfig,
-  useGuildMetrics,
 } from './hooks/useDashboardData';
 import { useGuildSelection } from './hooks/useGuildSelection';
-import { createDefaultGuildConfig } from './utils';
-import type {
-  DashboardSectionId,
-  GuildConfig,
-} from './types';
+import {
+  DASHBOARD_SECTION_STORAGE_PREFIX,
+} from './constants';
+import { dashboardSectionIds } from './schemas';
+import { getLatestBackupMutation, getLatestMutationForSection } from './utils';
+import type { ConfigMutationSectionId, DashboardSectionId, TicketDashboardActionId } from './types';
 
 const OverviewModule = lazy(() => import('./modules/OverviewModule'));
+const InboxModule = lazy(() => import('./modules/InboxModule'));
 const GeneralModule = lazy(() => import('./modules/GeneralModule'));
-const ModerationModule = lazy(() => import('./modules/ModerationModule'));
+const ServerRolesModule = lazy(() => import('./modules/ServerRolesModule'));
+const TicketsModule = lazy(() => import('./modules/TicketsModule'));
+const VerificationModule = lazy(() => import('./modules/VerificationModule'));
+const WelcomeModule = lazy(() => import('./modules/WelcomeModule'));
+const SuggestionsModule = lazy(() => import('./modules/SuggestionsModule'));
+const ModlogsModule = lazy(() => import('./modules/ModlogsModule'));
+const CommandsModule = lazy(() => import('./modules/CommandsModule'));
+const SystemModule = lazy(() => import('./modules/SystemModule'));
 const ActivityModule = lazy(() => import('./modules/ActivityModule'));
 const AnalyticsModule = lazy(() => import('./modules/AnalyticsModule'));
 
@@ -39,11 +44,32 @@ function ModuleFallback() {
       {[0, 1, 2, 3].map((item) => (
         <div
           key={item}
-          className="h-48 animate-pulse rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75"
+          className="dashboard-skeleton h-56 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75"
         />
       ))}
     </div>
   );
+}
+
+function isDashboardSectionId(value: string | null): value is DashboardSectionId {
+  return Boolean(value && dashboardSectionIds.includes(value as DashboardSectionId));
+}
+
+function readStoredSection(guildId: string): DashboardSectionId | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  const value = window.localStorage.getItem(`${DASHBOARD_SECTION_STORAGE_PREFIX}${guildId}`);
+  return isDashboardSectionId(value) ? value : null;
+}
+
+function persistSection(guildId: string, section: DashboardSectionId) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.setItem(`${DASHBOARD_SECTION_STORAGE_PREFIX}${guildId}`, section);
 }
 
 export default function DashboardPage() {
@@ -60,30 +86,68 @@ export default function DashboardPage() {
   const guildsQuery = useDashboardGuilds(isAuthenticated);
   const guilds = guildsQuery.data ?? [];
   const { selectedGuild, selectedGuildId, setSelectedGuildId } = useGuildSelection(guilds);
-  const configQuery = useGuildConfig(selectedGuildId, Boolean(selectedGuildId));
-  const activityQuery = useGuildActivity(selectedGuildId, Boolean(selectedGuildId));
-  const metricsQuery = useGuildMetrics(selectedGuildId, Boolean(selectedGuildId));
-  const saveConfig = useSaveGuildConfig(selectedGuildId);
+  const snapshotQuery = useGuildDashboardSnapshot(selectedGuildId, Boolean(selectedGuildId));
+  const requestConfigChange = useRequestGuildConfigChange(selectedGuildId);
+  const requestBackupAction = useRequestGuildBackupAction(selectedGuildId);
+  const requestTicketAction = useRequestTicketDashboardAction(selectedGuildId);
 
-  const effectiveConfig = configQuery.data ?? createDefaultGuildConfig(selectedGuildId ?? '');
+  const snapshot = snapshotQuery.data;
+  const mutations = snapshot?.mutations ?? [];
+  const syncStatus = snapshot?.syncStatus ?? null;
   const syncErrorMessage =
-    syncGuilds.error instanceof Error
-      ? syncGuilds.error.message
-      : undefined;
+    syncGuilds.error instanceof Error ? syncGuilds.error.message : undefined;
 
-  async function handleGeneralSave(values: Pick<GuildConfig, 'generalSettings' | 'dashboardPreferences'>) {
-    await saveConfig.mutateAsync({
-      generalSettings: values.generalSettings,
-      moderationSettings: effectiveConfig.moderationSettings,
-      dashboardPreferences: values.dashboardPreferences,
+  useEffect(() => {
+    if (!selectedGuildId) {
+      return;
+    }
+
+    const stored = readStoredSection(selectedGuildId);
+    if (stored) {
+      setActiveSection(stored);
+      return;
+    }
+
+    setActiveSection(snapshot?.config.dashboardPreferences.defaultSection ?? 'overview');
+  }, [selectedGuildId, snapshot?.config.dashboardPreferences.defaultSection]);
+
+  useEffect(() => {
+    if (!selectedGuildId) {
+      return;
+    }
+
+    persistSection(selectedGuildId, activeSection);
+  }, [activeSection, selectedGuildId]);
+
+  function handleSectionChange(section: DashboardSectionId) {
+    setActiveSection(section);
+  }
+
+  async function handleConfigSave(section: ConfigMutationSectionId, payload: unknown) {
+    await requestConfigChange.mutateAsync({
+      section,
+      payload,
     });
   }
 
-  async function handleModerationSave(values: Pick<GuildConfig, 'moderationSettings'>) {
-    await saveConfig.mutateAsync({
-      generalSettings: effectiveConfig.generalSettings,
-      moderationSettings: values.moderationSettings,
-      dashboardPreferences: effectiveConfig.dashboardPreferences,
+  async function handleCreateBackup() {
+    await requestBackupAction.mutateAsync({
+      action: 'create_backup',
+      payload: {},
+    });
+  }
+
+  async function handleRestoreBackup(backupId: string) {
+    await requestBackupAction.mutateAsync({
+      action: 'restore_backup',
+      payload: { backupId },
+    });
+  }
+
+  async function handleTicketAction(action: TicketDashboardActionId, payload: Record<string, unknown>) {
+    await requestTicketAction.mutateAsync({
+      action,
+      payload,
     });
   }
 
@@ -96,27 +160,10 @@ export default function DashboardPage() {
     void syncGuilds.mutateAsync(authState.session.provider_token).catch(() => undefined);
   }
 
-  const moduleLoading =
-    selectedGuild && (
-      activeSection === 'overview'
-        ? configQuery.isLoading || activityQuery.isLoading || metricsQuery.isLoading
-        : activeSection === 'general' || activeSection === 'moderation'
-          ? configQuery.isLoading
-          : activeSection === 'activity'
-            ? activityQuery.isLoading || configQuery.isLoading
-            : metricsQuery.isLoading
-    );
-
-  const moduleError =
-    activeSection === 'overview'
-      ? configQuery.error || activityQuery.error || metricsQuery.error
-      : activeSection === 'general' || activeSection === 'moderation'
-        ? configQuery.error
-        : activeSection === 'activity'
-          ? activityQuery.error || configQuery.error
-          : metricsQuery.error;
-
   const titleGuildName = selectedGuild?.guildName ?? 'Dashboard';
+  const backupMutation = getLatestBackupMutation(mutations);
+  const pendingMutations = syncStatus?.pendingMutations ?? mutations.filter((mutation) => mutation.status === 'pending').length;
+  const failedMutations = syncStatus?.failedMutations ?? mutations.filter((mutation) => mutation.status === 'failed').length;
 
   return (
     <>
@@ -129,13 +176,13 @@ export default function DashboardPage() {
       </Helmet>
 
       {authQuery.isLoading ? (
-        <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center px-4">
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 px-8 py-10 backdrop-blur-xl">
+        <div className="dashboard-shell flex min-h-screen items-center justify-center px-4 text-white">
+          <div className="dashboard-surface px-8 py-10">
             <p className="text-lg font-semibold">Validando sesion del dashboard...</p>
           </div>
         </div>
       ) : !isAuthenticated ? (
-        <div className="min-h-screen bg-[linear-gradient(180deg,_#101323_0%,_#151933_100%)] px-4 py-10 text-white">
+        <div className="dashboard-shell px-4 py-10 text-white">
           <div className="mx-auto max-w-5xl">
             <AuthCard
               canUseDashboard={canUseDashboard}
@@ -146,13 +193,13 @@ export default function DashboardPage() {
           </div>
         </div>
       ) : guildsQuery.isLoading ? (
-        <div className="min-h-screen bg-[linear-gradient(180deg,_#101323_0%,_#151933_100%)] px-4 py-10 text-white">
-          <div className="mx-auto max-w-6xl rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <div className="dashboard-shell px-4 py-10 text-white">
+          <div className="dashboard-surface mx-auto max-w-6xl p-8">
             <p className="text-lg font-semibold">Cargando servidores administrables...</p>
           </div>
         </div>
       ) : guildsQuery.isError ? (
-        <div className="min-h-screen bg-[linear-gradient(180deg,_#101323_0%,_#151933_100%)] px-4 py-10">
+        <div className="dashboard-shell px-4 py-10">
           <div className="mx-auto max-w-5xl">
             <StateCard
               eyebrow="Error de datos"
@@ -164,7 +211,7 @@ export default function DashboardPage() {
           </div>
         </div>
       ) : !guilds.length ? (
-        <div className="min-h-screen bg-[linear-gradient(180deg,_#101323_0%,_#151933_100%)] px-4 py-10">
+        <div className="dashboard-shell px-4 py-10">
           <div className="mx-auto max-w-5xl">
             <StateCard
               eyebrow="Sin servidores"
@@ -177,7 +224,7 @@ export default function DashboardPage() {
                   type="button"
                   onClick={syncGuildAccess}
                   disabled={syncGuilds.isPending}
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-500 to-violet-600 px-5 py-3 font-semibold text-white shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+                  className="dashboard-primary-button"
                 >
                   <RefreshCcw className={`h-4 w-4 ${syncGuilds.isPending ? 'animate-spin' : ''}`} />
                   Re-sincronizar acceso
@@ -192,69 +239,173 @@ export default function DashboardPage() {
           guilds={guilds}
           selectedGuild={selectedGuild}
           activeSection={activeSection}
-          onSectionChange={setActiveSection}
+          onSectionChange={handleSectionChange}
           onGuildChange={setSelectedGuildId}
           onSync={syncGuildAccess}
           onLogout={() => signOut.mutate()}
           isSyncing={syncGuilds.isPending}
           syncError={syncErrorMessage}
+          syncStatus={syncStatus}
+          pendingMutations={pendingMutations}
+          failedMutations={failedMutations}
         >
           {!selectedGuild ? (
             <StateCard
               eyebrow="Seleccion requerida"
               title="Escoge un servidor para continuar"
-              description="En cuanto elijas un guild, cargaremos la configuracion, actividad y analiticas asociadas."
+              description="En cuanto elijas un guild, cargaremos configuracion aplicada, inventario, auditoria y analiticas asociadas."
               icon={AlertTriangle}
             />
-          ) : moduleError ? (
+          ) : snapshotQuery.isError ? (
             <StateCard
               eyebrow="Modulo no disponible"
-              title="No pudimos cargar esta seccion"
-              description={moduleError instanceof Error ? moduleError.message : 'Revisa permisos, tablas y politicas RLS del panel.'}
+              title="No pudimos cargar este servidor"
+              description={snapshotQuery.error instanceof Error ? snapshotQuery.error.message : 'Revisa tablas, politicas RLS y el bridge del bot.'}
               icon={ServerCrash}
               tone="danger"
             />
-          ) : moduleLoading ? (
+          ) : snapshotQuery.isLoading || !snapshot ? (
             <ModuleFallback />
           ) : (
             <Suspense fallback={<ModuleFallback />}>
               {activeSection === 'overview' ? (
                 <OverviewModule
                   guild={selectedGuild}
-                  config={effectiveConfig}
-                  events={activityQuery.data ?? []}
-                  metrics={metricsQuery.data ?? []}
-                  onSectionChange={setActiveSection}
+                  config={snapshot.config}
+                  events={snapshot.events}
+                  metrics={snapshot.metrics}
+                  mutations={snapshot.mutations}
+                  backups={snapshot.backups}
+                  syncStatus={snapshot.syncStatus}
+                  onSectionChange={handleSectionChange}
+                />
+              ) : null}
+              {activeSection === 'inbox' ? (
+                <InboxModule
+                  guild={selectedGuild}
+                  workspace={snapshot.ticketWorkspace}
+                  mutation={snapshot.mutations.find((entry) => entry.mutationType === 'ticket_action') ?? null}
+                  syncStatus={snapshot.syncStatus}
+                  isMutating={requestTicketAction.isPending}
+                  onAction={handleTicketAction}
                 />
               ) : null}
               {activeSection === 'general' ? (
                 <GeneralModule
                   guild={selectedGuild}
-                  config={effectiveConfig}
-                  isSaving={saveConfig.isPending}
-                  onSave={handleGeneralSave}
+                  config={snapshot.config}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'general')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) =>
+                    handleConfigSave('general', {
+                      generalSettings: values.generalSettings,
+                      dashboardPreferences: values.dashboardPreferences,
+                    })
+                  }
                 />
               ) : null}
-              {activeSection === 'moderation' ? (
-                <ModerationModule
+              {activeSection === 'server_roles' ? (
+                <ServerRolesModule
                   guild={selectedGuild}
-                  config={effectiveConfig}
-                  isSaving={saveConfig.isPending}
-                  onSave={handleModerationSave}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'server_roles_channels')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('server_roles_channels', values)}
+                />
+              ) : null}
+              {activeSection === 'tickets' ? (
+                <TicketsModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'tickets')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('tickets', values)}
+                />
+              ) : null}
+              {activeSection === 'verification' ? (
+                <VerificationModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'verification')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('verification', values)}
+                />
+              ) : null}
+              {activeSection === 'welcome' ? (
+                <WelcomeModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'welcome')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('welcome', values)}
+                />
+              ) : null}
+              {activeSection === 'suggestions' ? (
+                <SuggestionsModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'suggestions')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('suggestions', values)}
+                />
+              ) : null}
+              {activeSection === 'modlogs' ? (
+                <ModlogsModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'modlogs')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('modlogs', values)}
+                />
+              ) : null}
+              {activeSection === 'commands' ? (
+                <CommandsModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'commands')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  onSave={(values) => handleConfigSave('commands', values)}
+                />
+              ) : null}
+              {activeSection === 'system' ? (
+                <SystemModule
+                  guild={selectedGuild}
+                  config={snapshot.config}
+                  backups={snapshot.backups}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'system')}
+                  backupMutation={backupMutation}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChange.isPending}
+                  isRequestingBackup={requestBackupAction.isPending}
+                  onSave={(values) => handleConfigSave('system', values)}
+                  onCreateBackup={handleCreateBackup}
+                  onRestoreBackup={handleRestoreBackup}
                 />
               ) : null}
               {activeSection === 'activity' ? (
                 <ActivityModule
                   guild={selectedGuild}
-                  config={effectiveConfig}
-                  events={activityQuery.data ?? []}
+                  events={snapshot.events}
+                  mutations={snapshot.mutations}
                 />
               ) : null}
               {activeSection === 'analytics' ? (
-                <AnalyticsModule
-                  guild={selectedGuild}
-                  metrics={metricsQuery.data ?? []}
-                />
+                <AnalyticsModule guild={selectedGuild} metrics={snapshot.metrics} />
               ) : null}
             </Suspense>
           )}
