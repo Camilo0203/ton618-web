@@ -30,7 +30,7 @@ export default function Hero() {
         <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] nebula-blur bg-purple-600/10" style={{ transform: 'translate3d(0,0,0)' }}></div>
       </div>
 
-      {/* THE SINGULARITY (TON 618 CORE) */}
+      {/* THE SINGULARITY (TON 618 ABSTRACT PRESENCE) */}
       <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
         <motion.div 
           style={{ 
@@ -39,30 +39,45 @@ export default function Hero() {
             rotate: shouldReduceMotion ? 0 : rotateSingularity,
             willChange: 'transform'
           }}
-          className="relative w-[300px] h-[300px] md:w-[600px] md:h-[600px] lg:w-[800px] lg:h-[800px]"
+          className="relative w-full h-full max-w-[1200px] max-h-[1200px] flex items-center justify-center"
         >
-          {/* Outer Accretion Disk (Slow, Massive) */}
-          <div className="absolute inset-0 rounded-full border-[0.5px] border-indigo-500/10 animate-[spin_180s_linear_infinite] mask-radial-faded"></div>
+          {/* 1. Deep Gravitational Well (Core Atmosphere) */}
+          <div className="absolute w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.08)_0%,rgba(0,0,0,0)_70%)] blur-[80px] animate-pulse-soft"></div>
           
-          {/* Middle Energy Disk (Counter-rotate, Glow) */}
-          <div className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/15 blur-[1px] animate-[spin_120s_linear_infinite_reverse] mask-radial-faded"></div>
-          
-          {/* The Event Horizon Core */}
-          <div className="absolute inset-[30%] rounded-full bg-black shadow-[0_0_60px_rgba(79,70,229,0.2)] flex items-center justify-center group overflow-hidden border border-white/5">
-            <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(79,70,229,0.05),transparent)] animate-[spin_15s_linear_infinite]"></div>
-            <div className="w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-2xl animate-pulse"></div>
+          {/* 2. Abstract Singular Point (The Energy Center - NOT solid black) */}
+          <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] flex items-center justify-center">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,rgba(0,0,0,0)_60%)] blur-3xl"></div>
+            <div className="absolute w-1/4 h-1/4 bg-white/5 rounded-full blur-[100px] mix-blend-screen"></div>
+            
+            {/* 3. Gravitational Waves (Fine Orbital Lines) */}
+            {[...Array(3)].map((_, i) => (
+              <div 
+                key={i}
+                className="absolute inset-0 rounded-full border-[0.5px] border-indigo-500/10 animate-orbit-slow"
+                style={{ 
+                  padding: `${i * 15}%`, 
+                  animationDuration: `${120 + i * 40}s`,
+                  opacity: 0.3 - i * 0.05
+                }}
+              >
+                <div className="w-full h-full rounded-full mask-radial-faded"></div>
+              </div>
+            ))}
           </div>
+
+          {/* 4. Ethereal Halos (Large & Suttle) */}
+          <div className="absolute w-full h-full bg-[radial-gradient(circle_at_center,rgba(79,70,229,0.03)_0%,rgba(0,0,0,0)_50%)] mask-radial-faded"></div>
           
-          {/* Quasar Jet Particles - Reduced count or simplified animation */}
-          {!shouldReduceMotion && [...Array(2)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute top-1/2 left-1/2 w-[1px] h-[800px] bg-gradient-to-t from-transparent via-indigo-500/30 to-transparent"
-              style={{ rotate: i * 90, translateX: '-50%', translateY: '-50%', willChange: 'opacity' }}
-              animate={{ opacity: [0.1, 0.3, 0.1] }}
-              transition={{ duration: 6, repeat: Infinity, delay: i * 2 }}
-            />
-          ))}
+          {/* 5. Spatial Distortion Accents (Refined Particles/Lines) */}
+          {!shouldReduceMotion && (
+            <div className="absolute inset-0 pointer-events-none opacity-20">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[150%] bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent rotate-45 blur-[1px]"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1px] h-[150%] bg-gradient-to-b from-transparent via-indigo-500/20 to-transparent -rotate-45 blur-[1px]"></div>
+            </div>
+          )}
+
+          {/* 6. Deep Dark Tensity (The "Weight" of the singularity) */}
+          <div className="absolute w-[40%] h-[40%] rounded-full bg-black/40 blur-[120px]"></div>
         </motion.div>
       </div>
 
