@@ -24,17 +24,17 @@ const itemVariants = {
 
 export default function Features() {
   return (
-    <section id="features" className="py-32 bg-[#020617] relative overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <section id="features" className="py-32 bg-[#010208] relative overflow-hidden">
+      {/* Background interstellar glow */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_10%_10%,rgba(245,158,11,0.03),transparent_50%)]"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-20">
+        <div className="text-center mb-24">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter"
+            className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter"
           >
             Power Beyond the <span className="text-brand-gradient">Horizon</span>
           </motion.h2>
@@ -43,9 +43,9 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-slate-400 max-w-2xl mx-auto font-bold uppercase tracking-widest leading-relaxed"
           >
-            TON618 provides the most massive toolset ever created for Discord. Unstable power, stabilized for your server.
+            TON618 provides the most massive toolset ever created for Discord.
           </motion.p>
         </div>
 
@@ -62,18 +62,15 @@ export default function Features() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="group relative gravitational-lens rounded-3xl p-8 border border-white/5 hover:border-amber-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(245,158,11,0.1)] overflow-hidden"
+                className="hud-border rounded-3xl p-8 flex flex-col transition-all duration-500 hover:border-amber-500/40 hover:scale-[1.02] group"
               >
-                {/* Hover light effect */}
-                <div className="absolute -inset-1 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
                 <div className="relative z-10">
-                  <div className="inline-flex p-4 rounded-2xl bg-amber-500/10 mb-6 group-hover:bg-amber-500/20 transition-all duration-500 group-hover:scale-110">
+                  <div className="inline-flex p-4 rounded-2xl bg-amber-500/10 mb-8 group-hover:bg-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.1)] group-hover:scale-110 transition-transform duration-500">
                     <Icon className="w-8 h-8 text-amber-500" />
                   </div>
 
-                  <h3 className="text-xl font-black text-white mb-3 uppercase tracking-tight">{feature.title}</h3>
-                  <p className="text-slate-400 leading-relaxed text-sm font-medium">{feature.description}</p>
+                  <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{feature.title}</h3>
+                  <p className="text-slate-400 leading-relaxed text-sm font-bold uppercase tracking-wide opacity-80">{feature.description}</p>
                 </div>
               </motion.div>
             );

@@ -1,15 +1,13 @@
 import { Bot, Twitter, Github, MessageCircle, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { config, getDashboardUrl, isDashboardExternal } from '../config';
+import { config } from '../config';
 
 interface FooterProps {
   onOpenLegal: (type: 'terms' | 'privacy' | 'cookies') => void;
 }
 
 export default function Footer({ onOpenLegal }: FooterProps) {
-  const dashboardHref = getDashboardUrl();
-  const dashboardExternal = isDashboardExternal();
+
 
   const containerVariants = {
     hidden: { opacity: 0 },

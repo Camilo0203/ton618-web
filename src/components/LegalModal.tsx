@@ -31,37 +31,37 @@ export default function LegalModal({ type, onClose, botName }: LegalModalProps) 
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-brand-900/80 dark:bg-surface-950/90 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-center justify-center px-4 bg-black/90 backdrop-blur-xl"
       role="dialog"
       aria-modal="true"
       aria-labelledby="legal-modal-title"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-brand-50 dark:bg-surface-800 rounded-3xl shadow-2xl border border-brand-200 dark:border-surface-700 overflow-hidden"
+        className="w-full max-w-2xl bg-[#010208] hud-border rounded-[40px] shadow-2xl overflow-hidden"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="p-8 border-b border-brand-200 dark:border-surface-700 flex items-start justify-between gap-4">
+        <div className="p-10 border-b border-white/5 flex items-start justify-between gap-6">
           <div>
-            <h3 id="legal-modal-title" className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h3 id="legal-modal-title" className="text-4xl font-black text-white uppercase tracking-tighter mb-2">
               {content.title}
             </h3>
-            <p className="text-sm text-brand-600 dark:text-brand-400 font-medium mt-1">{botName}</p>
+            <p className="text-[10px] text-amber-500 font-black uppercase tracking-[0.3em]">{botName} // Core Protocol</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-brand-100 dark:bg-surface-700 hover:bg-brand-200 dark:hover:bg-surface-600 text-brand-700 dark:text-white text-sm font-bold transition-colors"
+            className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all duration-300 hover:scale-105"
           >
-            Close
+            Close HUD
           </button>
         </div>
 
-        <div className="p-8 text-gray-700 dark:text-slate-300 leading-relaxed max-h-[60vh] overflow-y-auto">
-          <p className="text-lg">{content.content}</p>
-          <div className="mt-8 pt-6 border-t border-brand-100 dark:border-surface-700 flex justify-between items-center text-xs text-gray-500 dark:text-slate-500 uppercase tracking-widest font-bold">
-            <span>Last updated</span>
-            <span>March 5, 2026</span>
+        <div className="p-10 text-slate-400 font-bold leading-relaxed max-h-[60vh] overflow-y-auto uppercase text-xs tracking-wider">
+          <p className="text-xl text-white normal-case font-medium mb-10 leading-relaxed border-l-2 border-amber-500/30 pl-6">{content.content}</p>
+          <div className="mt-12 pt-8 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 uppercase tracking-[0.25em] font-black">
+            <span>Protocol Update</span>
+            <span className="text-amber-500/60">March 5, 2026 // Active</span>
           </div>
         </div>
       </div>

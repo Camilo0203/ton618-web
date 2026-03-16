@@ -11,14 +11,10 @@ interface AnimatedStats {
   uptimePercentage: number;
 }
 
-function formatDate(value: string): string {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return '';
-  return parsed.toLocaleString();
-}
+
 
 export default function LiveStats() {
-  const { stats, loading, error, lastUpdated } = useBotStats();
+  const { stats, error } = useBotStats();
   const [animated, setAnimated] = useState<AnimatedStats>(defaultBotStats);
   const { t } = useTranslation();
 

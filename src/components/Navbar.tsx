@@ -17,7 +17,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
   const inviteEnabled = Boolean(inviteUrl);
-  const { theme } = useTheme(); // setTheme is not used, so it's removed
+  useTheme(); // theme is not used
   const { i18n } = useTranslation();
 
   // The second redundant useTheme() call is removed.

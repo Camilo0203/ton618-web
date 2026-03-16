@@ -51,25 +51,25 @@ export default function Testimonials() {
   };
 
   return (
-    <section id="testimonials" className="py-24 bg-brand-100 dark:bg-surface-800 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+    <section id="testimonials" className="py-32 bg-[#010208] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-24">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4"
+            className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter"
           >
-            Loved by Server Owners Worldwide
+            Stabilized <span className="text-brand-gradient">Mass</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto"
+            className="text-xl text-slate-400 max-w-2xl mx-auto font-bold uppercase tracking-widest"
           >
-            Don't just take our word for it. Here's what our community has to say.
+            Trusted by the largest servers in the local cluster.
           </motion.p>
         </div>
 
@@ -78,36 +78,36 @@ export default function Testimonials() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="bg-brand-50 dark:bg-surface-700 rounded-2xl p-7 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 relative border border-brand-200 dark:border-surface-600"
+              className="hud-border rounded-3xl p-10 flex flex-col transition-all duration-500 hover:border-amber-500/40 relative group"
             >
-              <Quote className="absolute top-6 right-6 w-8 h-8 text-brand-200 dark:text-brand-600/60" />
+              <Quote className="absolute top-10 right-10 w-10 h-10 text-white/5 group-hover:text-amber-500/10 transition-colors" />
 
-              <div className="flex items-center gap-4 mb-5 relative z-10">
+              <div className="flex items-center gap-5 mb-8 relative z-10">
                 <img
                   src={testimonial.avatar}
                   alt={testimonial.name}
-                  className="w-14 h-14 rounded-full object-cover border-2 border-brand-200 dark:border-brand-700"
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-white/5 group-hover:border-amber-500/30 transition-colors shadow-2xl"
                 />
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-white">{testimonial.name}</h4>
-                  <p className="text-sm text-gray-500 dark:text-slate-400">{testimonial.role}</p>
-                  <p className="text-xs text-brand-600 dark:text-brand-400 font-medium">{testimonial.server}</p>
+                  <h4 className="font-black text-white uppercase tracking-tight text-lg">{testimonial.name}</h4>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{testimonial.role}</p>
+                  <p className="text-[10px] text-amber-500 font-black uppercase tracking-[0.2em]">{testimonial.server}</p>
                 </div>
               </div>
 
-              <div className="flex gap-1 mb-4 relative z-10">
+              <div className="flex gap-1.5 mb-6 relative z-10">
                 {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
                 ))}
               </div>
 
-              <p className="text-gray-700 dark:text-slate-300 leading-relaxed relative z-10 text-sm">
+              <p className="text-slate-400 font-bold leading-relaxed relative z-10 text-sm uppercase tracking-wide opacity-80">
                 "{testimonial.content}"
               </p>
             </motion.div>
