@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { Activity, ShieldCheck, Cpu } from 'lucide-react';
 
 export default function VisualExperience() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -8,85 +9,89 @@ export default function VisualExperience() {
     offset: ["start end", "end start"]
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1.2]);
 
   return (
-    <section ref={containerRef} id="experience" className="h-[150vh] relative bg-black overflow-hidden flex items-center justify-center">
-      {/* Background Distortion/Glow */}
+    <section ref={containerRef} id="experience" className="h-[200vh] relative bg-black overflow-hidden flex items-center justify-center">
+      {/* DEEP SPACE BACKGROUND */}
       <div className="absolute inset-0 z-0">
         <motion.div 
           style={{ y: y1 }}
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] nebula-blur bg-indigo-500/10 blur-[150px] rounded-full"
+          className="absolute top-0 left-0 w-full h-full opacity-30 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
         ></motion.div>
-        <motion.div 
-          style={{ y: y2 }}
-          className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] nebula-blur bg-purple-500/10 blur-[150px] rounded-full"
-        ></motion.div>
+        
+        {/* Dynamic Nebulas */}
+        <motion.div style={{ y: y1 }} className="absolute top-1/4 left-1/4 w-[800px] h-[800px] nebula-blur bg-indigo-500/10"></motion.div>
+        <motion.div style={{ y: y2 }} className="absolute bottom-1/4 right-1/4 w-[800px] h-[800px] nebula-blur bg-purple-500/10"></motion.div>
       </div>
 
-      {/* Centerpiece Visual */}
+      {/* CORE EXPERIENCE VISUAL */}
       <motion.div 
-        style={{ opacity }}
-        className="relative z-10 text-center px-4"
+        style={{ opacity, scale, rotate }}
+        className="relative z-10 text-center px-6"
       >
-        <div className="relative mb-16 inline-block">
-          {/* Energy Core Visual */}
-          <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-indigo-500/30 flex items-center justify-center relative">
-            <div className="absolute inset-0 bg-indigo-500/5 rounded-full animate-pulse-slow"></div>
-            <div className="w-4 h-4 bg-white rounded-full shadow-[0_0_40px_rgba(255,255,255,1)]"></div>
+        <div className="relative mb-20 inline-block">
+          {/* Energy Core HUD */}
+          <div className="w-48 h-48 md:w-72 md:h-72 rounded-full border border-white/[0.03] flex items-center justify-center relative">
+            <div className="absolute inset-[-10px] border border-indigo-500/10 rounded-full animate-[spin_20s_linear_infinite]"></div>
+            <div className="absolute inset-[-30px] border border-white/5 rounded-full animate-[spin_30s_linear_infinite_reverse]"></div>
             
-            {/* Spinning Rings */}
-            <div className="absolute inset-[-20px] border border-white/5 rounded-full animate-spin-slow"></div>
-            <div className="absolute inset-[-40px] border border-indigo-500/10 rounded-full bg-transparent opacity-50"></div>
+            <div className="w-8 h-8 bg-white rounded-full shadow-[0_0_50px_rgba(255,255,255,0.8)] z-10"></div>
+            
+            {/* Energy Ripples */}
+            <motion.div 
+              animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="absolute w-20 h-20 bg-indigo-500/20 rounded-full blur-xl"
+            ></motion.div>
+          </div>
+          
+          {/* Floating HUD Elements around the core */}
+          <div className="absolute top-0 -right-20 animate-float-subtle">
+             <div className="cinematic-glass p-4 rounded-xl border-indigo-500/20 flex gap-3 items-center">
+                <Activity className="w-4 h-4 text-indigo-400" />
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Flux: 0.88c</span>
+             </div>
           </div>
         </div>
 
-        <h2 className="text-4xl md:text-6xl lg:text-8xl font-black text-white uppercase tracking-tighter mb-8 max-w-5xl mx-auto leading-none">
-          Experience the <br/>
-          <span className="text-premium-gradient">Singularity</span>
+        <h2 className="text-6xl md:text-9xl font-black text-white uppercase tracking-tightest mb-10 leading-[0.85]">
+          Architect the <br/>
+          <span className="text-premium-gradient text-shadow-glow">Void</span>
         </h2>
         
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed uppercase tracking-[0.2em] opacity-80">
-          Scaling communities beyond the limits of known gravity.
+        <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed tracking-[0.3em] uppercase opacity-60 italic">
+          Scaling civilizations beyond the event horizon.
         </p>
       </motion.div>
 
-      {/* Floating UI Elements (Parallax) */}
+      {/* PARALLAX PANELS */}
       <motion.div 
         style={{ y: y1 }}
-        className="absolute top-[20%] right-[10%] cinematic-glass p-6 rounded-3xl border-indigo-500/20 hidden lg:block"
+        className="absolute top-[30%] right-[15%] hidden lg:block"
       >
-        <div className="flex flex-col gap-4">
-          <div className="w-40 h-2 bg-white/10 rounded-full overflow-hidden">
-            <motion.div 
-              animate={{ width: ["0%", "80%", "0%"] }}
-              transition={{ duration: 10, repeat: Infinity }}
-              className="h-full bg-indigo-500"
-            ></motion.div>
-          </div>
-          <div className="flex justify-between items-center text-[10px] font-black tracking-widest text-slate-500">
-            <span>FLUX CAPACITY</span>
-            <span>0.88c</span>
-          </div>
+        <div className="tech-card p-10 max-w-[300px] border-white/5 bg-black/40">
+           <ShieldCheck className="w-8 h-8 text-indigo-500 mb-6" />
+           <h4 className="text-lg font-bold text-white mb-3 tracking-tight">Vanguard Shield</h4>
+           <p className="text-xs text-slate-500 leading-relaxed">Advanced kinetic barriers protecting your server against the pressures of extreme growth.</p>
         </div>
       </motion.div>
 
       <motion.div 
         style={{ y: y2 }}
-        className="absolute bottom-[20%] left-[10%] cinematic-glass p-6 rounded-3xl border-indigo-500/20 hidden lg:block"
+        className="absolute bottom-[30%] left-[15%] hidden lg:block"
       >
-        <div className="flex gap-4 items-center">
-           <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></div>
-           </div>
-           <div>
-              <div className="text-[10px] font-black tracking-widest text-slate-500 uppercase">System Status</div>
-              <div className="text-sm font-bold text-white uppercase">Void Stabilized</div>
-           </div>
+        <div className="tech-card p-10 max-w-[300px] border-white/5 bg-black/40">
+           <Cpu className="w-8 h-8 text-indigo-500 mb-6" />
+           <h4 className="text-lg font-bold text-white mb-3 tracking-tight">Neural Sharding</h4>
+           <p className="text-xs text-slate-500 leading-relaxed">Dynamic shard distribution allowing for uninterrupted processing at hyper-massive scales.</p>
         </div>
       </motion.div>
     </section>
   );
 }
+

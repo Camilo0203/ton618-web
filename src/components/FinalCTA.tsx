@@ -1,25 +1,31 @@
 import { motion } from 'framer-motion';
-import { Bot, ChevronRight } from 'lucide-react';
+import { Bot, ChevronRight, Zap } from 'lucide-react';
 import { getDiscordInviteUrl } from '../config';
 
 export default function FinalCTA() {
   const inviteUrl = getDiscordInviteUrl();
 
   return (
-    <section id="join" className="py-40 relative overflow-hidden bg-black">
-      {/* Background Deep Space visual */}
+    <section id="join" className="py-60 relative overflow-hidden bg-black">
+      {/* Cinematic Singularity Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-500/10 blur-[150px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-indigo-500/5 blur-[180px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-500/10 blur-[100px] rounded-full animate-pulse-slow"></div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.2 }}
         >
-          <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none mb-10">
+          <div className="inline-flex items-center gap-2 mb-10 px-4 py-1 rounded-full border border-indigo-500/20 bg-indigo-500/5">
+             <Zap className="w-3 h-3 text-indigo-400 fill-indigo-400" />
+             <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Protocol Finalization</span>
+          </div>
+
+          <h2 className="text-6xl md:text-9xl font-bold text-white uppercase tracking-tightest leading-none mb-12">
             Expand Your <br/>
             <span className="text-premium-gradient">Empire</span>
           </h2>
@@ -28,27 +34,31 @@ export default function FinalCTA() {
             The singularity is ready. Initiate the synchronization protocol and bring cosmic-scale power to your Discord server today.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <div className="flex justify-center items-center">
             <a
               href={inviteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-16 py-6 bg-white text-black rounded-2xl font-black text-xl uppercase tracking-[0.2em] hover:scale-110 transition-all duration-500 shadow-[0_0_50px_rgba(255,255,255,0.2)] flex items-center gap-3 overflow-hidden group"
+              className="btn-premium-primary text-lg !px-20 !py-6 group"
             >
               <Bot className="w-6 h-6 group-hover:rotate-12 transition-transform duration-500" />
               <span>Initialize Sync</span>
-              <ChevronRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
 
-          <div className="mt-20 flex justify-center gap-12 text-slate-500 font-black text-[10px] uppercase tracking-[0.4em]">
-             <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+          <div className="mt-24 flex flex-wrap justify-center gap-12 text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">
+             <div className="flex items-center gap-2 group">
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 group-hover:animate-ping"></div>
                 <span>NODE-01 ACTIVE</span>
              </div>
-             <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></div>
+             <div className="flex items-center gap-2 group">
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 group-hover:animate-ping"></div>
                 <span>ENCRYPTION VERIFIED</span>
+             </div>
+             <div className="flex items-center gap-2 group">
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-500 group-hover:animate-ping"></div>
+                <span>VOID STABILIZED</span>
              </div>
           </div>
         </motion.div>
@@ -56,3 +66,4 @@ export default function FinalCTA() {
     </section>
   );
 }
+

@@ -1,107 +1,109 @@
-import { Shield, Zap, Bot, BarChart3, Lock, Cpu, Globe, Scale } from 'lucide-react';
+import { Shield, Zap, Cpu, BarChart3, Lock, Globe, Layers, Radio } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
   { 
     icon: Shield,    
-    title: 'Advanced Moderation',    
-    description: 'Establish absolute order with the most precise moderation engine. Automated guards that vanish threats before they manifest.',
-    accent: 'from-indigo-500 to-blue-500'
+    title: 'Kinetic Moderation',    
+    description: 'Neural-linked enforcement protocols that sanitize threats before they penetrate your community ecosystem.',
+    status: 'ENFORCER ACTIVE'
   },
   { 
     icon: Cpu,       
-    title: 'Intelligent Automation', 
-    description: 'Neural-grade workflows that learn your server\'s architecture. Automate everything from roles to complex community logic.',
-    accent: 'from-purple-500 to-indigo-500'
+    title: 'Core Autonomy', 
+    description: 'Sophisticated event-loops and automated role architectures that evolve with your server\'s complexity.',
+    status: 'LOGIC STABLE'
   },
   { 
     icon: Zap,       
-    title: 'Instant Execution',      
-    description: 'Zero-latency command processing powered by over-clocked shard clusters. Response times that defy traditional gravity.',
-    accent: 'from-cyan-400 to-blue-500'
+    title: 'Sub-Zero Latency',      
+    description: 'High-frequency command processing across decentralized shard clusters for near-instant execution.',
+    status: 'FLOW OPTIMIZED'
   },
   { 
     icon: Lock,      
-    title: 'Sovereign Security',     
-    description: 'End-to-end data encryption and sophisticated threat detection protocols. Your community integrity is our biological imperative.',
-    accent: 'from-blue-600 to-indigo-600'
+    title: 'Cryptographic Integrity',     
+    description: 'Military-grade data protection and sophisticated intrusion detection to maintain total sovereign security.',
+    status: 'SHIELD VERIFIED'
   },
   { 
     icon: BarChart3,  
-    title: 'Deep Analytics',         
-    description: 'Exhaustive data visualization of your server\'s pulse. Map every interaction within your digital ecosystem in real-time.',
-    accent: 'from-violet-500 to-purple-600'
+    title: 'Neural Analytics',         
+    description: 'Deep-space telemetry and interaction mapping. Visualize every data point within your digital horizon.',
+    status: 'COGNITION LIVE'
   },
   { 
     icon: Globe,     
-    title: 'Global Scalability',    
-    description: 'Architected to sustain millions of members without friction. TON618 expands with your vision, limitless and stable.',
-    accent: 'from-cyan-500 to-blue-400'
+    title: 'Omni-Scale Network',    
+    description: 'Architected for massive expansion. Seamlessly sustain multi-million member ecosystems with absolute stability.',
+    status: 'HORIZON EXPANDED'
   },
   { 
-    icon: Scale,     
-    title: 'Balanced Governance',   
-    description: 'Sophisticated leveling and reputation systems that encourage quality engagement. Meritocracy, automated flawlessly.',
-    accent: 'from-indigo-400 to-cyan-500'
+    icon: Layers,     
+    title: 'Modular DNA',   
+    description: 'Granular configuration patterns. Tailor the singularity core to your server\'s specific operational requirements.',
+    status: 'CORE CUSTOMIZED'
   },
   { 
-    icon: Bot,       
-    title: 'Custom Core',           
-    description: 'Highly modular configuration patterns. Tailor the Singularity to your server\'s specific DNA without compromise.',
-    accent: 'from-purple-400 to-indigo-500'
+    icon: Radio,       
+    title: 'Unified Comms',           
+    description: 'Seamless integration across the Discord API. A bridge between your community and the next generation of tools.',
+    status: 'SIGNAL CLEAR'
   },
 ];
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+  hidden: { opacity: 0, scale: 0.95, y: 30 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } } as const,
 };
 
 export default function Features() {
   return (
-    <section id="features" className="py-32 relative overflow-hidden bg-black">
-      {/* Dynamic Background Gradients */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] nebula-blur bg-indigo-500/10"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] nebula-blur bg-purple-500/5"></div>
+    <section id="features" className="py-40 relative overflow-hidden bg-black/50">
+      {/* ATMOSPHERIC BACKGROUND */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] nebula-blur bg-indigo-500/5 -translate-y-1/2 translate-x-1/2"></div>
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] nebula-blur bg-purple-500/5 translate-y-1/2 -translate-x-1/2"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-8">
-          <div className="max-w-2xl">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-32 gap-10">
+          <div className="max-w-3xl">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-3 mb-6"
+              className="flex items-center gap-4 mb-8"
             >
-              <div className="w-12 h-[1px] bg-indigo-500"></div>
-              <span className="text-xs font-black uppercase tracking-[0.4em] text-indigo-400">Biological Superiority</span>
+              <div className="w-8 h-[1px] bg-indigo-500/50"></div>
+              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400">Tactical Advantage</span>
             </motion.div>
             
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-5xl md:text-7xl font-black text-white leading-none uppercase tracking-[-0.02em]"
+              className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tightest uppercase"
             >
-              Master the <br/>
-              <span className="text-premium-gradient">Infinite Horizon</span>
+              Operational <br/>
+              <span className="text-premium-gradient">Superiority</span>
             </motion.h2>
           </div>
           
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-slate-400 max-w-sm font-medium leading-relaxed"
+            className="max-w-md"
           >
-            A suite of high-precision instruments designed for the next generation of digital communities. 
-          </motion.p>
+            <p className="text-lg text-slate-400 font-medium leading-relaxed border-l border-white/10 pl-8">
+              A highly-calibrated utility core designed to command the next generation of complex digital infrastructures.
+            </p>
+          </motion.div>
         </div>
 
         <motion.div
@@ -109,7 +111,7 @@ export default function Features() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {features.map((feature, index) => {
             const Icon = feature.icon;
@@ -117,22 +119,29 @@ export default function Features() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="group relative"
+                className="tech-card group"
               >
-                <div className="hud-border rounded-[2.5rem] p-8 h-full flex flex-col hover:border-indigo-500/30 transition-all duration-700">
-                  {/* Icon Wrapper */}
-                  <div className="relative mb-10 w-16 h-16 flex items-center justify-center">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.accent} opacity-5 rounded-2xl group-hover:opacity-15 transition-opacity duration-700`}></div>
-                    <Icon className="w-7 h-7 text-white/90 group-hover:text-cyan-400 transition-colors duration-700" />
-                  </div>
+                {/* HUD ACCENTS */}
+                <div className="hud-accent-corner top-left"></div>
+                <div className="hud-accent-corner top-right"></div>
+                <div className="hud-accent-corner bottom-left"></div>
+                <div className="hud-accent-corner bottom-right"></div>
 
-                  <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tight">{feature.title}</h3>
-                  <p className="text-slate-500 text-sm font-medium leading-relaxed mb-6 group-hover:text-slate-400 transition-colors duration-700">{feature.description}</p>
-                  
-                  <div className="mt-auto pt-4 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-500/50 group-hover:text-indigo-400 transition-colors duration-700">
-                    <span>Protocol Ready</span>
-                    <div className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></div>
-                  </div>
+                {/* ICON BOX */}
+                <div className="relative mb-8 w-14 h-14 flex items-center justify-center rounded-2xl bg-white/[0.03] border border-white/[0.05] group-hover:border-indigo-500/30 transition-all duration-500">
+                  <Icon className="w-6 h-6 text-slate-400 group-hover:text-indigo-400 transition-colors duration-500" />
+                </div>
+
+                <h3 className="text-xl font-bold text-white mb-4 tracking-tight group-hover:text-indigo-100 transition-colors">{feature.title}</h3>
+                <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8 group-hover:text-slate-400 transition-colors duration-500">
+                  {feature.description}
+                </p>
+                
+                <div className="mt-auto pt-6 flex items-center justify-between border-t border-white/[0.05]">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 group-hover:text-indigo-500/60 transition-colors">
+                    {feature.status}
+                  </span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-slate-800 group-hover:bg-indigo-500 animate-pulse"></div>
                 </div>
               </motion.div>
             );
@@ -142,3 +151,4 @@ export default function Features() {
     </section>
   );
 }
+
