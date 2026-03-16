@@ -36,72 +36,10 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
-      animation-delay: -1ms !important;
-      animation-duration: 1ms !important;
-      animation-iteration-count: 1 !important;
-      background-attachment: initial !important;
-      scroll-behavior: auto !important;
-      transition-duration: 0s !important;
-      transition-delay: 0s !important;
-    }
-  }
 }
 
 @layer components {
-  /* Cinematic Glassmorphism Container */
-  .cinematic-glass {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background-color: rgba(255, 255, 255, 0.03);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-    will-change: backdrop-filter;
-  }
-
-  /* Technical Card Design */
-  .tech-card {
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
-                background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    will-change: transform;
-  }
-  
-  .tech-card:hover {
-    background-color: rgba(79, 70, 229, 0.06);
-    border-color: rgba(79, 70, 229, 0.25);
-    transform: translateY(-4px);
-  }
-
-  /* HUD Decoration Corners */
-  .hud-accent-corner {
-    position: absolute;
-    width: 0.75rem;
-    height: 0.75rem;
-    border-color: rgba(99, 102, 241, 0.4);
-    opacity: 0.3;
-    transition: all 0.5s ease;
-  }
-
-  .tech-card:hover .hud-accent-corner {
-    opacity: 1;
-    border-color: rgba(99, 102, 241, 0.8);
-  }
-  
-  .hud-accent-corner.top-left { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; border-top-left-radius: 0.5rem; }
-  .hud-accent-corner.top-right { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; border-top-right-radius: 0.5rem; }
-  .hud-accent-corner.bottom-left { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; border-bottom-left-radius: 0.5rem; }
-  .hud-accent-corner.bottom-right { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; border-bottom-right-radius: 0.5rem; }
-
-  /* Premium High-Contrast Button */
+  /* Premium UI Buttons */
   .btn-premium-primary {
     position: relative;
     display: inline-flex;
@@ -114,154 +52,135 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
     color: #000000;
-    white-space: nowrap;
-    will-change: transform;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   }
   
   .btn-premium-primary:hover {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 60px rgba(79, 70, 229, 0.1);
-    transform: translateY(-2px) scale(1.02);
-  }
-  
-  .btn-premium-primary:active {
-    transform: scale(0.98);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
   }
 
-  /* Premium Outline/Glass Button */
   .btn-premium-outline {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
     padding: 1rem 2.5rem;
     border-radius: 0.75rem;
     font-weight: 700;
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    overflow: hidden;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    background-color: rgba(255, 255, 255, 0.02);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(255, 255, 255, 0.03);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    white-space: nowrap;
-    will-change: transform;
+    backdrop-filter: blur(10px);
   }
   
   .btn-premium-outline:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px) scale(1.02);
   }
 
   .text-premium-gradient {
-    background-clip: text;
+    background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 50%, #6366f1 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
-    background-image: linear-gradient(to right, #ffffff, #c7d2fe, #818cf8);
-    font-weight: 800;
   }
 }
 
 @layer utilities {
-  .mask-radial-faded {
-    mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+  /* CINEMATIC SINGULARITY - GARGANTUA ARCHITECTURE */
+  
+  .event-horizon-core {
+    background: #000000;
+    box-shadow: inset 0 0 100px rgba(79, 70, 229, 0.2), 
+                0 0 40px rgba(0, 0, 0, 1);
+    filter: blur(0.5px);
+  }
+
+  /* Matter Flow Texture - Conic + Layered Noise */
+  .matter-flow-disk {
+    background: conic-gradient(from 0deg at 50% 50%, 
+                transparent 0%, 
+                rgba(99, 102, 241, 0.1) 15%, 
+                rgba(167, 139, 250, 0.4) 30%, 
+                rgba(255, 255, 255, 0.8) 50%, 
+                rgba(167, 139, 250, 0.4) 70%, 
+                rgba(99, 102, 241, 0.1) 85%, 
+                transparent 100%);
+    filter: contrast(1.5) brightness(1.2) blur(1px);
+    mix-blend-mode: screen;
+  }
+
+  /* Lensing Arch Utilities (Top and Bottom Arches) */
+  .lensing-arch-mask {
+    mask-image: radial-gradient(ellipse at 50% 100%, black 40%, transparent 65%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 100%, black 40%, transparent 65%);
+  }
+
+  .lensing-arch-mask-bottom {
+    mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 65%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 65%);
+  }
+
+  /* Einstein Ring - High Energy Boundary */
+  .einstein-ring {
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 
+                inset 0 0 15px rgba(255, 255, 255, 0.2);
+    filter: blur(1px);
+    will-change: transform, opacity;
+  }
+
+  /* ANIMATIONS */
+  @keyframes orbit-matter {
+    0% { transform: rotate(0deg) scaleY(0.4); }
+    100% { transform: rotate(360deg) scaleY(0.4); }
+  }
+
+  .animate-orbit-matter {
+    animation: orbit-matter 30s linear infinite;
+  }
+
+  @keyframes doppler-shimmer {
+    0%, 100% { opacity: 0.6; filter: brightness(1) saturate(1); }
+    50% { opacity: 0.9; filter: brightness(1.3) saturate(1.2); }
+  }
+
+  .animate-doppler-shimmer {
+    animation: doppler-shimmer 8s ease-in-out infinite;
+  }
+
+  @keyframes gravity-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.02); opacity: 0.9; }
+  }
+
+  .animate-gravity-pulse {
+    animation: gravity-pulse 12s ease-in-out infinite;
   }
 
   .nebula-blur {
-    filter: blur(100px);
-    pointer-events: none;
-    position: absolute;
-    mix-blend-mode: screen;
+    filter: blur(120px);
     opacity: 0.15;
-    will-change: transform;
-    transform: translateZ(0); 
-  }
-  
-  .text-shadow-glow {
-    text-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+    mix-blend-mode: screen;
   }
 
-  /* CINEMATIC SINGULARITY - ADVANCED INCLINATION & WARP */
-  .singularity-void {
-    background: radial-gradient(circle at center, 
-                #000000 0%, 
-                #000000 55%, 
-                rgba(5, 6, 15, 0.95) 75%, 
-                transparent 100%);
-    box-shadow: inset 0 0 60px rgba(0, 0, 0, 1), 
-                0 0 40px rgba(79, 70, 229, 0.2);
-  }
-
-  /* Accretion Disk - Multi-band Organic Texture */
-  .accretion-disk-premium {
-    background: conic-gradient(from 0deg at 50% 50%, 
-                transparent 0%, 
-                rgba(99, 102, 241, 0.1) 10%, 
-                rgba(167, 139, 250, 0.3) 25%, 
-                rgba(255, 255, 255, 0.6) 45%, 
-                rgba(167, 139, 250, 0.5) 55%, 
-                rgba(255, 255, 255, 0.8) 60%, 
-                rgba(167, 139, 250, 0.3) 75%, 
-                rgba(99, 102, 241, 0.1) 90%, 
-                transparent 100%);
-    filter: blur(1.5px) contrast(1.4) brightness(1.1);
-  }
-
-  /* Gravitational Lensing / Warp Halo */
-  .lensing-warp-asymmetric {
-    mask-image: radial-gradient(ellipse at 50% 45%, black 40%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 40%, transparent 75%);
-    filter: blur(4px) saturate(1.5);
-    background: radial-gradient(circle at center, transparent 40%, rgba(99, 102, 241, 0.2) 50%, transparent 70%);
-  }
-
-  @keyframes accretion-flow-cinematic {
-    0% { transform: rotateX(75deg) rotateZ(0deg) skewX(10deg); }
-    50% { transform: rotateX(78deg) rotateZ(180deg) skewX(12deg); }
-    100% { transform: rotateX(75deg) rotateZ(360deg) skewX(10deg); }
-  }
-
-  .animate-accretion-flow {
-    animation: accretion-flow-cinematic 40s linear infinite;
-  }
-
-  @keyframes disk-shimmer {
-    0%, 100% { opacity: 0.6; filter: brightness(1) blur(1.5px); }
-    50% { opacity: 0.9; filter: brightness(1.4) blur(2.5px); }
-  }
-
-  .animate-disk-shimmer {
-    animation: disk-shimmer 12s ease-in-out infinite;
-  }
-
-  @keyframes singularity-breathing {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.03); opacity: 1; }
-  }
-
-  .animate-singularity-breathing {
-    animation: singularity-breathing 10s ease-in-out infinite;
+  .text-shadow-premium {
+    text-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
   }
 
   /* Distortion Artifacts */
-  .warp-fragment {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.2), transparent);
-    height: 1px;
-    filter: blur(1px);
-    mix-blend-mode: screen;
+  .lensing-warp-field {
+    mask-image: radial-gradient(circle at center, transparent 40%, black 100%);
+    -webkit-mask-image: radial-gradient(circle at center, transparent 40%, black 100%);
+    backdrop-filter: blur(4px) saturate(1.5);
   }
 }
