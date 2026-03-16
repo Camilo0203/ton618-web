@@ -1,58 +1,66 @@
 import { ChevronRight, Sparkles, Activity } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { getDiscordInviteUrl, getDashboardUrl } from '../config';
 import { useRef } from 'react';
 
 export default function Hero() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
 
   const { scrollY } = useScroll();
-  const ySingularity = useTransform(scrollY, [0, 500], [0, 150]);
-  const scaleSingularity = useTransform(scrollY, [0, 500], [1, 1.2]);
-  const rotateSingularity = useTransform(scrollY, [0, 2000], [0, 360]);
+  
+  // Optimized scroll transforms
+  const ySingularity = useTransform(scrollY, [0, 500], [0, 80]);
+  const scaleSingularity = useTransform(scrollY, [0, 500], [1, 1.1]);
+  const rotateSingularity = useTransform(scrollY, [0, 2000], [0, 180]);
 
   return (
     <section ref={containerRef} id="top" className="relative min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden">
       {/* BACKGROUND ATMOSPHERE */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <div className="absolute inset-0 bg-black"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(15,20,50,1)_0%,rgba(1,1,3,1)_100%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(15,20,50,0.8)_0%,rgba(1,1,3,1)_100%)]"></div>
         
-        {/* NEBULA LAYERS */}
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] nebula-blur bg-indigo-600/10"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] nebula-blur bg-purple-600/10"></div>
+        {/* NEBULA LAYERS - Optimized transforms */}
+        <div className="absolute top-[-5%] left-[-5%] w-[50%] h-[50%] nebula-blur bg-indigo-600/10" style={{ transform: 'translate3d(0,0,0)' }}></div>
+        <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] nebula-blur bg-purple-600/10" style={{ transform: 'translate3d(0,0,0)' }}></div>
       </div>
 
       {/* THE SINGULARITY (TON 618 CORE) */}
       <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
         <motion.div 
-          style={{ y: ySingularity, scale: scaleSingularity, rotate: rotateSingularity }}
+          style={{ 
+            y: shouldReduceMotion ? 0 : ySingularity, 
+            scale: shouldReduceMotion ? 1 : scaleSingularity, 
+            rotate: shouldReduceMotion ? 0 : rotateSingularity,
+            willChange: 'transform'
+          }}
           className="relative w-[300px] h-[300px] md:w-[600px] md:h-[600px] lg:w-[800px] lg:h-[800px]"
         >
           {/* Outer Accretion Disk (Slow, Massive) */}
-          <div className="absolute inset-0 rounded-full border-[0.5px] border-indigo-500/10 animate-[spin_120s_linear_infinite] mask-radial-faded"></div>
+          <div className="absolute inset-0 rounded-full border-[0.5px] border-indigo-500/10 animate-[spin_180s_linear_infinite] mask-radial-faded"></div>
           
           {/* Middle Energy Disk (Counter-rotate, Glow) */}
-          <div className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/20 blur-[2px] animate-[spin_80s_linear_infinite_reverse] mask-radial-faded"></div>
+          <div className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/15 blur-[1px] animate-[spin_120s_linear_infinite_reverse] mask-radial-faded"></div>
           
           {/* The Event Horizon Core */}
-          <div className="absolute inset-[30%] rounded-full bg-black shadow-[0_0_80px_rgba(79,70,229,0.3)] flex items-center justify-center group overflow-hidden border border-white/5">
-            <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(79,70,229,0.1),transparent)] animate-[spin_10s_linear_infinite]"></div>
-            <div className="w-[40%] h-[40%] bg-indigo-500/20 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute inset-[30%] rounded-full bg-black shadow-[0_0_60px_rgba(79,70,229,0.2)] flex items-center justify-center group overflow-hidden border border-white/5">
+            <div className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(79,70,229,0.05),transparent)] animate-[spin_15s_linear_infinite]"></div>
+            <div className="w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-2xl animate-pulse"></div>
           </div>
           
-          {/* Quasar Jet Particles */}
-          {[...Array(3)].map((_, i) => (
+          {/* Quasar Jet Particles - Reduced count or simplified animation */}
+          {!shouldReduceMotion && [...Array(2)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute top-1/2 left-1/2 w-[2px] h-[1000px] bg-gradient-to-t from-transparent via-indigo-500/40 to-transparent"
-              style={{ rotate: i * 60, translateX: '-50%', translateY: '-50%' }}
-              animate={{ opacity: [0.2, 0.4, 0.2] }}
-              transition={{ duration: 4, repeat: Infinity, delay: i }}
+              className="absolute top-1/2 left-1/2 w-[1px] h-[800px] bg-gradient-to-t from-transparent via-indigo-500/30 to-transparent"
+              style={{ rotate: i * 90, translateX: '-50%', translateY: '-50%', willChange: 'opacity' }}
+              animate={{ opacity: [0.1, 0.3, 0.1] }}
+              transition={{ duration: 6, repeat: Infinity, delay: i * 2 }}
             />
           ))}
         </motion.div>
@@ -61,9 +69,9 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
         {/* STATUS BADGE */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
           className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md mb-8 group cursor-default"
         >
           <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
@@ -73,9 +81,9 @@ export default function Hero() {
 
         {/* MAIN HEADLINE */}
         <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
           className="text-[10vw] md:text-[8vw] lg:text-[7.5vw] font-extrabold leading-[0.85] tracking-tightest uppercase mb-6"
         >
           {t('hero.titleMain')} <br/>
@@ -84,9 +92,9 @@ export default function Hero() {
 
         {/* SUBHEADLINE */}
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 font-medium leading-relaxed tracking-tight"
         >
           {t('hero.description')} <br className="hidden md:block"/>
@@ -95,9 +103,9 @@ export default function Hero() {
 
         {/* CTA BUTTONS */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-6 justify-center items-center"
         >
           <a href={inviteUrl} className="btn-premium-primary group">
@@ -114,11 +122,11 @@ export default function Hero() {
 
       {/* AMBIENT SCROLL INDICATOR */}
       <motion.div 
-        animate={{ y: [0, 8, 0] }}
+        animate={shouldReduceMotion ? {} : { y: [0, 5, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-20 hover:opacity-100 transition-opacity duration-500 cursor-default"
       >
-        <div className="w-[1px] h-16 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
         <span className="text-[9px] uppercase tracking-[0.5em] font-black text-indigo-200">{t('hero.scroll')}</span>
       </motion.div>
     </section>

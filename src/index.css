@@ -34,33 +34,51 @@
     font-family: var(--font-heading);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Support for users with motion sensitivity */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
   }
 }
 
 @layer components {
   /* Cinematic Glassmorphism Container */
   .cinematic-glass {
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    will-change: backdrop-filter;
   }
 
   /* Technical Card Design */
   .tech-card {
     position: relative;
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: 1.5rem;
     padding: 2rem;
-    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+                background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
+    will-change: transform;
   }
   
   .tech-card:hover {
-    background-color: rgba(79, 70, 229, 0.08);
-    border-color: rgba(79, 70, 229, 0.3);
+    background-color: rgba(79, 70, 229, 0.06);
+    border-color: rgba(79, 70, 229, 0.25);
     transform: translateY(-4px);
   }
 
@@ -97,20 +115,22 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     background-color: #ffffff;
     color: #000000;
     white-space: nowrap;
+    will-change: transform;
   }
   
   .btn-premium-primary:hover {
-    box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
   }
   
   .btn-premium-primary:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
   }
 
   /* Premium Outline/Glass Button */
@@ -126,20 +146,23 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.03);
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     white-space: nowrap;
+    will-change: transform;
   }
   
   .btn-premium-outline:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
   }
 
   .text-premium-gradient {
@@ -158,11 +181,13 @@
   }
 
   .nebula-blur {
-    filter: blur(140px);
+    filter: blur(80px);
     pointer-events: none;
     position: absolute;
     mix-blend-mode: screen;
-    opacity: 0.15;
+    opacity: 0.12;
+    will-change: transform;
+    transform: translateZ(0); /* Force GPU acceleration */
   }
   
   .text-shadow-glow {
