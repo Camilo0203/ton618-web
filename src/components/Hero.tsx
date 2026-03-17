@@ -42,9 +42,9 @@ export default function Hero() {
             preload="metadata"
             poster="/hero-poster.jpg"
             aria-hidden="true"
-            className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           >
-            <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
+            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
           </video>
         )}
 
