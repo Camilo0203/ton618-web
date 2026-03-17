@@ -28,6 +28,19 @@ export default function WhyTon() {
     }
   ];
 
+  const highlights = [
+    {
+      label: t('why.stats.uptime'),
+      value: t('why.stats.uptimeValue'),
+      sub: t('why.stats.uptimeSub')
+    },
+    {
+      label: t('why.stats.speed'),
+      value: t('why.stats.speedValue'),
+      sub: t('why.stats.speedSub')
+    }
+  ];
+
   return (
     <section id="why" className="pt-16 pb-32 bg-black relative overflow-hidden">
       {/* Structural Elements */}
@@ -57,10 +70,7 @@ export default function WhyTon() {
             </p>
             
             <div className="grid grid-cols-2 gap-4">
-               {[
-                 { label: t('why.stats.uptime'), value: '99.99%', sub: t('why.stats.uptimeSub') },
-                 { label: t('why.stats.speed'), value: '< 12ms', sub: t('why.stats.speedSub') }
-               ].map((item, i) => (
+               {highlights.map((item, i) => (
                  <div key={i} className="p-6 cinematic-glass rounded-2xl border-white/5 group hover:border-indigo-500/20 transition-all duration-500">
                     <div className="text-sm text-indigo-400 font-bold tracking-widest uppercase mb-1">{item.label}</div>
                     <div className="text-3xl font-bold text-white mb-1">{item.value}</div>

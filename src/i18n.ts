@@ -86,9 +86,11 @@ const resources = {
         description: 'In a universe of generic templates, TON618 is the only utility forged with the scale and power of a supermassive singularity.',
         stats: {
           uptime: 'Uptime Protocol',
-          uptimeSub: 'Verified 24/7',
+          uptimeValue: 'Always watched',
+          uptimeSub: 'Live telemetry backed',
           speed: 'Processing Speed',
-          speedSub: 'Global Latency'
+          speedValue: 'Built to respond',
+          speedSub: 'Performance shown live'
         },
         reasons: {
           precision: {
@@ -264,9 +266,11 @@ const resources = {
         description: 'En un universo de plantillas genéricas, TON618 es la única utilidad forjada con la escala y el poder de una singularidad supermasiva.',
         stats: {
           uptime: 'Protocolo de Actividad',
-          uptimeSub: 'Verificado 24/7',
+          uptimeValue: 'Siempre monitoreado',
+          uptimeSub: 'Respaldado por telemetria en vivo',
           speed: 'Velocidad de Proceso',
-          speedSub: 'Latencia Global'
+          speedValue: 'Hecho para responder',
+          speedSub: 'Rendimiento visible en vivo'
         },
         reasons: {
           precision: {
