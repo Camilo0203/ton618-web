@@ -63,24 +63,6 @@ export default function VisualExperience() {
         }}
         className="relative z-10 text-center px-6 max-w-4xl mx-auto"
       >
-        <div className="relative mb-12 inline-block">
-          {/* Energy Core HUD - Resized */}
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border border-white/[0.05] flex items-center justify-center relative">
-            <div className="absolute inset-[-6px] border border-indigo-500/10 rounded-full animate-[spin_25s_linear_infinite]"></div>
-            <div className="absolute inset-[-15px] border border-white/5 rounded-full animate-[spin_40s_linear_infinite_reverse]"></div>
-            
-            <div className="w-4 h-4 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.6)] z-10"></div>
-            
-            {!shouldReduceMotion && (
-              <motion.div 
-                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0, 0.2] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                className="absolute w-12 h-12 bg-indigo-500/10 rounded-full blur-lg"
-              />
-            )}
-          </div>
-          
-        </div>
 
         <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tightest mb-6 leading-[0.85]">
           {t('experience.title')} <br/>
