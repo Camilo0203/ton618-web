@@ -77,10 +77,10 @@ export default function Hero() {
         <motion.div {...fadeInScale} className="mb-8 flex justify-center">
           <Logo
             size="xl"
-            subtitle="Official System Mark"
+            subtitle="Official Brand Mark"
             className="gap-6 md:gap-7"
-            frameClassName="h-32 w-32 md:h-36 md:w-36 lg:h-40 lg:w-40"
-            imageClassName="scale-[1.14] drop-shadow-[0_20px_48px_rgba(99,102,241,0.22)]"
+            frameClassName="h-36 w-36 md:h-40 md:w-40 lg:h-44 lg:w-44"
+            imageClassName="scale-[1.08] drop-shadow-[0_24px_56px_rgba(99,102,241,0.24)]"
           />
         </motion.div>
 

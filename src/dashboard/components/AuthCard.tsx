@@ -30,10 +30,10 @@ export default function AuthCard({
   return (
     <div className="space-y-5">
       <div className="dashboard-surface-soft flex items-center justify-between gap-4 rounded-[1.75rem] p-5">
-        <Logo size="lg" subtitle="Secure Dashboard Access" />
+        <Logo size="lg" subtitle="TON618 Dashboard" />
         <div className="hidden text-right md:block">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-300">Official Identity</p>
-          <p className="mt-2 max-w-xs text-sm leading-6 text-slate-600 dark:text-slate-300">Acceso centralizado al bot y a su configuración operativa.</p>
+          <p className="mt-2 max-w-xs text-sm leading-6 text-slate-600 dark:text-slate-300">Acceso centralizado a TON618 y a su configuracion operativa.</p>
         </div>
       </div>
       <StateCard

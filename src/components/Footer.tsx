@@ -22,9 +22,9 @@ export default function Footer({ onOpenLegal }: FooterProps) {
             <div className="flex items-center gap-4 mb-10">
               <Logo
                 size="xl"
-                subtitle="Official Bot Identity"
-                frameClassName="h-24 w-24 md:h-28 md:w-28"
-                imageClassName="scale-[1.12]"
+                subtitle="TON618"
+                frameClassName="h-28 w-28 md:h-32 md:w-32"
+                imageClassName="scale-[1.06]"
               />
             </div>
             <p className="text-slate-500 max-w-sm font-medium leading-relaxed mb-10 text-lg">

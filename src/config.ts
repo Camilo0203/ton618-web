@@ -1,5 +1,13 @@
 export const config = {
-  botName: import.meta.env.VITE_BOT_NAME || 'TON618',
+  botName: 'TON618',
+  brandMarkPath: '/logo-ton618-transparent.png',
+  socialImagePath: '/logo-ton618.png',
+  faviconPath: '/favicon.png',
+  appleTouchIconPath: '/apple-touch-icon.png',
+  manifestPath: '/site.webmanifest',
+  defaultMetaTitle: 'TON618 | Premium Discord Control',
+  defaultMetaDescription:
+    'TON618 centraliza moderacion, automatizacion y control visual de tu bot con una identidad consistente y oscura.',
   discordClientId: import.meta.env.VITE_DISCORD_CLIENT_ID || '',
   discordPermissions: import.meta.env.VITE_DISCORD_PERMISSIONS || '8',
   supportServerUrl: import.meta.env.VITE_SUPPORT_SERVER_URL || '',

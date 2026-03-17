@@ -86,14 +86,14 @@ export default function AuthCallbackPage() {
   return (
     <main className="dashboard-shell flex min-h-screen items-center justify-center px-4 text-white">
       <Helmet>
-        <title>{config.botName} | Auth Callback</title>
+        <title>{config.botName} | Dashboard Auth</title>
       </Helmet>
       <div className="dashboard-surface w-full max-w-xl p-8">
         <div className="flex items-center gap-4">
-          <Logo size="lg" withText={false} />
+          <Logo size="lg" subtitle="TON618" />
           <div>
             <p className="dashboard-panel-label">Discord OAuth</p>
-            <h1 className="text-3xl font-bold tracking-[-0.04em] text-slate-950 dark:text-white">Callback del dashboard</h1>
+            <h1 className="text-3xl font-bold tracking-[-0.04em] text-slate-950 dark:text-white">Acceso al dashboard de TON618</h1>
           </div>
         </div>
 

@@ -83,7 +83,7 @@ function SidebarContent({
             {config.botName}
           </p>
           <p className="mt-1 text-[1.4rem] font-bold tracking-[-0.04em] text-white">
-            Control Deck
+            Dashboard
           </p>
         </div>
       </Link>

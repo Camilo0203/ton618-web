@@ -15,23 +15,24 @@ import { config } from '../config';
 type LegalModalType = 'terms' | 'privacy' | 'cookies' | null;
 
 export default function LandingPage() {
-  const { t } = useTranslation();
+  useTranslation();
   const [legalModalType, setLegalModalType] = useState<LegalModalType>(null);
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
       <Helmet>
-        <title>{t('meta.title')}</title>
-        <meta name="description" content={t('meta.description')} />
+        <title>{config.defaultMetaTitle}</title>
+        <meta name="description" content={config.defaultMetaDescription} />
         <meta name="theme-color" content="#05060f" />
-        <meta property="og:title" content={t('meta.title')} />
-        <meta property="og:description" content={t('meta.description')} />
-        <meta property="og:image" content="/logo-ton618.png" />
-        <meta name="twitter:title" content={t('meta.title')} />
-        <meta name="twitter:description" content={t('meta.description')} />
-        <meta name="twitter:image" content="/logo-ton618.png" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta property="og:title" content={config.defaultMetaTitle} />
+        <meta property="og:description" content={config.defaultMetaDescription} />
+        <meta property="og:image" content={config.socialImagePath} />
+        <meta name="twitter:title" content={config.defaultMetaTitle} />
+        <meta name="twitter:description" content={config.defaultMetaDescription} />
+        <meta name="twitter:image" content={config.socialImagePath} />
+        <link rel="icon" type="image/png" href={config.faviconPath} />
+        <link rel="apple-touch-icon" href={config.appleTouchIconPath} />
+        <link rel="manifest" href={config.manifestPath} />
       </Helmet>
 
       {/* Global Background Effects */}
