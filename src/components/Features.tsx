@@ -1,29 +1,54 @@
 import { Shield, Zap, Cpu, BarChart3, Lock, Globe, Layers, Radio } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { memo } from 'react';
 
-const FeatureCard = memo(({ feature, variants }: { feature: any, variants: any }) => {
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  status: string;
+}
+
+interface FeatureCardProps {
+  feature: Feature;
+  variants: {
+    hidden: { opacity: number; scale: number; y: number };
+    visible: {
+      opacity: number;
+      scale: number;
+      y: number;
+      transition: { duration: number; ease: 'easeOut' };
+    };
+  };
+}
+
+const FeatureCard = memo(({ feature, variants }: FeatureCardProps) => {
   const Icon = feature.icon;
   return (
     <motion.div
       variants={variants}
-      className="tech-card group h-full flex flex-col"
+      className="tech-card group flex h-full flex-col overflow-hidden"
     >
-      <div className="relative mb-8 w-14 h-14 flex items-center justify-center rounded-2xl bg-white/[0.02] border border-white/[0.04] group-hover:border-indigo-500/20 transition-all duration-500">
-        <Icon className="w-6 h-6 text-slate-500 group-hover:text-indigo-400 transition-colors duration-500" />
+      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-60"></div>
+
+      <div className="premium-icon-tile relative mb-7 h-14 w-14">
+        <Icon className="w-6 h-6 text-slate-300/85 group-hover:text-white transition-colors duration-500" />
       </div>
 
-      <h3 className="text-xl font-bold text-white mb-4 tracking-tight group-hover:text-indigo-100 transition-colors">{feature.title}</h3>
-      <p className="text-slate-500 text-sm font-medium leading-relaxed mb-8 group-hover:text-slate-400 transition-colors duration-500">
+      <h3 className="mb-4 text-xl font-bold tracking-tight text-white transition-colors duration-500 group-hover:text-white/95">
+        {feature.title}
+      </h3>
+      <p className="mb-8 text-sm font-medium leading-relaxed text-slate-400 transition-colors duration-500 group-hover:text-slate-300">
         {feature.description}
       </p>
       
-      <div className="mt-auto pt-6 flex items-center justify-between border-t border-white/[0.04]">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 group-hover:text-indigo-500/60 transition-colors">
+      <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-6">
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500 transition-colors duration-500 group-hover:text-slate-300">
           {feature.status}
         </span>
-        <div className="w-1.2 h-1.2 rounded-full bg-slate-800 group-hover:bg-indigo-500 transition-colors"></div>
+        <div className="h-1.5 w-1.5 rounded-full bg-white/20 transition-colors duration-500 group-hover:bg-white/50"></div>
       </div>
     </motion.div>
   );
@@ -35,7 +60,7 @@ export default function Features() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
 
-  const features = [
+  const features: Feature[] = [
     { icon: Shield, title: t('features.items.moderation.title'), description: t('features.items.moderation.desc'), status: t('features.items.moderation.status') },
     { icon: Cpu, title: t('features.items.autonomy.title'), description: t('features.items.autonomy.desc'), status: t('features.items.autonomy.status') },
     { icon: Zap, title: t('features.items.latency.title'), description: t('features.items.latency.desc'), status: t('features.items.latency.status') },

@@ -19,7 +19,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
           <div className="col-span-1 lg:col-span-2">
             <div className="flex items-center gap-4 mb-10">
-              <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group hover:border-indigo-500/40 transition-colors">
+              <div className="premium-icon-tile group h-12 w-12 rounded-xl">
                 <Bot className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
               </div>
               <span className="text-3xl font-bold text-white uppercase tracking-tightest">TON618</span>
@@ -36,7 +36,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
                ].filter(s => s.url).map(({ url, Icon, label }) => (
                  <a key={label} href={url!} target={label !== 'Email' ? '_blank' : undefined}
                    rel={label !== 'Email' ? 'noopener noreferrer' : undefined}
-                   className="w-14 h-14 cinematic-glass rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all duration-500 hover:scale-110 border-white/5 hover:border-indigo-500/30"
+                   className="cinematic-glass flex h-14 w-14 items-center justify-center rounded-xl text-slate-400 transition-all duration-500 hover:scale-110 hover:text-white"
                    aria-label={label}>
                    <Icon className="w-6 h-6" />
                  </a>

@@ -71,7 +71,7 @@ export default function WhyTon() {
             
             <div className="grid grid-cols-2 gap-4">
                {highlights.map((item, i) => (
-                 <div key={i} className="p-6 cinematic-glass rounded-2xl border-white/5 group hover:border-indigo-500/20 transition-all duration-500">
+                 <div key={i} className="cinematic-glass group rounded-2xl p-6">
                     <div className="text-sm text-indigo-400 font-bold tracking-widest uppercase mb-1">{item.label}</div>
                     <div className="text-3xl font-bold text-white mb-1">{item.value}</div>
                     <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{item.sub}</div>
@@ -91,7 +91,7 @@ export default function WhyTon() {
                 className="tech-card overflow-hidden group"
               >
                 <div className="relative z-10">
-                  <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <div className="premium-icon-tile mb-6 h-12 w-12">
                     <reason.icon className="w-6 h-6 text-indigo-400" />
                   </div>
                   <h3 className="text-lg font-bold text-white uppercase tracking-tighter mb-3 flex items-center justify-between">

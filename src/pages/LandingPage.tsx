@@ -27,9 +27,11 @@ export default function LandingPage() {
 
       {/* Global Background Effects */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+        <div className="bg-cinematic-atmosphere absolute inset-0"></div>
+        <div className="bg-cinematic-texture absolute inset-0 opacity-40"></div>
+        <div className="bg-film-grain absolute inset-0 opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent animate-scanline"></div>
+        <div className="scanline-sweep absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
       </div>
 
       <div className="relative z-10">

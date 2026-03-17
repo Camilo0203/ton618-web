@@ -29,34 +29,37 @@ const StatCard = memo(({ icon: Icon, label, value, sub, index, loading }: StatCa
     transition={{ duration: 0.6, delay: index * 0.1 }}
     className="group ml-0"
   >
-    <div className="tech-card h-full flex flex-col items-center text-center group">
-      <div className="inline-flex p-4 rounded-2xl bg-indigo-500/5 mb-8 group-hover:bg-indigo-500/10 transition-colors duration-500">
-        <Icon className="w-8 h-8 text-indigo-400" />
-      </div>
-      
-      <div
-        className={`text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter tabular-nums text-shadow-glow transition-opacity duration-300 ${loading ? 'opacity-80' : 'opacity-100'}`}
-        style={{ willChange: 'contents' }}
-      >
-        {value}
-      </div>
-      
-      <div className="space-y-1">
-        <div className="text-indigo-400 font-bold text-[11px] uppercase tracking-[0.25em]">
-          {label}
+    <div className="tech-card relative h-full overflow-hidden text-center">
+      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-60"></div>
+
+      <div className="flex h-full flex-col items-center">
+        <div className="premium-icon-tile mb-8 p-4">
+          <Icon className="h-8 w-8 text-slate-200 transition-colors duration-500 group-hover:text-white" />
         </div>
-        <div className="text-slate-600 font-bold text-[9px] uppercase tracking-widest">
-          {sub}
+
+        <div
+          className={`mb-4 text-4xl font-bold tracking-tighter tabular-nums text-white transition-opacity duration-300 md:text-5xl ${loading ? 'opacity-80' : 'opacity-100'}`}
+          style={{ willChange: 'contents' }}
+        >
+          {value}
         </div>
-      </div>
-      
-      <div className="w-full h-1 bg-white/[0.02] rounded-full mt-10 overflow-hidden relative">
-         <motion.div 
-           initial={{ width: 0 }}
-           whileInView={{ width: '70%' }}
-           viewport={{ once: true }}
-           className="absolute left-0 top-0 h-full bg-gradient-to-r from-indigo-500/10 to-indigo-500/40"
-         ></motion.div>
+
+        <div className="space-y-2">
+          <div className="text-[11px] font-bold uppercase tracking-[0.24em] text-slate-200">
+            {label}
+          </div>
+          <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-slate-500">
+            {sub}
+          </div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0.45, scaleX: 0.4 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: index * 0.1 + 0.15 }}
+          className="mt-10 h-px w-full origin-left bg-gradient-to-r from-transparent via-white/18 to-transparent"
+        />
       </div>
     </div>
   </motion.div>
@@ -149,8 +152,14 @@ export default function LiveStats() {
 
   return (
     <section id="stats" className="pt-16 pb-32 relative bg-black overflow-hidden">
-      {/* Background Matrix/Grid - GPU accelerated */}
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '40px 40px', transform: 'translate3d(0,0,0)' }}></div>
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
+        style={{
+          backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+          backgroundSize: '48px 48px',
+          transform: 'translate3d(0,0,0)',
+        }}
+      ></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -159,7 +168,7 @@ export default function LiveStats() {
           viewport={{ once: true }}
           className="text-center mb-24"
         >
-          <div className="inline-flex items-center gap-3 px-6 py-2 cinematic-glass rounded-full border border-white/10 mb-10">
+          <div className="premium-pill mb-10 px-6 py-2">
             <div className={`w-2 h-2 rounded-full ${badgeToneClass}`}></div>
             <span className="text-white font-bold text-[10px] uppercase tracking-[0.4em]">
               {badgeLabel}
@@ -175,7 +184,7 @@ export default function LiveStats() {
           {(statusMessage || error) && (
             <div className="mt-6 flex flex-col items-center gap-2">
               {statusMessage && (
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-300">
+                <div className="premium-pill gap-2 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-300">
                   <span className={`h-1.5 w-1.5 rounded-full ${liveUnavailable ? 'bg-red-400' : loading ? 'bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.75)]' : 'bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.65)]'}`}></span>
                   <span>{statusMessage}</span>
                 </div>
