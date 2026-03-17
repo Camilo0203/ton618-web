@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Activity, ShieldCheck, Cpu } from 'lucide-react';
+import { ShieldCheck, Cpu } from 'lucide-react';
 
 export default function VisualExperience() {
   const { t } = useTranslation();
@@ -80,13 +80,6 @@ export default function VisualExperience() {
             )}
           </div>
           
-          {/* Floating HUD Elements */}
-          <div className="absolute top-0 -right-16 animate-float-subtle">
-             <div className="cinematic-glass p-2 rounded-lg border-indigo-500/10 flex gap-2 items-center">
-                <Activity className="w-3 h-3 text-indigo-400" />
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{t('experience.hud')}</span>
-             </div>
-          </div>
         </div>
 
         <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tightest mb-6 leading-[0.85]">

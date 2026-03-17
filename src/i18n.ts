@@ -71,7 +71,6 @@ const resources = {
         }
       },
       experience: {
-        hud: 'Flux: 0.88c',
         title: 'Architect the',
         titleAccent: 'Void',
         subtitle: 'Scaling civilizations beyond the event horizon.',
@@ -243,7 +242,6 @@ const resources = {
         }
       },
       experience: {
-        hud: 'Flujo: 0.88c',
         title: 'Arquitecta el',
         titleAccent: 'Vacío',
         subtitle: 'Escalando civilizaciones más allá del horizonte de sucesos.',
