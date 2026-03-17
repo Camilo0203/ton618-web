@@ -106,7 +106,7 @@ export default function Features() {
               viewport={{ once: true }}
               className="flex items-center gap-4 mb-8"
             >
-              <div className="w-8 h-[px] bg-indigo-500/30"></div>
+              <div className="h-px w-8 bg-indigo-500/30"></div>
               <span className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400">{t('features.tag')}</span>
             </motion.div>
             
@@ -117,7 +117,7 @@ export default function Features() {
               className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tightest uppercase"
             >
               {t('features.title')} <br/>
-              <span className="text-premium-gradient">{t('features.titleAccent')}</span>
+              <span className="headline-accent headline-accent-solid">{t('features.titleAccent')}</span>
             </motion.h2>
           </div>
           

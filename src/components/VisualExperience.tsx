@@ -20,14 +20,14 @@ export default function VisualExperience() {
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
         <motion.div 
           style={{ y: shouldReduceMotion ? 0 : y1, willChange: 'transform' }}
-          className="absolute inset-0 opacity-[0.04] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+          className="absolute inset-0 opacity-[0.025] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
         ></motion.div>
         
         <div 
-          className="absolute inset-0 opacity-[0.08] mix-blend-screen"
+          className="absolute inset-0 opacity-[0.045] mix-blend-screen"
           style={{ 
-            maskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
+            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 22%, black 56%, transparent 84%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 22%, black 56%, transparent 84%)'
           }}
         >
           <video 
@@ -42,7 +42,7 @@ export default function VisualExperience() {
           </video>
         </div>
 
-        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/[0.035] blur-[120px] rounded-full" />
+        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/[0.025] blur-[120px] rounded-full" />
         <div className="absolute inset-x-0 top-[18%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       </div>
@@ -55,7 +55,7 @@ export default function VisualExperience() {
         }}
         className="relative z-10 text-center px-6 max-w-4xl mx-auto"
       >
-        <div className="absolute inset-x-8 top-1/2 h-40 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(3,4,10,0.88)_0%,rgba(3,4,10,0.7)_45%,transparent_100%)] blur-2xl" aria-hidden="true" />
+        <div className="absolute inset-x-10 top-1/2 h-48 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(2,3,8,0.94)_0%,rgba(2,3,8,0.82)_48%,rgba(2,3,8,0.18)_78%,transparent_100%)] blur-2xl" aria-hidden="true" />
         <h2 className="relative z-10 text-5xl md:text-8xl font-black text-white uppercase tracking-tightest mb-6 leading-[0.85]">
           {t('experience.title')} <br/>
           <span className="headline-accent headline-accent-solid">{t('experience.titleAccent')}</span>

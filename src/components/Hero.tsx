@@ -60,8 +60,8 @@ export default function Hero() {
         <div
           className={`absolute inset-0 ${
             shouldReduceMotion
-              ? 'bg-[radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.24),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.1),transparent_24%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.06),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.34)_0%,rgba(0,0,0,0.84)_68%,rgba(0,0,0,0.96)_100%)]'
-              : 'bg-[radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.18),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.08),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.18)_0%,rgba(0,0,0,0.75)_72%,rgba(0,0,0,0.94)_100%)]'
+              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.38),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.18),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.08),transparent_24%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.04),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.42)_0%,rgba(0,0,0,0.86)_68%,rgba(0,0,0,0.97)_100%)]'
+              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.42),transparent_38%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.12),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.24)_0%,rgba(0,0,0,0.78)_72%,rgba(0,0,0,0.95)_100%)]'
           }`}
         ></div>
         {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-[0.08]"></div>}
@@ -72,7 +72,7 @@ export default function Hero() {
         <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/72' : 'bg-black/60'}`}></div>
         
         {/* Radial Gradient Overlay (Softens the center/edges) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.8)_100%)] z-15"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(3,4,10,0.24)_0%,rgba(3,4,10,0.16)_26%,transparent_52%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.4)_70%,rgba(0,0,0,0.8)_100%)] z-15"></div>
         
         {/* Cinematic Vignette */}
         <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-20"></div>

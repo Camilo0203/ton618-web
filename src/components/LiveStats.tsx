@@ -176,7 +176,7 @@ export default function LiveStats() {
           </div>
 
           <h2 className="text-6xl md:text-8xl font-bold text-white mb-8 tracking-tightest uppercase leading-none">
-            {t('stats.title')} <span className="text-premium-gradient">{t('stats.titleAccent')}</span>
+            {t('stats.title')} <span className="headline-accent headline-accent-solid">{t('stats.titleAccent')}</span>
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
             {t('stats.description')}

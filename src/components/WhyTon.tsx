@@ -62,7 +62,7 @@ export default function WhyTon() {
             
             <h2 className="text-5xl md:text-7xl font-bold text-white uppercase leading-[0.9] mb-10 tracking-tightest">
               {t('why.title')} <br/>
-              <span className="text-premium-gradient">{t('why.titleAccent')}</span>
+              <span className="headline-accent headline-accent-solid">{t('why.titleAccent')}</span>
             </h2>
             
             <p className="text-xl text-slate-400 font-medium leading-relaxed mb-12 max-w-xl">

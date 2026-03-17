@@ -13,14 +13,14 @@ export default function FinalCTA() {
       <div className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none">
         {/* Soft Depth Glows */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[800px] bg-indigo-500/5 blur-[180px] rounded-full"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full animate-pulse-slow"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/8 blur-[120px] rounded-full animate-pulse-slow"></div>
         
         {/* ORGANIC FOCAL ACCENT VIDEO - No visible boxes */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-40 mix-blend-lighten"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-24 mix-blend-lighten"
           style={{ 
-            maskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)'
+            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 24%, black 52%, transparent 78%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 24%, black 52%, transparent 78%)'
           }}
         >
           <video 
@@ -50,7 +50,7 @@ export default function FinalCTA() {
 
           <h2 className="text-6xl md:text-9xl font-bold text-white uppercase tracking-tightest leading-none mb-12">
             {t('final.title')} <br/>
-            <span className="text-premium-gradient">{t('final.titleAccent')}</span>
+            <span className="headline-accent headline-accent-solid">{t('final.titleAccent')}</span>
           </h2>
           
           <p className="text-xl text-slate-400 font-medium mb-16 max-w-2xl mx-auto leading-relaxed">
@@ -89,4 +89,3 @@ export default function FinalCTA() {
     </section>
   );
 }
-

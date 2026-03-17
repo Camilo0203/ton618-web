@@ -96,17 +96,10 @@
   .text-premium-gradient {
     display: inline-block;
     padding-inline: 0.02em;
-    background-image: linear-gradient(135deg, #f8fbff 0%, #d8defe 42%, #9ba8ff 72%, #6b6ef6 100%);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    isolation: isolate;
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    text-shadow: none;
+    color: #ccd5ff;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.1),
+      0 12px 30px rgba(79, 70, 229, 0.14);
   }
 
   .tech-card {
@@ -222,12 +215,16 @@
   .headline-accent-solid {
     position: relative;
     z-index: 1;
+  }
+
+  .headline-accent-solid,
+  .text-premium-gradient {
     display: inline-block;
     padding-inline: 0.02em;
-    color: #b7c2ff;
+    color: #ccd5ff;
     text-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.08),
-      0 10px 28px rgba(76, 88, 196, 0.16);
+      0 1px 0 rgba(255, 255, 255, 0.1),
+      0 12px 30px rgba(79, 70, 229, 0.14);
   }
 
   .bg-cinematic-atmosphere {
