@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { getDiscordLoginUrl } from '../config';
+import { getDashboardUrl } from '../config';
 import LanguageSelector from './LanguageSelector';
 import Logo from './Logo';
 
@@ -42,7 +42,7 @@ export default function Navbar() {
     };
   }, []);
 
-  const loginUrl = getDiscordLoginUrl();
+  const dashboardUrl = getDashboardUrl();
 
   const navLinks = [
     { name: t('nav.features'), href: '#features' },
@@ -86,7 +86,7 @@ export default function Navbar() {
             <LanguageSelector />
 
             <a
-              href={loginUrl}
+              href={dashboardUrl}
               className="hidden md:flex btn-premium-primary !px-6 !py-2.5 !text-[10px] !rounded-lg"
             >
               <span>{t('nav.cta')}</span>
@@ -138,7 +138,7 @@ export default function Navbar() {
               ))}
               <hr className="border-white/5" />
               <a
-                href={loginUrl}
+                href={dashboardUrl}
                 className="flex items-center justify-center gap-3 px-6 py-4 bg-white text-black rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl"
               >
                 <span>{t('nav.mobileCta')}</span>

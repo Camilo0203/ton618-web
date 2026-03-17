@@ -86,18 +86,6 @@ export function getAbsoluteAssetUrl(path: string): string {
   return buildAbsoluteUrl(origin, path);
 }
 
-export function getDiscordLoginUrl(): string {
-  if (!config.discordClientId) {
-    return '';
-  }
-
-  const clientId = encodeURIComponent(config.discordClientId);
-  const redirectUri = encodeURIComponent(getAuthCallbackUrl());
-  const scope = encodeURIComponent('identify guilds email');
-
-  return `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-}
-
 export function getDiscordInviteUrl(guildId?: string): string {
   if (!config.discordClientId) {
     return '';
