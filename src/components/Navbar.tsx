@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className={`flex items-center justify-between overflow-hidden px-6 py-3 rounded-[1.75rem] transition-all duration-500 ${navbarClassName}`}>
+        <div className={`flex items-center justify-between overflow-visible px-6 py-3 rounded-[1.75rem] transition-all duration-500 ${navbarClassName}`}>
           
           <div className="flex items-center gap-10 lg:gap-16">
             <a href="/" className="flex items-center gap-3 group">

@@ -55,7 +55,7 @@ export default function LanguageSelector() {
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             role="menu"
-            className="absolute right-0 z-[100] mt-3 w-40 overflow-hidden rounded-2xl border border-white/10 cinematic-glass shadow-3xl"
+            className="absolute right-0 z-[110] mt-3 w-40 overflow-hidden rounded-2xl border border-white/10 cinematic-glass shadow-3xl"
           >
             <div className="flex flex-col gap-1 p-2">
               {languages.map((language) => (
