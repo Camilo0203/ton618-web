@@ -44,15 +44,15 @@ export default function Hero() {
             aria-hidden="true"
             className="absolute inset-0 hidden h-full w-full object-cover object-center md:block"
           >
-            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
+            <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
           </video>
         )}
 
         <div
           className={`absolute inset-0 ${
             shouldReduceMotion
-              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.54),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.16),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.03),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(139,92,246,0.06),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.7)_0%,rgba(1,2,8,0.9)_58%,rgba(0,0,0,0.98)_100%)]'
-              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.42),transparent_38%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.14),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.035),transparent_20%),radial-gradient(circle_at_84%_22%,rgba(139,92,246,0.08),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.28)_0%,rgba(0,0,0,0.82)_72%,rgba(0,0,0,0.96)_100%)]'
+              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.62),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.15),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.03),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(139,92,246,0.06),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.78)_0%,rgba(1,2,8,0.92)_58%,rgba(0,0,0,0.985)_100%)]'
+              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.5),transparent_38%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.12),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.03),transparent_20%),radial-gradient(circle_at_84%_22%,rgba(139,92,246,0.07),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.42)_0%,rgba(0,0,0,0.86)_72%,rgba(0,0,0,0.97)_100%)]'
           }`}
         />
         <div className="absolute inset-x-[12%] top-[12%] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(109,40,217,0.22)_0%,rgba(67,56,202,0.16)_38%,rgba(15,23,42,0.04)_72%,transparent_100%)] blur-3xl" />
