@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChevronRight, Sparkles, Activity } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +8,8 @@ import Logo from './Logo';
 export default function Hero() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
   const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
@@ -28,25 +31,35 @@ export default function Hero() {
       {/* 1. BACKDROP LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <div
-          className="absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat"
+          className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${
+            videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
+          }`}
           style={{ backgroundImage: 'url("/hero-poster.jpg")' }}
           aria-hidden="true"
         />
 
-        {!shouldReduceMotion && (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster="/hero-poster.jpg"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          >
-            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
-          </video>
-        )}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster="/hero-poster.jpg"
+          aria-hidden="true"
+          onLoadedData={() => {
+            setVideoReady(true);
+            setVideoFailed(false);
+          }}
+          onError={() => {
+            setVideoReady(false);
+            setVideoFailed(true);
+          }}
+          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
+            videoFailed ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <source src="/videos/ton618-hero.mp4" type="video/mp4" />
+        </video>
 
         <div
           className={`absolute inset-0 ${
