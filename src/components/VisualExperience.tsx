@@ -21,29 +21,36 @@ export default function VisualExperience() {
   return (
     <section ref={containerRef} id="experience" className="min-h-[100vh] py-24 relative bg-black overflow-hidden flex items-center justify-center">
       {/* DEEP SPACE BACKGROUND */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+      <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
+        {/* Deep Space Texture */}
         <motion.div 
           style={{ y: shouldReduceMotion ? 0 : y1, willChange: 'transform' }}
-          className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+          className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
         ></motion.div>
         
-        {/* ATMOSPHERIC VIDEO OVERLAY */}
-        <div className="absolute inset-0 opacity-[0.15] mix-blend-screen overflow-hidden">
+        {/* ORGANIC ATMOSPHERIC VIDEO - No rectangular containers */}
+        <div 
+          className="absolute inset-0 opacity-[0.12] mix-blend-screen"
+          style={{ 
+            maskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
+          }}
+        >
           <video 
             autoPlay 
             muted 
             loop 
             playsInline 
             preload="metadata"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover scale-110"
           >
             <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
           </video>
         </div>
 
-        {/* Dynamic Nebulas - Compacted size */}
-        <motion.div style={{ y: shouldReduceMotion ? 0 : y1, willChange: 'transform' }} className="absolute top-1/4 left-1/3 w-[400px] h-[400px] nebula-blur bg-indigo-500/10" />
-        <motion.div style={{ y: shouldReduceMotion ? 0 : y2, willChange: 'transform' }} className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] nebula-blur bg-purple-500/10" />
+        {/* Dynamic Light Accents - Extremely subtle and soft to avoid "blocks" */}
+        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full" />
+        <motion.div style={{ y: shouldReduceMotion ? 0 : y2 }} className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-purple-500/5 blur-[120px] rounded-full" />
       </div>
 
       {/* CORE EXPERIENCE VISUAL */}

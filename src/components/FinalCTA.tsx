@@ -10,19 +10,26 @@ export default function FinalCTA() {
   return (
     <section id="join" className="py-32 relative overflow-hidden bg-black">
       {/* Cinematic Singularity Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-indigo-500/5 blur-[180px] rounded-full"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-500/10 blur-[100px] rounded-full animate-pulse-slow"></div>
+      <div className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none">
+        {/* Soft Depth Glows */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[800px] bg-indigo-500/5 blur-[180px] rounded-full"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-500/10 blur-[120px] rounded-full animate-pulse-slow"></div>
         
-        {/* FOCAL ACCENT VIDEO */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl aspect-video opacity-40 mix-blend-lighten pointer-events-none select-none">
+        {/* ORGANIC FOCAL ACCENT VIDEO - No visible boxes */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-40 mix-blend-lighten"
+          style={{ 
+            maskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, black 20%, transparent 70%)'
+          }}
+        >
           <video 
             autoPlay 
             muted 
             loop 
             playsInline 
             preload="metadata"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain scale-125"
           >
             <source src="/videos/lensing-arc.mp4" type="video/mp4" />
           </video>
