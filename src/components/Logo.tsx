@@ -45,7 +45,7 @@ export default function Logo({
       >
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.16),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.06),transparent_70%)]" />
         <img
-          src="/logo-ton618.png"
+          src="/logo-ton618-transparent.png"
           alt={alt ?? `${config.botName} logo`}
           className={clsx('relative z-[1] h-full w-full object-contain', imageClassName)}
           loading="eager"

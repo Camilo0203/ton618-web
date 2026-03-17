@@ -78,7 +78,8 @@ export default function Hero() {
           <Logo
             size="xl"
             subtitle="Official System Mark"
-            frameClassName="border-indigo-300/20 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)),radial-gradient(circle_at_top,rgba(99,102,241,0.26),transparent_62%),rgba(3,5,14,0.95)]"
+            className="gap-6 md:gap-7"
+            frameClassName="h-24 w-24 rounded-[1.75rem] p-2.5 md:h-28 md:w-28 md:rounded-[1.95rem] md:p-3 lg:h-32 lg:w-32 border-indigo-300/20 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)),radial-gradient(circle_at_top,rgba(99,102,241,0.26),transparent_62%),rgba(3,5,14,0.95)]"
           />
         </motion.div>
 
