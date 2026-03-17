@@ -20,11 +20,11 @@ export default function VisualExperience() {
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
         <motion.div 
           style={{ y: shouldReduceMotion ? 0 : y1, willChange: 'transform' }}
-          className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+          className="absolute inset-0 opacity-[0.04] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
         ></motion.div>
         
         <div 
-          className="absolute inset-0 opacity-[0.12] mix-blend-screen"
+          className="absolute inset-0 opacity-[0.08] mix-blend-screen"
           style={{ 
             maskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)',
             WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
@@ -42,7 +42,7 @@ export default function VisualExperience() {
           </video>
         </div>
 
-        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full" />
+        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/[0.035] blur-[120px] rounded-full" />
         <div className="absolute inset-x-0 top-[18%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       </div>
@@ -57,7 +57,7 @@ export default function VisualExperience() {
       >
         <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tightest mb-6 leading-[0.85]">
           {t('experience.title')} <br/>
-          <span className="text-premium-gradient text-shadow-glow">{t('experience.titleAccent')}</span>
+          <span className="headline-accent headline-accent-clean text-premium-gradient text-shadow-glow">{t('experience.titleAccent')}</span>
         </h2>
         
         <p className="text-base md:text-lg text-slate-500 max-w-xl mx-auto font-medium leading-relaxed tracking-[0.2em] uppercase opacity-70 italic">

@@ -64,7 +64,7 @@ export default function Hero() {
               : 'bg-[radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.18),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.08),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.18)_0%,rgba(0,0,0,0.75)_72%,rgba(0,0,0,0.94)_100%)]'
           }`}
         ></div>
-        {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-18"></div>}
+        {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-[0.08]"></div>}
         {shouldReduceMotion && <div className="bg-hero-still absolute inset-0 opacity-70"></div>}
 
         {/* 2. OVERLAY LAYERS */}
@@ -99,7 +99,7 @@ export default function Hero() {
           className="text-[11vw] md:text-[9vw] lg:text-[8vw] font-black leading-[0.8] tracking-tightest uppercase mb-8"
         >
           {t('hero.titleMain')} <br/>
-          <span className="text-premium-gradient text-shadow-premium">{t('hero.titleAccent')}</span>
+          <span className="headline-accent headline-accent-clean text-premium-gradient text-shadow-premium">{t('hero.titleAccent')}</span>
         </motion.h1>
 
         {/* SUBHEADLINE */}
