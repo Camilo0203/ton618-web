@@ -372,8 +372,8 @@ const resources = {
   }
 };
 
-function normalizeDocumentLanguage(language?: string): string {
-  return language?.startsWith('es') ? 'es' : 'en';
+function normalizeLanguageCode(language?: string): string {
+  return language?.toLowerCase().startsWith('es') ? 'es' : 'en';
 }
 
 function applyDocumentLanguage(language?: string) {
@@ -381,13 +381,13 @@ function applyDocumentLanguage(language?: string) {
     return;
   }
 
-  const normalizedLanguage = normalizeDocumentLanguage(language);
+  const normalizedLanguage = normalizeLanguageCode(language);
   document.documentElement.lang = normalizedLanguage;
   document.documentElement.setAttribute('xml:lang', normalizedLanguage);
 }
 
 const savedLanguage = typeof window !== 'undefined'
-  ? localStorage.getItem('i18nextLng') || 'en'
+  ? normalizeLanguageCode(localStorage.getItem('i18nextLng') || 'en')
   : 'en';
 
 i18n
@@ -402,11 +402,13 @@ i18n
   });
 
 i18n.on('languageChanged', (lng) => {
+  const normalizedLanguage = normalizeLanguageCode(lng);
+
   if (typeof window !== 'undefined') {
-    localStorage.setItem('i18nextLng', lng);
+    localStorage.setItem('i18nextLng', normalizedLanguage);
   }
 
-  applyDocumentLanguage(lng);
+  applyDocumentLanguage(normalizedLanguage);
 });
 
 applyDocumentLanguage(i18n.resolvedLanguage || i18n.language || savedLanguage);

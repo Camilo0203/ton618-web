@@ -14,6 +14,9 @@ const MENU_HEIGHT = 132;
 const VIEWPORT_GUTTER = 12;
 const MENU_OFFSET = 12;
 
+const normalizeLanguageCode = (language?: string) =>
+  language?.toLowerCase().startsWith('es') ? 'es' : 'en';
+
 const getMenuPosition = (trigger: HTMLElement, menuHeight = MENU_HEIGHT) => {
   const rect = trigger.getBoundingClientRect();
   const availableBelow = window.innerHeight - rect.bottom - VIEWPORT_GUTTER;
@@ -35,8 +38,10 @@ export default function LanguageSelector() {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, openUpward: false });
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const normalizedLanguage = normalizeLanguageCode(i18n.resolvedLanguage || i18n.language);
 
-  const currentLanguage = languages.find((language) => i18n.language.startsWith(language.code)) || languages[0];
+  const currentLanguage =
+    languages.find((language) => language.code === normalizedLanguage) || languages[0];
 
   useEffect(() => {
     if (!isOpen) {
@@ -99,6 +104,8 @@ export default function LanguageSelector() {
     setIsOpen(true);
   };
 
+  const getIsActiveLanguage = (code: string) => code === normalizedLanguage;
+
   const menu = (
     <motion.div
       id="language-selector-menu"
@@ -116,24 +123,28 @@ export default function LanguageSelector() {
       }}
     >
       <div className="flex flex-col gap-1 p-2">
-        {languages.map((language) => (
+        {languages.map((language) => {
+          const isActive = getIsActiveLanguage(language.code);
+
+          return (
           <button
             key={language.code}
             onClick={() => toggleLanguage(language.code)}
             role="menuitemradio"
-            aria-checked={i18n.language.startsWith(language.code)}
+            aria-checked={isActive}
             className={`group flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300 ${
-              i18n.language.startsWith(language.code)
+              isActive
                 ? 'bg-indigo-500/20 text-white'
                 : 'text-slate-400 hover:bg-white/5 hover:text-white'
             }`}
           >
             <span className="text-[10px] font-bold uppercase tracking-widest">{language.name}</span>
-            {i18n.language.startsWith(language.code) ? (
+            {isActive ? (
               <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
             ) : null}
           </button>
-        ))}
+          );
+        })}
       </div>
 
       <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent"></div>
