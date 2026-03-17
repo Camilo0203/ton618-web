@@ -111,10 +111,17 @@ const resources = {
       },
       stats: {
         badgeOnline: 'Telemetry Online',
+        badgeLoading: 'Sync In Progress',
         badgeOffline: 'Protocol Restricted',
         title: 'Proven',
         titleAccent: 'Scale',
         description: 'Live telemetry data verified by our global synchronization layer. Power without compromise.',
+        lastUpdated: 'Last updated {{value}}',
+        status: {
+          syncing: 'Refreshing live telemetry',
+          standby: 'Awaiting live telemetry',
+          fallback: 'Fallback metrics remain visible while the live feed stabilizes.'
+        },
         cards: {
           clusters: { label: 'Active Clusters', sub: 'Across Global Nodes' },
           souls: { label: 'Synchronized Souls', sub: 'Verified Identities' },
@@ -282,10 +289,17 @@ const resources = {
       },
       stats: {
         badgeOnline: 'Telemetría Online',
+        badgeLoading: 'Sincronizando Datos',
         badgeOffline: 'Protocolo Restringido',
         title: 'Escala',
         titleAccent: 'Probada',
         description: 'Datos de telemetría en vivo verificados por nuestra capa de sincronización global. Poder sin concesiones.',
+        lastUpdated: 'Actualizado {{value}}',
+        status: {
+          syncing: 'Actualizando telemetría en vivo',
+          standby: 'Esperando telemetría en vivo',
+          fallback: 'Las métricas base siguen visibles mientras se estabiliza la señal en vivo.'
+        },
         cards: {
           clusters: { label: 'Clústeres Activos', sub: 'En Nodos Globales' },
           souls: { label: 'Almas Sincronizadas', sub: 'Identidades Verificadas' },

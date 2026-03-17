@@ -1,5 +1,6 @@
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useMemo, useRef, useState, memo } from 'react';
 import { Server, Users, Zap, Clock } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { defaultBotStats, useBotStats } from '../hooks/useBotStats';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -11,7 +12,16 @@ interface AnimatedStats {
   uptimePercentage: number;
 }
 
-const StatCard = memo(({ icon: Icon, label, value, sub, index }: any) => (
+interface StatCardProps {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  sub: string;
+  index: number;
+  loading: boolean;
+}
+
+const StatCard = memo(({ icon: Icon, label, value, sub, index, loading }: StatCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 15 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -24,7 +34,10 @@ const StatCard = memo(({ icon: Icon, label, value, sub, index }: any) => (
         <Icon className="w-8 h-8 text-indigo-400" />
       </div>
       
-      <div className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter tabular-nums text-shadow-glow" style={{ willChange: 'contents' }}>
+      <div
+        className={`text-4xl md:text-5xl font-bold text-white mb-4 tracking-tighter tabular-nums text-shadow-glow transition-opacity duration-300 ${loading ? 'opacity-80' : 'opacity-100'}`}
+        style={{ willChange: 'contents' }}
+      >
         {value}
       </div>
       
@@ -52,23 +65,26 @@ const StatCard = memo(({ icon: Icon, label, value, sub, index }: any) => (
 StatCard.displayName = 'StatCard';
 
 export default function LiveStats() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const { stats, error } = useBotStats();
+  const { stats, loading, error, lastUpdated } = useBotStats();
   const [animated, setAnimated] = useState<AnimatedStats>(defaultBotStats);
+  const previousStatsRef = useRef<AnimatedStats>(defaultBotStats);
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      setAnimated({
+      const nextAnimated = {
         servers: stats.servers,
         users: stats.users,
         commands: stats.commands,
         uptimePercentage: stats.uptimePercentage
-      });
+      };
+      previousStatsRef.current = nextAnimated;
+      setAnimated(nextAnimated);
       return;
     }
 
-    const start = { ...animated };
+    const start = previousStatsRef.current;
     const target = { servers: stats.servers, users: stats.users, commands: stats.commands, uptimePercentage: stats.uptimePercentage };
     const durationMs = 1500;
     const startTime = performance.now();
@@ -87,6 +103,8 @@ export default function LiveStats() {
       
       if (progress < 1) {
         frameId = requestAnimationFrame(tick);
+      } else {
+        previousStatsRef.current = target;
       }
     };
     
@@ -95,6 +113,32 @@ export default function LiveStats() {
   }, [stats, shouldReduceMotion]);
 
   const liveUnavailable = Boolean(error);
+  const badgeToneClass = liveUnavailable ? 'bg-red-500' : loading ? 'bg-amber-400 animate-pulse' : 'bg-cyan-400 animate-pulse';
+  const badgeLabel = loading ? t('stats.badgeLoading') : liveUnavailable ? t('stats.badgeOffline') : t('stats.badgeOnline');
+  const locale = i18n.resolvedLanguage || i18n.language || 'en';
+  const formattedLastUpdated = useMemo(() => {
+    if (!lastUpdated) {
+      return '';
+    }
+
+    const parsedDate = new Date(lastUpdated);
+    if (Number.isNaN(parsedDate.getTime())) {
+      return '';
+    }
+
+    return new Intl.DateTimeFormat(locale, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(parsedDate);
+  }, [lastUpdated, locale]);
+
+  const statusMessage = loading
+    ? t('stats.status.syncing')
+    : formattedLastUpdated
+      ? t('stats.lastUpdated', { value: formattedLastUpdated })
+      : error
+        ? t('stats.status.standby')
+        : '';
 
   const statCardsData = [
     { icon: Server, label: t('stats.cards.clusters.label'), value: animated.servers.toLocaleString(), sub: t('stats.cards.clusters.sub') },
@@ -116,9 +160,9 @@ export default function LiveStats() {
           className="text-center mb-24"
         >
           <div className="inline-flex items-center gap-3 px-6 py-2 cinematic-glass rounded-full border border-white/10 mb-10">
-            <div className={`w-2 h-2 rounded-full ${liveUnavailable ? 'bg-red-500' : 'bg-cyan-400 animate-pulse'}`}></div>
+            <div className={`w-2 h-2 rounded-full ${badgeToneClass}`}></div>
             <span className="text-white font-bold text-[10px] uppercase tracking-[0.4em]">
-              {liveUnavailable ? t('stats.badgeOffline') : t('stats.badgeOnline')}
+              {badgeLabel}
             </span>
           </div>
 
@@ -128,6 +172,21 @@ export default function LiveStats() {
           <p className="text-xl text-slate-400 max-w-2xl mx-auto font-medium leading-relaxed">
             {t('stats.description')}
           </p>
+          {(statusMessage || error) && (
+            <div className="mt-6 flex flex-col items-center gap-2">
+              {statusMessage && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-300">
+                  <span className={`h-1.5 w-1.5 rounded-full ${liveUnavailable ? 'bg-red-400' : loading ? 'bg-amber-400 shadow-[0_0_12px_rgba(251,191,36,0.75)]' : 'bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.65)]'}`}></span>
+                  <span>{statusMessage}</span>
+                </div>
+              )}
+              {error && (
+                <p className="max-w-2xl text-[10px] font-medium uppercase tracking-[0.22em] text-slate-500">
+                  {t('stats.status.fallback')}
+                </p>
+              )}
+            </div>
+          )}
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -139,6 +198,7 @@ export default function LiveStats() {
               value={stat.value}
               sub={stat.sub}
               index={i}
+              loading={loading}
             />
           ))}
         </div>
