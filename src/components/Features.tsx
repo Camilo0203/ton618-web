@@ -75,7 +75,7 @@ export default function Features() {
   };
 
   return (
-    <section id="features" className="py-40 relative overflow-hidden bg-black/50">
+    <section id="features" className="pt-16 pb-32 relative overflow-hidden bg-black/50">
       {/* ATMOSPHERIC BACKGROUND */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] nebula-blur bg-indigo-500/5 -translate-y-1/2 translate-x-1/2" style={{ transform: 'translate3d(0,0,0)' }}></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] nebula-blur bg-purple-500/5 translate-y-1/2 -translate-x-1/2" style={{ transform: 'translate3d(0,0,0)' }}></div>

@@ -12,7 +12,7 @@ export default function Hero() {
   const dashboardUrl = getDashboardUrl();
 
   return (
-    <section ref={containerRef} id="top" className="relative min-h-[100dvh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-[#000]">
+    <section ref={containerRef} id="top" className="relative min-h-[85dvh] flex items-center justify-center pt-32 pb-12 overflow-hidden bg-[#000]">
       {/* 1. VIDEO BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <video 
@@ -35,6 +35,9 @@ export default function Hero() {
         
         {/* Cinematic Vignette */}
         <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-20"></div>
+
+        {/* BOTTOM TRANSITION MASK (Cinematic fade to next section) */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-25"></div>
       </div>
 
       {/* 3. UI CONTENT LAYER */}
@@ -96,9 +99,9 @@ export default function Hero() {
       <motion.div 
         animate={shouldReduceMotion ? {} : { y: [0, 8, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40 hover:opacity-100 transition-all duration-700 pointer-events-none"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40 hover:opacity-100 transition-all duration-700 pointer-events-none"
       >
-        <div className="w-[1px] h-16 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
         <span className="text-[10px] uppercase tracking-[0.6em] font-black text-indigo-300/50">{t('hero.scroll')}</span>
       </motion.div>
     </section>
