@@ -1,14 +1,12 @@
 import { ChevronRight, Sparkles, Activity } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 import { getDiscordInviteUrl, getDashboardUrl } from '../config';
 import Logo from './Logo';
 
 export default function Hero() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const [useStaticBackdrop, setUseStaticBackdrop] = useState(shouldReduceMotion);
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
   const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
@@ -25,68 +23,35 @@ export default function Hero() {
     ? instantReveal
     : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.4 } };
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 767px), (prefers-reduced-motion: reduce)');
-    const updateBackdropMode = () => {
-      const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-      setUseStaticBackdrop(mediaQuery.matches || Boolean(connection?.saveData));
-    };
-
-    updateBackdropMode();
-    mediaQuery.addEventListener('change', updateBackdropMode);
-
-    return () => mediaQuery.removeEventListener('change', updateBackdropMode);
-  }, []);
-
   return (
     <section id="top" className="relative min-h-[85dvh] flex items-center justify-center pt-32 pb-12 overflow-hidden bg-[#000]">
-      {/* 1. VIDEO BACKGROUND LAYER */}
+      {/* 1. STATIC BACKDROP LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
-        {useStaticBackdrop ? (
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage:
-                "linear-gradient(180deg, rgba(5, 6, 15, 0.12) 0%, rgba(0, 0, 0, 0.44) 72%, rgba(0, 0, 0, 0.68) 100%), url('/hero-poster.jpg')",
-            }}
-          />
-        ) : (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            poster="/hero-poster.jpg"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          >
-            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
-          </video>
-        )}
+        <div className="absolute inset-0 bg-[#02030a]" aria-hidden="true" />
 
         <div
           className={`absolute inset-0 ${
             shouldReduceMotion
-              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(7,9,20,0.42),transparent_40%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.14),transparent_37%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_26%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.03),transparent_20%),linear-gradient(180deg,rgba(5,6,15,0.34)_0%,rgba(0,0,0,0.78)_72%,rgba(0,0,0,0.93)_100%)]'
-              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.34),transparent_42%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.13),transparent_38%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_30%),linear-gradient(180deg,rgba(5,6,15,0.18)_0%,rgba(0,0,0,0.72)_72%,rgba(0,0,0,0.92)_100%)]'
+              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(67,56,202,0.22),transparent_32%),radial-gradient(circle_at_50%_20%,rgba(14,19,46,0.78),transparent_52%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.03),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(129,140,248,0.05),transparent_18%),linear-gradient(180deg,rgba(4,5,14,0.82)_0%,rgba(1,2,8,0.92)_56%,rgba(0,0,0,0.98)_100%)]'
+              : 'bg-[radial-gradient(circle_at_50%_28%,rgba(67,56,202,0.28),transparent_30%),radial-gradient(circle_at_50%_18%,rgba(10,14,34,0.82),transparent_54%),radial-gradient(circle_at_16%_16%,rgba(255,255,255,0.035),transparent_20%),radial-gradient(circle_at_84%_22%,rgba(129,140,248,0.06),transparent_18%),linear-gradient(180deg,rgba(3,4,12,0.78)_0%,rgba(1,2,8,0.9)_58%,rgba(0,0,0,0.98)_100%)]'
           }`}
-        ></div>
+        />
+        <div className="absolute inset-x-[12%] top-[12%] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(109,40,217,0.22)_0%,rgba(67,56,202,0.16)_38%,rgba(15,23,42,0.04)_72%,transparent_100%)] blur-3xl" />
+        <div className="absolute inset-x-[24%] top-[18%] h-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06)_0%,rgba(99,102,241,0.08)_24%,transparent_68%)] blur-[120px]" />
         {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-[0.08]"></div>}
 
         {/* 2. OVERLAY LAYERS */}
         {/* Primary Dark Overlay */}
-        <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/58' : 'bg-black/52'}`}></div>
+        <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/62' : 'bg-black/56'}`}></div>
         
         {/* Radial Gradient Overlay (Softens the center/edges) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(3,4,10,0.18)_0%,rgba(3,4,10,0.1)_28%,transparent_56%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.32)_72%,rgba(0,0,0,0.72)_100%)] z-15"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(3,4,12,0.06)_0%,rgba(3,4,12,0.18)_30%,transparent_52%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.4)_74%,rgba(0,0,0,0.82)_100%)] z-15" />
         
         {/* Cinematic Vignette */}
-        <div className="absolute inset-0 shadow-[inset_0_0_140px_rgba(0,0,0,0.82)] z-20"></div>
+        <div className="absolute inset-0 shadow-[inset_0_0_180px_rgba(0,0,0,0.9)] z-20" />
 
         {/* BOTTOM TRANSITION MASK (Cinematic fade to next section) */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-25"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black via-black/80 to-transparent z-25" />
       </div>
 
       {/* 3. UI CONTENT LAYER */}
