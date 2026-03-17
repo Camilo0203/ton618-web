@@ -5,7 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const siteUrl = (env.VITE_SITE_URL || '').replace(/\/+$/, '');
-  const socialImageUrl = siteUrl ? `${siteUrl}/social-preview.png` : '/social-preview.png';
+  const siteRootUrl = siteUrl ? `${siteUrl}/` : '/';
+  const socialImagePath = '/social-preview.png';
+  const socialImageUrl = siteUrl ? `${siteUrl}${socialImagePath}` : socialImagePath;
 
   return {
     plugins: [
@@ -15,6 +17,7 @@ export default defineConfig(({ mode }) => {
         transformIndexHtml(html) {
           return html
             .replaceAll('__SITE_URL__', siteUrl)
+            .replaceAll('__SITE_ROOT_URL__', siteRootUrl)
             .replaceAll('__SOCIAL_IMAGE_URL__', socialImageUrl);
         },
         generateBundle() {

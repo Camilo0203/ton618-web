@@ -1,3 +1,5 @@
+const siteUrl = (import.meta.env.VITE_SITE_URL || '').replace(/\/+$/, '');
+
 export const config = {
   botName: 'TON618',
   brandMarkPath: '/logo-ton618-transparent.png',
@@ -19,7 +21,7 @@ export const config = {
   contactEmail: import.meta.env.VITE_CONTACT_EMAIL || '',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-  siteUrl: (import.meta.env.VITE_SITE_URL || '').replace(/\/+$/, ''),
+  siteUrl,
   dashboardInternalPath: '/dashboard',
   authCallbackPath: '/auth/callback',
 };
@@ -34,7 +36,7 @@ export function getSiteOrigin(): string {
   }
 
   if (config.siteUrl) {
-    return config.siteUrl.replace(/\/$/, '');
+    return config.siteUrl;
   }
 
   if (typeof window !== 'undefined') {
