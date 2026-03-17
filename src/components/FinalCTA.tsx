@@ -18,10 +18,10 @@ export default function FinalCTA() {
         
         {/* ORGANIC FOCAL ACCENT VIDEO - No visible boxes */}
         <div 
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-[0.13] mix-blend-screen"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-[0.16] mix-blend-screen"
           style={{ 
-            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 18%, black 52%, transparent 86%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 18%, black 52%, transparent 86%)'
+            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 16%, black 52%, transparent 88%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 16%, black 52%, transparent 88%)'
           }}
         >
           <motion.video
@@ -39,7 +39,7 @@ export default function FinalCTA() {
             <source src="/videos/lensing-arc.mp4" type="video/mp4" />
           </motion.video>
         </div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(3,4,10,0.1)_0%,rgba(3,4,10,0.24)_44%,rgba(0,0,0,0.78)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(3,4,10,0.08)_0%,rgba(3,4,10,0.2)_44%,rgba(0,0,0,0.74)_100%)]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">

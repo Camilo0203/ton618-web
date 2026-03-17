@@ -24,10 +24,10 @@ export default function VisualExperience() {
         ></motion.div>
         
         <div 
-          className="absolute inset-0 opacity-[0.12] mix-blend-screen"
+          className="absolute inset-0 opacity-[0.2] mix-blend-screen"
           style={{ 
-            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 18%, black 52%, transparent 86%)',
-            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 18%, black 52%, transparent 86%)'
+            maskImage: 'radial-gradient(circle at center, transparent 0%, transparent 14%, black 50%, transparent 90%)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 14%, black 50%, transparent 90%)'
           }}
         >
           <video 
@@ -42,10 +42,10 @@ export default function VisualExperience() {
           </video>
         </div>
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,4,10,0.18)_0%,rgba(2,4,10,0.28)_44%,rgba(0,0,0,0.72)_100%)]" />
-        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/[0.025] blur-[120px] rounded-full" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,4,10,0.12)_0%,rgba(2,4,10,0.2)_42%,rgba(0,0,0,0.64)_100%)]" />
+        <motion.div style={{ y: shouldReduceMotion ? 0 : y1 }} className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-indigo-500/[0.04] blur-[120px] rounded-full" />
         <div className="absolute inset-x-0 top-[18%] h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute inset-x-0 bottom-[18%] h-px bg-gradient-to-r from-transparent via-white/6 to-transparent" />
       </div>
 
       <motion.div 
@@ -56,7 +56,7 @@ export default function VisualExperience() {
         }}
         className="relative z-10 text-center px-6 max-w-4xl mx-auto"
       >
-        <div className="absolute inset-x-10 top-1/2 h-48 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(2,3,8,0.94)_0%,rgba(2,3,8,0.82)_48%,rgba(2,3,8,0.22)_78%,transparent_100%)] blur-2xl" aria-hidden="true" />
+        <div className="absolute inset-x-10 top-1/2 h-48 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(2,3,8,0.88)_0%,rgba(2,3,8,0.72)_48%,rgba(2,3,8,0.16)_78%,transparent_100%)] blur-2xl" aria-hidden="true" />
         <h2 className="relative z-10 text-5xl md:text-8xl font-black text-white uppercase tracking-tightest mb-6 leading-[0.85]">
           {t('experience.title')} <br/>
           <span className="headline-accent headline-accent-solid">{t('experience.titleAccent')}</span>

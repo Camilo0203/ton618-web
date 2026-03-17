@@ -41,21 +41,21 @@ export default function Hero() {
         <div
           className={`absolute inset-0 ${
             shouldReduceMotion
-              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(7,9,20,0.48),transparent_38%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.12),transparent_35%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.05),transparent_24%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.025),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.42)_0%,rgba(0,0,0,0.82)_72%,rgba(0,0,0,0.95)_100%)]'
-              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.4),transparent_40%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.11),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.05),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.22)_0%,rgba(0,0,0,0.76)_72%,rgba(0,0,0,0.94)_100%)]'
+              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(7,9,20,0.42),transparent_40%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.14),transparent_37%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_26%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.03),transparent_20%),linear-gradient(180deg,rgba(5,6,15,0.34)_0%,rgba(0,0,0,0.78)_72%,rgba(0,0,0,0.93)_100%)]'
+              : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.34),transparent_42%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.13),transparent_38%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_30%),linear-gradient(180deg,rgba(5,6,15,0.18)_0%,rgba(0,0,0,0.72)_72%,rgba(0,0,0,0.92)_100%)]'
           }`}
         ></div>
         {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-[0.08]"></div>}
 
         {/* 2. OVERLAY LAYERS */}
         {/* Primary Dark Overlay */}
-        <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/64' : 'bg-black/58'}`}></div>
+        <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/58' : 'bg-black/52'}`}></div>
         
         {/* Radial Gradient Overlay (Softens the center/edges) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(3,4,10,0.22)_0%,rgba(3,4,10,0.14)_26%,transparent_54%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.38)_70%,rgba(0,0,0,0.78)_100%)] z-15"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(3,4,10,0.18)_0%,rgba(3,4,10,0.1)_28%,transparent_56%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.32)_72%,rgba(0,0,0,0.72)_100%)] z-15"></div>
         
         {/* Cinematic Vignette */}
-        <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,0.9)] z-20"></div>
+        <div className="absolute inset-0 shadow-[inset_0_0_140px_rgba(0,0,0,0.82)] z-20"></div>
 
         {/* BOTTOM TRANSITION MASK (Cinematic fade to next section) */}
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent z-25"></div>
