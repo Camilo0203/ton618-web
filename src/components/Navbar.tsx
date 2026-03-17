@@ -11,8 +11,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navbarClassName = scrolled
-    ? 'bg-[#05060f]/72 backdrop-blur-md border border-transparent shadow-2xl shadow-black/70'
-    : 'bg-transparent border border-transparent shadow-none';
+    ? 'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-xl border-0 shadow-[0_18px_55px_rgba(0,0,0,0.52)]'
+    : 'bg-transparent border-0 shadow-none';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -32,7 +32,7 @@ export default function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}>
       <div className="max-w-7xl mx-auto px-6">
-        <div className={`flex items-center justify-between px-6 py-3 rounded-2xl transition-all duration-500 ${navbarClassName}`}>
+        <div className={`flex items-center justify-between overflow-hidden px-6 py-3 rounded-[1.75rem] transition-all duration-500 ${navbarClassName}`}>
           
           <div className="flex items-center gap-10 lg:gap-16">
             <a href="/" className="flex items-center gap-3 group">
@@ -75,7 +75,10 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+              className="lg:hidden p-2 text-slate-300 hover:text-white transition-colors"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -89,6 +92,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
+            id="mobile-navigation"
             className="lg:hidden absolute top-full left-0 right-0 px-6 pt-2 overflow-hidden"
           >
             <div className="cinematic-glass rounded-2xl border-white/5 p-8 flex flex-col gap-8 shadow-3xl shadow-black">

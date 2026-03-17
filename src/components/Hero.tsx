@@ -1,12 +1,14 @@
 import { ChevronRight, Sparkles, Activity } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
 import { getDiscordInviteUrl, getDashboardUrl } from '../config';
 import Logo from './Logo';
 
 export default function Hero() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const [useStaticBackdrop, setUseStaticBackdrop] = useState(shouldReduceMotion);
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
   const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
@@ -23,21 +25,46 @@ export default function Hero() {
     ? instantReveal
     : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.4 } };
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px), (prefers-reduced-motion: reduce)');
+    const updateBackdropMode = () => {
+      const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+      setUseStaticBackdrop(mediaQuery.matches || Boolean(connection?.saveData));
+    };
+
+    updateBackdropMode();
+    mediaQuery.addEventListener('change', updateBackdropMode);
+
+    return () => mediaQuery.removeEventListener('change', updateBackdropMode);
+  }, []);
+
   return (
     <section id="top" className="relative min-h-[85dvh] flex items-center justify-center pt-32 pb-12 overflow-hidden bg-[#000]">
       {/* 1. VIDEO BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        >
-          <source src="/videos/ton618-hero.mp4" type="video/mp4" />
-        </video>
+        {useStaticBackdrop ? (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage:
+                "linear-gradient(180deg, rgba(5, 6, 15, 0.12) 0%, rgba(0, 0, 0, 0.44) 72%, rgba(0, 0, 0, 0.68) 100%), url('/hero-poster.jpg')",
+            }}
+          />
+        ) : (
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            poster="/hero-poster.jpg"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          >
+            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
+          </video>
+        )}
 
         <div
           className={`absolute inset-0 ${
@@ -96,10 +123,10 @@ export default function Hero() {
         {/* SUBHEADLINE */}
         <motion.p 
           {...fadeInActions}
-          className="text-lg md:text-xl text-slate-300/90 max-w-2xl mx-auto mb-14 font-medium leading-relaxed tracking-tight"
+          className="text-lg md:text-xl text-slate-200/95 max-w-2xl mx-auto mb-14 font-medium leading-relaxed tracking-tight"
         >
           {t('hero.description')} <br className="hidden md:block"/>
-          <span className="text-slate-500 font-normal mt-2 block">{t('hero.descriptionSub')}</span>
+          <span className="mt-2 block font-normal text-slate-400">{t('hero.descriptionSub')}</span>
         </motion.p>
 
         {/* CTA BUTTONS */}
@@ -107,14 +134,14 @@ export default function Hero() {
           {...(shouldReduceMotion
             ? instantReveal
             : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.55 } })}
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
         >
-          <a href={inviteUrl} className="btn-premium-primary group">
+          <a href={inviteUrl} className="btn-premium-primary group w-full sm:w-auto">
             <Sparkles className={`h-5 w-5 ${shouldReduceMotion ? '' : 'transition-transform duration-500 group-hover:rotate-12'}`} />
             <span>{t('hero.ctaPrimary')}</span>
           </a>
 
-          <a href={dashboardUrl} className="btn-premium-outline group shadow-lg hover:shadow-indigo-500/10">
+          <a href={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
             <span>{t('hero.ctaSecondary')}</span>
             <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
           </a>

@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
@@ -10,26 +11,38 @@ import WhyTon from '../components/WhyTon';
 import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
 import LegalModal from '../components/LegalModal';
-import { config } from '../config';
+import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
 
 type LegalModalType = 'terms' | 'privacy' | 'cookies' | null;
 
 export default function LandingPage() {
-  useTranslation();
+  const { t, i18n } = useTranslation();
+  const location = useLocation();
   const [legalModalType, setLegalModalType] = useState<LegalModalType>(null);
+  const title = t('meta.title');
+  const description = t('meta.description');
+  const canonicalUrl = getCanonicalUrl(location.pathname);
+  const socialImageUrl = getAbsoluteAssetUrl(config.socialImagePath);
+  const locale = i18n.language.startsWith('es') ? 'es_ES' : 'en_US';
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-indigo-500/30 overflow-x-hidden">
       <Helmet>
-        <title>{config.defaultMetaTitle}</title>
-        <meta name="description" content={config.defaultMetaDescription} />
+        <html lang={i18n.language.startsWith('es') ? 'es' : 'en'} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
         <meta name="theme-color" content="#05060f" />
-        <meta property="og:title" content={config.defaultMetaTitle} />
-        <meta property="og:description" content={config.defaultMetaDescription} />
-        <meta property="og:image" content={config.socialImagePath} />
-        <meta name="twitter:title" content={config.defaultMetaTitle} />
-        <meta name="twitter:description" content={config.defaultMetaDescription} />
-        <meta name="twitter:image" content={config.socialImagePath} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={socialImageUrl} />
+        <meta property="og:locale" content={locale} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={socialImageUrl} />
         <link rel="icon" type="image/png" href={config.faviconPath} />
         <link rel="apple-touch-icon" href={config.appleTouchIconPath} />
         <link rel="manifest" href={config.manifestPath} />

@@ -1,7 +1,7 @@
 export const config = {
   botName: 'TON618',
   brandMarkPath: '/logo-ton618-transparent.png',
-  socialImagePath: '/logo-ton618.png',
+  socialImagePath: '/social-preview.png',
   faviconPath: '/favicon.png',
   appleTouchIconPath: '/apple-touch-icon.png',
   manifestPath: '/site.webmanifest',
@@ -19,7 +19,7 @@ export const config = {
   contactEmail: import.meta.env.VITE_CONTACT_EMAIL || '',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-  siteUrl: import.meta.env.VITE_SITE_URL || '',
+  siteUrl: (import.meta.env.VITE_SITE_URL || '').replace(/\/+$/, ''),
   dashboardInternalPath: '/dashboard',
   authCallbackPath: '/auth/callback',
 };
@@ -56,6 +56,31 @@ export function getAuthCallbackUrl(): string {
   const origin = getSiteOrigin();
 
   return origin ? `${origin}${config.authCallbackPath}` : config.authCallbackPath;
+}
+
+export function getCanonicalUrl(pathname = '/'): string {
+  const origin = getSiteOrigin();
+  const normalizedPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+
+  if (!origin) {
+    return normalizedPath;
+  }
+
+  return normalizedPath === '/' ? `${origin}/` : `${origin}${normalizedPath}`;
+}
+
+export function getAbsoluteAssetUrl(path: string): string {
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
+  const origin = getSiteOrigin();
+
+  if (!origin) {
+    return path;
+  }
+
+  return `${origin}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 export function getDiscordLoginUrl(): string {

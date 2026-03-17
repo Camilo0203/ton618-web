@@ -9,7 +9,7 @@ const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
 
 function AppLoadingFallback() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 text-white">
       <div className="flex flex-col items-center gap-4 rounded-[2rem] border border-white/10 bg-white/5 px-8 py-10 backdrop-blur-xl">
         <Logo size="lg" withText={false} />
         <div className="text-center">
