@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { ChevronRight, Sparkles, Activity } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -7,8 +6,6 @@ import { getDiscordInviteUrl, getDashboardUrl } from '../config';
 export default function Hero() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [shouldRenderVideo, setShouldRenderVideo] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
   const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
@@ -25,47 +22,30 @@ export default function Hero() {
     ? instantReveal
     : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.4 } };
 
-  useEffect(() => {
-    if (shouldReduceMotion) {
-      setShouldRenderVideo(false);
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.currentTime = 0;
-      }
-      return;
-    }
-
-    setShouldRenderVideo(true);
-  }, [shouldReduceMotion]);
-
   return (
     <section id="top" className="relative min-h-[85dvh] flex items-center justify-center pt-32 pb-12 overflow-hidden bg-[#000]">
       {/* 1. VIDEO BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
-        {shouldRenderVideo && (
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          >
-            <source src="/videos/ton618-hero.mp4" type="video/mp4" />
-          </video>
-        )}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        >
+          <source src="/videos/ton618-hero.mp4" type="video/mp4" />
+        </video>
 
         <div
           className={`absolute inset-0 ${
             shouldReduceMotion
-              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.38),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.18),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.08),transparent_24%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.04),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.42)_0%,rgba(0,0,0,0.86)_68%,rgba(0,0,0,0.97)_100%)]'
+              ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.54),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.14),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_24%),radial-gradient(circle_at_82%_24%,rgba(255,255,255,0.03),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.58)_0%,rgba(0,0,0,0.9)_68%,rgba(0,0,0,0.98)_100%)]'
               : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.42),transparent_38%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.12),transparent_36%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.06),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.24)_0%,rgba(0,0,0,0.78)_72%,rgba(0,0,0,0.95)_100%)]'
           }`}
         ></div>
         {shouldReduceMotion && <div className="bg-film-grain absolute inset-0 opacity-[0.08]"></div>}
-        {shouldReduceMotion && <div className="bg-hero-still absolute inset-0 opacity-70"></div>}
 
         {/* 2. OVERLAY LAYERS */}
         {/* Primary Dark Overlay */}
