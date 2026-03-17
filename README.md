@@ -24,6 +24,7 @@ Copy `.env.example` to `.env` and fill values:
 - `VITE_SITE_URL`: Canonical website URL for OG, sitemap, and Discord OAuth redirect setup.
 
 If a variable is missing, the UI degrades gracefully (disabled CTA, hidden social icon, or internal fallback anchor).
+After changing any `VITE_*` variable, restart the Vite dev server so the new values are picked up.
 
 ## Supabase `bot_stats` Setup
 Use the migration in `supabase/migrations/20260305063924_create_bot_stats_table.sql` to create:
