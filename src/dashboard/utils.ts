@@ -362,6 +362,14 @@ export function getDashboardChecklist(
   const tickets = findState('tickets');
   const modlogs = findState('modlogs');
   const system = findState('system');
+  const memberExperienceState = [
+    verification?.status === 'needs_attention' ? verification : null,
+    welcome?.status === 'needs_attention' ? welcome : null,
+    welcome?.status === 'active' ? welcome : null,
+    verification?.status === 'active' ? verification : null,
+    verification?.status === 'basic' ? verification : null,
+    welcome?.status === 'basic' ? welcome : null,
+  ].find((state): state is DashboardSectionState => Boolean(state));
 
   return [
     {
@@ -395,7 +403,7 @@ export function getDashboardChecklist(
       id: 'member-experience',
       label: 'Preparar la llegada de nuevos miembros',
       description: 'Activa una experiencia de bienvenida o un control de acceso antes de abrir el servidor.',
-      sectionId: verification?.status === 'needs_attention' ? 'verification' : (welcome?.status === 'active' ? 'welcome' : 'verification'),
+      sectionId: memberExperienceState?.sectionId ?? 'verification',
       complete: welcome?.status === 'active' || verification?.status === 'active',
       status: welcome?.status === 'active' || verification?.status === 'active'
         ? 'active'
@@ -404,12 +412,14 @@ export function getDashboardChecklist(
             ? 'needs_attention'
             : (welcome?.status === 'basic' || verification?.status === 'basic' ? 'basic' : 'not_configured')
         ),
-      summary: welcome?.status === 'active'
+      summary: memberExperienceState?.status === 'needs_attention'
+        ? memberExperienceState.summary
+        : welcome?.status === 'active'
         ? 'La bienvenida ya esta funcionando.'
         : verification?.status === 'active'
           ? 'La verificacion de acceso ya esta funcionando.'
-          : verification?.status === 'needs_attention'
-            ? verification.summary
+          : memberExperienceState && memberExperienceState.status !== 'not_configured'
+            ? memberExperienceState.summary
             : 'Activa al menos una experiencia de acceso para nuevos miembros.',
     },
     {
