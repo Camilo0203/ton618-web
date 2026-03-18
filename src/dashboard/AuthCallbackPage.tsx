@@ -31,6 +31,14 @@ export default function AuthCallbackPage() {
     let redirectTimeout: number | null = null;
 
     async function completeAuthFlow() {
+      console.log('[dashboard-auth] callback:begin', {
+        attemptKey,
+        hasCode: Boolean(code),
+        hasAuthError: Boolean(authError),
+        callbackPath: window.location.pathname,
+        callbackSearch: window.location.search,
+      });
+
       if (authError) {
         throw new Error(authError);
       }
@@ -40,7 +48,14 @@ export default function AuthCallbackPage() {
       }
 
       setStatusText('Intercambiando codigo por sesion segura...');
+      console.log('[dashboard-auth] callback:exchange:start', { attemptKey });
       const session = await exchangeDashboardCodeForSession(code);
+      console.log('[dashboard-auth] callback:exchange:done', {
+        attemptKey,
+        hasSession: Boolean(session),
+        hasProviderToken: Boolean(session?.provider_token),
+        userId: session?.user?.id ?? null,
+      });
 
       if (!session?.provider_token) {
         throw new Error('Discord no devolvio provider_token. Repite el login para sincronizar servidores.');
@@ -58,6 +73,10 @@ export default function AuthCallbackPage() {
       const firstGuildId = syncResult.guilds[0]?.guildId;
       setStatusText('Listo. Redirigiendo al panel...');
       setIsCompleted(true);
+      console.log('[dashboard-auth] callback:complete', {
+        attemptKey,
+        firstGuildId: firstGuildId ?? null,
+      });
 
       redirectTimeout = window.setTimeout(() => {
         navigate(firstGuildId ? `/dashboard?guild=${encodeURIComponent(firstGuildId)}` : '/dashboard', {
@@ -72,6 +91,11 @@ export default function AuthCallbackPage() {
       }
 
       const message = error instanceof Error ? error.message : 'No se pudo completar el callback.';
+      console.error('[dashboard-auth] callback:error', {
+        attemptKey,
+        message,
+        error,
+      });
       setErrorMessage(message);
       processedAttemptRef.current = null;
     });

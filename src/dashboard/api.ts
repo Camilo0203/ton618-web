@@ -32,6 +32,8 @@ import type {
   TicketMacro,
 } from './types';
 
+const OAUTH_EXCHANGE_TIMEOUT_MS = 15_000;
+
 interface GuildAccessRow {
   guild_id: string;
   guild_name: string;
@@ -202,12 +204,58 @@ interface GuildTicketMacroRow {
   is_system: boolean | null;
 }
 
+function getMissingSupabaseConfigKeys(): string[] {
+  const missingKeys: string[] = [];
+
+  if (!import.meta.env.VITE_SUPABASE_URL) {
+    missingKeys.push('VITE_SUPABASE_URL');
+  }
+
+  if (!import.meta.env.VITE_SUPABASE_ANON_KEY) {
+    missingKeys.push('VITE_SUPABASE_ANON_KEY');
+  }
+
+  return missingKeys;
+}
+
 function getSupabaseClient() {
   if (!supabase) {
-    throw new Error('Supabase no esta configurado para la dashboard.');
+    const missingKeys = getMissingSupabaseConfigKeys();
+    const missingKeysLabel = missingKeys.length ? ` Faltan: ${missingKeys.join(', ')}.` : '';
+    throw new Error(`Supabase no esta configurado para la dashboard.${missingKeysLabel}`);
   }
 
   return supabase;
+}
+
+function getErrorMessage(error: unknown, fallbackMessage: string): string {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  if (typeof error === 'string' && error) {
+    return error;
+  }
+
+  return fallbackMessage;
+}
+
+async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, timeoutMessage: string): Promise<T> {
+  let timeoutHandle: number | null = null;
+
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timeoutHandle = window.setTimeout(() => {
+      reject(new Error(timeoutMessage));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([promise, timeoutPromise]);
+  } finally {
+    if (timeoutHandle !== null) {
+      window.clearTimeout(timeoutHandle);
+    }
+  }
 }
 
 function mapGuildRow(row: GuildAccessRow): DashboardGuild {
@@ -281,14 +329,42 @@ export async function signOutDashboard(): Promise<void> {
 }
 
 export async function exchangeDashboardCodeForSession(code: string): Promise<Session | null> {
-  const client = getSupabaseClient();
-  const { data, error } = await client.auth.exchangeCodeForSession(code);
+  const startedAt = Date.now();
+  console.log('[dashboard-auth] exchangeDashboardCodeForSession:start', {
+    codeLength: code.length,
+    callbackUrl: getAuthCallbackUrl(),
+    startedAt: new Date(startedAt).toISOString(),
+  });
 
-  if (error) {
-    throw error;
+  try {
+    const client = getSupabaseClient();
+    const { data, error } = await withTimeout(
+      client.auth.exchangeCodeForSession(code),
+      OAUTH_EXCHANGE_TIMEOUT_MS,
+      `Supabase tardo demasiado en intercambiar el codigo OAuth (${OAUTH_EXCHANGE_TIMEOUT_MS / 1000}s). Revisa la configuracion de Supabase Auth, el redirect URL y la conexion de red.`,
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('[dashboard-auth] exchangeDashboardCodeForSession:success', {
+      durationMs: Date.now() - startedAt,
+      hasSession: Boolean(data.session),
+      hasProviderToken: Boolean(data.session?.provider_token),
+      userId: data.session?.user?.id ?? null,
+    });
+
+    return data.session;
+  } catch (error: unknown) {
+    const message = getErrorMessage(error, 'No se pudo intercambiar el codigo OAuth con Supabase.');
+    console.error('[dashboard-auth] exchangeDashboardCodeForSession:error', {
+      durationMs: Date.now() - startedAt,
+      message,
+      error,
+    });
+    throw new Error(message);
   }
-
-  return data.session;
 }
 
 export async function syncDiscordGuilds(providerToken: string): Promise<DashboardSyncResult> {

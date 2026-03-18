@@ -182,8 +182,8 @@ export default function DashboardPage() {
           </div>
         </div>
       ) : !isAuthenticated ? (
-        <div className="dashboard-shell px-4 py-10 text-white">
-          <div className="mx-auto max-w-5xl">
+        <div className="dashboard-shell flex min-h-screen items-center justify-center px-4 py-8 text-white sm:px-6">
+          <div className="mx-auto w-full max-w-[42rem]">
             <AuthCard
               canUseDashboard={canUseDashboard}
               isLoading={signIn.isPending}
