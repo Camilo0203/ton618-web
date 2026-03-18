@@ -183,7 +183,7 @@ function SidebarContent({
         </div>
 
         <div className="dashboard-sidebar-bottom mt-4 flex min-h-0 flex-1 flex-col overflow-hidden">
-          <div className="dashboard-sidebar-scroll relative z-[1] min-h-[10rem] flex-1 overflow-y-auto pr-2">
+          <div className="dashboard-sidebar-scroll relative z-[1] mt-2 min-h-[10rem] flex-1 overflow-y-auto pr-2">
             <p className="dashboard-sidebar-muted px-2 text-[11px] font-semibold uppercase tracking-[0.26em]">
               Navegacion por tareas
             </p>
