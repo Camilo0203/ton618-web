@@ -1,4 +1,5 @@
 import { BookOpen, ExternalLink, LifeBuoy, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
 
 const resourceCards = [
@@ -67,15 +68,30 @@ export default function DocsSection() {
                 </div>
                 <h3 className="text-2xl font-bold tracking-tight text-white">{card.title}</h3>
                 <p className="mt-4 flex-1 text-sm font-medium leading-relaxed text-slate-400">{card.description}</p>
-                <a
-                  href={card.href}
-                  target={card.external ? '_blank' : undefined}
-                  rel={card.external ? 'noopener noreferrer' : undefined}
-                  className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-white"
-                >
-                  <span>{card.cta}</span>
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+                {card.external ? (
+                  <a
+                    href={card.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-white"
+                  >
+                    <span>{card.cta}</span>
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                ) : card.href.startsWith('/') ? (
+                  <Link
+                    to={card.href}
+                    className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-white"
+                  >
+                    <span>{card.cta}</span>
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <a href={card.href} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 transition hover:text-white">
+                    <span>{card.cta}</span>
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
               </article>
             );
           })}

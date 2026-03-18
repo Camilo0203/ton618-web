@@ -1,5 +1,6 @@
 import { Twitter, Github, MessageCircle, Mail, Map, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
 import Logo from './Logo';
 
@@ -27,9 +28,9 @@ function FooterLink({
 
   if (isInternal) {
     return (
-      <a href={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
+      <Link to={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
         <span>{label}</span>
-      </a>
+      </Link>
     );
   }
 

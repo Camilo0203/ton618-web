@@ -1,8 +1,8 @@
 import { Suspense, lazy } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import Logo from './components/Logo';
 import LandingPage from './pages/LandingPage';
 import NotFoundPage from './pages/NotFoundPage';
-import Logo from './components/Logo';
 
 const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
@@ -14,7 +14,7 @@ function AppLoadingFallback() {
         <Logo size="lg" withText={false} />
         <div className="text-center">
           <p className="text-lg font-semibold">Cargando experiencia</p>
-          <p className="text-sm text-slate-300">Preparando el panel y la navegación.</p>
+          <p className="text-sm text-slate-300">Preparando el panel y la navegacion.</p>
         </div>
       </div>
     </div>

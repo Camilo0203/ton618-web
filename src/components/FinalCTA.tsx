@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight, Zap, BookOpen, LifeBuoy } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
 import Logo from './Logo';
 
@@ -78,10 +79,17 @@ export default function FinalCTA() {
               </button>
             )}
 
-            <a href={dashboardUrl} className="btn-premium-outline group !px-8 !py-5">
-              <span>{t('final.secondaryCta')}</span>
-              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            {dashboardUrl.startsWith('/') ? (
+              <Link to={dashboardUrl} className="btn-premium-outline group !px-8 !py-5">
+                <span>{t('final.secondaryCta')}</span>
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ) : (
+              <a href={dashboardUrl} className="btn-premium-outline group !px-8 !py-5">
+                <span>{t('final.secondaryCta')}</span>
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            )}
 
             {config.docsUrl ? (
               <a href={config.docsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white">

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronRight, Sparkles, Activity, BookOpen } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl, getDashboardUrl } from '../config';
 import Logo from './Logo';
 
@@ -206,10 +207,17 @@ export default function Hero() {
                 </button>
               )}
 
-              <a href={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
-                <span>{t('hero.ctaSecondary')}</span>
-                <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
-              </a>
+              {dashboardUrl.startsWith('/') ? (
+                <Link to={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
+                  <span>{t('hero.ctaSecondary')}</span>
+                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
+                </Link>
+              ) : (
+                <a href={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
+                  <span>{t('hero.ctaSecondary')}</span>
+                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
+                </a>
+              )}
 
               {hasDocs ? (
                 <a

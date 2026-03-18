@@ -1,13 +1,13 @@
 # ton618-web
 
-Frontend de landing y dashboard web para TON618, construido con Vite, React, TypeScript, Tailwind, React Query y Supabase.
+Frontend de landing publica y dashboard operativo para TON618, construido con Vite, React, TypeScript, Tailwind, React Query y Supabase.
 
 ## Estado actual
 
-- Landing comercial lista para presentar valor, confianza y CTA hacia invite, dashboard, docs y soporte.
-- Dashboard operativo en `/dashboard` con auth vía Supabase + Discord.
+- Landing comercial en `/` con CTA hacia invite, dashboard, docs y soporte.
+- Dashboard operativo en `/dashboard` con auth via Supabase + Discord.
 - Callback OAuth endurecido en `/auth/callback`.
-- Snapshot del dashboard con degradación parcial para `activity`, `metrics`, `ticket events` y `ticket macros`.
+- Snapshot del dashboard con degradacion parcial para `activity`, `metrics`, `ticket events` y `ticket macros`.
 
 ## Scripts
 
@@ -21,7 +21,7 @@ Frontend de landing y dashboard web para TON618, construido con Vite, React, Typ
 
 ## Entorno
 
-Variables críticas:
+Variables criticas:
 
 - `VITE_DISCORD_CLIENT_ID`
 - `VITE_SUPABASE_URL`
@@ -38,7 +38,7 @@ Variables recomendadas:
 - `VITE_TWITTER_URL`
 - `VITE_DASHBOARD_URL`
 
-Usa [.env.example](/c:/Users/Camilo/Desktop/ton618-web/.env.example) como base local.
+Usa `.env.example` como base local.
 
 ## Setup local
 
@@ -70,7 +70,8 @@ Requisitos operativos:
 
 ## Release
 
-- Checklist de release: [docs/release-readiness-checklist.md](/c:/Users/Camilo/Desktop/ton618-web/docs/release-readiness-checklist.md)
-- Checklist de QA manual: [docs/manual-qa-checklist.md](/c:/Users/Camilo/Desktop/ton618-web/docs/manual-qa-checklist.md)
-- Deuda técnica resuelta: [docs/technical-debt-resolved.md](/c:/Users/Camilo/Desktop/ton618-web/docs/technical-debt-resolved.md)
-- Verificación final: [docs/final-verification-report.md](/c:/Users/Camilo/Desktop/ton618-web/docs/final-verification-report.md)
+- Checklist de release: `docs/release-readiness-checklist.md`
+- Checklist de QA manual: `docs/manual-qa-checklist.md`
+- Deuda tecnica resuelta: `docs/technical-debt-resolved.md`
+- Revision tecnica Codex: `docs/technical-review-codex.md`
+- Verificacion final: `docs/final-verification-report.md`
