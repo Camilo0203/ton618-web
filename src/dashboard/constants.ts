@@ -52,7 +52,7 @@ export const dashboardSections: DashboardSectionMeta[] = [
   {
     id: 'overview',
     label: 'Inicio',
-    description: 'Resumen general, checklist y proximo paso.',
+    description: 'Lo que ya funciona, lo que falta y que deberias hacer ahora.',
     icon: LayoutGrid,
   },
   {
@@ -64,13 +64,13 @@ export const dashboardSections: DashboardSectionMeta[] = [
   {
     id: 'general',
     label: 'Configuracion inicial',
-    description: 'Idioma, zona horaria y base del panel.',
+    description: 'Idioma, comandos y base del panel.',
     icon: SlidersHorizontal,
   },
   {
     id: 'server_roles',
     label: 'Roles y canales',
-    description: 'Canales clave, staff y permisos base.',
+    description: 'Canales clave, staff y permisos que destraban el resto.',
     icon: Bot,
   },
   {
@@ -112,7 +112,7 @@ export const dashboardSections: DashboardSectionMeta[] = [
   {
     id: 'system',
     label: 'Sistema del bot',
-    description: 'Backups, sincronizacion y diagnostico.',
+    description: 'Backups, sincronizacion y salud tecnica.',
     icon: Wrench,
   },
   {
@@ -133,7 +133,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
   {
     id: 'home',
     label: 'Inicio',
-    description: 'Resumen del servidor y siguientes pasos.',
+    description: 'Portada operativa del servidor y siguientes pasos.',
     icon: LayoutGrid,
     sections: ['overview', 'activity'],
     shortcuts: [
@@ -160,7 +160,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
   {
     id: 'setup',
     label: 'Configuracion inicial',
-    description: 'Base operativa para que el bot funcione bien.',
+    description: 'Base operativa para dejar el bot listo.',
     icon: Compass,
     sections: ['general', 'server_roles', 'commands'],
     shortcuts: [
@@ -187,7 +187,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
   {
     id: 'community',
     label: 'Comunidad',
-    description: 'Experiencias visibles para miembros y acceso.',
+    description: 'Experiencias visibles para miembros nuevos y comunidad.',
     icon: Sparkles,
     sections: ['welcome', 'verification', 'suggestions'],
     shortcuts: [
@@ -220,7 +220,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
   {
     id: 'support',
     label: 'Soporte',
-    description: 'Atencion operativa, tickets y seguimiento.',
+    description: 'Atencion operativa, tickets y seguimiento real.',
     icon: Ticket,
     sections: ['tickets', 'inbox'],
     shortcuts: [
@@ -280,7 +280,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
   {
     id: 'system',
     label: 'Sistema',
-    description: 'Estado tecnico, respaldo y rendimiento.',
+    description: 'Estado tecnico, respaldo y rendimiento del bot.',
     icon: Settings2,
     sections: ['system', 'analytics'],
     shortcuts: [

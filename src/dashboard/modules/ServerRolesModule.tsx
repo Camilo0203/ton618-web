@@ -110,7 +110,7 @@ export default function ServerRolesModule({
       <PanelCard
         eyebrow="Roles y canales"
         title="Base operativa del servidor"
-        description="Estos canales y roles permiten que tickets, logs y automatizaciones funcionen correctamente."
+        description="Estos canales y roles destraban tickets, logs y automatizaciones. Si esto queda bien, el resto del panel avanza mucho mas rapido."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -130,7 +130,7 @@ export default function ServerRolesModule({
       <PanelCard
         eyebrow="Accesos"
         title="Roles esenciales"
-        description="El bot usa estos roles para dar acceso al staff, administrar funciones y controlar flujos."
+        description="El bot usa estos roles para dar acceso al staff, separar permisos y operar flujos sensibles sin confusion."
       >
         <div className="grid gap-5 md:grid-cols-2">
           <SelectField label="Rol del equipo de soporte" registerName="supportRoleId" options={roleOptions} register={register} />
@@ -139,7 +139,7 @@ export default function ServerRolesModule({
         </div>
 
         <div className="mt-8 rounded-3xl border border-brand-200 bg-brand-50/70 p-4 text-sm text-brand-800 dark:border-brand-900/50 dark:bg-brand-950/20 dark:text-brand-200">
-          Todos los selectores salen del inventario sincronizado por el bot. Si falta un rol o canal, re-sincroniza el servidor antes de seguir.
+          Todos los selectores salen del inventario sincronizado por el bot. Si aqui falta un rol o canal, primero re-sincroniza el servidor y luego vuelve a esta pantalla.
         </div>
       </PanelCard>
     </form>

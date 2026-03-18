@@ -93,7 +93,7 @@ export default function TicketsModule({
       <PanelCard
         eyebrow="Tickets y SLA"
         title="Operacion del sistema de tickets"
-        description="Limites, tiempos, SLA y comportamientos automaticos sobre el flujo real del bot."
+        description="Aqui decides cuanta carga soporta el sistema, cuanto tarda en pedir ayuda y cuando debe escalar o reportar automaticamente."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -155,7 +155,7 @@ export default function TicketsModule({
       </PanelCard>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <PanelCard title="Escalado y reportes" description="Roles y canales usados por las alertas del sistema.">
+        <PanelCard title="Escalado y reportes" description="Roles y canales usados cuando un ticket necesita visibilidad extra o seguimiento diario.">
           <div className="grid gap-5 md:grid-cols-2">
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
@@ -224,7 +224,7 @@ export default function TicketsModule({
           </div>
         </PanelCard>
 
-        <PanelCard title="Reglas avanzadas" description="Overrides por prioridad y categoria del sistema de tickets.">
+        <PanelCard title="Reglas avanzadas" description="Ajustes finos para cambiar SLA o escalado segun prioridad y categoria sin tocar la base general.">
           <div className="space-y-6">
             <div>
               <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">Overrides SLA por prioridad</p>

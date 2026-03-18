@@ -92,7 +92,7 @@ export default function GeneralModule({
       <PanelCard
         eyebrow="General"
         title="Configuracion esencial del servidor"
-        description="Define idioma, comandos y reglas base para que el bot quede entendible desde el primer minuto."
+        description="Define idioma, comandos y reglas base para que el panel y el bot se entiendan desde el primer minuto."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
         variant="highlight"
         stickyActions
@@ -207,7 +207,7 @@ export default function GeneralModule({
       <PanelCard
         eyebrow="Panel"
         title="Preferencias del equipo"
-        description="Ajustes de presentacion para que el staff entre directamente a la tarea que mas usa."
+        description="Ajustes de presentacion para que el equipo vuelva directo a la tarea que mas usa."
         variant="soft"
       >
         <div className="space-y-5">

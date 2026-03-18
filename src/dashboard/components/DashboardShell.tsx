@@ -254,6 +254,19 @@ function SidebarContent({
                               <p className="dashboard-sidebar-nav-copy mt-0.5 transition-colors group-hover:text-white/84">
                                 {state?.summary ?? section.description}
                               </p>
+                              {state ? (
+                                <div className="mt-2 flex items-center gap-2">
+                                  <div className="dashboard-sidebar-progress h-1.5 flex-1 overflow-hidden rounded-full">
+                                    <div
+                                      className="dashboard-sidebar-progress-bar h-full rounded-full"
+                                      style={{ width: `${Math.max(6, Math.round(state.progress * 100))}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-white/44">
+                                    {Math.round(state.progress * 100)}%
+                                  </span>
+                                </div>
+                              ) : null}
                             </div>
                             <ChevronRight className={`h-4 w-4 flex-shrink-0 transition ${
                               active ? 'text-white/78' : 'text-white/28 group-hover:text-white/54'
@@ -429,7 +442,7 @@ export default function DashboardShell({
                     {selectedGuild?.guildName ?? 'Sin seleccion'}
                   </h1>
                   <p className="mt-1.5 max-w-3xl text-sm leading-6 text-slate-700 dark:text-slate-300">
-                    Centro de control guiado para terminar configuracion, detectar bloqueos y saber exactamente que sigue.
+                    Centro de control guiado para terminar configuracion, detectar bloqueos y saber exactamente que sigue sin tener que adivinar a que modulo entrar.
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -514,7 +527,7 @@ export default function DashboardShell({
                 {!syncError && failedMutations > 0 ? (
                   <div className="flex items-start gap-2 rounded-[1.1rem] border border-amber-200/70 bg-amber-50/90 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100">
                     <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                    Hay cambios que requieren revision. Entra a Inicio para ver que tarea necesita atencion.
+                    Hay cambios que requieren revision. Vuelve a Inicio para ver que tarea necesita atencion antes de seguir aplicando cambios.
                   </div>
                 ) : null}
               </div>

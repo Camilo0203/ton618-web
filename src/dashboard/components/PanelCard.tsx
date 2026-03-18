@@ -12,6 +12,7 @@ interface PanelCardProps {
   variant?: 'default' | 'highlight' | 'soft' | 'danger' | 'success';
   contentClassName?: string;
   stickyActions?: boolean;
+  headerClassName?: string;
 }
 
 const variantClasses: Record<NonNullable<PanelCardProps['variant']>, string> = {
@@ -32,6 +33,7 @@ export default function PanelCard({
   variant = 'default',
   contentClassName = '',
   stickyActions = false,
+  headerClassName = '',
 }: PanelCardProps) {
   return (
     <motion.section
@@ -44,7 +46,7 @@ export default function PanelCard({
       <div className="absolute -right-10 top-0 h-24 w-24 rounded-full bg-brand-400/8 blur-3xl" />
 
       {title || description || eyebrow || actions ? (
-        <div className="relative z-[1] flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
+        <div className={`relative z-[1] flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between ${headerClassName}`}>
           <div className="min-w-0 max-w-3xl">
             {eyebrow ? (
               <p className="dashboard-panel-label">

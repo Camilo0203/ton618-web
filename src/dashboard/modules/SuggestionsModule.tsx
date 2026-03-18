@@ -80,7 +80,7 @@ export default function SuggestionsModule({
       <PanelCard
         eyebrow="Sugerencias"
         title="Canales y experiencia del usuario"
-        description="Controla donde nacen, se revisan y se cierran las sugerencias."
+        description="Define donde nacen las ideas de la comunidad, donde las revisa el staff y donde se publica el resultado."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -115,7 +115,7 @@ export default function SuggestionsModule({
         </div>
       </PanelCard>
 
-      <PanelCard title="Reglas de moderacion" description="Condiciones que afectan el flujo de sugerencias.">
+      <PanelCard title="Reglas de moderacion" description="Condiciones que cambian la experiencia del usuario y la forma en que el staff cierra cada sugerencia.">
         <div className="space-y-5">
           <label className="block">
             <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Cooldown (min)</span>

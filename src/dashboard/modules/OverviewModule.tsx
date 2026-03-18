@@ -3,9 +3,11 @@ import {
   ArrowRight,
   Bot,
   CheckCircle2,
+  CircleDot,
   Clock3,
   HardDriveDownload,
   ListTodo,
+  Siren,
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
@@ -95,40 +97,44 @@ export default function OverviewModule({
   const progressRatio = checklist.length ? completedChecklist / checklist.length : setup.ratio;
   const nextStep = checklist.find((step) => !step.complete) ?? checklist[checklist.length - 1] ?? null;
   const blockedStates = sectionStates.filter((section) => section.status === 'needs_attention');
+  const readyStates = sectionStates.filter((section) => section.status === 'active' && !['overview', 'activity', 'analytics'].includes(section.sectionId));
+  const basicStates = sectionStates.filter((section) => section.status === 'basic');
+  const homeSignalCards = [
+    {
+      label: 'Progreso real',
+      value: `${Math.round(progressRatio * 100)}%`,
+      note: `${completedChecklist}/${checklist.length || 0} pasos de arranque completados`,
+    },
+    {
+      label: 'Bot y sincronizacion',
+      value: getHealthLabel(syncStatus),
+      note: guild.botInstalled ? 'El bot ya esta dentro del servidor' : 'Todavia falta invitar el bot',
+    },
+    {
+      label: 'Bloqueos visibles',
+      value: `${blockedStates.length + failedMutations.length}`,
+      note: blockedStates.length || failedMutations.length ? 'Requieren revision antes de cerrar la configuracion' : 'No hay tareas bloqueadas',
+    },
+    {
+      label: 'Backup inicial',
+      value: latestBackup ? formatRelativeTime(latestBackup.createdAt) : 'Pendiente',
+      note: latestBackup ? 'Ya tienes una base segura para volver atras' : 'Conviene crearlo antes de tocar automatizaciones delicadas',
+    },
+  ];
+
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(22rem,0.95fr)] 2xl:grid-cols-[minmax(0,1.58fr)_minmax(24rem,0.88fr)]">
       <div className="space-y-6">
         <PanelCard
           eyebrow="Inicio"
           title="Centro de control del servidor"
-          description="Aqui ves lo que ya esta funcionando, lo que falta por configurar y el siguiente paso recomendado para dejar el bot listo."
+          description="Esta portada te dice que ya funciona, que sigue pendiente y donde entrar para cerrar la configuracion sin depender de documentacion externa."
           variant="highlight"
         >
           <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(20rem,0.95fr)]">
             <div className="space-y-4">
               <div className="dashboard-grid-fit-standard">
-                {[
-                  {
-                    label: 'Progreso real',
-                    value: `${Math.round(progressRatio * 100)}%`,
-                    note: `${completedChecklist}/${checklist.length || 0} pasos de arranque completados`,
-                  },
-                  {
-                    label: 'Bot y sincronizacion',
-                    value: getHealthLabel(syncStatus),
-                    note: guild.botInstalled ? 'El bot ya esta en el servidor' : 'Todavia falta instalar el bot',
-                  },
-                  {
-                    label: 'Cambios pendientes',
-                    value: pendingMutations.length.toLocaleString(),
-                    note: pendingMutations.length ? 'Esperando aplicacion del bot' : 'No hay cola activa',
-                  },
-                  {
-                    label: 'Backup inicial',
-                    value: latestBackup ? formatRelativeTime(latestBackup.createdAt) : 'Pendiente',
-                    note: latestBackup ? 'Ya puedes restaurar una base segura' : 'Conviene crear uno antes de seguir',
-                  },
-                ].map((card) => (
+                {homeSignalCards.map((card) => (
                   <article key={card.label} className="dashboard-kpi-card">
                     <p className="dashboard-data-label">{card.label}</p>
                     <p className="mt-3 text-[1.8rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white lg:text-[2rem]">
@@ -140,14 +146,17 @@ export default function OverviewModule({
               </div>
 
               <div className="dashboard-guided-progress">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="max-w-2xl">
                     <p className="dashboard-panel-label">Siguiente paso recomendado</p>
                     <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
                       {nextStep?.label ?? 'Configuracion completa'}
                     </h3>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                       {nextStep?.description ?? 'El servidor ya tiene la configuracion base completada.'}
+                    </p>
+                    <p className="mt-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                      {nextStep?.summary ?? 'No quedan pasos criticos pendientes.'}
                     </p>
                   </div>
                   {nextStep ? (
@@ -168,9 +177,32 @@ export default function OverviewModule({
                     style={{ width: `${Math.max(8, Math.round(progressRatio * 100))}%` }}
                   />
                 </div>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
-                  {nextStep?.summary ?? 'No quedan pasos criticos pendientes.'}
-                </p>
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <div className="dashboard-action-note">
+                    <CircleDot className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                      {pendingMutations.length
+                        ? `Hay ${pendingMutations.length} cambios esperando confirmacion del bot.`
+                        : 'No hay cambios pendientes por aplicar.'}
+                    </p>
+                  </div>
+                  <div className="dashboard-action-note">
+                    <Siren className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                      {blockedStates.length
+                        ? `${blockedStates.length} areas piden revision antes de cerrar la puesta en marcha.`
+                        : 'No hay bloqueos visibles en las areas principales.'}
+                    </p>
+                  </div>
+                  <div className="dashboard-action-note">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                    <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                      {readyStates.length
+                        ? `${readyStates.length} areas ya estan activas y listas para uso diario.`
+                        : 'Todavia no hay areas marcadas como completamente activas.'}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -231,7 +263,7 @@ export default function OverviewModule({
         <PanelCard
           eyebrow="Configuracion inicial"
           title="Checklist guiada"
-          description="Completa estos pasos en orden y el dashboard ira marcando automaticamente que ya esta listo y que requiere atencion."
+          description="Sigue estos pasos para dejar el servidor operativo. El estado cambia automaticamente cuando la configuracion ya cumple lo necesario."
           variant="soft"
         >
           <div className="space-y-3">
@@ -269,7 +301,7 @@ export default function OverviewModule({
 
         <PanelCard
           title="Areas del servidor"
-          description="Cada bloque muestra el estado operativo de una tarea real para que sepas que esta funcionando y que todavia falta cerrar."
+          description="Cada bloque resume una tarea del producto para que veas de un vistazo que ya funciona, que esta a medio camino y que necesita revision."
           variant="soft"
         >
           <div className="dashboard-grid-fit-standard">
@@ -304,7 +336,7 @@ export default function OverviewModule({
       </div>
 
       <div className="space-y-6">
-        <PanelCard title="Bloqueos y revisiones" description="Mensajes accionables para saber exactamente que falta o que necesita atencion." variant={blockedStates.length || failedMutations.length ? 'danger' : 'success'}>
+        <PanelCard title="Bloqueos y revisiones" description="Mensajes accionables para saber exactamente que falta o que necesita atencion antes de seguir." variant={blockedStates.length || failedMutations.length ? 'danger' : 'success'}>
           <div className="space-y-3">
             {failedMutations.length ? (
               <div className="dashboard-action-alert">
@@ -336,6 +368,38 @@ export default function OverviewModule({
                   <p className="font-semibold">No hay bloqueos criticos detectados.</p>
                   <p className="mt-1 text-sm text-current/80">Puedes seguir completando tareas opcionales o publicar cambios pendientes con normalidad.</p>
                 </div>
+              </div>
+            ) : null}
+          </div>
+        </PanelCard>
+
+        <PanelCard title="Lo que ya esta funcionando" description="Resumen rapido de las areas que ya estan listas o encaminadas para uso real." variant="soft">
+          <div className="space-y-3">
+            {readyStates.slice(0, 4).map((section) => (
+              <button
+                key={section.sectionId}
+                type="button"
+                onClick={() => onSectionChange(section.sectionId)}
+                className="dashboard-action-success w-full text-left"
+              >
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold">{section.label}</p>
+                  <p className="mt-1 text-sm text-current/80">{section.summary}</p>
+                </div>
+              </button>
+            ))}
+            {!readyStates.length ? (
+              <div className="dashboard-empty-state">
+                Todavia no hay areas completamente activas. Completa la checklist inicial para empezar a ver modulos listos.
+              </div>
+            ) : null}
+            {basicStates.length ? (
+              <div className="dashboard-action-note">
+                <ListTodo className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                  Tambien hay {basicStates.length} areas en progreso que ya tienen una base montada, pero todavia no estan cerradas.
+                </p>
               </div>
             ) : null}
           </div>

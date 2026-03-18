@@ -83,7 +83,7 @@ export default function SystemModule({
         <PanelCard
           eyebrow="Sistema"
           title="Mantenimiento y compatibilidad"
-          description="Ajustes globales del bot y visibilidad del bridge en tiempo real."
+          description="Ajustes globales del bot y lectura del estado tecnico para saber si puedes seguir configurando con seguridad."
           actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
         >
           <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -125,7 +125,7 @@ export default function SystemModule({
 
       <PanelCard
         title="Backups y restore"
-        description="Snapshots versionados del estado del bot. Se solicitan desde la web y el bot los crea o restaura."
+        description="Crea una base segura antes de cambios grandes y restaura una version anterior si algo no queda como esperabas."
         actions={(
           <button
             type="button"
@@ -171,7 +171,7 @@ export default function SystemModule({
             ))
           ) : (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-6 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
-              El bot aun no ha publicado backups para este guild.
+              Aun no existe un backup inicial. Crear uno ahora te deja un punto seguro antes de tocar tickets, verificacion o automatizaciones delicadas.
             </div>
           )}
         </div>

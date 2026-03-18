@@ -80,7 +80,7 @@ export default function ModlogsModule({
       <PanelCard
         eyebrow="Modlogs"
         title="Canal de auditoria"
-        description="Controla el canal y los eventos que el bot registra automaticamente."
+        description="Deja una bitacora clara de moderacion para que el equipo pueda revisar que paso y cuando paso."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -106,7 +106,7 @@ export default function ModlogsModule({
         </div>
       </PanelCard>
 
-      <PanelCard title="Eventos registrados" description="Activa o desactiva cada tipo de log del sistema.">
+      <PanelCard title="Eventos registrados" description="Elige exactamente que acciones del servidor deben quedar guardadas en la bitacora.">
         <div className="grid gap-4 md:grid-cols-2">
           {[
             ['logBans', 'Baneos'],

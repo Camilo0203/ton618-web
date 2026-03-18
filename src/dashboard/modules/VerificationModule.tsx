@@ -82,7 +82,7 @@ export default function VerificationModule({
       <PanelCard
         eyebrow="Verificacion"
         title="Flujo de acceso al servidor"
-        description="Roles, panel visual y defensas de antiraid para el sistema de verificacion."
+        description="Configura como entra la gente al servidor, que rol recibe al completar el proceso y que pasa si llega una oleada sospechosa."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -152,7 +152,7 @@ export default function VerificationModule({
         </div>
       </PanelCard>
 
-      <PanelCard title="Panel visual y antiraid" description="Textos, color y reglas defensivas del sistema.">
+      <PanelCard title="Panel visual y antiraid" description="Textos, apariencia y reglas defensivas para que el acceso sea claro para miembros y seguro para el staff.">
         <div className="space-y-5">
           <label className="block">
             <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">Titulo</span>

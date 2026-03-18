@@ -81,8 +81,8 @@ export default function WelcomeModule({
     >
       <PanelCard
         eyebrow="Bienvenida"
-        title="Bienvenida"
-        description="Mensajes de entrada, DM de onboarding y autoroles."
+        title="Experiencia de bienvenida"
+        description="Prepara el primer mensaje que vera un miembro nuevo, si recibira DM y si saldra con un autorrol base."
         actions={<SaveRequestButton isDirty={isDirty} isSaving={isSaving} />}
       >
         <SectionMutationBanner mutation={mutation} syncStatus={syncStatus} />
@@ -157,7 +157,7 @@ export default function WelcomeModule({
         </div>
       </PanelCard>
 
-      <PanelCard title="Despedida" description="Mensajes cuando un usuario abandona el servidor.">
+      <PanelCard title="Despedida" description="Configura el mensaje que deja trazabilidad cuando alguien abandona el servidor.">
         <div className="space-y-5">
           <label className="flex items-start gap-3 rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70">
             <input type="checkbox" {...register('goodbyeEnabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
