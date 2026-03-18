@@ -366,35 +366,35 @@ export function getDashboardChecklist(
   return [
     {
       id: 'select-server',
-      label: 'Seleccionar servidor',
-      description: 'Confirma el servidor donde quieres trabajar y verifica que el bot este dentro.',
+      label: 'Confirmar servidor y bot',
+      description: 'Asegurate de estar trabajando en el servidor correcto y de que el bot ya tenga acceso.',
       sectionId: 'overview',
       complete: Boolean(guild.guildId && guild.botInstalled),
       status: guild.botInstalled ? 'active' : (guild.guildId ? 'basic' : 'not_configured'),
-      summary: guild.botInstalled ? 'Servidor listo para configurar.' : 'Servidor elegido, pero el bot aun no esta instalado.',
+      summary: guild.botInstalled ? 'El servidor ya esta listo para seguir configurando.' : 'El servidor ya fue elegido, pero el bot aun no esta dentro.',
     },
     {
       id: 'language-and-commands',
-      label: 'Configurar idioma y comandos',
-      description: 'Define idioma, prefijo o mencion y zona horaria del servidor.',
+      label: 'Definir idioma y comandos',
+      description: 'Deja lista la base del servidor: idioma, forma de invocar al bot y zona horaria.',
       sectionId: 'general',
       complete: Boolean(general && general.progress >= 1),
       status: general?.status ?? 'not_configured',
-      summary: general?.summary ?? 'Falta revisar la configuracion basica.',
+      summary: general?.summary ?? 'Todavia falta cerrar la configuracion basica.',
     },
     {
       id: 'roles-and-channels',
-      label: 'Vincular canales y roles esenciales',
-      description: 'Asigna staff, admin y los canales que el bot necesita para operar.',
+      label: 'Conectar canales y roles clave',
+      description: 'Asigna staff, admin y los canales que el bot necesita para funcionar sin improvisacion.',
       sectionId: 'server_roles',
       complete: Boolean(roles && roles.progress >= 0.8 && roles.messages.length === 0),
       status: roles?.status ?? 'not_configured',
-      summary: roles?.summary ?? 'Faltan roles y canales base.',
+      summary: roles?.summary ?? 'Todavia faltan roles y canales base.',
     },
     {
       id: 'member-experience',
       label: 'Preparar la llegada de nuevos miembros',
-      description: 'Activa una experiencia de bienvenida o un control de acceso antes de abrir el servidor.',
+      description: 'Define si el servidor va a recibir usuarios con bienvenida, verificacion o ambas cosas.',
       sectionId: verification?.status === 'needs_attention' ? 'verification' : (welcome?.status === 'active' ? 'welcome' : 'verification'),
       complete: welcome?.status === 'active' || verification?.status === 'active',
       status: welcome?.status === 'active' || verification?.status === 'active'
@@ -410,43 +410,43 @@ export function getDashboardChecklist(
           ? 'La verificacion de acceso ya esta funcionando.'
           : verification?.status === 'needs_attention'
             ? verification.summary
-            : 'Activa al menos una experiencia de acceso para nuevos miembros.',
+            : 'Activa al menos una experiencia clara para nuevos miembros.',
     },
     {
       id: 'tickets',
-      label: 'Configurar tickets',
-      description: 'Elige canal, limites y tiempos de atencion para el sistema de soporte.',
+      label: 'Cerrar el flujo de tickets',
+      description: 'Define canal, limites y tiempos para que soporte pueda operar sin dudas.',
       sectionId: 'tickets',
       complete: Boolean(tickets && tickets.progress >= 0.8 && tickets.messages.length === 0),
       status: tickets?.status ?? 'not_configured',
-      summary: tickets?.summary ?? 'Falta preparar el sistema de tickets.',
+      summary: tickets?.summary ?? 'Todavia falta dejar operativo el sistema de tickets.',
     },
     {
       id: 'moderation',
-      label: 'Activar logs y moderacion',
-      description: 'Deja trazabilidad del staff y define el canal de registro.',
+      label: 'Activar trazabilidad del staff',
+      description: 'Deja claro donde quedaran registrados los eventos importantes de moderacion.',
       sectionId: 'modlogs',
       complete: Boolean(modlogs?.status === 'active'),
       status: modlogs?.status ?? 'not_configured',
-      summary: modlogs?.summary ?? 'Todavia no hay un registro claro de moderacion.',
+      summary: modlogs?.summary ?? 'Todavia no hay un registro confiable de moderacion.',
     },
     {
       id: 'backup',
-      label: 'Crear backup inicial',
-      description: 'Genera una copia base del estado del bot para restauracion futura.',
+      label: 'Guardar un backup inicial',
+      description: 'Crea una copia base para poder volver atras si algo sale mal despues.',
       sectionId: 'system',
       complete: backups.length > 0,
       status: backups.length > 0 ? 'active' : (system?.status === 'needs_attention' ? 'needs_attention' : 'not_configured'),
-      summary: backups.length > 0 ? `Backup disponible desde ${formatRelativeTime(backups[0]?.createdAt ?? null)}.` : 'Aun no existe un backup inicial.',
+      summary: backups.length > 0 ? `Ya existe una copia segura desde ${formatRelativeTime(backups[0]?.createdAt ?? null)}.` : 'Todavia no existe una copia segura inicial.',
     },
     {
       id: 'sync',
-      label: 'Confirmar sincronizacion',
-      description: 'Verifica que el bot este conectado y aplicando cambios sin errores.',
+      label: 'Confirmar que el bot responde bien',
+      description: 'Verifica que el bot siga conectado y que los cambios realmente se esten aplicando.',
       sectionId: 'system',
       complete: syncStatus?.bridgeStatus === 'healthy',
       status: system?.status ?? 'not_configured',
-      summary: system?.summary ?? 'Revisa el estado tecnico del bot.',
+      summary: system?.summary ?? 'Revisa si el bot esta listo para trabajar sin errores.',
     },
   ];
 }
@@ -464,7 +464,7 @@ export function getDashboardQuickActions(
   if (nextChecklistStep) {
     actions.push({
       id: `checklist-${nextChecklistStep.id}`,
-      label: nextChecklistStep.label,
+      label: `Seguir con: ${nextChecklistStep.label}`,
       description: nextChecklistStep.summary,
       sectionId: nextChecklistStep.sectionId,
       priority: 110,
@@ -474,7 +474,7 @@ export function getDashboardQuickActions(
   if (findState('server_roles')?.messages.length) {
     actions.push({
       id: 'roles-channels',
-      label: 'Completar canales y roles',
+      label: 'Cerrar canales y roles clave',
       description: findState('server_roles')?.messages[0] ?? 'Revisa staff, admin y canales base.',
       sectionId: 'server_roles',
       priority: 100,
@@ -484,7 +484,7 @@ export function getDashboardQuickActions(
   if (findState('tickets')?.status !== 'active') {
     actions.push({
       id: 'activate-tickets',
-      label: 'Activar sistema de tickets',
+      label: 'Dejar listo el soporte',
       description: findState('tickets')?.summary ?? 'Configura el canal y las reglas de soporte.',
       sectionId: 'tickets',
       priority: 95,
@@ -494,10 +494,10 @@ export function getDashboardQuickActions(
   if (syncStatus?.bridgeStatus !== 'healthy') {
     actions.push({
       id: 'review-sync',
-      label: 'Revisar sincronizacion',
+      label: 'Revisar estado del bot',
       description: getHealthLabel(syncStatus) === 'Con errores'
-        ? 'El bot necesita revision tecnica para aplicar cambios.'
-        : 'Confirma que el bridge este al dia.',
+        ? 'El bot necesita revision antes de seguir aplicando cambios.'
+        : 'Confirma que el bot siga al dia antes de continuar.',
       sectionId: 'system',
       priority: 98,
     });
@@ -510,7 +510,7 @@ export function getDashboardQuickActions(
   for (const section of attentionStates.slice(0, 2)) {
     actions.push({
       id: `attention-${section.sectionId}`,
-      label: `Revisar ${section.label.toLowerCase()}`,
+      label: `Resolver ${section.label.toLowerCase()}`,
       description: section.messages[0] ?? section.summary,
       sectionId: section.sectionId,
       priority: 101 - Math.round(section.progress * 10),
@@ -520,8 +520,8 @@ export function getDashboardQuickActions(
   if (!checklist.find((step) => step.id === 'backup')?.complete) {
     actions.push({
       id: 'create-backup',
-      label: 'Crear backup inicial',
-      description: 'Genera una copia base antes de seguir ajustando el servidor.',
+      label: 'Guardar una copia segura',
+      description: 'Crea un backup antes de seguir tocando configuraciones sensibles.',
       sectionId: 'system',
       priority: 92,
     });
@@ -530,8 +530,8 @@ export function getDashboardQuickActions(
   if (findState('verification')?.status === 'not_configured' && findState('welcome')?.status === 'not_configured') {
     actions.push({
       id: 'member-experience',
-      label: 'Preparar acceso de miembros',
-      description: 'Activa bienvenida o verificacion para guiar a nuevos usuarios.',
+      label: 'Definir llegada de miembros',
+      description: 'Activa bienvenida o verificacion para que el acceso no quede improvisado.',
       sectionId: 'verification',
       priority: 88,
     });

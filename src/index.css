@@ -1456,6 +1456,171 @@
     background: linear-gradient(135deg, rgba(10, 61, 46, 0.72), rgba(12, 43, 37, 0.66));
     color: rgb(167 243 208);
   }
+
+  .dashboard-next-step-card,
+  .dashboard-overview-summary-card,
+  .dashboard-guided-stack,
+  .dashboard-area-group,
+  .dashboard-quick-action-card,
+  .dashboard-overview-inline-note,
+  .dashboard-live-detail-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--dashboard-data-border);
+    background: var(--dashboard-data-bg);
+    box-shadow: var(--dashboard-data-shadow);
+  }
+
+  .dashboard-next-step-card {
+    border-radius: 1.8rem;
+    border-color: rgba(129, 140, 248, 0.22);
+    background:
+      radial-gradient(circle at top right, rgba(99, 102, 241, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+      var(--dashboard-data-bg);
+    padding: 1.35rem;
+  }
+
+  .dashboard-overview-summary-card,
+  .dashboard-guided-stack,
+  .dashboard-area-group {
+    border-radius: 1.5rem;
+    padding: 1.15rem;
+  }
+
+  .dashboard-overview-inline-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    border-radius: 1.2rem;
+    padding: 0.9rem 1rem;
+  }
+
+  .dashboard-overview-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .dashboard-overview-badge-progress {
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    background: rgba(99, 102, 241, 0.1);
+    color: rgb(79 70 229);
+  }
+
+  .dark .dashboard-overview-badge-progress {
+    color: rgb(199 210 254);
+  }
+
+  .dashboard-overview-count {
+    display: inline-flex;
+    min-width: 2.35rem;
+    height: 2.35rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid var(--dashboard-pill-border);
+    background: var(--dashboard-pill-bg);
+    color: var(--dashboard-pill-text);
+    box-shadow: var(--dashboard-pill-shadow);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .dashboard-guided-stack-alert {
+    border-color: rgba(245, 158, 11, 0.22);
+  }
+
+  .dashboard-guided-stack-success {
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+
+  .dashboard-quick-action-card {
+    border-radius: 1.3rem;
+    padding: 1rem 1.05rem;
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      background-color 220ms ease;
+  }
+
+  .dashboard-quick-action-card:hover,
+  .dashboard-quick-action-card-primary {
+    transform: translateY(-1px);
+    border-color: var(--dashboard-surface-hover-border);
+    box-shadow: var(--dashboard-surface-hover-shadow);
+  }
+
+  .dashboard-quick-action-card-primary {
+    background:
+      radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 34%),
+      var(--dashboard-data-bg);
+  }
+
+  .dashboard-checklist-item-featured {
+    border-color: rgba(99, 102, 241, 0.24);
+    background:
+      radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 34%),
+      var(--dashboard-data-bg);
+  }
+
+  .dashboard-area-card-alert {
+    border-color: rgba(245, 158, 11, 0.22);
+  }
+
+  .dashboard-area-card-progress {
+    border-color: rgba(56, 189, 248, 0.22);
+  }
+
+  .dashboard-area-card-ready {
+    border-color: rgba(16, 185, 129, 0.22);
+  }
+
+  .dashboard-signal-card-alert {
+    border-color: rgba(245, 158, 11, 0.24);
+  }
+
+  .dashboard-signal-card-progress {
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+
+  .dashboard-signal-card-ready {
+    border-color: rgba(16, 185, 129, 0.22);
+  }
+
+  .dashboard-live-detail-card {
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.045);
+    padding: 0.95rem 1rem;
+  }
+
+  .dashboard-live-detail-icon {
+    display: flex;
+    width: 2.3rem;
+    height: 2.3rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 640px) {
+    .dashboard-next-step-card,
+    .dashboard-overview-summary-card,
+    .dashboard-guided-stack,
+    .dashboard-area-group {
+      padding: 1rem;
+    }
+  }
 }
 
 @layer utilities {

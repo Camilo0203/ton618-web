@@ -33,6 +33,8 @@ import type {
 } from './types';
 
 const OAUTH_EXCHANGE_TIMEOUT_MS = 15_000;
+const GUILD_SYNC_TIMEOUT_MS = 20_000;
+const DASHBOARD_AUTH_INTENT_STORAGE_KEY = 'dashboard:auth-intent';
 
 interface GuildAccessRow {
   guild_id: string;
@@ -240,6 +242,62 @@ function getErrorMessage(error: unknown, fallbackMessage: string): string {
   return fallbackMessage;
 }
 
+function readStorage(): Storage | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return window.sessionStorage;
+}
+
+function persistDashboardAuthIntent(requestedGuildId?: string | null) {
+  const storage = readStorage();
+  if (!storage) {
+    return;
+  }
+
+  const intent = {
+    requestedGuildId: requestedGuildId ?? null,
+    createdAt: new Date().toISOString(),
+  };
+
+  storage.setItem(DASHBOARD_AUTH_INTENT_STORAGE_KEY, JSON.stringify(intent));
+}
+
+export function consumeDashboardAuthIntent(): { requestedGuildId: string | null } {
+  const storage = readStorage();
+  if (!storage) {
+    return { requestedGuildId: null };
+  }
+
+  const rawIntent = storage.getItem(DASHBOARD_AUTH_INTENT_STORAGE_KEY);
+  if (!rawIntent) {
+    return { requestedGuildId: null };
+  }
+
+  storage.removeItem(DASHBOARD_AUTH_INTENT_STORAGE_KEY);
+
+  try {
+    const parsedIntent = JSON.parse(rawIntent) as { requestedGuildId?: unknown };
+    return {
+      requestedGuildId:
+        typeof parsedIntent.requestedGuildId === 'string' && parsedIntent.requestedGuildId
+          ? parsedIntent.requestedGuildId
+          : null,
+    };
+  } catch {
+    return { requestedGuildId: null };
+  }
+}
+
+export function resolveDashboardRedirectPath(preferredGuildId?: string | null): string {
+  if (!preferredGuildId) {
+    return '/dashboard';
+  }
+
+  return `/dashboard?guild=${encodeURIComponent(preferredGuildId)}`;
+}
+
 async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, timeoutMessage: string): Promise<T> {
   let timeoutHandle: number | null = null;
 
@@ -300,8 +358,15 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
   };
 }
 
-export async function signInWithDiscord(): Promise<void> {
+export async function signInWithDiscord(requestedGuildId?: string | null): Promise<void> {
   const client = getSupabaseClient();
+  persistDashboardAuthIntent(requestedGuildId);
+
+  console.log('[dashboard-auth] signInWithDiscord:start', {
+    redirectTo: getAuthCallbackUrl(),
+    requestedGuildId: requestedGuildId ?? null,
+  });
+
   const { data, error } = await client.auth.signInWithOAuth({
     provider: 'discord',
     options: {
@@ -368,18 +433,53 @@ export async function exchangeDashboardCodeForSession(code: string): Promise<Ses
 }
 
 export async function syncDiscordGuilds(providerToken: string): Promise<DashboardSyncResult> {
+  const startedAt = Date.now();
   const client = getSupabaseClient();
-  const { data, error } = await client.functions.invoke('sync-discord-guilds', {
-    body: {
-      providerToken,
-    },
-  });
 
-  if (error) {
-    throw error;
+  if (!providerToken.trim()) {
+    throw new Error('No llego un provider token valido para sincronizar los servidores.');
   }
 
-  return dashboardSyncResultSchema.parse(data);
+  console.log('[dashboard-auth] syncDiscordGuilds:start', {
+    startedAt: new Date(startedAt).toISOString(),
+    tokenLength: providerToken.length,
+  });
+
+  try {
+    const { data, error } = await withTimeout(
+      client.functions.invoke('sync-discord-guilds', {
+        body: {
+          providerToken,
+        },
+      }),
+      GUILD_SYNC_TIMEOUT_MS,
+      `La sincronizacion inicial de servidores tardo demasiado (${GUILD_SYNC_TIMEOUT_MS / 1000}s). Revisa la funcion sync-discord-guilds, la red y el estado de Supabase.`,
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    const parsedResult = dashboardSyncResultSchema.parse(data);
+    console.log('[dashboard-auth] syncDiscordGuilds:success', {
+      durationMs: Date.now() - startedAt,
+      manageableCount: parsedResult.manageableCount,
+      installedCount: parsedResult.installedCount,
+    });
+
+    return parsedResult;
+  } catch (error: unknown) {
+    const message = getErrorMessage(
+      error,
+      'No se pudieron sincronizar los servidores administrables con Supabase.',
+    );
+    console.error('[dashboard-auth] syncDiscordGuilds:error', {
+      durationMs: Date.now() - startedAt,
+      message,
+      error,
+    });
+    throw new Error(message);
+  }
 }
 
 export async function fetchDashboardGuilds(): Promise<DashboardGuild[]> {

@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useSearchParams } from 'react-router-dom';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { config } from '../config';
 import AuthCard from './components/AuthCard';
@@ -79,6 +80,7 @@ function persistSection(guildId: string, section: DashboardSectionId) {
 }
 
 export default function DashboardPage() {
+  const [searchParams] = useSearchParams();
   const authQuery = useDashboardAuth();
   const signIn = useSignInWithDiscord();
   const signOut = useSignOutDashboard();
@@ -91,6 +93,7 @@ export default function DashboardPage() {
 
   const guildsQuery = useDashboardGuilds(isAuthenticated);
   const guilds = guildsQuery.data ?? [];
+  const requestedGuildId = searchParams.get('guild');
   const { selectedGuild, selectedGuildId, setSelectedGuildId } = useGuildSelection(guilds);
   const snapshotQuery = useGuildDashboardSnapshot(selectedGuildId, Boolean(selectedGuildId));
   const requestConfigChange = useRequestGuildConfigChange(selectedGuildId);
@@ -158,8 +161,14 @@ export default function DashboardPage() {
   }
 
   function syncGuildAccess() {
+    const preferredGuildId = selectedGuildId ?? requestedGuildId;
     if (!authState.session?.provider_token) {
-      signIn.mutate();
+      console.warn('[dashboard-auth] dashboard:missing-provider-token', {
+        selectedGuildId: preferredGuildId,
+        hasSession: Boolean(authState.session),
+        userId: authState.user?.id ?? null,
+      });
+      signIn.mutate(preferredGuildId);
       return;
     }
 
@@ -203,7 +212,7 @@ export default function DashboardPage() {
               canUseDashboard={canUseDashboard}
               isLoading={signIn.isPending}
               errorMessage={signIn.error instanceof Error ? signIn.error.message : undefined}
-              onLogin={() => signIn.mutate()}
+              onLogin={() => signIn.mutate(selectedGuildId ?? requestedGuildId)}
             />
           </div>
         </div>

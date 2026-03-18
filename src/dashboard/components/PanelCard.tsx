@@ -13,6 +13,9 @@ interface PanelCardProps {
   contentClassName?: string;
   stickyActions?: boolean;
   headerClassName?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
+  eyebrowClassName?: string;
 }
 
 const variantClasses: Record<NonNullable<PanelCardProps['variant']>, string> = {
@@ -34,6 +37,9 @@ export default function PanelCard({
   contentClassName = '',
   stickyActions = false,
   headerClassName = '',
+  titleClassName = '',
+  descriptionClassName = '',
+  eyebrowClassName = '',
 }: PanelCardProps) {
   return (
     <motion.section
@@ -49,17 +55,17 @@ export default function PanelCard({
         <div className={`relative z-[1] flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between ${headerClassName}`}>
           <div className="min-w-0 max-w-3xl">
             {eyebrow ? (
-              <p className="dashboard-panel-label">
+              <p className={`dashboard-panel-label ${eyebrowClassName}`}>
                 {eyebrow}
               </p>
             ) : null}
             {title ? (
-              <h2 className="mt-2 break-words text-[1.35rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white lg:text-[1.55rem]">
+              <h2 className={`mt-2 break-words text-[1.35rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white lg:text-[1.55rem] ${titleClassName}`}>
                 {title}
               </h2>
             ) : null}
             {description ? (
-              <p className="mt-2 max-w-3xl text-[0.96rem] leading-6 text-slate-700 dark:text-slate-300">
+              <p className={`mt-2 max-w-3xl text-[0.96rem] leading-6 text-slate-700 dark:text-slate-300 ${descriptionClassName}`}>
                 {description}
               </p>
             ) : null}
