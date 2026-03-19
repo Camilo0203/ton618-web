@@ -89,7 +89,7 @@ export default function LandingPage() {
           <Navbar />
         </header>
 
-        <main id="main-content">
+        <main id="main-content" className="relative">
           <Hero />
           <Features />
           <VisualExperience />
