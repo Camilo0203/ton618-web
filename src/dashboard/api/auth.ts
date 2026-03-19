@@ -58,7 +58,7 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
     throw createDashboardError(
       'auth.session',
       sessionError,
-      'No se pudo validar la sesion actual del dashboard.',
+      i18n.t('dashboardAuth.errors.sessionValidationFailed'),
     );
   }
 
@@ -66,7 +66,7 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
     throw createDashboardError(
       'auth.user',
       userError,
-      'No se pudo cargar el usuario autenticado del dashboard.',
+      i18n.t('dashboardAuth.errors.userLoadFailed'),
     );
   }
 
@@ -97,7 +97,7 @@ export async function signInWithDiscord(requestedGuildId?: string | null): Promi
     throw createDashboardError(
       'auth.oauth.start',
       error,
-      'No se pudo iniciar el acceso con Discord para el dashboard.',
+      i18n.t('dashboardAuth.errors.startLoginFailed'),
     );
   }
 }
@@ -110,7 +110,7 @@ export async function signOutDashboard(): Promise<void> {
     throw createDashboardError(
       'auth.signout',
       error,
-      'No se pudo cerrar la sesion del dashboard.',
+      i18n.t('dashboardAuth.errors.signOutFailed'),
     );
   }
 }
@@ -218,7 +218,7 @@ export async function syncDiscordGuilds(providerToken: string): Promise<Dashboar
     const dashboardError = createDashboardError(
       'auth.guild-sync',
       error,
-      'No se pudieron sincronizar los servidores administrables con Supabase.',
+      i18n.t('dashboardAuth.errors.syncFailed'),
     );
     console.error('[dashboard-auth] syncDiscordGuilds:error', {
       durationMs: Date.now() - startedAt,

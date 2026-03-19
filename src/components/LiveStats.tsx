@@ -95,7 +95,7 @@ StatCard.displayName = 'StatCard';
 export default function LiveStats() {
   const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
-  const { stats, loading, error, lastUpdated } = useBotStats();
+  const { stats, loading, error, errorKind, lastUpdated } = useBotStats();
   const [animated, setAnimated] = useState<AnimatedStats>(defaultBotStats);
   const previousStatsRef = useRef<AnimatedStats>(defaultBotStats);
   const liveUnavailable = Boolean(error);
@@ -160,9 +160,13 @@ export default function LiveStats() {
   const sourceLabel = loading ? t('stats.source.loading') : liveUnavailable ? t('stats.source.fallback') : t('stats.source.live');
   const statusMessage = loading ? t('stats.status.syncing') : liveUnavailable ? t('stats.status.standby') : formattedLastUpdated ? t('stats.lastUpdated', { value: formattedLastUpdated }) : '';
   const fallbackDetail = liveUnavailable
-    ? formattedLastUpdated
-      ? t('stats.status.fallbackWithTime', { value: formattedLastUpdated })
-      : t('stats.status.fallback')
+    ? errorKind === 'config'
+      ? t('stats.status.configFallback')
+      : errorKind === 'network'
+        ? t('stats.status.networkFallback')
+        : formattedLastUpdated
+          ? t('stats.status.fallbackWithTime', { value: formattedLastUpdated })
+          : t('stats.status.fallback')
     : '';
 
   const statCardsData = [

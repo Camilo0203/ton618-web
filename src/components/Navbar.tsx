@@ -145,7 +145,7 @@ export default function Navbar() {
               </div>
             ) : null}
 
-            <LanguageSelector />
+            <LanguageSelector mode="desktop" />
 
             <NavAction href={dashboardUrl} label={t('nav.secondaryCta')} />
 
@@ -168,7 +168,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3 lg:hidden">
-            <LanguageSelector />
+            <LanguageSelector mode="mobile" />
 
             <button
               type="button"
@@ -184,75 +184,77 @@ export default function Navbar() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {mobileMenuOpen ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            id="mobile-navigation"
-            className="absolute left-0 right-0 top-full z-[95] overflow-hidden px-4 pt-2 sm:px-6"
-          >
-            <div className="cinematic-glass flex flex-col gap-6 rounded-[1.75rem] border-white/10 p-6 shadow-3xl shadow-black">
-              <div className="grid gap-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-base font-bold text-white transition hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
-                  >
-                    {link.name}
-                  </a>
-                ))}
-              </div>
-
-              {utilityLinks.length > 0 ? (
-                <div className="grid gap-3">
-                  {utilityLinks.map((link) => (
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:hidden">
+        <AnimatePresence>
+          {mobileMenuOpen ? (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              id="mobile-navigation"
+              className="relative z-[95] overflow-hidden pt-2"
+            >
+              <div className="cinematic-glass flex flex-col gap-6 rounded-[1.75rem] border-white/10 p-6 shadow-3xl shadow-black">
+                <div className="grid gap-4">
+                  {navLinks.map((link) => (
                     <a
-                      key={link.label}
+                      key={link.name}
                       href={link.href}
-                      target={link.href.startsWith('#') ? undefined : '_blank'}
-                      rel={link.href.startsWith('#') ? undefined : 'noopener noreferrer'}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+                      className="rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-base font-bold text-white transition hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                     >
-                      <span>{link.label}</span>
-                      {link.href.startsWith('#') ? null : <ExternalLink className="h-4 w-4" />}
+                      {link.name}
                     </a>
                   ))}
                 </div>
-              ) : null}
 
-              <div className="grid gap-3 border-t border-white/8 pt-4">
-                <NavAction href={dashboardUrl} label={t('nav.mobileSecondaryCta')} onClick={() => setMobileMenuOpen(false)} />
+                {utilityLinks.length > 0 ? (
+                  <div className="grid gap-3">
+                    {utilityLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target={link.href.startsWith('#') ? undefined : '_blank'}
+                        rel={link.href.startsWith('#') ? undefined : 'noopener noreferrer'}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+                      >
+                        <span>{link.label}</span>
+                        {link.href.startsWith('#') ? null : <ExternalLink className="h-4 w-4" />}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
 
-                {canInvite ? (
-                  <a
-                    href={inviteUrl}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="btn-premium-primary w-full justify-center"
-                  >
-                    <span>{t('nav.mobilePrimaryCta')}</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    className="btn-premium-primary w-full cursor-not-allowed justify-center opacity-60"
-                    title={t('hero.inviteUnavailable')}
-                  >
-                    <span>{t('nav.mobilePrimaryCta')}</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                )}
+                <div className="grid gap-3 border-t border-white/8 pt-4">
+                  <NavAction href={dashboardUrl} label={t('nav.mobileSecondaryCta')} onClick={() => setMobileMenuOpen(false)} />
+
+                  {canInvite ? (
+                    <a
+                      href={inviteUrl}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="btn-premium-primary w-full justify-center"
+                    >
+                      <span>{t('nav.mobilePrimaryCta')}</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="btn-premium-primary w-full cursor-not-allowed justify-center opacity-60"
+                      title={t('hero.inviteUnavailable')}
+                    >
+                      <span>{t('nav.mobilePrimaryCta')}</span>
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
     </nav>
   );
 }

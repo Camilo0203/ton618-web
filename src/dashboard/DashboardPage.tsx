@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { config } from '../config';
 import AuthCard from './components/AuthCard';
 import DashboardModuleViewport from './components/DashboardModuleViewport';
@@ -22,6 +23,7 @@ import { useGuildSelection } from './hooks/useGuildSelection';
 import { getDashboardSectionStates } from './utils';
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const requestedGuildId = searchParams.get('guild');
 
@@ -81,25 +83,25 @@ export default function DashboardPage() {
     void syncGuilds.mutateAsync(authState.session.provider_token).catch(() => undefined);
   }
 
-  const titleGuildName = selectedGuild?.guildName ?? 'Dashboard';
+  const titleGuildName = selectedGuild?.guildName ?? t('dashboard.pageTitle');
   const authErrorMessage =
-    authQuery.error instanceof Error ? authQuery.error.message : 'No se pudo validar la sesion del dashboard.';
+    authQuery.error instanceof Error ? authQuery.error.message : t('dashboard.errors.authValidation');
   const guildsErrorMessage =
     guildsQuery.error instanceof Error
       ? guildsQuery.error.message
-      : 'Intenta sincronizar otra vez o revisa la configuracion de Supabase.';
+      : t('dashboard.errors.guildsLoad');
   const snapshotErrorMessage =
     snapshotQuery.error instanceof Error
       ? snapshotQuery.error.message
-      : 'Revisa tablas, politicas RLS y el bridge del bot.';
+      : t('dashboard.errors.snapshotLoad');
 
   return (
     <>
       <Helmet>
-        <title>{config.botName} | Dashboard | {titleGuildName}</title>
+        <title>{config.botName} | {t('dashboard.pageTitle')} | {titleGuildName}</title>
         <meta
           name="description"
-          content="Dashboard profesional para administrar configuraciones, actividad y analiticas de tu bot de Discord."
+          content={t('dashboard.metaDescription')}
         />
       </Helmet>
 
@@ -107,14 +109,14 @@ export default function DashboardPage() {
         <div className="dashboard-shell flex min-h-screen items-center justify-center px-4 text-white">
           <div className="mx-auto w-full max-w-[42rem]">
             <StateCard
-              eyebrow="Acceso seguro"
-              title="Validando sesion del dashboard"
-              description="Estamos comprobando tu sesion con Supabase antes de cargar servidores, permisos y estado operativo."
+              eyebrow={t('dashboard.states.authLoading.eyebrow')}
+              title={t('dashboard.states.authLoading.title')}
+              description={t('dashboard.states.authLoading.description')}
               icon={RefreshCcw}
               actions={(
                 <span className="dashboard-status-pill-compact dashboard-neutral-pill">
                   <RefreshCcw className="h-4 w-4 animate-spin" />
-                  Verificando acceso
+                  {t('dashboard.states.authLoading.pill')}
                 </span>
               )}
             />
@@ -124,8 +126,8 @@ export default function DashboardPage() {
         <div className="dashboard-shell px-4 py-10">
           <div className="mx-auto max-w-5xl">
             <StateCard
-              eyebrow="Acceso no disponible"
-              title="No pudimos validar tu sesion"
+              eyebrow={t('dashboard.states.authError.eyebrow')}
+              title={t('dashboard.states.authError.title')}
               description={authErrorMessage}
               icon={ServerCrash}
               tone="danger"
@@ -137,7 +139,7 @@ export default function DashboardPage() {
                     className="dashboard-primary-button"
                   >
                     <RefreshCcw className="h-4 w-4" />
-                    Reintentar validacion
+                    {t('dashboard.actions.retryValidation')}
                   </button>
                   <button
                     type="button"
@@ -145,7 +147,7 @@ export default function DashboardPage() {
                     disabled={signIn.isPending || !canUseDashboard}
                     className="dashboard-secondary-button"
                   >
-                    Volver a iniciar con Discord
+                    {t('dashboard.actions.restartDiscord')}
                   </button>
                 </>
               )}
@@ -167,14 +169,14 @@ export default function DashboardPage() {
         <div className="dashboard-shell px-4 py-10 text-white">
           <div className="mx-auto max-w-5xl">
             <StateCard
-              eyebrow="Sincronizacion inicial"
-              title="Cargando tus servidores administrables"
-              description="Estamos consultando el acceso ya sincronizado para preparar el selector de guild, el estado de salud y el snapshot del panel."
+              eyebrow={t('dashboard.states.guildsLoading.eyebrow')}
+              title={t('dashboard.states.guildsLoading.title')}
+              description={t('dashboard.states.guildsLoading.description')}
               icon={RefreshCcw}
               actions={(
                 <span className="dashboard-status-pill-compact dashboard-neutral-pill">
                   <RefreshCcw className="h-4 w-4 animate-spin" />
-                  Preparando shell
+                  {t('dashboard.states.guildsLoading.pill')}
                 </span>
               )}
             />
@@ -184,8 +186,8 @@ export default function DashboardPage() {
         <div className="dashboard-shell px-4 py-10">
           <div className="mx-auto max-w-5xl">
             <StateCard
-              eyebrow="Error de datos"
-              title="No pudimos cargar tus servidores"
+              eyebrow={t('dashboard.states.guildsError.eyebrow')}
+              title={t('dashboard.states.guildsError.title')}
               description={guildsErrorMessage}
               icon={ServerCrash}
               tone="danger"
@@ -197,7 +199,7 @@ export default function DashboardPage() {
                     className="dashboard-primary-button"
                   >
                     <RefreshCcw className="h-4 w-4" />
-                    Reintentar carga
+                    {t('dashboard.actions.retryLoad')}
                   </button>
                   <button
                     type="button"
@@ -206,7 +208,7 @@ export default function DashboardPage() {
                     className="dashboard-secondary-button"
                   >
                     <RefreshCcw className={`h-4 w-4 ${syncGuilds.isPending ? 'animate-spin' : ''}`} />
-                    Re-sincronizar acceso
+                    {t('dashboard.actions.resyncAccess')}
                   </button>
                 </>
               )}
@@ -217,9 +219,9 @@ export default function DashboardPage() {
         <div className="dashboard-shell px-4 py-10">
           <div className="mx-auto max-w-5xl">
             <StateCard
-              eyebrow="Sin servidores"
-              title="No encontramos guilds administrables para esta cuenta"
-              description="Asegurate de tener permisos de administracion o Manage Server en Discord y vuelve a sincronizar el acceso."
+              eyebrow={t('dashboard.states.emptyGuilds.eyebrow')}
+              title={t('dashboard.states.emptyGuilds.title')}
+              description={t('dashboard.states.emptyGuilds.description')}
               icon={AlertTriangle}
               tone="warning"
               actions={(
@@ -231,7 +233,7 @@ export default function DashboardPage() {
                     className="dashboard-primary-button"
                   >
                     <RefreshCcw className={`h-4 w-4 ${syncGuilds.isPending ? 'animate-spin' : ''}`} />
-                    Re-sincronizar acceso
+                    {t('dashboard.actions.resyncAccess')}
                   </button>
                   <button
                     type="button"
@@ -239,7 +241,7 @@ export default function DashboardPage() {
                     disabled={signOut.isPending}
                     className="dashboard-secondary-button"
                   >
-                    Cambiar de cuenta
+                    {t('dashboard.actions.switchAccount')}
                   </button>
                 </>
               )}

@@ -11,8 +11,14 @@ const languages = [
 const normalizeLanguageCode = (language?: string) =>
   language?.toLowerCase().startsWith('es') ? 'es' : 'en';
 
-export default function LanguageSelector() {
-  const { i18n } = useTranslation();
+type LanguageSelectorMode = 'auto' | 'mobile' | 'desktop';
+
+interface LanguageSelectorProps {
+  mode?: LanguageSelectorMode;
+}
+
+export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProps) {
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -21,6 +27,12 @@ export default function LanguageSelector() {
 
   const currentLanguage =
     languages.find((language) => language.code === normalizedLanguage) || languages[0];
+  const showMobileSelector = mode === 'mobile' || mode === 'auto';
+  const showDesktopSelector = mode === 'desktop' || mode === 'auto';
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [normalizedLanguage]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -115,47 +127,53 @@ export default function LanguageSelector() {
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="cinematic-glass flex items-center rounded-xl border border-white/5 sm:hidden">
-        {languages.map((language) => {
-          const isActive = getIsActiveLanguage(language.code);
+      {showMobileSelector ? (
+        <div className={`cinematic-glass items-center rounded-xl border border-white/5 ${mode === 'mobile' ? 'flex' : 'flex sm:hidden'}`}>
+          {languages.map((language) => {
+            const isActive = getIsActiveLanguage(language.code);
 
-          return (
-            <button
-              key={language.code}
-              type="button"
-              onClick={() => toggleLanguage(language.code)}
-              aria-pressed={isActive}
-              aria-label={language.name}
-              className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
-                isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {language.short}
-            </button>
-          );
-        })}
-      </div>
+            return (
+              <button
+                key={language.code}
+                type="button"
+                onClick={() => toggleLanguage(language.code)}
+                aria-pressed={isActive}
+                aria-label={language.name}
+                className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+                  isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {language.short}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
 
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={() => setIsOpen((open) => !open)}
-        onKeyDown={handleTriggerKeyDown}
-        className="cinematic-glass group hidden items-center gap-2 rounded-xl border border-white/5 px-4 py-2 transition-all duration-300 hover:border-indigo-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 sm:flex"
-        aria-label="Change language"
-        aria-haspopup="menu"
-        aria-expanded={isOpen}
-        aria-controls={isOpen ? 'language-selector-menu' : undefined}
-      >
-        <Globe className="h-4 w-4 text-indigo-400 transition-transform duration-500 group-hover:rotate-12" />
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-          {currentLanguage.short}
-        </span>
-        <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
+      {showDesktopSelector ? (
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setIsOpen((open) => !open)}
+          onKeyDown={handleTriggerKeyDown}
+          className={`cinematic-glass group items-center gap-2 rounded-xl border border-white/5 px-4 py-2 transition-all duration-300 hover:border-indigo-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+            mode === 'desktop' ? 'inline-flex' : 'hidden sm:flex'
+          }`}
+          aria-label={t('languageSelector.triggerLabel')}
+          aria-haspopup="menu"
+          aria-expanded={isOpen}
+          aria-controls={isOpen ? 'language-selector-menu' : undefined}
+        >
+          <Globe className="h-4 w-4 text-indigo-400 transition-transform duration-500 group-hover:rotate-12" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+            {currentLanguage.short}
+          </span>
+          <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+      ) : null}
 
       <AnimatePresence>
-        {isOpen ? (
+        {showDesktopSelector && isOpen ? (
           <motion.div
             id="language-selector-menu"
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
@@ -163,8 +181,10 @@ export default function LanguageSelector() {
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
             role="menu"
-            aria-label="Language selector"
-            className="cinematic-glass shadow-3xl absolute right-0 top-[calc(100%+0.75rem)] z-[140] hidden w-40 overflow-hidden rounded-2xl border border-white/10 sm:block"
+            aria-label={t('languageSelector.menuLabel')}
+            className={`cinematic-glass shadow-3xl absolute right-0 top-[calc(100%+0.75rem)] z-[140] w-40 overflow-hidden rounded-2xl border border-white/10 ${
+              mode === 'desktop' ? 'block' : 'hidden sm:block'
+            }`}
           >
             <div className="flex flex-col gap-1 p-2">
               {languages.map((language, index) => {

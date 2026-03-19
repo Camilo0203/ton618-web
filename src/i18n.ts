@@ -26,6 +26,10 @@ const resources = {
         homeAria: 'Go to home',
         primaryAria: 'Primary navigation',
       },
+      languageSelector: {
+        triggerLabel: 'Change language',
+        menuLabel: 'Language selector',
+      },
       app: {
         loadingTitle: 'Loading experience',
         loadingDescription: 'Preparing the dashboard and navigation.',
@@ -203,6 +207,8 @@ const resources = {
           standby: 'Live telemetry is unavailable right now.',
           fallback: 'The landing keeps a stable baseline visible so trust is not lost during temporary outages.',
           fallbackWithTime: 'Most recent live sync: {{value}}',
+          configFallback: 'Live telemetry is not configured in this environment.',
+          networkFallback: 'Live telemetry could not be reached from this environment.',
         },
         cards: {
           clusters: { label: 'Servers', sub: 'Communities connected' },
@@ -318,6 +324,10 @@ const resources = {
           secureAccessFailed: 'Secure access could not be completed.',
         },
         errors: {
+          sessionValidationFailed: 'The current dashboard session could not be validated.',
+          userLoadFailed: 'The authenticated dashboard user could not be loaded.',
+          startLoginFailed: 'Discord sign-in for the dashboard could not be started.',
+          signOutFailed: 'The dashboard session could not be closed.',
           restartLoginFailed: 'Discord login could not be restarted.',
           restartLoginAction: 'Could not restart login with Discord.',
           missingSessionAfterCallback:
@@ -330,11 +340,55 @@ const resources = {
           missingOauthCode: 'A valid OAuth code did not reach the callback.',
           syncMissingToken: 'A valid provider token did not arrive to sync servers.',
           syncEmptyResponse: 'The sync-discord-guilds function returned an empty response.',
+          syncFailed: 'Manageable servers could not be synced with Supabase.',
           exchangeFailed: 'The OAuth code could not be exchanged with Supabase.',
           exchangeTimeout:
             'The OAuth exchange took too long ({{seconds}}s). Check the network, Supabase Auth and the redirect URL configuration.',
           syncTimeout:
             'The initial server sync took too long ({{seconds}}s). Check the sync-discord-guilds function, the network and Supabase status.',
+        },
+      },
+      dashboard: {
+        pageTitle: 'Dashboard',
+        metaDescription: 'Professional dashboard to manage your Discord bot configuration, activity and analytics.',
+        actions: {
+          retryValidation: 'Retry validation',
+          restartDiscord: 'Start Discord login again',
+          retryLoad: 'Retry load',
+          resyncAccess: 'Re-sync access',
+          switchAccount: 'Switch account',
+        },
+        errors: {
+          authValidation: 'The dashboard session could not be validated.',
+          guildsLoad: 'Try syncing again or review the Supabase configuration.',
+          snapshotLoad: 'Review tables, RLS policies and the bot bridge.',
+        },
+        states: {
+          authLoading: {
+            eyebrow: 'Secure access',
+            title: 'Validating dashboard session',
+            description: 'We are checking your Supabase session before loading servers, permissions and operational state.',
+            pill: 'Checking access',
+          },
+          authError: {
+            eyebrow: 'Access unavailable',
+            title: 'We could not validate your session',
+          },
+          guildsLoading: {
+            eyebrow: 'Initial sync',
+            title: 'Loading your manageable servers',
+            description: 'We are reading synced access to prepare guild selection, health state and the dashboard snapshot.',
+            pill: 'Preparing shell',
+          },
+          guildsError: {
+            eyebrow: 'Data error',
+            title: 'We could not load your servers',
+          },
+          emptyGuilds: {
+            eyebrow: 'No servers',
+            title: 'We did not find manageable guilds for this account',
+            description: 'Make sure you have Administrator or Manage Server permissions in Discord, then sync access again.',
+          },
         },
       },
     },
@@ -362,6 +416,10 @@ const resources = {
         closeMenu: 'Cerrar menú de navegación',
         homeAria: 'Ir al inicio',
         primaryAria: 'Navegación principal',
+      },
+      languageSelector: {
+        triggerLabel: 'Cambiar idioma',
+        menuLabel: 'Selector de idioma',
       },
       app: {
         loadingTitle: 'Cargando experiencia',
@@ -540,6 +598,8 @@ const resources = {
           standby: 'La telemetría en vivo no está disponible ahora mismo.',
           fallback: 'La landing mantiene una base estable visible para no perder confianza durante incidencias temporales.',
           fallbackWithTime: 'Última sincronización en vivo: {{value}}',
+          configFallback: 'La telemetría en vivo no está configurada en este entorno.',
+          networkFallback: 'La telemetría en vivo no pudo alcanzarse desde este entorno.',
         },
         cards: {
           clusters: { label: 'Servidores', sub: 'Comunidades conectadas' },
@@ -655,6 +715,10 @@ const resources = {
           secureAccessFailed: 'El acceso seguro no pudo completarse.',
         },
         errors: {
+          sessionValidationFailed: 'No se pudo validar la sesión actual del dashboard.',
+          userLoadFailed: 'No se pudo cargar el usuario autenticado del dashboard.',
+          startLoginFailed: 'No se pudo iniciar el acceso con Discord para el dashboard.',
+          signOutFailed: 'No se pudo cerrar la sesión del dashboard.',
           restartLoginFailed: 'No se pudo reiniciar el login.',
           restartLoginAction: 'No se pudo reiniciar el login con Discord.',
           missingSessionAfterCallback:
@@ -667,11 +731,55 @@ const resources = {
           missingOauthCode: 'No llegó un código OAuth válido al callback.',
           syncMissingToken: 'No llegó un provider token válido para sincronizar los servidores.',
           syncEmptyResponse: 'La función sync-discord-guilds respondió vacío.',
+          syncFailed: 'No se pudieron sincronizar los servidores administrables con Supabase.',
           exchangeFailed: 'No se pudo intercambiar el código OAuth con Supabase.',
           exchangeTimeout:
             'El intercambio OAuth tardó demasiado ({{seconds}}s). Revisa la red, Supabase Auth y la configuración de redirect URLs.',
           syncTimeout:
             'La sincronización inicial de servidores tardó demasiado ({{seconds}}s). Revisa la función sync-discord-guilds, la red y el estado de Supabase.',
+        },
+      },
+      dashboard: {
+        pageTitle: 'Dashboard',
+        metaDescription: 'Dashboard profesional para administrar configuraciones, actividad y analíticas de tu bot de Discord.',
+        actions: {
+          retryValidation: 'Reintentar validación',
+          restartDiscord: 'Volver a iniciar con Discord',
+          retryLoad: 'Reintentar carga',
+          resyncAccess: 'Re-sincronizar acceso',
+          switchAccount: 'Cambiar de cuenta',
+        },
+        errors: {
+          authValidation: 'No se pudo validar la sesión del dashboard.',
+          guildsLoad: 'Intenta sincronizar otra vez o revisa la configuración de Supabase.',
+          snapshotLoad: 'Revisa tablas, políticas RLS y el bridge del bot.',
+        },
+        states: {
+          authLoading: {
+            eyebrow: 'Acceso seguro',
+            title: 'Validando sesión del dashboard',
+            description: 'Estamos comprobando tu sesión con Supabase antes de cargar servidores, permisos y estado operativo.',
+            pill: 'Verificando acceso',
+          },
+          authError: {
+            eyebrow: 'Acceso no disponible',
+            title: 'No pudimos validar tu sesión',
+          },
+          guildsLoading: {
+            eyebrow: 'Sincronización inicial',
+            title: 'Cargando tus servidores administrables',
+            description: 'Estamos consultando el acceso ya sincronizado para preparar el selector de guild, el estado de salud y el snapshot del panel.',
+            pill: 'Preparando shell',
+          },
+          guildsError: {
+            eyebrow: 'Error de datos',
+            title: 'No pudimos cargar tus servidores',
+          },
+          emptyGuilds: {
+            eyebrow: 'Sin servidores',
+            title: 'No encontramos guilds administrables para esta cuenta',
+            description: 'Asegúrate de tener permisos de administración o Manage Server en Discord y vuelve a sincronizar el acceso.',
+          },
         },
       },
     },
@@ -701,6 +809,10 @@ i18n.use(initReactI18next).init({
   resources,
   lng: savedLanguage,
   fallbackLng: 'en',
+  supportedLngs: ['en', 'es'],
+  nonExplicitSupportedLngs: true,
+  load: 'languageOnly',
+  cleanCode: true,
   interpolation: {
     escapeValue: false,
   },
