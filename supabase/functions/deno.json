@@ -2,8 +2,9 @@
   "compilerOptions": {
     "lib": [
       "deno.window",
-      "deno.ns"
-    ],
-    "strict": true
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
   }
 }
