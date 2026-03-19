@@ -356,6 +356,9 @@ const resources = {
           restartDiscord: 'Start Discord login again',
           retryLoad: 'Retry load',
           resyncAccess: 'Re-sync access',
+          goToAvailableGuild: 'Go to available server',
+          retrySnapshot: 'Retry snapshot',
+          resyncServer: 'Re-sync server',
           switchAccount: 'Switch account',
         },
         errors: {
@@ -388,6 +391,22 @@ const resources = {
             eyebrow: 'No servers',
             title: 'We did not find manageable guilds for this account',
             description: 'Make sure you have Administrator or Manage Server permissions in Discord, then sync access again.',
+          },
+          invalidGuild: {
+            eyebrow: 'Invalid server',
+            title: 'That guild is no longer available for this session',
+            description:
+              'The requested server ({{guildId}}) does not appear in your current manageable guilds. Access, sync status or the shared URL may have changed.',
+          },
+          noSelectedGuild: {
+            eyebrow: 'Selection required',
+            title: 'Choose a server to continue',
+            description:
+              'As soon as you choose a guild, we will load applied configuration, inventory, audit trail and related analytics.',
+          },
+          snapshotError: {
+            eyebrow: 'Module unavailable',
+            title: 'We could not load this server',
           },
         },
       },
@@ -747,6 +766,9 @@ const resources = {
           restartDiscord: 'Volver a iniciar con Discord',
           retryLoad: 'Reintentar carga',
           resyncAccess: 'Re-sincronizar acceso',
+          goToAvailableGuild: 'Ir al servidor disponible',
+          retrySnapshot: 'Reintentar snapshot',
+          resyncServer: 'Re-sincronizar servidor',
           switchAccount: 'Cambiar de cuenta',
         },
         errors: {
@@ -779,6 +801,22 @@ const resources = {
             eyebrow: 'Sin servidores',
             title: 'No encontramos guilds administrables para esta cuenta',
             description: 'Asegúrate de tener permisos de administración o Manage Server en Discord y vuelve a sincronizar el acceso.',
+          },
+          invalidGuild: {
+            eyebrow: 'Servidor inválido',
+            title: 'Ese guild ya no está disponible para esta sesión',
+            description:
+              'El servidor solicitado ({{guildId}}) no aparece entre tus guilds administrables actuales. Puede haber cambiado el acceso, la sincronización o la URL compartida.',
+          },
+          noSelectedGuild: {
+            eyebrow: 'Selección requerida',
+            title: 'Escoge un servidor para continuar',
+            description:
+              'En cuanto elijas un guild, cargaremos configuración aplicada, inventario, auditoría y analíticas asociadas.',
+          },
+          snapshotError: {
+            eyebrow: 'Módulo no disponible',
+            title: 'No pudimos cargar este servidor',
           },
         },
       },

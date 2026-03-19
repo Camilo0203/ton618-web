@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import StateCard from './StateCard';
 import DashboardDegradationNotice from './DashboardDegradationNotice';
 import type {
@@ -135,6 +136,7 @@ export default function DashboardModuleViewport({
   onRestoreBackup,
   onTicketAction,
 }: DashboardModuleViewportProps) {
+  const { t } = useTranslation();
   const {
     sectionStates,
     checklist,
@@ -146,9 +148,9 @@ export default function DashboardModuleViewport({
   if (invalidRequestedGuildId) {
     return (
       <StateCard
-        eyebrow="Servidor invalido"
-        title="Ese guild ya no esta disponible para esta sesion"
-        description={`El servidor solicitado (${invalidRequestedGuildId}) no aparece entre tus guilds administrables actuales. Puede haber cambiado el acceso, la sincronizacion o la URL compartida.`}
+        eyebrow={t('dashboard.states.invalidGuild.eyebrow')}
+        title={t('dashboard.states.invalidGuild.title')}
+        description={t('dashboard.states.invalidGuild.description', { guildId: invalidRequestedGuildId })}
         icon={AlertTriangle}
         tone="warning"
         actions={(
@@ -159,7 +161,7 @@ export default function DashboardModuleViewport({
                 onClick={() => setSelectedGuildId(fallbackGuildId)}
                 className="dashboard-primary-button"
               >
-                Ir al servidor disponible
+                {t('dashboard.actions.goToAvailableGuild')}
               </button>
             ) : null}
             <button
@@ -169,7 +171,7 @@ export default function DashboardModuleViewport({
               className="dashboard-secondary-button"
             >
               <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-              Re-sincronizar acceso
+              {t('dashboard.actions.resyncAccess')}
             </button>
           </>
         )}
@@ -180,9 +182,9 @@ export default function DashboardModuleViewport({
   if (!selectedGuild) {
     return (
       <StateCard
-        eyebrow="Seleccion requerida"
-        title="Escoge un servidor para continuar"
-        description="En cuanto elijas un guild, cargaremos configuracion aplicada, inventario, auditoria y analiticas asociadas."
+        eyebrow={t('dashboard.states.noSelectedGuild.eyebrow')}
+        title={t('dashboard.states.noSelectedGuild.title')}
+        description={t('dashboard.states.noSelectedGuild.description')}
         icon={AlertTriangle}
       />
     );
@@ -191,8 +193,8 @@ export default function DashboardModuleViewport({
   if (isSnapshotError) {
     return (
       <StateCard
-        eyebrow="Modulo no disponible"
-        title="No pudimos cargar este servidor"
+        eyebrow={t('dashboard.states.snapshotError.eyebrow')}
+        title={t('dashboard.states.snapshotError.title')}
         description={snapshotErrorMessage}
         icon={ServerCrash}
         tone="danger"
@@ -204,7 +206,7 @@ export default function DashboardModuleViewport({
               className="dashboard-primary-button"
             >
               <RefreshCcw className="h-4 w-4" />
-              Reintentar snapshot
+              {t('dashboard.actions.retrySnapshot')}
             </button>
             <button
               type="button"
@@ -213,7 +215,7 @@ export default function DashboardModuleViewport({
               className="dashboard-secondary-button"
             >
               <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-              Re-sincronizar servidor
+              {t('dashboard.actions.resyncServer')}
             </button>
           </>
         )}
