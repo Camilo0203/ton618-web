@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,7 @@ import {
 import { usePersistentDashboardSection } from './hooks/usePersistentDashboardSection';
 import { useGuildSelection } from './hooks/useGuildSelection';
 import { getDashboardSectionStates } from './utils';
+import type { ConfigMutationSectionId } from './types';
 
 export default function DashboardPage() {
   const { t } = useTranslation();
@@ -51,6 +53,10 @@ export default function DashboardPage() {
   const requestConfigChange = useRequestGuildConfigChange(selectedGuildId);
   const requestBackupAction = useRequestGuildBackupAction(selectedGuildId);
   const requestTicketAction = useRequestTicketDashboardAction(selectedGuildId);
+  const [configSaveError, setConfigSaveError] = useState<{
+    section: ConfigMutationSectionId;
+    message: string;
+  } | null>(null);
 
   const { activeSection, setActiveSection } = usePersistentDashboardSection(
     selectedGuildId,
@@ -94,6 +100,10 @@ export default function DashboardPage() {
     snapshotQuery.error instanceof Error
       ? snapshotQuery.error.message
       : t('dashboard.errors.snapshotLoad');
+
+  useEffect(() => {
+    setConfigSaveError(null);
+  }, [selectedGuildId]);
 
   return (
     <>
@@ -279,11 +289,24 @@ export default function DashboardPage() {
             isSnapshotError={snapshotQuery.isError}
             refetchSnapshot={() => void snapshotQuery.refetch()}
             requestConfigChangePending={requestConfigChange.isPending}
+            requestConfigChangeErrorMessage={configSaveError?.message ?? ''}
+            requestConfigChangeErrorSection={configSaveError?.section ?? null}
             requestBackupActionPending={requestBackupAction.isPending}
             requestTicketActionPending={requestTicketAction.isPending}
             onSectionChange={setActiveSection}
             onConfigSave={async (section, payload) => {
-              await requestConfigChange.mutateAsync({ section, payload });
+              try {
+                await requestConfigChange.mutateAsync({ section, payload });
+                setConfigSaveError(null);
+              } catch (error) {
+                setConfigSaveError({
+                  section,
+                  message: error instanceof Error
+                    ? error.message
+                    : 'No se pudo registrar la solicitud de cambio.',
+                });
+                throw error;
+              }
             }}
             onCreateBackup={async () => {
               await requestBackupAction.mutateAsync({

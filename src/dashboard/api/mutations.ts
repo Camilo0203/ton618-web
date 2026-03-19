@@ -10,22 +10,71 @@ import {
 } from './shared';
 import { getDashboardSession } from './auth';
 
+function isRpcSignatureMismatch(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false;
+  }
+
+  const candidate = error as { code?: unknown; message?: unknown; details?: unknown; hint?: unknown };
+  const code = typeof candidate.code === 'string' ? candidate.code : '';
+  const message = typeof candidate.message === 'string' ? candidate.message.toLowerCase() : '';
+  const details = typeof candidate.details === 'string' ? candidate.details.toLowerCase() : '';
+  const hint = typeof candidate.hint === 'string' ? candidate.hint.toLowerCase() : '';
+  const body = `${message} ${details} ${hint}`;
+
+  return code === 'PGRST202'
+    || (
+      body.includes('request_guild_config_change')
+      && (
+        body.includes('schema cache')
+        || body.includes('function')
+        || body.includes('parameters')
+        || body.includes('arguments')
+      )
+    );
+}
+
+async function callRequestGuildConfigChangeRpc(
+  guildId: string,
+  section: ConfigMutationSectionId,
+  payload: unknown,
+) {
+  const client = getSupabaseClient();
+  const primaryArgs = {
+    p_guild_id: guildId,
+    p_section: section,
+    p_payload: payload,
+  };
+  const fallbackArgs = {
+    guild_id: guildId,
+    section,
+    payload,
+  };
+
+  const firstAttempt = await runQueryWithTimeout(
+    `rpc.request_guild_config_change.${guildId}.${section}`,
+    client.rpc('request_guild_config_change', primaryArgs),
+    DASHBOARD_RPC_TIMEOUT_MS,
+  );
+
+  if (!firstAttempt.error || !isRpcSignatureMismatch(firstAttempt.error)) {
+    return firstAttempt;
+  }
+
+  return runQueryWithTimeout(
+    `rpc.request_guild_config_change.${guildId}.${section}.fallback`,
+    client.rpc('request_guild_config_change', fallbackArgs),
+    DASHBOARD_RPC_TIMEOUT_MS,
+  );
+}
+
 export async function requestGuildConfigChange(
   guildId: string,
   section: ConfigMutationSectionId,
   payload: unknown,
 ): Promise<GuildConfigMutation> {
   const resolvedGuildId = ensureGuildId(guildId, 'guardar cambios');
-  const client = getSupabaseClient();
-  const { data, error } = await runQueryWithTimeout(
-    `rpc.request_guild_config_change.${resolvedGuildId}.${section}`,
-    client.rpc('request_guild_config_change', {
-      p_guild_id: resolvedGuildId,
-      p_section: section,
-      p_payload: payload,
-    }),
-    DASHBOARD_RPC_TIMEOUT_MS,
-  );
+  const { data, error } = await callRequestGuildConfigChangeRpc(resolvedGuildId, section, payload);
 
   if (error) {
     throw createDashboardError(

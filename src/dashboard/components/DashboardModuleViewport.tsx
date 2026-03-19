@@ -70,6 +70,8 @@ interface DashboardModuleViewportProps {
   isSnapshotError: boolean;
   refetchSnapshot: () => void;
   requestConfigChangePending: boolean;
+  requestConfigChangeErrorMessage: string;
+  requestConfigChangeErrorSection: ConfigMutationSectionId | null;
   requestBackupActionPending: boolean;
   requestTicketActionPending: boolean;
   onSectionChange: (section: DashboardSectionId) => void;
@@ -128,6 +130,8 @@ export default function DashboardModuleViewport({
   isSnapshotError,
   refetchSnapshot,
   requestConfigChangePending,
+  requestConfigChangeErrorMessage,
+  requestConfigChangeErrorSection,
   requestBackupActionPending,
   requestTicketActionPending,
   onSectionChange,
@@ -232,11 +236,49 @@ export default function DashboardModuleViewport({
   const inboxFailures = partialFailures.filter(
     (failure) => failure.id === 'ticket_events' || failure.id === 'ticket_macros',
   );
+  const activeConfigSection: ConfigMutationSectionId | null = (() => {
+    switch (activeSection) {
+      case 'general':
+        return 'general';
+      case 'server_roles':
+        return 'server_roles_channels';
+      case 'tickets':
+        return 'tickets';
+      case 'verification':
+        return 'verification';
+      case 'welcome':
+        return 'welcome';
+      case 'suggestions':
+        return 'suggestions';
+      case 'modlogs':
+        return 'modlogs';
+      case 'commands':
+        return 'commands';
+      case 'system':
+        return 'system';
+      default:
+        return null;
+    }
+  })();
+  const showConfigError =
+    Boolean(requestConfigChangeErrorMessage)
+    && Boolean(activeConfigSection)
+    && requestConfigChangeErrorSection === activeConfigSection;
 
   return (
     <Suspense fallback={<ModuleFallback />}>
       <div className="space-y-6">
         <DashboardDegradationNotice failures={partialFailures} />
+        {showConfigError ? (
+          <div
+            className="rounded-[1.55rem] border border-rose-200/80 bg-[linear-gradient(135deg,rgba(255,241,242,0.98),rgba(255,245,245,0.92))] p-4 text-rose-900 dark:border-rose-900/40 dark:bg-[linear-gradient(135deg,rgba(72,22,38,0.76),rgba(46,18,28,0.68))] dark:text-rose-100"
+            role="alert"
+            aria-live="polite"
+          >
+            <p className="font-semibold">No se pudo enviar la solicitud de cambio</p>
+            <p className="mt-2 text-sm text-current/85">{requestConfigChangeErrorMessage}</p>
+          </div>
+        ) : null}
 
         {activeSection === 'overview' ? (
           <OverviewModule
