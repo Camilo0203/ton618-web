@@ -21,10 +21,12 @@ import {
 } from './hooks/useDashboardData';
 import { usePersistentDashboardSection } from './hooks/usePersistentDashboardSection';
 import { useGuildSelection } from './hooks/useGuildSelection';
+import { useDashboardDarkMode } from './hooks/useDashboardDarkMode';
 import { getDashboardSectionStates } from './utils';
 import type { ConfigMutationSectionId } from './types';
 
 export default function DashboardPage() {
+  useDashboardDarkMode();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const requestedGuildId = searchParams.get('guild');

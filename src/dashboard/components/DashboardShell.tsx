@@ -8,11 +8,9 @@ import {
   ChevronRight,
   LogOut,
   Menu,
-  Moon,
   RefreshCcw,
   ShieldCheck,
   Sparkles,
-  Sun,
   Users,
   X,
 } from 'lucide-react';
@@ -28,7 +26,6 @@ import {
   resolveUserAvatarUrl,
 } from '../utils';
 import { config, getDiscordInviteUrl } from '../../config';
-import { useTheme } from '../../components/ThemeProvider';
 import Logo from '../../components/Logo';
 
 interface DashboardShellProps {
@@ -377,7 +374,6 @@ export default function DashboardShell({
 }: DashboardShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t } = useTranslation();
-  const { theme, setTheme } = useTheme();
   const userAvatarUrl = resolveUserAvatarUrl(user);
   const guildIconUrl = selectedGuild ? resolveGuildIconUrl(selectedGuild) : null;
   const dashboardBrandLabel = `${config.botName} Dashboard`;
@@ -406,17 +402,17 @@ export default function DashboardShell({
     {
       label: selectedGuild?.botInstalled ? 'Bot activo en el servidor' : 'Bot sin instalar',
       className: selectedGuild?.botInstalled
-        ? 'border-emerald-200/70 bg-emerald-50/90 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/25 dark:text-emerald-200'
-        : 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/25 dark:text-amber-200',
+        ? 'border-emerald-400/30 bg-emerald-500/12 text-emerald-100'
+        : 'border-amber-400/30 bg-amber-500/12 text-amber-100',
     },
     {
       label: getHealthLabel(syncStatus),
       className:
         syncStatus?.bridgeStatus === 'error'
-          ? 'border-rose-200/70 bg-rose-50/90 text-rose-800 dark:border-rose-800/60 dark:bg-rose-950/25 dark:text-rose-200'
+          ? 'border-rose-400/30 bg-rose-500/12 text-rose-100'
           : syncStatus?.bridgeStatus === 'degraded'
-            ? 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/25 dark:text-amber-200'
-            : 'border-sky-200/70 bg-sky-50/90 text-sky-800 dark:border-sky-800/60 dark:bg-sky-950/25 dark:text-sky-200',
+            ? 'border-amber-400/30 bg-amber-500/12 text-amber-100'
+            : 'border-sky-400/30 bg-sky-500/12 text-sky-100',
     },
     {
       label: `${pendingMutations} en cola`,
@@ -426,16 +422,16 @@ export default function DashboardShell({
       label: `${failedMutations} fallidas`,
       className:
         failedMutations > 0
-          ? 'border-rose-200/70 bg-rose-50/90 text-rose-800 dark:border-rose-800/60 dark:bg-rose-950/25 dark:text-rose-200'
+          ? 'border-rose-400/30 bg-rose-500/12 text-rose-100'
           : 'dashboard-neutral-pill',
     },
   ];
 
   return (
-    <div className="dashboard-shell text-slate-950 dark:text-white">
+    <div className="dashboard-shell text-white">
       <a
         href="#dashboard-main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-slate-950"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-xl focus:border focus:border-white/20 focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white"
       >
         Saltar al contenido del dashboard
       </a>
@@ -496,10 +492,10 @@ export default function DashboardShell({
 
                 <div className="min-w-0">
                   <p className="dashboard-panel-label">{dashboardBrandLabel}</p>
-                  <h1 className="mt-1.5 break-words text-[1.45rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white lg:text-[1.65rem]">
+                  <h1 className="mt-1.5 break-words text-[1.45rem] font-bold tracking-[-0.05em] text-white lg:text-[1.65rem]">
                     {selectedGuild?.guildName ?? 'Sin seleccion'}
                   </h1>
-                  <p className="mt-1.5 max-w-3xl text-sm leading-6 text-slate-700 dark:text-slate-300">
+                  <p className="mt-1.5 max-w-3xl text-sm leading-6 text-slate-300">
                     Centro de control guiado para terminar configuracion, detectar bloqueos y saber exactamente que sigue sin tener que adivinar a que modulo entrar.
                   </p>
 
@@ -517,10 +513,10 @@ export default function DashboardShell({
                       Ultimo heartbeat {formatRelativeTime(syncStatus?.lastHeartbeatAt ?? selectedGuild?.botLastSeenAt ?? null)}
                     </span>
                   </div>
-                  <div className="mt-4 max-w-md rounded-[1.25rem] border border-slate-200/70 bg-white/75 p-3.5 shadow-sm dark:border-white/10 dark:bg-surface-700/55">
+                  <div className="dashboard-header-focus-card mt-4 max-w-md rounded-[1.25rem] p-3.5">
                     <label
                       htmlFor="header-guild-select"
-                      className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400"
+                      className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400"
                     >
                       Servidor en foco
                     </label>
@@ -528,7 +524,7 @@ export default function DashboardShell({
                       id="header-guild-select"
                       value={selectedGuild?.guildId ?? ''}
                       onChange={(event) => onGuildChange(event.target.value)}
-                      className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-900 outline-none transition dark:border-white/10 dark:bg-surface-800 dark:text-white"
+                      className="dashboard-header-select mt-2 w-full rounded-2xl px-4 py-3 text-sm font-medium outline-none transition"
                     >
                       {!selectedGuild ? (
                         <option value="">Selecciona un servidor</option>
@@ -540,7 +536,7 @@ export default function DashboardShell({
                         </option>
                       ))}
                     </select>
-                    <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-400">
+                    <p className="mt-2 text-xs leading-5 text-slate-400">
                       {selectedGuild?.botInstalled
                         ? 'Este servidor ya tiene el bot y puede cargar snapshot completo.'
                         : 'Este servidor aun necesita instalacion o una sincronizacion completa.'}
@@ -560,7 +556,7 @@ export default function DashboardShell({
 
                 <div className="flex flex-wrap items-center gap-2.5 sm:justify-between xl:justify-end">
                   <div className="dashboard-user-chip flex min-w-0 flex-1 items-center gap-3 rounded-[1.3rem] px-3 py-2.5 sm:flex-none">
-                    <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-surface-600">
+                    <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-white/10">
                       {userAvatarUrl ? (
                         <img
                           src={userAvatarUrl}
@@ -570,35 +566,26 @@ export default function DashboardShell({
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <span className="font-semibold text-slate-700 dark:text-white">
+                        <span className="font-semibold text-white">
                           {user.email?.[0]?.toUpperCase() ?? 'U'}
                         </span>
                       )}
                     </div>
                     <div className="hidden min-w-0 text-left sm:block">
-                      <p className="truncate text-sm font-semibold text-slate-950 dark:text-white">
+                      <p className="truncate text-sm font-semibold text-white">
                         {user.user_metadata?.full_name
                           || user.user_metadata?.name
                           || user.email
                           || 'Administrador'}
                       </p>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                      <p className="text-xs text-slate-400">
                         Ultima sincronizacion {formatDateTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null)}
                       </p>
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="dashboard-secondary-button h-11 w-11 p-0"
-                    aria-label="Cambiar tema"
-                  >
-                    {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                  </button>
-
                   {showInviteCta ? (
-                    <div className="w-full rounded-[1.1rem] border border-amber-200/70 bg-amber-50/90 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100 sm:w-auto">
+                    <div className="dashboard-inline-notice-warning w-full rounded-[1.1rem] px-4 py-3 text-sm sm:w-auto">
                       <p className="text-xs leading-5 text-current/85">
                         {t('dashboard.inviteBot.helper')}
                       </p>
@@ -606,7 +593,7 @@ export default function DashboardShell({
                         href={inviteUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="dashboard-secondary-button mt-3 w-full border-amber-300/80 bg-white/80 text-amber-900 hover:border-amber-400 hover:bg-white dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100 dark:hover:border-amber-500/70 dark:hover:bg-amber-950/40 sm:min-w-[14rem] sm:w-auto"
+                        className="dashboard-secondary-button mt-3 w-full border-amber-500/35 bg-amber-500/10 text-amber-100 hover:border-amber-400/45 hover:bg-amber-500/14 sm:min-w-[14rem] sm:w-auto"
                       >
                         {t('dashboard.inviteBot.cta')}
                       </a>
@@ -625,38 +612,38 @@ export default function DashboardShell({
                 </div>
 
                 <div className="grid gap-2 sm:grid-cols-2 xl:w-full xl:max-w-[44rem]">
-                  <div className="rounded-[1.1rem] border border-slate-200/70 bg-white/80 px-4 py-3 text-sm text-slate-700 dark:border-white/10 dark:bg-surface-700/55 dark:text-slate-200">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
+                  <div className="dashboard-header-info-card rounded-[1.1rem] px-4 py-3 text-sm text-slate-200">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                       Salud del bridge
                     </p>
-                    <p className="mt-1.5 font-semibold text-slate-950 dark:text-white">
+                    <p className="mt-1.5 font-semibold text-white">
                       {getHealthLabel(syncStatus)}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
+                    <p className="mt-1 text-xs leading-5 text-slate-400">
                       {syncStatus?.bridgeMessage ?? 'Sin detalles adicionales reportados por el bridge.'}
                     </p>
                   </div>
-                  <div className="rounded-[1.1rem] border border-slate-200/70 bg-white/80 px-4 py-3 text-sm text-slate-700 dark:border-white/10 dark:bg-surface-700/55 dark:text-slate-200">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
+                  <div className="dashboard-header-info-card rounded-[1.1rem] px-4 py-3 text-sm text-slate-200">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
                       Actividad de sincronizacion
                     </p>
-                    <p className="mt-1.5 font-semibold text-slate-950 dark:text-white">
+                    <p className="mt-1.5 font-semibold text-white">
                       Config {formatRelativeTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null)}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
+                    <p className="mt-1 text-xs leading-5 text-slate-400">
                       Inventario {formatRelativeTime(syncStatus?.lastInventoryAt ?? null)}. Cola {pendingMutations} pendientes y {failedMutations} fallidas.
                     </p>
                   </div>
                 </div>
 
                 {syncError ? (
-                  <div className="rounded-[1.1rem] border border-rose-200/70 bg-rose-50/90 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-200">
+                  <div className="dashboard-inline-notice-danger rounded-[1.1rem] px-4 py-3 text-sm font-medium">
                     <p className="font-semibold">La re-sincronizacion no pudo completarse</p>
                     <p className="mt-1.5 text-sm leading-6 text-current/85">{syncError}</p>
                   </div>
                 ) : null}
                 {!syncError && failedMutations > 0 ? (
-                  <div className="flex items-start gap-2 rounded-[1.1rem] border border-amber-200/70 bg-amber-50/90 px-4 py-3 text-sm font-medium text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100">
+                  <div className="dashboard-inline-notice-warning flex items-start gap-2 rounded-[1.1rem] px-4 py-3 text-sm font-medium">
                     <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
                     Hay cambios que requieren revision. Vuelve a Inicio para ver que tarea necesita atencion antes de seguir aplicando cambios.
                   </div>

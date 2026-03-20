@@ -17,8 +17,10 @@ import {
   subscribeToExecution,
   updateExecutionState,
 } from './authCallbackFlow';
+import { useDashboardDarkMode } from './hooks/useDashboardDarkMode';
 
 export default function AuthCallbackPage() {
+  useDashboardDarkMode();
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -92,15 +94,15 @@ export default function AuthCallbackPage() {
           <Logo size="lg" subtitle={config.botName} />
           <div>
             <p className="dashboard-panel-label">{t('dashboardAuth.oauthLabel')}</p>
-            <h1 className="text-3xl font-bold tracking-[-0.04em] text-slate-950 dark:text-white">{t('dashboardAuth.pageHeading', { name: dashboardBrandLabel })}</h1>
-            <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">
+            <h1 className="text-3xl font-bold tracking-[-0.04em] text-white">{t('dashboardAuth.pageHeading', { name: dashboardBrandLabel })}</h1>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
               {t('dashboardAuth.pageDescription')}
             </p>
           </div>
         </div>
 
         {viewState.errorMessage ? (
-          <div className="relative z-[1] mt-8 rounded-[1.75rem] border border-rose-200/70 bg-rose-50/90 p-5 text-rose-800 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-200 sm:p-6">
+          <div className="dashboard-inline-notice-danger relative z-[1] mt-8 rounded-[1.75rem] p-5 sm:p-6">
             <div className="flex items-start gap-3">
               <AlertOctagon className="mt-0.5 h-5 w-5" />
               <div className="w-full">
@@ -125,7 +127,7 @@ export default function AuthCallbackPage() {
             </div>
           </div>
         ) : (
-          <div className="relative z-[1] mt-8 rounded-[1.75rem] border border-slate-200/70 bg-white/80 p-5 dark:border-surface-600 dark:bg-surface-800/70 sm:p-6">
+          <div className="dashboard-header-info-card relative z-[1] mt-8 rounded-[1.75rem] p-5 sm:p-6">
             <div className="flex items-start gap-3">
               {viewState.isCompleted ? (
                 <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-500" />
@@ -133,11 +135,11 @@ export default function AuthCallbackPage() {
                 <Loader2 className="mt-0.5 h-5 w-5 animate-spin text-brand-500" />
               )}
               <div className="w-full">
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
                   {viewState.phase === 'redirecting' ? t('dashboardAuth.successEyebrowRedirecting') : t('dashboardAuth.successEyebrowLoading')}
                 </p>
-                <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{viewState.statusText}</p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                <p className="mt-2 text-lg font-semibold text-white">{viewState.statusText}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
                   {viewState.phase === 'syncing'
                     ? t('dashboardAuth.syncingDescription')
                     : t('dashboardAuth.holdingContextDescription')}
