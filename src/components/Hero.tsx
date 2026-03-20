@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl, getDashboardUrl } from '../config';
 import Logo from './Logo';
+import { useHeavyMedia } from '../hooks/useHeavyMedia';
 
 export default function Hero() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const shouldLoadVideo = useHeavyMedia(Boolean(shouldReduceMotion));
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -28,7 +30,7 @@ export default function Hero() {
     : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.2 } };
 
   useEffect(() => {
-    if (shouldReduceMotion) {
+    if (!shouldLoadVideo || shouldReduceMotion) {
       setVideoReady(false);
       setVideoFailed(false);
       return;
@@ -97,14 +99,13 @@ export default function Hero() {
     >
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <div
-          className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${
-            videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
-          }`}
+          className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
+            }`}
           style={{ backgroundImage: 'url("/hero-poster.jpg")' }}
           aria-hidden="true"
         />
 
-        {!shouldReduceMotion ? (
+        {shouldLoadVideo && !shouldReduceMotion ? (
           <video
             ref={videoRef}
             autoPlay
@@ -122,20 +123,18 @@ export default function Hero() {
               setVideoReady(false);
               setVideoFailed(true);
             }}
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
-              videoReady && !videoFailed ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady && !videoFailed ? 'opacity-100' : 'opacity-0'
+              }`}
           >
             <source src="/videos/ton618-hero.mp4" type="video/mp4" />
           </video>
         ) : null}
 
         <div
-          className={`absolute inset-0 ${
-            shouldReduceMotion
+          className={`absolute inset-0 ${shouldReduceMotion
               ? 'bg-[radial-gradient(circle_at_50%_30%,rgba(8,10,24,0.62),transparent_36%),radial-gradient(circle_at_50%_32%,rgba(99,102,241,0.15),transparent_34%),radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.03),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(34,211,238,0.08),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.8)_0%,rgba(1,2,8,0.92)_58%,rgba(0,0,0,0.985)_100%)]'
               : 'bg-[radial-gradient(circle_at_50%_34%,rgba(7,9,20,0.44),transparent_38%),radial-gradient(circle_at_50%_35%,rgba(99,102,241,0.14),transparent_36%),radial-gradient(circle_at_16%_18%,rgba(255,255,255,0.03),transparent_20%),radial-gradient(circle_at_84%_22%,rgba(34,211,238,0.08),transparent_18%),linear-gradient(180deg,rgba(5,6,15,0.38)_0%,rgba(0,0,0,0.84)_72%,rgba(0,0,0,0.97)_100%)]'
-          }`}
+            }`}
         />
         <div className="absolute inset-x-[12%] top-[12%] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(109,40,217,0.22)_0%,rgba(67,56,202,0.16)_38%,rgba(15,23,42,0.04)_72%,transparent_100%)] blur-3xl" />
         <div className="absolute inset-x-[24%] top-[18%] h-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06)_0%,rgba(99,102,241,0.08)_24%,transparent_68%)] blur-[120px]" />

@@ -1,5 +1,5 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import { Component, type ReactNode, type ErrorInfo } from 'react';
+import { AlertOctagon, RefreshCcw } from 'lucide-react';
 import StateCard from './StateCard';
 
 interface ErrorBoundaryProps {
@@ -25,29 +25,33 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         if (import.meta.env.DEV) {
-            console.error('[dashboard-error-boundary] Modulo fallo al renderizar:', error, errorInfo);
+            console.error('[ErrorBoundary] Capturo un error en el renderizado del modulo:', error, errorInfo);
         }
     }
+
+    handleReset = () => {
+        this.setState({ hasError: false, error: null });
+    };
 
     render() {
         if (this.state.hasError) {
             return (
-                <div className="flex w-full items-center justify-center p-6">
+                <div className="flex h-full min-h-[50vh] w-full items-center justify-center p-6">
                     <div className="w-full max-w-2xl">
                         <StateCard
-                            eyebrow={this.props.fallbackEyebrow ?? 'Error del sistema'}
-                            title={this.props.fallbackTitle ?? 'No se pudo cargar este modulo'}
-                            description={this.state.error?.message ?? 'Ocurrio un error inesperado al mostrar la interfaz.'}
-                            icon={AlertTriangle}
+                            eyebrow={this.props.fallbackEyebrow ?? 'Error de renderizado'}
+                            title={this.props.fallbackTitle ?? 'No se pudo mostrar esta seccion'}
+                            description={this.state.error?.message ?? 'Ocurrio un error inesperado en la interfaz. Puedes reintentar o volver al inicio.'}
+                            icon={AlertOctagon}
                             tone="danger"
                             actions={
                                 <button
                                     type="button"
-                                    onClick={() => this.setState({ hasError: false, error: null })}
+                                    onClick={this.handleReset}
                                     className="dashboard-primary-button"
                                 >
                                     <RefreshCcw className="h-4 w-4" />
-                                    Reintentar modulo
+                                    Reintentar renderizado
                                 </button>
                             }
                         />

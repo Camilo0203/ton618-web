@@ -17,10 +17,10 @@ interface BotStatsRow {
 }
 
 export const defaultBotStats: BotStats = {
-  servers: 52847,
-  users: 12456789,
-  commands: 45678912,
-  uptimePercentage: 99.9,
+  servers: 0,
+  users: 0,
+  commands: 0,
+  uptimePercentage: 0,
 };
 
 export type BotStatsErrorKind = 'none' | 'config' | 'network' | 'query';

@@ -166,14 +166,18 @@ export default function LiveStats() {
         ? t('stats.status.networkFallback')
         : formattedLastUpdated
           ? t('stats.status.fallbackWithTime', { value: formattedLastUpdated })
-          : t('stats.status.fallback')
+          : stats.servers > 0
+            ? t('stats.status.fallback')
+            : ''
     : '';
 
+  const hasData = animated.servers > 0 || animated.users > 0 || animated.commands > 0;
+
   const statCardsData = [
-    { icon: Server, label: t('stats.cards.clusters.label'), value: animated.servers.toLocaleString(locale), sub: t('stats.cards.clusters.sub') },
-    { icon: Users, label: t('stats.cards.souls.label'), value: animated.users.toLocaleString(locale), sub: t('stats.cards.souls.sub') },
-    { icon: Zap, label: t('stats.cards.ops.label'), value: animated.commands.toLocaleString(locale), sub: t('stats.cards.ops.sub') },
-    { icon: Clock, label: t('stats.cards.stability.label'), value: `${animated.uptimePercentage.toFixed(2)}%`, sub: t('stats.cards.stability.sub') },
+    { icon: Server, label: t('stats.cards.clusters.label'), value: hasData ? animated.servers.toLocaleString(locale) : '-', sub: t('stats.cards.clusters.sub') },
+    { icon: Users, label: t('stats.cards.souls.label'), value: hasData ? animated.users.toLocaleString(locale) : '-', sub: t('stats.cards.souls.sub') },
+    { icon: Zap, label: t('stats.cards.ops.label'), value: hasData ? animated.commands.toLocaleString(locale) : '-', sub: t('stats.cards.ops.sub') },
+    { icon: Clock, label: t('stats.cards.stability.label'), value: hasData ? `${animated.uptimePercentage.toFixed(2)}%` : '-', sub: t('stats.cards.stability.sub') },
   ];
 
   return (
@@ -206,9 +210,8 @@ export default function LiveStats() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`cinematic-glass mb-10 rounded-[2rem] border px-5 py-5 md:px-6 ${
-            liveUnavailable ? 'border-amber-400/20 bg-amber-400/[0.03]' : 'border-white/10'
-          }`}
+          className={`cinematic-glass mb-10 rounded-[2rem] border px-5 py-5 md:px-6 ${liveUnavailable ? 'border-amber-400/20 bg-amber-400/[0.03]' : 'border-white/10'
+            }`}
           aria-live="polite"
         >
           <div className="grid gap-4 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">

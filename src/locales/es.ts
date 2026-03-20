@@ -347,6 +347,76 @@ export const es = {
         dashboard: {
             pageTitle: 'Dashboard',
             metaDescription: 'Dashboard profesional para administrar configuraciones, actividad y analíticas de tu bot de Discord.',
+            checklist: {
+                roles: {
+                    missingDashboard: 'Falta elegir el canal principal donde el staff abrirá el panel.',
+                    missingTicketPanel: 'Falta elegir el canal donde se publicará el panel de tickets.',
+                    missingSupportRole: 'Aún no has seleccionado un rol de staff.',
+                    missingAdminRole: 'Falta definir el rol administrador del bot.',
+                    missingLogs: 'Todavía no existe un canal central para registros del bot.',
+                    missingTranscripts: 'Conviene dejar listo un canal para guardar transcripciones.',
+                },
+                tickets: {
+                    missingChannel: 'Falta elegir el canal de tickets.',
+                    missingSla: 'Define un SLA base para saber cuándo un ticket necesita seguimiento.',
+                    missingSupportRole: 'La autoasignación está activa, pero todavía no existe un rol de staff base.',
+                    missingEscalation: 'El escalado de SLA está activo pero no tiene rol ni canal de aviso.',
+                    missingReportChannel: 'El reporte diario está activo pero no tiene canal asignado.',
+                },
+                verification: {
+                    missingChannel: 'La verificación está activa pero no tiene canal asignado.',
+                    missingRole: 'La verificación necesita un rol para miembros verificados.',
+                    missingAnswer: 'La verificación por pregunta necesita una respuesta correcta.',
+                },
+                welcome: {
+                    missingWelcomeChannel: 'La bienvenida está activa pero no tiene canal asignado.',
+                    missingGoodbyeChannel: 'La despedida está activa pero no tiene canal asignado.',
+                    missingAutorole: 'Puedes completar la experiencia asignando un autorrol de entrada.',
+                    missingDmOrRole: 'La bienvenida ya publica mensajes, pero todavía no acompaña al miembro con DM o autorrol.',
+                },
+                suggestions: {
+                    missingChannel: 'Las sugerencias están activas pero falta el canal principal.',
+                    missingLogChannel: 'Conviene definir un canal interno para revisar sugerencias.',
+                    missingOutcomeChannel: 'Aún no definiste dónde se verán las sugerencias aprobadas o rechazadas.',
+                },
+                modlogs: {
+                    missingChannel: 'El registro de moderación está activo pero no tiene canal.',
+                    missingEvents: 'El registro está activado, pero no has marcado eventos para guardar.',
+                },
+                commands: {
+                    missingPrefix: 'Elegiste comandos por prefijo, pero aún no definiste el prefijo.',
+                    missingTimezone: 'Falta elegir una zona horaria base para reportes y automatizaciones.',
+                    invalidRateLimit: 'El rate limit general está activo, pero no tiene un límite válido.',
+                    invalidCommandLimit: 'El límite por comando está activo, pero falta definir cuántas acciones permite.',
+                },
+                system: {
+                    botMissing: 'El bot todavía no está instalado en este servidor.',
+                    bridgeError: 'El bot está conectado, pero la sincronización reporta errores.',
+                    bridgeDegraded: 'La sincronización funciona, pero llega con retraso.',
+                    missingBackup: 'Todavía no existe un backup inicial.',
+                    failedMutations: 'Hay {{count}} cambios que no pudo aplicar el bot.',
+                    pendingMutations: 'Hay {{count}} cambios pendientes por aplicar.',
+                },
+                steps: {
+                    selectServer: { label: 'Confirmar servidor y bot', desc: 'Asegúrate de estar trabajando en el servidor correcto y de que el bot ya tenga acceso.', summaryReady: 'El servidor ya está listo para seguir configurando.', summaryPending: 'El servidor ya fue elegido, pero el bot aún no está dentro.' },
+                    language: { label: 'Definir idioma y comandos', desc: 'Deja lista la base del servidor: idioma, forma de invocar al bot y zona horaria.', summary: 'Todavía falta cerrar la configuración básica.' },
+                    roles: { label: 'Conectar canales y roles clave', desc: 'Asigna staff, admin y los canales que el bot necesita para funcionar sin improvisación.', summary: 'Todavía faltan roles y canales base.' },
+                    memberExp: { label: 'Preparar la llegada de nuevos miembros', desc: 'Activa una experiencia de bienvenida o un control de acceso antes de abrir el servidor.', summaryWelcome: 'La bienvenida ya está funcionando.', summaryVerification: 'La verificación de acceso ya está funcionando.', summaryPending: 'Activa al menos una experiencia de acceso para nuevos miembros.' },
+                    tickets: { label: 'Cerrar el flujo de tickets', desc: 'Define canal, límites y tiempos para que soporte pueda operar sin dudas.', summary: 'Todavía falta dejar operativo el sistema de tickets.' },
+                    moderation: { label: 'Activar trazabilidad del staff', desc: 'Deja claro dónde quedarán registrados los eventos importantes de moderación.', summary: 'Todavía no hay un registro confiable de moderación.' },
+                    backup: { label: 'Guardar un backup inicial', desc: 'Crea una copia base para poder volver atrás si algo sale mal después.', summaryReady: 'Ya existe una copia segura desde {{time}}.', summaryPending: 'Todavía no existe una copia segura inicial.' },
+                    sync: { label: 'Confirmar que el bot responde bien', desc: 'Verifica que el bot siga conectado y que los cambios realmente se estén aplicando.', summary: 'Revisa si el bot está listo para trabajar sin errores.' }
+                },
+                actions: {
+                    continue: 'Seguir con: {{label}}',
+                    rolesChannels: { label: 'Cerrar canales y roles clave', desc: 'Revisa staff, admin y canales base.' },
+                    tickets: { label: 'Dejar listo el soporte', desc: 'Configura el canal y las reglas de soporte.' },
+                    sync: { label: 'Revisar estado del bot', descError: 'El bot necesita revisión antes de seguir aplicando cambios.', descOk: 'Confirma que el bot siga al día antes de continuar.' },
+                    attention: 'Resolver {{section}}',
+                    backup: { label: 'Guardar una copia segura', desc: 'Crea un backup antes de seguir tocando configuraciones sensibles.' },
+                    memberExp: { label: 'Definir llegada de miembros', desc: 'Activa bienvenida o verificación para que el acceso no quede improvisado.' }
+                }
+            },
             inbox: {
                 workflow: {
                     new: 'Nuevo',

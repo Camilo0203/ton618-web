@@ -12,6 +12,7 @@ import {
   persistDashboardAuthIntent,
   runQueryWithTimeout,
   withTimeout,
+  debugAuthLog,
 } from './shared';
 
 export function isInvalidJwtError(error: unknown): boolean {
@@ -80,12 +81,10 @@ export async function signInWithDiscord(requestedGuildId?: string | null): Promi
   const client = getSupabaseClient();
   persistDashboardAuthIntent(requestedGuildId);
 
-  if (import.meta.env.DEV) {
-    console.log('[dashboard-auth] signInWithDiscord:start', {
-      redirectTo: getAuthCallbackUrl(),
-      requestedGuildId: requestedGuildId ?? null,
-    });
-  }
+  debugAuthLog('signInWithDiscord:start', {
+    redirectTo: getAuthCallbackUrl(),
+    requestedGuildId: requestedGuildId ?? null,
+  });
 
   const { error } = await client.auth.signInWithOAuth({
     provider: 'discord',
@@ -125,12 +124,10 @@ export async function exchangeDashboardCodeForSession(code: string): Promise<Ses
     throw new Error(i18n.t('dashboardAuth.errors.missingOauthCode'));
   }
 
-  if (import.meta.env.DEV) {
-    console.log('[dashboard-auth] exchangeDashboardCodeForSession:start', {
-      startedAt: new Date(startedAt).toISOString(),
-      codeLength: code.length,
-    });
-  }
+  debugAuthLog('exchangeDashboardCodeForSession:start', {
+    startedAt: new Date(startedAt).toISOString(),
+    codeLength: code.length,
+  });
 
   try {
     const { data, error } = await withTimeout(
@@ -143,13 +140,11 @@ export async function exchangeDashboardCodeForSession(code: string): Promise<Ses
       throw error;
     }
 
-    if (import.meta.env.DEV) {
-      console.log('[dashboard-auth] exchangeDashboardCodeForSession:success', {
-        durationMs: Date.now() - startedAt,
-        hasSession: Boolean(data.session),
-        userId: data.session?.user?.id ?? null,
-      });
-    }
+    debugAuthLog('exchangeDashboardCodeForSession:success', {
+      durationMs: Date.now() - startedAt,
+      hasSession: Boolean(data.session),
+      userId: data.session?.user?.id ?? null,
+    });
 
     return data.session;
   } catch (error: unknown) {
@@ -158,13 +153,11 @@ export async function exchangeDashboardCodeForSession(code: string): Promise<Ses
       error,
       i18n.t('dashboardAuth.errors.exchangeFailed'),
     );
-    if (import.meta.env.DEV) {
-      console.error('[dashboard-auth] exchangeDashboardCodeForSession:error', {
-        durationMs: Date.now() - startedAt,
-        message: dashboardError.message,
-        error,
-      });
-    }
+    debugAuthLog('exchangeDashboardCodeForSession:error', {
+      durationMs: Date.now() - startedAt,
+      message: dashboardError.message,
+      error,
+    }, 'error');
     throw dashboardError;
   }
 }
@@ -190,12 +183,10 @@ export async function syncDiscordGuilds(providerToken: string): Promise<Dashboar
     throw new Error(i18n.t('dashboardAuth.errors.syncMissingToken'));
   }
 
-  if (import.meta.env.DEV) {
-    console.log('[dashboard-auth] syncDiscordGuilds:start', {
-      startedAt: new Date(startedAt).toISOString(),
-      tokenLength: providerToken.length,
-    });
-  }
+  debugAuthLog('syncDiscordGuilds:start', {
+    startedAt: new Date(startedAt).toISOString(),
+    tokenLength: providerToken.length,
+  });
 
   try {
     const { data, error } = await withTimeout(
@@ -217,13 +208,11 @@ export async function syncDiscordGuilds(providerToken: string): Promise<Dashboar
     }
 
     const parsedResult = dashboardSyncResultSchema.parse(data);
-    if (import.meta.env.DEV) {
-      console.log('[dashboard-auth] syncDiscordGuilds:success', {
-        durationMs: Date.now() - startedAt,
-        manageableCount: parsedResult.manageableCount,
-        installedCount: parsedResult.installedCount,
-      });
-    }
+    debugAuthLog('syncDiscordGuilds:success', {
+      durationMs: Date.now() - startedAt,
+      manageableCount: parsedResult.manageableCount,
+      installedCount: parsedResult.installedCount,
+    });
 
     return parsedResult;
   } catch (error: unknown) {
@@ -232,13 +221,11 @@ export async function syncDiscordGuilds(providerToken: string): Promise<Dashboar
       error,
       i18n.t('dashboardAuth.errors.syncFailed'),
     );
-    if (import.meta.env.DEV) {
-      console.error('[dashboard-auth] syncDiscordGuilds:error', {
-        durationMs: Date.now() - startedAt,
-        message: dashboardError.message,
-        error,
-      });
-    }
+    debugAuthLog('syncDiscordGuilds:error', {
+      durationMs: Date.now() - startedAt,
+      message: dashboardError.message,
+      error,
+    }, 'error');
     throw dashboardError;
   }
 }

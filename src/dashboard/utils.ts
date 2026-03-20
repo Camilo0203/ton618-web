@@ -1,4 +1,5 @@
 import type { User } from '@supabase/supabase-js';
+import i18n from '../locales/i18n';
 import { dashboardSections, dashboardTaskGroups } from './constants';
 import {
   defaultDashboardPreferences,
@@ -93,13 +94,13 @@ function clampRatio(value: number): number {
 function summarizeStatus(status: DashboardTaskStatus): string {
   switch (status) {
     case 'active':
-      return 'Activo';
+      return i18n.t('dashboard.shell.sectionStatus.active');
     case 'basic':
-      return 'Basico';
+      return i18n.t('dashboard.shell.sectionStatus.basic');
     case 'needs_attention':
-      return 'Requiere revision';
+      return i18n.t('dashboard.shell.sectionStatus.needsAttention');
     default:
-      return 'No configurado';
+      return i18n.t('dashboard.shell.sectionStatus.notConfigured');
   }
 }
 
@@ -182,12 +183,12 @@ export function getDashboardSectionStates(
     Boolean(channels.adminRoleId),
   ];
   const rolesChannelsMessages = [
-    !channels.dashboardChannelId ? 'Falta elegir el canal principal donde el staff abrira el panel.' : null,
-    !channels.ticketPanelChannelId ? 'Falta elegir el canal donde se publicara el panel de tickets.' : null,
-    !channels.supportRoleId ? 'Aun no has seleccionado un rol de staff.' : null,
-    !channels.adminRoleId ? 'Falta definir el rol administrador del bot.' : null,
-    !channels.logsChannelId ? 'Todavia no existe un canal central para registros del bot.' : null,
-    !channels.transcriptChannelId ? 'Conviene dejar listo un canal para guardar transcripciones.' : null,
+    !channels.dashboardChannelId ? i18n.t('dashboard.checklist.roles.missingDashboard') : null,
+    !channels.ticketPanelChannelId ? i18n.t('dashboard.checklist.roles.missingTicketPanel') : null,
+    !channels.supportRoleId ? i18n.t('dashboard.checklist.roles.missingSupportRole') : null,
+    !channels.adminRoleId ? i18n.t('dashboard.checklist.roles.missingAdminRole') : null,
+    !channels.logsChannelId ? i18n.t('dashboard.checklist.roles.missingLogs') : null,
+    !channels.transcriptChannelId ? i18n.t('dashboard.checklist.roles.missingTranscripts') : null,
   ].filter((message): message is string => Boolean(message));
 
   const ticketChecks = [
@@ -199,16 +200,16 @@ export function getDashboardSectionStates(
     !tickets.slaEscalationEnabled || Boolean(tickets.slaEscalationRoleId || tickets.slaEscalationChannelId),
   ];
   const ticketMessages = [
-    !channels.ticketPanelChannelId ? 'Falta elegir el canal de tickets.' : null,
-    tickets.slaMinutes <= 0 ? 'Define un SLA base para saber cuando un ticket necesita seguimiento.' : null,
+    !channels.ticketPanelChannelId ? i18n.t('dashboard.checklist.tickets.missingChannel') : null,
+    tickets.slaMinutes <= 0 ? i18n.t('dashboard.checklist.tickets.missingSla') : null,
     tickets.autoAssignEnabled && !channels.supportRoleId
-      ? 'La autoasignacion esta activa, pero todavia no existe un rol de staff base.'
+      ? i18n.t('dashboard.checklist.tickets.missingSupportRole')
       : null,
     tickets.slaEscalationEnabled && !tickets.slaEscalationRoleId && !tickets.slaEscalationChannelId
-      ? 'El escalado de SLA esta activo pero no tiene rol ni canal de aviso.'
+      ? i18n.t('dashboard.checklist.tickets.missingEscalation')
       : null,
     tickets.dailySlaReportEnabled && !tickets.dailySlaReportChannelId
-      ? 'El reporte diario esta activo pero no tiene canal asignado.'
+      ? i18n.t('dashboard.checklist.tickets.missingReportChannel')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -219,10 +220,10 @@ export function getDashboardSectionStates(
     !verification.enabled || (verification.mode !== 'question' || Boolean(verification.questionAnswer.trim())),
   ];
   const verificationMessages = [
-    verification.enabled && !verification.channelId ? 'La verificacion esta activa pero no tiene canal asignado.' : null,
-    verification.enabled && !verification.verifiedRoleId ? 'La verificacion necesita un rol para miembros verificados.' : null,
+    verification.enabled && !verification.channelId ? i18n.t('dashboard.checklist.verification.missingChannel') : null,
+    verification.enabled && !verification.verifiedRoleId ? i18n.t('dashboard.checklist.verification.missingRole') : null,
     verification.enabled && verification.mode === 'question' && !verification.questionAnswer.trim()
-      ? 'La verificacion por pregunta necesita una respuesta correcta.'
+      ? i18n.t('dashboard.checklist.verification.missingAnswer')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -232,11 +233,11 @@ export function getDashboardSectionStates(
     !welcome.goodbyeEnabled || Boolean(welcome.goodbyeChannelId),
   ];
   const welcomeMessages = [
-    welcome.welcomeEnabled && !welcome.welcomeChannelId ? 'La bienvenida esta activa pero no tiene canal asignado.' : null,
-    welcome.goodbyeEnabled && !welcome.goodbyeChannelId ? 'La despedida esta activa pero no tiene canal asignado.' : null,
-    welcome.welcomeEnabled && !welcome.welcomeAutoroleId ? 'Puedes completar la experiencia asignando un autorrol de entrada.' : null,
+    welcome.welcomeEnabled && !welcome.welcomeChannelId ? i18n.t('dashboard.checklist.welcome.missingWelcomeChannel') : null,
+    welcome.goodbyeEnabled && !welcome.goodbyeChannelId ? i18n.t('dashboard.checklist.welcome.missingGoodbyeChannel') : null,
+    welcome.welcomeEnabled && !welcome.welcomeAutoroleId ? i18n.t('dashboard.checklist.welcome.missingAutorole') : null,
     welcome.welcomeEnabled && !welcome.welcomeDm && !welcome.welcomeAutoroleId
-      ? 'La bienvenida ya publica mensajes, pero todavia no acompana al miembro con DM o autorrol.'
+      ? i18n.t('dashboard.checklist.welcome.missingDmOrRole')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -246,10 +247,10 @@ export function getDashboardSectionStates(
     !suggestions.enabled || Boolean(suggestions.approvedChannelId || suggestions.rejectedChannelId),
   ];
   const suggestionMessages = [
-    suggestions.enabled && !suggestions.channelId ? 'Las sugerencias estan activas pero falta el canal principal.' : null,
-    suggestions.enabled && !suggestions.logChannelId ? 'Conviene definir un canal interno para revisar sugerencias.' : null,
+    suggestions.enabled && !suggestions.channelId ? i18n.t('dashboard.checklist.suggestions.missingChannel') : null,
+    suggestions.enabled && !suggestions.logChannelId ? i18n.t('dashboard.checklist.suggestions.missingLogChannel') : null,
     suggestions.enabled && !suggestions.approvedChannelId && !suggestions.rejectedChannelId
-      ? 'Aun no definiste donde se veran las sugerencias aprobadas o rechazadas.'
+      ? i18n.t('dashboard.checklist.suggestions.missingOutcomeChannel')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -266,7 +267,7 @@ export function getDashboardSectionStates(
     ].some(Boolean),
   ];
   const modlogMessages = [
-    modlogs.enabled && !modlogs.channelId ? 'El registro de moderacion esta activo pero no tiene canal.' : null,
+    modlogs.enabled && !modlogs.channelId ? i18n.t('dashboard.checklist.modlogs.missingChannel') : null,
     modlogs.enabled && ![
       modlogs.logBans,
       modlogs.logUnbans,
@@ -280,7 +281,7 @@ export function getDashboardSectionStates(
       modlogs.logRoleRemove,
       modlogs.logNickname,
     ].some(Boolean)
-      ? 'El registro esta activado, pero no has marcado eventos para guardar.'
+      ? i18n.t('dashboard.checklist.modlogs.missingEvents')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -292,14 +293,14 @@ export function getDashboardSectionStates(
   ];
   const commandMessages = [
     config.generalSettings.commandMode === 'prefix' && !config.generalSettings.prefix.trim()
-      ? 'Elegiste comandos por prefijo, pero aun no definiste el prefijo.'
+      ? i18n.t('dashboard.checklist.commands.missingPrefix')
       : null,
-    !config.generalSettings.timezone ? 'Falta elegir una zona horaria base para reportes y automatizaciones.' : null,
+    !config.generalSettings.timezone ? i18n.t('dashboard.checklist.commands.missingTimezone') : null,
     commands.rateLimitEnabled && commands.rateLimitMaxActions <= 0
-      ? 'El rate limit general esta activo, pero no tiene un limite valido.'
+      ? i18n.t('dashboard.checklist.commands.invalidRateLimit')
       : null,
     commands.commandRateLimitEnabled && commands.commandRateLimitMaxActions <= 0
-      ? 'El limite por comando esta activo, pero falta definir cuantas acciones permite.'
+      ? i18n.t('dashboard.checklist.commands.invalidCommandLimit')
       : null,
   ].filter((message): message is string => Boolean(message));
 
@@ -312,12 +313,12 @@ export function getDashboardSectionStates(
     failedMutations === 0,
   ];
   const systemMessages = [
-    !guild.botInstalled ? 'El bot todavia no esta instalado en este servidor.' : null,
-    syncStatus?.bridgeStatus === 'error' ? 'El bot esta conectado, pero la sincronizacion reporta errores.' : null,
-    syncStatus?.bridgeStatus === 'degraded' ? 'La sincronizacion funciona, pero llega con retraso.' : null,
-    backups.length === 0 ? 'Todavia no existe un backup inicial.' : null,
-    failedMutations > 0 ? `Hay ${failedMutations} cambios que no pudo aplicar el bot.` : null,
-    pendingMutations > 0 ? `Hay ${pendingMutations} cambios pendientes por aplicar.` : null,
+    !guild.botInstalled ? i18n.t('dashboard.checklist.system.botMissing') : null,
+    syncStatus?.bridgeStatus === 'error' ? i18n.t('dashboard.checklist.system.bridgeError') : null,
+    syncStatus?.bridgeStatus === 'degraded' ? i18n.t('dashboard.checklist.system.bridgeDegraded') : null,
+    backups.length === 0 ? i18n.t('dashboard.checklist.system.missingBackup') : null,
+    failedMutations > 0 ? i18n.t('dashboard.checklist.system.failedMutations', { count: failedMutations }) : null,
+    pendingMutations > 0 ? i18n.t('dashboard.checklist.system.pendingMutations', { count: pendingMutations }) : null,
   ].filter((message): message is string => Boolean(message));
 
   return [
@@ -326,9 +327,9 @@ export function getDashboardSectionStates(
       Boolean(config.generalSettings.timezone),
       config.generalSettings.commandMode === 'mention' || Boolean(config.generalSettings.prefix.trim()),
     ]), [
-      !config.generalSettings.timezone ? 'Falta elegir la zona horaria principal del servidor.' : null,
+      !config.generalSettings.timezone ? i18n.t('dashboard.checklist.commands.missingTimezone') : null,
       config.generalSettings.commandMode === 'prefix' && !config.generalSettings.prefix.trim()
-        ? 'Elegiste comandos por prefijo, pero aun no definiste el prefijo.'
+        ? i18n.t('dashboard.checklist.commands.missingPrefix')
         : null,
     ].filter((message): message is string => Boolean(message))),
     buildSectionState('server_roles', ratioFromChecks(rolesChannelsChecks), rolesChannelsMessages),
@@ -374,35 +375,35 @@ export function getDashboardChecklist(
   return [
     {
       id: 'select-server',
-      label: 'Confirmar servidor y bot',
-      description: 'Asegurate de estar trabajando en el servidor correcto y de que el bot ya tenga acceso.',
+      label: i18n.t('dashboard.checklist.steps.selectServer.label'),
+      description: i18n.t('dashboard.checklist.steps.selectServer.desc'),
       sectionId: 'overview',
       complete: Boolean(guild.guildId && guild.botInstalled),
       status: guild.botInstalled ? 'active' : (guild.guildId ? 'basic' : 'not_configured'),
-      summary: guild.botInstalled ? 'El servidor ya esta listo para seguir configurando.' : 'El servidor ya fue elegido, pero el bot aun no esta dentro.',
+      summary: guild.botInstalled ? i18n.t('dashboard.checklist.steps.selectServer.summaryReady') : i18n.t('dashboard.checklist.steps.selectServer.summaryPending'),
     },
     {
       id: 'language-and-commands',
-      label: 'Definir idioma y comandos',
-      description: 'Deja lista la base del servidor: idioma, forma de invocar al bot y zona horaria.',
+      label: i18n.t('dashboard.checklist.steps.language.label'),
+      description: i18n.t('dashboard.checklist.steps.language.desc'),
       sectionId: 'general',
       complete: Boolean(general && general.progress >= 1),
       status: general?.status ?? 'not_configured',
-      summary: general?.summary ?? 'Todavia falta cerrar la configuracion basica.',
+      summary: general?.summary ?? i18n.t('dashboard.checklist.steps.language.summary'),
     },
     {
       id: 'roles-and-channels',
-      label: 'Conectar canales y roles clave',
-      description: 'Asigna staff, admin y los canales que el bot necesita para funcionar sin improvisacion.',
+      label: i18n.t('dashboard.checklist.steps.roles.label'),
+      description: i18n.t('dashboard.checklist.steps.roles.desc'),
       sectionId: 'server_roles',
       complete: Boolean(roles && roles.progress >= 0.8 && roles.messages.length === 0),
       status: roles?.status ?? 'not_configured',
-      summary: roles?.summary ?? 'Todavia faltan roles y canales base.',
+      summary: roles?.summary ?? i18n.t('dashboard.checklist.steps.roles.summary'),
     },
     {
       id: 'member-experience',
-      label: 'Preparar la llegada de nuevos miembros',
-      description: 'Activa una experiencia de bienvenida o un control de acceso antes de abrir el servidor.',
+      label: i18n.t('dashboard.checklist.steps.memberExp.label'),
+      description: i18n.t('dashboard.checklist.steps.memberExp.desc'),
       sectionId: memberExperienceState?.sectionId ?? 'verification',
       complete: welcome?.status === 'active' || verification?.status === 'active',
       status: welcome?.status === 'active' || verification?.status === 'active'
@@ -415,48 +416,48 @@ export function getDashboardChecklist(
       summary: memberExperienceState?.status === 'needs_attention'
         ? memberExperienceState.summary
         : welcome?.status === 'active'
-        ? 'La bienvenida ya esta funcionando.'
-        : verification?.status === 'active'
-          ? 'La verificacion de acceso ya esta funcionando.'
-          : memberExperienceState && memberExperienceState.status !== 'not_configured'
-            ? memberExperienceState.summary
-            : 'Activa al menos una experiencia de acceso para nuevos miembros.',
+          ? i18n.t('dashboard.checklist.steps.memberExp.summaryWelcome')
+          : verification?.status === 'active'
+            ? i18n.t('dashboard.checklist.steps.memberExp.summaryVerification')
+            : memberExperienceState && memberExperienceState.status !== 'not_configured'
+              ? memberExperienceState.summary
+              : i18n.t('dashboard.checklist.steps.memberExp.summaryPending'),
     },
     {
       id: 'tickets',
-      label: 'Cerrar el flujo de tickets',
-      description: 'Define canal, limites y tiempos para que soporte pueda operar sin dudas.',
+      label: i18n.t('dashboard.checklist.steps.tickets.label'),
+      description: i18n.t('dashboard.checklist.steps.tickets.desc'),
       sectionId: 'tickets',
       complete: Boolean(tickets && tickets.progress >= 0.8 && tickets.messages.length === 0),
       status: tickets?.status ?? 'not_configured',
-      summary: tickets?.summary ?? 'Todavia falta dejar operativo el sistema de tickets.',
+      summary: tickets?.summary ?? i18n.t('dashboard.checklist.steps.tickets.summary'),
     },
     {
       id: 'moderation',
-      label: 'Activar trazabilidad del staff',
-      description: 'Deja claro donde quedaran registrados los eventos importantes de moderacion.',
+      label: i18n.t('dashboard.checklist.steps.moderation.label'),
+      description: i18n.t('dashboard.checklist.steps.moderation.desc'),
       sectionId: 'modlogs',
       complete: Boolean(modlogs?.status === 'active'),
       status: modlogs?.status ?? 'not_configured',
-      summary: modlogs?.summary ?? 'Todavia no hay un registro confiable de moderacion.',
+      summary: modlogs?.summary ?? i18n.t('dashboard.checklist.steps.moderation.summary'),
     },
     {
       id: 'backup',
-      label: 'Guardar un backup inicial',
-      description: 'Crea una copia base para poder volver atras si algo sale mal despues.',
+      label: i18n.t('dashboard.checklist.steps.backup.label'),
+      description: i18n.t('dashboard.checklist.steps.backup.desc'),
       sectionId: 'system',
       complete: backups.length > 0,
       status: backups.length > 0 ? 'active' : (system?.status === 'needs_attention' ? 'needs_attention' : 'not_configured'),
-      summary: backups.length > 0 ? `Ya existe una copia segura desde ${formatRelativeTime(backups[0]?.createdAt ?? null)}.` : 'Todavia no existe una copia segura inicial.',
+      summary: backups.length > 0 ? i18n.t('dashboard.checklist.steps.backup.summaryReady', { time: formatRelativeTime(backups[0]?.createdAt ?? null) }) : i18n.t('dashboard.checklist.steps.backup.summaryPending'),
     },
     {
       id: 'sync',
-      label: 'Confirmar que el bot responde bien',
-      description: 'Verifica que el bot siga conectado y que los cambios realmente se esten aplicando.',
+      label: i18n.t('dashboard.checklist.steps.sync.label'),
+      description: i18n.t('dashboard.checklist.steps.sync.desc'),
       sectionId: 'system',
       complete: syncStatus?.bridgeStatus === 'healthy',
       status: system?.status ?? 'not_configured',
-      summary: system?.summary ?? 'Revisa si el bot esta listo para trabajar sin errores.',
+      summary: system?.summary ?? i18n.t('dashboard.checklist.steps.sync.summary'),
     },
   ];
 }
@@ -474,7 +475,7 @@ export function getDashboardQuickActions(
   if (nextChecklistStep) {
     actions.push({
       id: `checklist-${nextChecklistStep.id}`,
-      label: `Seguir con: ${nextChecklistStep.label}`,
+      label: i18n.t('dashboard.checklist.actions.continue', { label: nextChecklistStep.label }),
       description: nextChecklistStep.summary,
       sectionId: nextChecklistStep.sectionId,
       priority: 110,
@@ -484,8 +485,8 @@ export function getDashboardQuickActions(
   if (findState('server_roles')?.messages.length) {
     actions.push({
       id: 'roles-channels',
-      label: 'Cerrar canales y roles clave',
-      description: findState('server_roles')?.messages[0] ?? 'Revisa staff, admin y canales base.',
+      label: i18n.t('dashboard.checklist.actions.rolesChannels.label'),
+      description: findState('server_roles')?.messages[0] ?? i18n.t('dashboard.checklist.actions.rolesChannels.desc'),
       sectionId: 'server_roles',
       priority: 100,
     });
@@ -494,8 +495,8 @@ export function getDashboardQuickActions(
   if (findState('tickets')?.status !== 'active') {
     actions.push({
       id: 'activate-tickets',
-      label: 'Dejar listo el soporte',
-      description: findState('tickets')?.summary ?? 'Configura el canal y las reglas de soporte.',
+      label: i18n.t('dashboard.checklist.actions.tickets.label'),
+      description: findState('tickets')?.summary ?? i18n.t('dashboard.checklist.actions.tickets.desc'),
       sectionId: 'tickets',
       priority: 95,
     });
@@ -504,10 +505,10 @@ export function getDashboardQuickActions(
   if (syncStatus?.bridgeStatus !== 'healthy') {
     actions.push({
       id: 'review-sync',
-      label: 'Revisar estado del bot',
-      description: getHealthLabel(syncStatus) === 'Con errores'
-        ? 'El bot necesita revision antes de seguir aplicando cambios.'
-        : 'Confirma que el bot siga al dia antes de continuar.',
+      label: i18n.t('dashboard.checklist.actions.sync.label'),
+      description: syncStatus?.bridgeStatus === 'error'
+        ? i18n.t('dashboard.checklist.actions.sync.descError')
+        : i18n.t('dashboard.checklist.actions.sync.descOk'),
       sectionId: 'system',
       priority: 98,
     });
@@ -520,7 +521,7 @@ export function getDashboardQuickActions(
   for (const section of attentionStates.slice(0, 2)) {
     actions.push({
       id: `attention-${section.sectionId}`,
-      label: `Resolver ${section.label.toLowerCase()}`,
+      label: i18n.t('dashboard.checklist.actions.attention', { section: section.label.toLowerCase() }),
       description: section.messages[0] ?? section.summary,
       sectionId: section.sectionId,
       priority: 101 - Math.round(section.progress * 10),
@@ -530,8 +531,8 @@ export function getDashboardQuickActions(
   if (!checklist.find((step) => step.id === 'backup')?.complete) {
     actions.push({
       id: 'create-backup',
-      label: 'Guardar una copia segura',
-      description: 'Crea un backup antes de seguir tocando configuraciones sensibles.',
+      label: i18n.t('dashboard.checklist.actions.backup.label'),
+      description: i18n.t('dashboard.checklist.actions.backup.desc'),
       sectionId: 'system',
       priority: 92,
     });
@@ -540,8 +541,8 @@ export function getDashboardQuickActions(
   if (findState('verification')?.status === 'not_configured' && findState('welcome')?.status === 'not_configured') {
     actions.push({
       id: 'member-experience',
-      label: 'Definir llegada de miembros',
-      description: 'Activa bienvenida o verificacion para que el acceso no quede improvisado.',
+      label: i18n.t('dashboard.checklist.actions.memberExp.label'),
+      description: i18n.t('dashboard.checklist.actions.memberExp.desc'),
       sectionId: 'verification',
       priority: 88,
     });
@@ -736,15 +737,15 @@ export function normalizeCommandRateLimitOverrides(value: unknown): Record<strin
     const override =
       rawConfig && typeof rawConfig === 'object' && !Array.isArray(rawConfig)
         ? {
-            maxActions: clampNumber((rawConfig as Record<string, unknown>).max_actions ?? (rawConfig as Record<string, unknown>).maxActions, 1, 50, 4),
-            windowSeconds: clampNumber((rawConfig as Record<string, unknown>).window_seconds ?? (rawConfig as Record<string, unknown>).windowSeconds, 1, 300, 20),
-            enabled: (rawConfig as Record<string, unknown>).enabled !== false,
-          }
+          maxActions: clampNumber((rawConfig as Record<string, unknown>).max_actions ?? (rawConfig as Record<string, unknown>).maxActions, 1, 50, 4),
+          windowSeconds: clampNumber((rawConfig as Record<string, unknown>).window_seconds ?? (rawConfig as Record<string, unknown>).windowSeconds, 1, 300, 20),
+          enabled: (rawConfig as Record<string, unknown>).enabled !== false,
+        }
         : {
-            maxActions: clampNumber(rawConfig, 1, 50, 4),
-            windowSeconds: 20,
-            enabled: true,
-          };
+          maxActions: clampNumber(rawConfig, 1, 50, 4),
+          windowSeconds: 20,
+          enabled: true,
+        };
 
     result[name] = override;
   }
@@ -782,34 +783,34 @@ export function normalizeGuildConfig(
     commandSettings:
       row.command_settings && typeof row.command_settings === 'object' && !Array.isArray(row.command_settings)
         ? {
-            ...(row.command_settings as Record<string, unknown>),
-            commandRateLimitOverrides: normalizeCommandRateLimitOverrides(
-              (row.command_settings as Record<string, unknown>).commandRateLimitOverrides ??
-                (row.command_settings as Record<string, unknown>).command_rate_limit_overrides,
-            ),
-          }
+          ...(row.command_settings as Record<string, unknown>),
+          commandRateLimitOverrides: normalizeCommandRateLimitOverrides(
+            (row.command_settings as Record<string, unknown>).commandRateLimitOverrides ??
+            (row.command_settings as Record<string, unknown>).command_rate_limit_overrides,
+          ),
+        }
         : defaultGuildConfig.commandSettings,
     systemSettings:
       row.system_settings && typeof row.system_settings === 'object' && !Array.isArray(row.system_settings)
         ? {
-            maintenanceMode:
-              (row.system_settings as Record<string, unknown>).maintenanceMode ??
-                (row.system_settings as Record<string, unknown>).maintenance_mode ??
-                defaultSystemSettings.maintenanceMode,
-            maintenanceReason:
-              (row.system_settings as Record<string, unknown>).maintenanceReason ??
-                (row.system_settings as Record<string, unknown>).maintenance_reason ??
-                defaultSystemSettings.maintenanceReason,
-            legacyProtectionSettings:
-              (row.system_settings as Record<string, unknown>).legacyProtectionSettings ??
-                (row.system_settings as Record<string, unknown>).legacy_protection_settings ??
-                row.moderation_settings ??
-                defaultLegacyProtectionSettings,
-          }
+          maintenanceMode:
+            (row.system_settings as Record<string, unknown>).maintenanceMode ??
+            (row.system_settings as Record<string, unknown>).maintenance_mode ??
+            defaultSystemSettings.maintenanceMode,
+          maintenanceReason:
+            (row.system_settings as Record<string, unknown>).maintenanceReason ??
+            (row.system_settings as Record<string, unknown>).maintenance_reason ??
+            defaultSystemSettings.maintenanceReason,
+          legacyProtectionSettings:
+            (row.system_settings as Record<string, unknown>).legacyProtectionSettings ??
+            (row.system_settings as Record<string, unknown>).legacy_protection_settings ??
+            row.moderation_settings ??
+            defaultLegacyProtectionSettings,
+        }
         : {
-            ...defaultSystemSettings,
-            legacyProtectionSettings: row.moderation_settings ?? defaultLegacyProtectionSettings,
-          },
+          ...defaultSystemSettings,
+          legacyProtectionSettings: row.moderation_settings ?? defaultLegacyProtectionSettings,
+        },
     dashboardPreferences:
       normalizeDashboardPreferencesInput(row.dashboard_preferences) ?? defaultDashboardPreferences,
     updatedBy: row.updated_by ?? null,

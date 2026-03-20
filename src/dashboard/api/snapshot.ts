@@ -472,7 +472,18 @@ function buildPartialFailure(id: DashboardPartialFailureId, error: unknown): Das
 export async function fetchGuildDashboardSnapshot(guildId: string): Promise<GuildDashboardSnapshot> {
   const resolvedGuildId = ensureGuildId(guildId, 'cargar el snapshot del dashboard');
 
-  const results = await Promise.allSettled([
+  const [
+    configResult,
+    inventoryResult,
+    mutationsResult,
+    syncStatusResult,
+    backupsResult,
+    ticketInboxResult,
+    activityResult,
+    metricsResult,
+    ticketEventsResult,
+    ticketMacrosResult,
+  ] = await Promise.allSettled([
     fetchGuildConfig(resolvedGuildId),
     fetchGuildInventory(resolvedGuildId),
     fetchGuildMutations(resolvedGuildId),
@@ -515,17 +526,17 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     return fallbackValue;
   }
 
-  const config = getCritical(results[0]);
-  const inventory = getCritical(results[1]);
-  const mutations = getCritical(results[2]);
-  const syncStatus = getCritical(results[3]);
+  const config = getCritical(configResult);
+  const inventory = getCritical(inventoryResult);
+  const mutations = getCritical(mutationsResult);
+  const syncStatus = getCritical(syncStatusResult);
 
-  const backups = getOptional(results[4], 'backups', [] as GuildBackupManifest[]);
-  const ticketInbox = getOptional(results[5], 'ticket_inbox', [] as TicketInboxItem[]);
-  const activity = getOptional(results[6], 'activity', [] as GuildEvent[]);
-  const metrics = getOptional(results[7], 'metrics', [] as GuildMetricsDaily[]);
-  const ticketEvents = getOptional(results[8], 'ticket_events', [] as TicketConversationEvent[]);
-  const ticketMacros = getOptional(results[9], 'ticket_macros', [] as TicketMacro[]);
+  const backups = getOptional(backupsResult, 'backups', [] as GuildBackupManifest[]);
+  const ticketInbox = getOptional(ticketInboxResult, 'ticket_inbox', [] as TicketInboxItem[]);
+  const activity = getOptional(activityResult, 'activity', [] as GuildEvent[]);
+  const metrics = getOptional(metricsResult, 'metrics', [] as GuildMetricsDaily[]);
+  const ticketEvents = getOptional(ticketEventsResult, 'ticket_events', [] as TicketConversationEvent[]);
+  const ticketMacros = getOptional(ticketMacrosResult, 'ticket_macros', [] as TicketMacro[]);
 
   return {
     config,

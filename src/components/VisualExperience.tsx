@@ -1,10 +1,12 @@
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHeavyMedia } from '../hooks/useHeavyMedia';
 
 export default function VisualExperience() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const shouldLoadVideo = useHeavyMedia(Boolean(shouldReduceMotion));
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,9 +37,13 @@ export default function VisualExperience() {
             WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 14%, black 50%, transparent 90%)',
           }}
         >
-          <video autoPlay muted loop playsInline preload="none" poster="/cosmic-poster.jpg" aria-hidden="true" className="h-full w-full scale-110 object-cover">
-            <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
-          </video>
+          {shouldLoadVideo && !shouldReduceMotion ? (
+            <video autoPlay muted loop playsInline preload="none" poster="/cosmic-poster.jpg" aria-hidden="true" className="h-full w-full scale-110 object-cover">
+              <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <img src="/cosmic-poster.jpg" alt="" aria-hidden="true" className="h-full w-full scale-110 object-cover" />
+          )}
         </div>
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(2,4,10,0.12)_0%,rgba(2,4,10,0.18)_40%,rgba(0,0,0,0.72)_100%)]" />

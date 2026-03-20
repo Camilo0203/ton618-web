@@ -4,10 +4,12 @@ import { ChevronRight, Zap, BookOpen, LifeBuoy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
 import Logo from './Logo';
+import { useHeavyMedia } from '../hooks/useHeavyMedia';
 
 export default function FinalCTA() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const shouldLoadVideo = useHeavyMedia(Boolean(shouldReduceMotion));
   const inviteUrl = getDiscordInviteUrl();
   const dashboardUrl = getDashboardUrl();
   const canInvite = Boolean(inviteUrl);
@@ -25,20 +27,22 @@ export default function FinalCTA() {
             WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 16%, black 52%, transparent 88%)',
           }}
         >
-          <motion.video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: shouldReduceMotion ? 0.01 : 0.45, ease: 'easeOut' }}
-            aria-hidden="true"
-            className="h-full w-full scale-125 object-contain"
-          >
-            <source src="/videos/lensing-arc.mp4" type="video/mp4" />
-          </motion.video>
+          {shouldLoadVideo && !shouldReduceMotion ? (
+            <motion.video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              aria-hidden="true"
+              className="h-full w-full scale-125 object-contain"
+            >
+              <source src="/videos/lensing-arc.mp4" type="video/mp4" />
+            </motion.video>
+          ) : null}
         </div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(3,4,10,0.08)_0%,rgba(3,4,10,0.2)_44%,rgba(0,0,0,0.74)_100%)]" />
       </div>

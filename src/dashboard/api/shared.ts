@@ -355,3 +355,14 @@ export function ensureGuildId(guildId: string, context: string): string {
 
   return normalizedGuildId;
 }
+
+export function debugAuthLog(event: string, payload?: Record<string, unknown>, level: 'info' | 'error' = 'info'): void {
+  if (!import.meta.env.DEV) {
+    return;
+  }
+  if (level === 'error') {
+    console.error(`[dashboard-auth] ${event}`, payload);
+  } else {
+    console.log(`[dashboard-auth] ${event}`, payload);
+  }
+}

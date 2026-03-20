@@ -61,12 +61,20 @@ Edge Function requerida:
 
 - `supabase/functions/sync-discord-guilds`
 
-Requisitos operativos:
+## Configuracion de OAuth (Discord + Supabase)
 
-1. Activar Discord como provider en Supabase Auth.
-2. Configurar redirects terminando en `/auth/callback`.
-3. Desplegar `sync-discord-guilds` con sus secretos.
-4. Mantener al bot publicando `bot_stats`, `bot_guilds`, `guild_metrics_daily` y tablas operativas del dashboard.
+El login del dashboard esta delegado a Supabase, el cual se conecta con Discord. Para que el callback hacia `/auth/callback` funcione correctamente:
+
+1. **En Discord Developer Portal:** 
+   - Ve a tu aplicacion > *OAuth2*.
+   - Añade el *Callback URL* que te proporciona Supabase (ej: `https://<tu-proyecto>.supabase.co/auth/v1/callback`).
+2. **En Supabase:** 
+   - Ve a *Authentication* > *Providers* y activa **Discord**. Ingresa tu `Client ID` y `Client Secret`.
+   - Ve a *Authentication* > *URL Configuration* y añade tu URL local (`http://localhost:5173/**`) o tu URL de produccion a las **Redirect URLs**.
+3. **Edge Functions:** 
+   - Despliega la funcion `sync-discord-guilds` configurando previamente el `DISCORD_BOT_TOKEN` en los secretos de Supabase.
+
+Finalmente, manten al bot publicando latidos constantes hacia `bot_stats`, `bot_guilds`, `guild_metrics_daily` y las tablas operativas del dashboard para que el panel luzca actualizado.
 
 ## Release
 
