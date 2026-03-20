@@ -297,12 +297,6 @@ export function clearDashboardAuthIntent() {
   storage?.removeItem(DASHBOARD_AUTH_INTENT_STORAGE_KEY);
 }
 
-export function consumeDashboardAuthIntent(): { requestedGuildId: string | null } {
-  const intent = peekDashboardAuthIntent();
-  clearDashboardAuthIntent();
-  return intent;
-}
-
 export function resolveDashboardRedirectPath(preferredGuildId?: string | null): string {
   if (!preferredGuildId) {
     return '/dashboard';

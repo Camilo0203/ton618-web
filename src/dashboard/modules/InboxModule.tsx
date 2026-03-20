@@ -19,7 +19,9 @@ import {
 import PanelCard from '../components/PanelCard';
 import DashboardDegradationNotice from '../components/DashboardDegradationNotice';
 import SectionMutationBanner from '../components/SectionMutationBanner';
+import { useTranslation } from 'react-i18next';
 import StateCard from '../components/StateCard';
+import ModuleEmptyState from '../components/ModuleEmptyState';
 import { fadeInVariants, panelSwapVariants, staggerContainerVariants } from '../motion';
 import type {
   DashboardGuild,
@@ -67,46 +69,58 @@ interface ActionFeedback {
   ticketId: string;
 }
 
-const workflowOptions: Array<{ value: TicketWorkflowStatus; label: string }> = [
-  { value: 'new', label: 'Nuevo' },
-  { value: 'triage', label: 'Triage' },
-  { value: 'waiting_staff', label: 'Esperando staff' },
-  { value: 'waiting_user', label: 'Esperando usuario' },
-  { value: 'escalated', label: 'Escalado' },
-  { value: 'resolved', label: 'Resuelto' },
-  { value: 'closed', label: 'Cerrado' },
-];
+type T = ReturnType<typeof useTranslation>['t'];
 
-const openStateOptions: Array<{ value: OpenStateFilter; label: string }> = [
-  { value: 'all', label: 'Todos' },
-  { value: 'open', label: 'Abiertos' },
-  { value: 'closed', label: 'Cerrados' },
-];
+function getWorkflowOptions(t: T): Array<{ value: TicketWorkflowStatus; label: string }> {
+  return [
+    { value: 'new', label: t('dashboard.inbox.workflow.new') },
+    { value: 'triage', label: t('dashboard.inbox.workflow.triage') },
+    { value: 'waiting_staff', label: t('dashboard.inbox.workflow.waitingStaff') },
+    { value: 'waiting_user', label: t('dashboard.inbox.workflow.waitingUser') },
+    { value: 'escalated', label: t('dashboard.inbox.workflow.escalated') },
+    { value: 'resolved', label: t('dashboard.inbox.workflow.resolved') },
+    { value: 'closed', label: t('dashboard.inbox.workflow.closed') },
+  ];
+}
 
-const priorityOptions: Array<{ value: PriorityFilter; label: string }> = [
-  { value: 'all', label: 'Todas' },
-  { value: 'urgent', label: 'Urgente' },
-  { value: 'high', label: 'Alta' },
-  { value: 'normal', label: 'Normal' },
-  { value: 'low', label: 'Baja' },
-];
+function getOpenStateOptions(t: T): Array<{ value: OpenStateFilter; label: string }> {
+  return [
+    { value: 'all', label: t('dashboard.inbox.filters.all') },
+    { value: 'open', label: t('dashboard.inbox.filters.open') },
+    { value: 'closed', label: t('dashboard.inbox.filters.closed') },
+  ];
+}
 
-const slaOptions: Array<{ value: SlaFilter; label: string }> = [
-  { value: 'all', label: 'Todos' },
-  { value: 'breached', label: 'Incumplido' },
-  { value: 'warning', label: 'Por vencer' },
-  { value: 'healthy', label: 'Saludable' },
-  { value: 'paused', label: 'Pausado' },
-  { value: 'resolved', label: 'Resuelto' },
-];
+function getPriorityOptions(t: T): Array<{ value: PriorityFilter; label: string }> {
+  return [
+    { value: 'all', label: t('dashboard.inbox.filters.all') },
+    { value: 'urgent', label: t('dashboard.inbox.filters.urgent') },
+    { value: 'high', label: t('dashboard.inbox.filters.high') },
+    { value: 'normal', label: t('dashboard.inbox.filters.normal') },
+    { value: 'low', label: t('dashboard.inbox.filters.low') },
+  ];
+}
 
-const assignmentOptions: Array<{ value: AssignmentFilter; label: string }> = [
-  { value: 'all', label: 'Toda la cola' },
-  { value: 'unclaimed', label: 'Sin reclamar' },
-  { value: 'claimed', label: 'Reclamados' },
-  { value: 'unassigned', label: 'Sin asignar' },
-  { value: 'assigned', label: 'Asignados' },
-];
+function getSlaOptions(t: T): Array<{ value: SlaFilter; label: string }> {
+  return [
+    { value: 'all', label: t('dashboard.inbox.filters.all') },
+    { value: 'breached', label: t('dashboard.inbox.filters.breached') },
+    { value: 'warning', label: t('dashboard.inbox.filters.warning') },
+    { value: 'healthy', label: t('dashboard.inbox.filters.healthy') },
+    { value: 'paused', label: t('dashboard.inbox.filters.paused') },
+    { value: 'resolved', label: t('dashboard.inbox.filters.resolved') },
+  ];
+}
+
+function getAssignmentOptions(t: T): Array<{ value: AssignmentFilter; label: string }> {
+  return [
+    { value: 'all', label: t('dashboard.inbox.filters.allQueue') },
+    { value: 'unclaimed', label: t('dashboard.inbox.filters.unclaimed') },
+    { value: 'claimed', label: t('dashboard.inbox.filters.claimed') },
+    { value: 'unassigned', label: t('dashboard.inbox.filters.unassigned') },
+    { value: 'assigned', label: t('dashboard.inbox.filters.assigned') },
+  ];
+}
 
 function getStatusTone(status: TicketWorkflowStatus) {
   if (status === 'escalated') return 'border-rose-300/60 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950/20 dark:text-rose-200';
@@ -131,17 +145,17 @@ function getPriorityTone(priority: TicketInboxItem['priority']) {
   return 'border-indigo-300/60 bg-indigo-50 text-indigo-700 dark:border-indigo-900 dark:bg-indigo-950/20 dark:text-indigo-200';
 }
 
-function getPriorityLabel(priority: TicketInboxItem['priority']) {
-  if (priority === 'urgent') return 'Urgente';
-  if (priority === 'high') return 'Alta';
-  if (priority === 'low') return 'Baja';
-  return 'Normal';
+function getPriorityLabel(priority: TicketInboxItem['priority'], t: T) {
+  if (priority === 'urgent') return t('dashboard.inbox.filters.urgent');
+  if (priority === 'high') return t('dashboard.inbox.filters.high');
+  if (priority === 'low') return t('dashboard.inbox.filters.low');
+  return t('dashboard.inbox.filters.normal');
 }
 
-function getVisibilityLabel(visibility: string | null) {
-  if (visibility === 'internal') return 'Interno';
-  if (visibility === 'public') return 'Cliente';
-  return 'Sistema';
+function getVisibilityLabel(visibility: string | null, t: T) {
+  if (visibility === 'internal') return t('dashboard.inbox.visibility.internal');
+  if (visibility === 'public') return t('dashboard.inbox.visibility.public');
+  return t('dashboard.inbox.visibility.system');
 }
 
 function priorityWeight(priority: TicketInboxItem['priority']) {
@@ -151,36 +165,36 @@ function priorityWeight(priority: TicketInboxItem['priority']) {
   return 1;
 }
 
-function getActionLabel(action: TicketDashboardActionId) {
+function getActionLabel(action: TicketDashboardActionId, t: T) {
   switch (action) {
     case 'claim':
-      return 'reclamar el ticket';
+      return t('dashboard.inbox.actions.claim');
     case 'unclaim':
-      return 'liberar el ticket';
+      return t('dashboard.inbox.actions.unclaim');
     case 'assign_self':
-      return 'asignarte el ticket';
+      return t('dashboard.inbox.actions.assignSelf');
     case 'unassign':
-      return 'desasignar el ticket';
+      return t('dashboard.inbox.actions.unassign');
     case 'set_status':
-      return 'actualizar el estado';
+      return t('dashboard.inbox.actions.setStatus');
     case 'close':
-      return 'cerrar el ticket';
+      return t('dashboard.inbox.actions.close');
     case 'reopen':
-      return 'reabrir el ticket';
+      return t('dashboard.inbox.actions.reopen');
     case 'add_note':
-      return 'guardar la nota interna';
+      return t('dashboard.inbox.actions.addNote');
     case 'add_tag':
-      return 'agregar el tag';
+      return t('dashboard.inbox.actions.addTag');
     case 'remove_tag':
-      return 'remover el tag';
+      return t('dashboard.inbox.actions.removeTag');
     case 'reply_customer':
-      return 'enviar la respuesta';
+      return t('dashboard.inbox.actions.replyCustomer');
     case 'post_macro':
-      return 'publicar la macro';
+      return t('dashboard.inbox.actions.postMacro');
     case 'set_priority':
-      return 'actualizar la prioridad';
+      return t('dashboard.inbox.actions.setPriority');
     default:
-      return 'ejecutar la accion';
+      return t('dashboard.inbox.actions.fallback');
   }
 }
 
@@ -228,6 +242,13 @@ export default function InboxModule({
   onAction,
   partialFailures,
 }: InboxModuleProps) {
+  const { t } = useTranslation();
+  const workflowOptions = useMemo(() => getWorkflowOptions(t), [t]);
+  const openStateOptions = useMemo(() => getOpenStateOptions(t), [t]);
+  const priorityOptions = useMemo(() => getPriorityOptions(t), [t]);
+  const slaOptions = useMemo(() => getSlaOptions(t), [t]);
+  const assignmentOptions = useMemo(() => getAssignmentOptions(t), [t]);
+
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [openStateFilter, setOpenStateFilter] = useState<OpenStateFilter>('open');
@@ -416,7 +437,7 @@ export default function InboxModule({
 
     setActionFeedback({
       tone: 'pending',
-      message: `Registrando la solicitud para ${getActionLabel(action)}...`,
+      message: `Registrando la solicitud para ${getActionLabel(action, t)}...`,
       action,
       ticketId: selectedTicket.ticketId,
     });
@@ -439,14 +460,14 @@ export default function InboxModule({
 
       setActionFeedback({
         tone: 'success',
-        message: `Solicitud enviada para ${getActionLabel(action)}. El inbox se actualizara en el siguiente refresh.`,
+        message: `Solicitud enviada para ${getActionLabel(action, t)}. El inbox se actualizara en el siguiente refresh.`,
         action,
         ticketId: selectedTicket.ticketId,
       });
     } catch (error) {
       setActionFeedback({
         tone: 'error',
-        message: error instanceof Error ? error.message : `No se pudo ${getActionLabel(action)}.`,
+        message: error instanceof Error ? error.message : `No se pudo ${getActionLabel(action, t)}.`,
         action,
         ticketId: selectedTicket.ticketId,
       });
@@ -458,7 +479,13 @@ export default function InboxModule({
   }
 
   if (!workspace.inbox.length) {
-    return <StateCard eyebrow="Sin tickets" title="Todavia no hay tickets para operar desde la dashboard" description="Cuando entren tickets reales en Discord, aqui veras la cola, SLA, historial del cliente y acciones del staff." icon={LifeBuoy} />;
+    return (
+      <ModuleEmptyState
+        icon={LifeBuoy}
+        title="La bandeja de tickets esta limpia"
+        description="Cuando los usuarios abran tickets reales en Discord, aqui veras la cola operativa, alertas SLA, el historial del cliente y las acciones del staff."
+      />
+    );
   }
 
   return (
@@ -520,7 +547,7 @@ export default function InboxModule({
               </FilterField>
               <FilterField label="Categoria" htmlFor="category-filter">
                 <select id="category-filter" value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)} className="dashboard-form-field md:col-span-2 xl:col-span-1 2xl:col-span-2">
-                  <option value="all">Todas las categorias</option>
+                  <option value="all">{t('dashboard.inbox.filters.allCategories')}</option>
                   {categoryOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
               </FilterField>
@@ -562,7 +589,7 @@ export default function InboxModule({
 
                       <div className="mt-4 flex flex-wrap gap-2">
                         <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getTicketQueueLabel(ticket.queueType)}</span>
-                        <span className={`dashboard-status-pill-compact ${getPriorityTone(ticket.priority)}`}>Prioridad {getPriorityLabel(ticket.priority)}</span>
+                        <span className={`dashboard-status-pill-compact ${getPriorityTone(ticket.priority)}`}>Prioridad {getPriorityLabel(ticket.priority, t)}</span>
                         <span className="dashboard-status-pill-compact dashboard-neutral-pill">{ticket.claimedByLabel ?? 'Sin reclamar'}</span>
                         <span className="dashboard-status-pill-compact dashboard-neutral-pill">{ticket.assigneeLabel ?? 'Sin asignar'}</span>
                       </div>
@@ -623,7 +650,7 @@ export default function InboxModule({
                     <div className="dashboard-grid-fit-standard">
                       {[
                         ['Estado', getTicketStatusLabel(selectedTicket.workflowStatus), getStatusTone(selectedTicket.workflowStatus), selectedTicket.isOpen ? 'Ticket activo dentro de la cola operativa.' : 'Ticket fuera de la cola activa.'],
-                        ['Prioridad', getPriorityLabel(selectedTicket.priority), getPriorityTone(selectedTicket.priority), 'Nivel de urgencia esperado para el caso.'],
+                        ['Prioridad', getPriorityLabel(selectedTicket.priority, t), getPriorityTone(selectedTicket.priority), 'Nivel de urgencia esperado para el caso.'],
                         ['SLA', getTicketSlaLabel(selectedTicket.slaState), getSlaTone(selectedTicket.slaState), `Objetivo ${formatMinutesLabel(selectedTicket.slaTargetMinutes)}`],
                         ['Categoria', selectedTicket.categoryLabel, 'dashboard-neutral-pill', getTicketQueueLabel(selectedTicket.queueType)],
                       ].map(([label, value, tone, note]) => (
@@ -689,7 +716,7 @@ export default function InboxModule({
                                 <p className="break-words font-semibold text-slate-950 dark:text-white">{event.title}</p>
                                 <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{event.description}</p>
                               </div>
-                              <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getVisibilityLabel(event.visibility)}</span>
+                              <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getVisibilityLabel(event.visibility, t)}</span>
                             </div>
                             <div className="mt-3 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.16em] text-slate-500">
                               <span>{event.actorLabel ?? 'Sistema'}</span>

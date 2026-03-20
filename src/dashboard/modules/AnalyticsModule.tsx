@@ -2,6 +2,7 @@ import { BarChart3, TrendingDown, TrendingUp } from 'lucide-react';
 import DashboardDegradationNotice from '../components/DashboardDegradationNotice';
 import PanelCard from '../components/PanelCard';
 import StateCard from '../components/StateCard';
+import ModuleEmptyState from '../components/ModuleEmptyState';
 import type { DashboardGuild, DashboardPartialFailure, GuildMetricsDaily } from '../types';
 import {
   formatCompactNumber,
@@ -116,11 +117,10 @@ export default function AnalyticsModule({
 
   if (!metrics.length) {
     return (
-      <StateCard
-        eyebrow="Sin metricas"
-        title="Todavia no hay telemetria diaria"
-        description="La dashboard ya esta preparada para leer tendencias. Solo falta que el bridge publique snapshots diarios para este guild."
+      <ModuleEmptyState
         icon={BarChart3}
+        title="Aun no hay telemetria diaria"
+        description="La dashboard ya esta preparada para leer tendencias. Solo falta que el bridge publique snapshots diarios para este guild."
       />
     );
   }

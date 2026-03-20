@@ -8,6 +8,7 @@ import AuthCard from './components/AuthCard';
 import DashboardModuleViewport from './components/DashboardModuleViewport';
 import DashboardShell from './components/DashboardShell';
 import StateCard from './components/StateCard';
+import ErrorBoundary from './components/ErrorBoundary';
 import {
   useDashboardAuth,
   useDashboardGuilds,
@@ -79,11 +80,13 @@ export default function DashboardPage() {
   function syncGuildAccess() {
     const preferredGuildId = selectedGuildId ?? requestedGuildId;
     if (!authState.session?.provider_token) {
-      console.warn('[dashboard-auth] dashboard:missing-provider-token', {
-        selectedGuildId: preferredGuildId,
-        hasSession: Boolean(authState.session),
-        userId: authState.user?.id ?? null,
-      });
+      if (import.meta.env.DEV) {
+        console.warn('[dashboard-auth] dashboard:missing-provider-token', {
+          selectedGuildId: preferredGuildId,
+          hasSession: Boolean(authState.session),
+          userId: authState.user?.id ?? null,
+        });
+      }
       signIn.mutate(preferredGuildId);
       return;
     }
@@ -277,55 +280,57 @@ export default function DashboardPage() {
           failedMutations={failedMutations}
           sectionStates={sectionStates}
         >
-          <DashboardModuleViewport
-            activeSection={activeSection}
-            selectedGuild={selectedGuild}
-            invalidRequestedGuildId={invalidRequestedGuildId}
-            fallbackGuildId={fallbackGuildId}
-            setSelectedGuildId={setSelectedGuildId}
-            syncGuildAccess={syncGuildAccess}
-            isSyncing={syncGuilds.isPending}
-            snapshot={snapshot}
-            snapshotErrorMessage={snapshotErrorMessage}
-            isSnapshotLoading={snapshotQuery.isLoading}
-            isSnapshotError={snapshotQuery.isError}
-            refetchSnapshot={() => void snapshotQuery.refetch()}
-            requestConfigChangePending={requestConfigChange.isPending}
-            requestConfigChangeErrorMessage={configSaveError?.message ?? ''}
-            requestConfigChangeErrorSection={configSaveError?.section ?? null}
-            requestBackupActionPending={requestBackupAction.isPending}
-            requestTicketActionPending={requestTicketAction.isPending}
-            onSectionChange={setActiveSection}
-            onConfigSave={async (section, payload) => {
-              try {
-                await requestConfigChange.mutateAsync({ section, payload });
-                setConfigSaveError(null);
-              } catch (error) {
-                setConfigSaveError({
-                  section,
-                  message: error instanceof Error
-                    ? error.message
-                    : 'No se pudo registrar la solicitud de cambio.',
+          <ErrorBoundary fallbackEyebrow={t('dashboard.shell.errorBoundary.eyebrow')} fallbackTitle={t('dashboard.shell.errorBoundary.title')}>
+            <DashboardModuleViewport
+              activeSection={activeSection}
+              selectedGuild={selectedGuild}
+              invalidRequestedGuildId={invalidRequestedGuildId}
+              fallbackGuildId={fallbackGuildId}
+              setSelectedGuildId={setSelectedGuildId}
+              syncGuildAccess={syncGuildAccess}
+              isSyncing={syncGuilds.isPending}
+              snapshot={snapshot}
+              snapshotErrorMessage={snapshotErrorMessage}
+              isSnapshotLoading={snapshotQuery.isLoading}
+              isSnapshotError={snapshotQuery.isError}
+              refetchSnapshot={() => void snapshotQuery.refetch()}
+              requestConfigChangePending={requestConfigChange.isPending}
+              requestConfigChangeErrorMessage={configSaveError?.message ?? ''}
+              requestConfigChangeErrorSection={configSaveError?.section ?? null}
+              requestBackupActionPending={requestBackupAction.isPending}
+              requestTicketActionPending={requestTicketAction.isPending}
+              onSectionChange={setActiveSection}
+              onConfigSave={async (section, payload) => {
+                try {
+                  await requestConfigChange.mutateAsync({ section, payload });
+                  setConfigSaveError(null);
+                } catch (error) {
+                  setConfigSaveError({
+                    section,
+                    message: error instanceof Error
+                      ? error.message
+                      : t('dashboard.shell.configSaveError'),
+                  });
+                  throw error;
+                }
+              }}
+              onCreateBackup={async () => {
+                await requestBackupAction.mutateAsync({
+                  action: 'create_backup',
+                  payload: {},
                 });
-                throw error;
-              }
-            }}
-            onCreateBackup={async () => {
-              await requestBackupAction.mutateAsync({
-                action: 'create_backup',
-                payload: {},
-              });
-            }}
-            onRestoreBackup={async (backupId) => {
-              await requestBackupAction.mutateAsync({
-                action: 'restore_backup',
-                payload: { backupId },
-              });
-            }}
-            onTicketAction={async (action, payload) => {
-              await requestTicketAction.mutateAsync({ action, payload });
-            }}
-          />
+              }}
+              onRestoreBackup={async (backupId) => {
+                await requestBackupAction.mutateAsync({
+                  action: 'restore_backup',
+                  payload: { backupId },
+                });
+              }}
+              onTicketAction={async (action, payload) => {
+                await requestTicketAction.mutateAsync({ action, payload });
+              }}
+            />
+          </ErrorBoundary>
         </DashboardShell>
       )}
     </>

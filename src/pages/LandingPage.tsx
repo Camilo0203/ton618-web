@@ -1,18 +1,19 @@
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import Features from '../components/Features';
-import LiveStats from '../components/LiveStats';
-import VisualExperience from '../components/VisualExperience';
-import WhyTon from '../components/WhyTon';
-import DocsSection from '../components/DocsSection';
-import FinalCTA from '../components/FinalCTA';
 import Footer from '../components/Footer';
 import LegalModal from '../components/LegalModal';
 import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
+
+const Features = lazy(() => import('../components/Features'));
+const VisualExperience = lazy(() => import('../components/VisualExperience'));
+const WhyTon = lazy(() => import('../components/WhyTon'));
+const DocsSection = lazy(() => import('../components/DocsSection'));
+const LiveStats = lazy(() => import('../components/LiveStats'));
+const FinalCTA = lazy(() => import('../components/FinalCTA'));
 
 type LegalModalType = 'terms' | 'privacy' | 'cookies' | null;
 
@@ -91,12 +92,14 @@ export default function LandingPage() {
 
         <main id="main-content" className="relative">
           <Hero />
-          <Features />
-          <VisualExperience />
-          <WhyTon />
-          <DocsSection />
-          <LiveStats />
-          <FinalCTA />
+          <Suspense fallback={<div className="h-64 w-full animate-pulse bg-transparent"></div>}>
+            <Features />
+            <VisualExperience />
+            <WhyTon />
+            <DocsSection />
+            <LiveStats />
+            <FinalCTA />
+          </Suspense>
         </main>
 
         <Footer onOpenLegal={setLegalModalType} />

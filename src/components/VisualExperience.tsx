@@ -35,7 +35,7 @@ export default function VisualExperience() {
             WebkitMaskImage: 'radial-gradient(circle at center, transparent 0%, transparent 14%, black 50%, transparent 90%)',
           }}
         >
-          <video autoPlay muted loop playsInline preload="metadata" aria-hidden="true" className="h-full w-full scale-110 object-cover">
+          <video autoPlay muted loop playsInline preload="none" poster="/cosmic-poster.jpg" aria-hidden="true" className="h-full w-full scale-110 object-cover">
             <source src="/videos/cosmic-haze.mp4" type="video/mp4" />
           </video>
         </div>

@@ -291,15 +291,17 @@ export function runAuthCallbackFlow(
   }
 
   execution.promise = (async () => {
-    console.log('[dashboard-auth] callback:begin', {
-      attemptKey,
-      hasCode: Boolean(code),
-      hasAuthError: Boolean(authError),
-      callbackPath: window.location.pathname,
-      callbackSearch: window.location.search,
-      requestedGuildId: execution.requestedGuildId,
-      hasCachedSession: Boolean(execution.session),
-    });
+    if (import.meta.env.DEV) {
+      console.log('[dashboard-auth] callback:begin', {
+        attemptKey,
+        hasCode: Boolean(code),
+        hasAuthError: Boolean(authError),
+        callbackPath: window.location.pathname,
+        callbackSearch: window.location.search,
+        requestedGuildId: execution.requestedGuildId,
+        hasCachedSession: Boolean(execution.session),
+      });
+    }
 
     if (authError) {
       throw new Error(authError);
@@ -376,14 +378,16 @@ export function runAuthCallbackFlow(
           : i18n.t('dashboardAuth.errors.callbackFailed');
     const retryFlags = resolveRetryFlags(message, execution);
 
-    console.error('[dashboard-auth] callback:error', {
-      attemptKey,
-      message,
-      hasCachedSession: Boolean(execution.session),
-      hasProviderToken: Boolean(execution.session?.provider_token),
-      requestedGuildId: execution.requestedGuildId,
-      error,
-    });
+    if (import.meta.env.DEV) {
+      console.error('[dashboard-auth] callback:error', {
+        attemptKey,
+        message,
+        hasCachedSession: Boolean(execution.session),
+        hasProviderToken: Boolean(execution.session?.provider_token),
+        requestedGuildId: execution.requestedGuildId,
+        error,
+      });
+    }
 
     if (shouldResetAuth) {
       void clearDashboardAuthState();

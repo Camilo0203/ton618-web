@@ -12,6 +12,7 @@ import {
 import type {
   DashboardPartialFailure,
   DashboardPartialFailureId,
+  GuildBackupManifest,
   GuildConfigMutation,
   GuildDashboardSnapshot,
   GuildEvent,
@@ -61,6 +62,14 @@ const OPTIONAL_SNAPSHOT_METADATA: Record<
   ticket_macros: {
     label: 'Macros de tickets',
     contextHint: 'Revisa guild_ticket_macros y la sincronizacion de configuracion del workspace.',
+  },
+  backups: {
+    label: 'Copias de seguridad',
+    contextHint: 'Revisa la tabla guild_backup_manifests.',
+  },
+  ticket_inbox: {
+    label: 'Bandeja de tickets',
+    contextHint: 'Revisa guild_ticket_inbox y la bandeja de tickets.',
   },
 };
 
@@ -477,11 +486,13 @@ async function resolveOptionalSnapshotPart<T>(
     };
   } catch (error: unknown) {
     const failure = buildPartialFailure(id, error);
-    console.warn('[dashboard-snapshot] optional-dataset-failed', {
-      dataset: id,
-      message: failure.message,
-      error,
-    });
+    if (import.meta.env.DEV) {
+      console.warn('[dashboard-snapshot] optional-dataset-failed', {
+        dataset: id,
+        message: failure.message,
+        error,
+      });
+    }
 
     return {
       data: fallbackValue,
@@ -496,9 +507,9 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     config,
     inventory,
     mutations,
-    backups,
     syncStatus,
-    ticketInbox,
+    backupsResult,
+    ticketInboxResult,
     activityResult,
     metricsResult,
     ticketEventsResult,
@@ -507,9 +518,9 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     fetchGuildConfig(resolvedGuildId),
     fetchGuildInventory(resolvedGuildId),
     fetchGuildMutations(resolvedGuildId),
-    fetchGuildBackups(resolvedGuildId),
     fetchGuildSyncStatus(resolvedGuildId),
-    fetchGuildTicketInbox(resolvedGuildId),
+    resolveOptionalSnapshotPart('backups', () => fetchGuildBackups(resolvedGuildId), [] as GuildBackupManifest[]),
+    resolveOptionalSnapshotPart('ticket_inbox', () => fetchGuildTicketInbox(resolvedGuildId), [] as TicketInboxItem[]),
     resolveOptionalSnapshotPart('activity', () => fetchGuildActivity(resolvedGuildId), [] as GuildEvent[]),
     resolveOptionalSnapshotPart('metrics', () => fetchGuildMetrics(resolvedGuildId), [] as GuildMetricsDaily[]),
     resolveOptionalSnapshotPart('ticket_events', () => fetchGuildTicketEvents(resolvedGuildId), [] as TicketConversationEvent[]),
@@ -522,14 +533,16 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     events: activityResult.data,
     metrics: metricsResult.data,
     mutations,
-    backups,
+    backups: backupsResult.data,
     syncStatus,
     ticketWorkspace: {
-      inbox: ticketInbox,
+      inbox: ticketInboxResult.data,
       events: ticketEventsResult.data,
       macros: ticketMacrosResult.data,
     },
     partialFailures: [
+      backupsResult.failure,
+      ticketInboxResult.failure,
       activityResult.failure,
       metricsResult.failure,
       ticketEventsResult.failure,

@@ -417,7 +417,9 @@ export type DashboardPartialFailureId =
   | 'activity'
   | 'metrics'
   | 'ticket_events'
-  | 'ticket_macros';
+  | 'ticket_macros'
+  | 'backups'
+  | 'ticket_inbox';
 
 export interface DashboardPartialFailure {
   id: DashboardPartialFailureId;

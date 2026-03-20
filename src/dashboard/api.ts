@@ -1,6 +1,5 @@
 export {
   clearDashboardAuthIntent,
-  consumeDashboardAuthIntent,
   peekDashboardAuthIntent,
   resolveDashboardRedirectPath,
 } from './api/shared';

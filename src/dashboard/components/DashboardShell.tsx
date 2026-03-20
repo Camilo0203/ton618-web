@@ -59,16 +59,16 @@ interface SidebarProps {
   closeOnNavigate?: () => void;
 }
 
-function getSectionStatusLabel(status: DashboardSectionState['status']) {
+function getSectionStatusLabel(status: DashboardSectionState['status'], t: ReturnType<typeof useTranslation>['t']) {
   switch (status) {
     case 'active':
-      return 'Activo';
+      return t('dashboard.shell.sectionStatus.active');
     case 'basic':
-      return 'Basico';
+      return t('dashboard.shell.sectionStatus.basic');
     case 'needs_attention':
-      return 'Requiere revision';
+      return t('dashboard.shell.sectionStatus.needsAttention');
     default:
-      return 'No configurado';
+      return t('dashboard.shell.sectionStatus.notConfigured');
   }
 }
 
@@ -97,6 +97,7 @@ function SidebarContent({
   sectionStates,
   closeOnNavigate,
 }: SidebarProps) {
+  const { t } = useTranslation();
   const dashboardBrandLabel = `${config.botName} Dashboard`;
   const sectionStateMap = new Map(sectionStates.map((section) => [section.sectionId, section]));
   const sectionMetaMap = new Map(dashboardSections.map((section) => [section.id, section]));
@@ -128,7 +129,7 @@ function SidebarContent({
                 {dashboardBrandLabel}
               </p>
               <p className="mt-1 max-w-[14rem] text-[0.88rem] leading-5 text-slate-200/78">
-                Navegacion por tareas para configurar, revisar y operar el servidor.
+                {t('dashboard.shell.brandDescription')}
               </p>
             </div>
           </Link>
@@ -137,25 +138,24 @@ function SidebarContent({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="dashboard-sidebar-label text-[11px] font-semibold uppercase tracking-[0.24em]">
-                  Servidor activo
+                  {t('dashboard.shell.activeServer')}
                 </p>
                 <p className="mt-2 break-words text-[0.97rem] font-semibold text-white">
-                  {selectedGuild?.guildName ?? 'Selecciona un servidor'}
+                  {selectedGuild?.guildName ?? t('dashboard.shell.selectServer')}
                 </p>
                 <p className="dashboard-sidebar-copy mt-1.5 text-[0.84rem] leading-5">
                   {!selectedGuild
-                    ? 'Elige un servidor administrable para abrir configuracion, actividad y tickets.'
+                    ? t('dashboard.shell.serverEmpty')
                     : selectedGuild.botInstalled
-                    ? 'Inventario sincronizado y listo para terminar la configuracion.'
-                    : 'Puedes elegirlo ahora y completar la instalacion despues.'}
+                      ? t('dashboard.shell.serverReady')
+                      : t('dashboard.shell.serverPending')}
                 </p>
               </div>
-              <span className={`dashboard-status-pill-compact shrink-0 self-start whitespace-nowrap px-3 py-2 text-center tracking-[0.13em] ${
-                selectedGuild?.botInstalled
-                  ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100'
-                  : 'border-amber-400/25 bg-amber-400/10 text-amber-100'
-              }`}>
-                {selectedGuild?.botInstalled ? 'Listo' : 'Pendiente'}
+              <span className={`dashboard-status-pill-compact shrink-0 self-start whitespace-nowrap px-3 py-2 text-center tracking-[0.13em] ${selectedGuild?.botInstalled
+                ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-100'
+                : 'border-amber-400/25 bg-amber-400/10 text-amber-100'
+                }`}>
+                {selectedGuild?.botInstalled ? t('dashboard.shell.readyBadge') : t('dashboard.shell.pendingBadge')}
               </span>
             </div>
 
@@ -163,7 +163,7 @@ function SidebarContent({
               htmlFor="guild-select"
               className="dashboard-sidebar-label mt-4 block text-[11px] font-semibold uppercase tracking-[0.24em]"
             >
-              Selector de guild
+              {t('dashboard.shell.guildSelector')}
             </label>
             <select
               id="guild-select"
@@ -176,27 +176,26 @@ function SidebarContent({
             >
               {!selectedGuild ? (
                 <option value="" className="bg-surface-800 text-white">
-                  Selecciona un servidor
+                  {t('dashboard.shell.selectServer')}
                 </option>
               ) : null}
               {guilds.map((guild) => (
                 <option key={guild.guildId} value={guild.guildId} className="bg-surface-800 text-white">
                   {guild.guildName}
-                  {guild.botInstalled ? ' - listo' : ' - invitar'}
+                  {guild.botInstalled ? t('dashboard.shell.readySuffix') : t('dashboard.shell.inviteSuffix')}
                 </option>
               ))}
             </select>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="dashboard-status-pill-compact dashboard-neutral-pill">
-                {guilds.length} guilds
+                {t('dashboard.shell.guildsCount', { count: guilds.length })}
               </span>
-              <span className={`dashboard-status-pill-compact ${
-                syncStatus?.bridgeStatus === 'error'
-                  ? 'border-rose-400/25 bg-rose-400/10 text-rose-100'
-                  : syncStatus?.bridgeStatus === 'degraded'
-                    ? 'border-amber-400/25 bg-amber-400/10 text-amber-100'
-                    : 'border-sky-400/25 bg-sky-400/10 text-sky-100'
-              }`}>
+              <span className={`dashboard-status-pill-compact ${syncStatus?.bridgeStatus === 'error'
+                ? 'border-rose-400/25 bg-rose-400/10 text-rose-100'
+                : syncStatus?.bridgeStatus === 'degraded'
+                  ? 'border-amber-400/25 bg-amber-400/10 text-amber-100'
+                  : 'border-sky-400/25 bg-sky-400/10 text-sky-100'
+                }`}>
                 {getHealthLabel(syncStatus)}
               </span>
             </div>
@@ -206,7 +205,7 @@ function SidebarContent({
         <div className="dashboard-sidebar-bottom mt-4 flex min-h-0 flex-1 flex-col overflow-hidden">
           <div className="dashboard-sidebar-scroll relative z-[1] mt-2 min-h-[10rem] flex-1 overflow-y-auto pr-2">
             <p className="dashboard-sidebar-muted px-2 text-[11px] font-semibold uppercase tracking-[0.26em]">
-              Navegacion por tareas
+              {t('dashboard.shell.taskNavigation')}
             </p>
             <motion.nav variants={staggerContainerVariants} initial="hidden" animate="show" className="mt-3 space-y-3 pb-4">
               {dashboardTaskGroups.map((group) => (
@@ -247,18 +246,16 @@ function SidebarContent({
                             onSectionChange(section.id);
                             closeOnNavigate?.();
                           }}
-                          className={`group w-full rounded-[1.15rem] border px-3 py-2.5 text-left transition focus-visible:outline-none ${
-                            active
-                              ? 'dashboard-sidebar-nav-active border-brand-300/40 bg-[linear-gradient(135deg,rgba(88,101,242,0.24),rgba(20,184,166,0.1))] text-white shadow-[0_14px_28px_rgba(88,101,242,0.18)]'
-                              : 'dashboard-sidebar-nav'
-                          }`}
+                          className={`group w-full rounded-[1.15rem] border px-3 py-2.5 text-left transition focus-visible:outline-none ${active
+                            ? 'dashboard-sidebar-nav-active border-brand-300/40 bg-[linear-gradient(135deg,rgba(88,101,242,0.24),rgba(20,184,166,0.1))] text-white shadow-[0_14px_28px_rgba(88,101,242,0.18)]'
+                            : 'dashboard-sidebar-nav'
+                            }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[0.95rem] border ${
-                              active
-                                ? 'border-white/14 bg-white/12 text-white shadow-[0_12px_22px_rgba(15,23,42,0.18)]'
-                                : 'dashboard-sidebar-icon text-white/80 group-hover:text-white'
-                            }`}>
+                            <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[0.95rem] border ${active
+                              ? 'border-white/14 bg-white/12 text-white shadow-[0_12px_22px_rgba(15,23,42,0.18)]'
+                              : 'dashboard-sidebar-icon text-white/80 group-hover:text-white'
+                              }`}>
                               <Icon className="h-[0.95rem] w-[0.95rem]" />
                             </div>
                             <div className="min-w-0 flex-1 pr-1">
@@ -268,7 +265,7 @@ function SidebarContent({
                                 </p>
                                 {state ? (
                                   <span className={`dashboard-status-pill-compact hidden px-2.5 py-1 text-[0.62rem] xl:inline-flex ${getSectionStatusClasses(state.status)}`}>
-                                    {getSectionStatusLabel(state.status)}
+                                    {getSectionStatusLabel(state.status, t)}
                                   </span>
                                 ) : null}
                               </div>
@@ -289,9 +286,8 @@ function SidebarContent({
                                 </div>
                               ) : null}
                             </div>
-                            <ChevronRight className={`h-4 w-4 flex-shrink-0 transition ${
-                              active ? 'text-white/78' : 'text-white/28 group-hover:text-white/54'
-                            }`} />
+                            <ChevronRight className={`h-4 w-4 flex-shrink-0 transition ${active ? 'text-white/78' : 'text-white/28 group-hover:text-white/54'
+                              }`} />
                           </div>
                         </motion.button>
                       );
@@ -310,9 +306,8 @@ function SidebarContent({
                             onSectionChange(shortcut.sectionId);
                             closeOnNavigate?.();
                           }}
-                          className={`dashboard-sidebar-shortcut ${
-                            shortcutActive ? 'dashboard-sidebar-shortcut-active' : ''
-                          }`}
+                          className={`dashboard-sidebar-shortcut ${shortcutActive ? 'dashboard-sidebar-shortcut-active' : ''
+                            }`}
                           title={shortcut.description}
                         >
                           {shortcut.label}
@@ -329,13 +324,13 @@ function SidebarContent({
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="dashboard-sidebar-muted text-[11px] font-semibold uppercase tracking-[0.24em]">
-                  Sesion
+                  {t('dashboard.shell.session')}
                 </p>
                 <p className="dashboard-sidebar-copy mt-1.5 text-[0.85rem]">
-                  {isSyncing ? 'Actualizando inventario...' : syncStatus?.bridgeMessage ?? 'Panel listo para operar'}
+                  {isSyncing ? t('dashboard.shell.syncingInventory') : syncStatus?.bridgeMessage ?? t('dashboard.shell.panelReady')}
                 </p>
                 <p className="dashboard-sidebar-label mt-1.5 text-[0.73rem] tracking-[0.12em]">
-                  Ultimo heartbeat {formatRelativeTime(syncStatus?.lastHeartbeatAt ?? null)}.
+                  {t('dashboard.shell.lastHeartbeat', { time: formatRelativeTime(syncStatus?.lastHeartbeatAt ?? null) })}
                 </p>
               </div>
               <ChevronRight className="dashboard-sidebar-muted h-4 w-4 flex-shrink-0" />
@@ -346,7 +341,7 @@ function SidebarContent({
               className="dashboard-secondary-button dashboard-secondary-button-inverse mt-4 w-full hover:border-rose-300/30 hover:text-rose-100"
             >
               <LogOut className="h-4 w-4" />
-              Cerrar sesion
+              {t('dashboard.shell.logout')}
             </button>
           </div>
         </div>
@@ -400,7 +395,7 @@ export default function DashboardShell({
 
   const statusPills = [
     {
-      label: selectedGuild?.botInstalled ? 'Bot activo en el servidor' : 'Bot sin instalar',
+      label: selectedGuild?.botInstalled ? t('dashboard.shell.statusBotActive') : t('dashboard.shell.statusBotMissing'),
       className: selectedGuild?.botInstalled
         ? 'border-emerald-400/30 bg-emerald-500/12 text-emerald-100'
         : 'border-amber-400/30 bg-amber-500/12 text-amber-100',
@@ -415,11 +410,11 @@ export default function DashboardShell({
             : 'border-sky-400/30 bg-sky-500/12 text-sky-100',
     },
     {
-      label: `${pendingMutations} en cola`,
+      label: t('dashboard.shell.statusInQueue', { count: pendingMutations }),
       className: 'dashboard-neutral-pill',
     },
     {
-      label: `${failedMutations} fallidas`,
+      label: t('dashboard.shell.statusFailed', { count: failedMutations }),
       className:
         failedMutations > 0
           ? 'border-rose-400/30 bg-rose-500/12 text-rose-100'
@@ -433,11 +428,11 @@ export default function DashboardShell({
         href="#dashboard-main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-xl focus:border focus:border-white/20 focus:bg-slate-950 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white"
       >
-        Saltar al contenido del dashboard
+        {t('dashboard.shell.skipToContent')}
       </a>
 
       <div className="relative z-[1] mx-auto grid max-w-[1760px] gap-5 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6 2xl:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="hidden min-h-0 lg:block" aria-label="Navegacion lateral del dashboard">
+        <aside className="hidden min-h-0 lg:block" aria-label={t('dashboard.shell.navAria')}>
           <div className="sticky top-4 h-[calc(100dvh-2rem)] min-h-0 max-h-[calc(100dvh-2rem)]">
             <SidebarContent
               guilds={guilds}
@@ -467,7 +462,7 @@ export default function DashboardShell({
                   type="button"
                   onClick={() => setMobileOpen(true)}
                   className="dashboard-secondary-button h-11 w-11 p-0 lg:hidden"
-                  aria-label="Abrir navegacion del dashboard"
+                  aria-label={t('dashboard.shell.openMenuAria')}
                   aria-expanded={mobileOpen}
                   aria-controls="dashboard-mobile-navigation"
                 >
@@ -493,24 +488,24 @@ export default function DashboardShell({
                 <div className="min-w-0">
                   <p className="dashboard-panel-label">{dashboardBrandLabel}</p>
                   <h1 className="mt-1.5 break-words text-[1.45rem] font-bold tracking-[-0.05em] text-white lg:text-[1.65rem]">
-                    {selectedGuild?.guildName ?? 'Sin seleccion'}
+                    {selectedGuild?.guildName ?? t('dashboard.shell.selectServer')}
                   </h1>
                   <p className="mt-1.5 max-w-3xl text-sm leading-6 text-slate-300">
-                    Centro de control guiado para terminar configuracion, detectar bloqueos y saber exactamente que sigue sin tener que adivinar a que modulo entrar.
+                    {t('dashboard.shell.headerDescription')}
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="dashboard-status-pill-compact dashboard-neutral-pill">
                       <Users className="h-3.5 w-3.5" />
-                      {selectedGuild?.memberCount?.toLocaleString() ?? '0'} miembros
+                      {t('dashboard.shell.membersCount', { count: (selectedGuild?.memberCount?.toLocaleString() ?? '0') as unknown as number })}
                     </span>
                     <span className="dashboard-status-pill-compact dashboard-neutral-pill">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Plan {selectedGuild?.premiumTier ?? 'free'}
+                      {t('dashboard.shell.planBadge', { tier: selectedGuild?.premiumTier ?? 'free' })}
                     </span>
                     <span className="dashboard-status-pill-compact dashboard-neutral-pill">
                       <ShieldCheck className="h-3.5 w-3.5" />
-                      Ultimo heartbeat {formatRelativeTime(syncStatus?.lastHeartbeatAt ?? selectedGuild?.botLastSeenAt ?? null)}
+                      {t('dashboard.shell.heartbeatBadge', { time: formatRelativeTime(syncStatus?.lastHeartbeatAt ?? selectedGuild?.botLastSeenAt ?? null) })}
                     </span>
                   </div>
                   <div className="dashboard-header-focus-card mt-4 max-w-md rounded-[1.25rem] p-3.5">
@@ -518,7 +513,7 @@ export default function DashboardShell({
                       htmlFor="header-guild-select"
                       className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400"
                     >
-                      Servidor en foco
+                      {t('dashboard.shell.focusServer')}
                     </label>
                     <select
                       id="header-guild-select"
@@ -527,19 +522,19 @@ export default function DashboardShell({
                       className="dashboard-header-select mt-2 w-full rounded-2xl px-4 py-3 text-sm font-medium outline-none transition"
                     >
                       {!selectedGuild ? (
-                        <option value="">Selecciona un servidor</option>
+                        <option value="">{t('dashboard.shell.selectServer')}</option>
                       ) : null}
                       {guilds.map((guild) => (
                         <option key={guild.guildId} value={guild.guildId}>
                           {guild.guildName}
-                          {guild.botInstalled ? ' - listo' : ' - invitar'}
+                          {guild.botInstalled ? t('dashboard.shell.readySuffix') : t('dashboard.shell.inviteSuffix')}
                         </option>
                       ))}
                     </select>
                     <p className="mt-2 text-xs leading-5 text-slate-400">
                       {selectedGuild?.botInstalled
-                        ? 'Este servidor ya tiene el bot y puede cargar snapshot completo.'
-                        : 'Este servidor aun necesita instalacion o una sincronizacion completa.'}
+                        ? t('dashboard.shell.focusReadyInfo')
+                        : t('dashboard.shell.focusPendingInfo')}
                     </p>
                   </div>
                 </div>
@@ -576,10 +571,10 @@ export default function DashboardShell({
                         {user.user_metadata?.full_name
                           || user.user_metadata?.name
                           || user.email
-                          || 'Administrador'}
+                          || t('dashboard.shell.defaultUser')}
                       </p>
                       <p className="text-xs text-slate-400">
-                        Ultima sincronizacion {formatDateTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null)}
+                        {t('dashboard.shell.lastSync', { time: formatDateTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null) })}
                       </p>
                     </div>
                   </div>
@@ -614,38 +609,42 @@ export default function DashboardShell({
                 <div className="grid gap-2 sm:grid-cols-2 xl:w-full xl:max-w-[44rem]">
                   <div className="dashboard-header-info-card rounded-[1.1rem] px-4 py-3 text-sm text-slate-200">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      Salud del bridge
+                      {t('dashboard.shell.bridgeHealth')}
                     </p>
                     <p className="mt-1.5 font-semibold text-white">
                       {getHealthLabel(syncStatus)}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-slate-400">
-                      {syncStatus?.bridgeMessage ?? 'Sin detalles adicionales reportados por el bridge.'}
+                      {syncStatus?.bridgeMessage ?? t('dashboard.shell.bridgeNoDetails')}
                     </p>
                   </div>
                   <div className="dashboard-header-info-card rounded-[1.1rem] px-4 py-3 text-sm text-slate-200">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                      Actividad de sincronizacion
+                      {t('dashboard.shell.syncActivity')}
                     </p>
                     <p className="mt-1.5 font-semibold text-white">
-                      Config {formatRelativeTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null)}
+                      {t('dashboard.shell.configSync', { time: formatRelativeTime(syncStatus?.lastConfigSyncAt ?? selectedGuild?.lastSyncedAt ?? null) })}
                     </p>
                     <p className="mt-1 text-xs leading-5 text-slate-400">
-                      Inventario {formatRelativeTime(syncStatus?.lastInventoryAt ?? null)}. Cola {pendingMutations} pendientes y {failedMutations} fallidas.
+                      {t('dashboard.shell.inventorySync', {
+                        time: formatRelativeTime(syncStatus?.lastInventoryAt ?? null),
+                        pending: pendingMutations,
+                        failed: failedMutations
+                      })}
                     </p>
                   </div>
                 </div>
 
                 {syncError ? (
                   <div className="dashboard-inline-notice-danger rounded-[1.1rem] px-4 py-3 text-sm font-medium">
-                    <p className="font-semibold">La re-sincronizacion no pudo completarse</p>
+                    <p className="font-semibold">{t('dashboard.shell.syncFailed')}</p>
                     <p className="mt-1.5 text-sm leading-6 text-current/85">{syncError}</p>
                   </div>
                 ) : null}
                 {!syncError && failedMutations > 0 ? (
                   <div className="dashboard-inline-notice-warning flex items-start gap-2 rounded-[1.1rem] px-4 py-3 text-sm font-medium">
                     <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                    Hay cambios que requieren revision. Vuelve a Inicio para ver que tarea necesita atencion antes de seguir aplicando cambios.
+                    {t('dashboard.shell.reviewNeeded')}
                   </div>
                 ) : null}
               </div>
@@ -680,7 +679,7 @@ export default function DashboardShell({
               exit="exit"
               role="dialog"
               aria-modal="true"
-              aria-label="Navegacion del dashboard"
+              aria-label={t('dashboard.shell.navAria')}
             >
               <SidebarContent
                 guilds={guilds}
@@ -698,7 +697,7 @@ export default function DashboardShell({
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 className="dashboard-secondary-button dashboard-secondary-button-inverse absolute right-8 top-8 flex h-10 w-10 items-center justify-center rounded-2xl p-0"
-                aria-label="Cerrar navegacion del dashboard"
+                aria-label={t('dashboard.shell.closeMenuAria')}
               >
                 <X className="h-5 w-5" />
               </button>

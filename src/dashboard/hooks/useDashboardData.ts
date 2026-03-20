@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabaseClient';
 import {
-  exchangeDashboardCodeForSession,
   fetchDashboardGuilds,
   fetchGuildDashboardSnapshot,
   getDashboardSession,
@@ -86,6 +85,10 @@ export function useGuildDashboardSnapshot(guildId: string | null, enabled: boole
     retry: shouldRetryDashboardRequest,
     placeholderData: (previousData) => previousData,
     refetchInterval: (query) => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        return false;
+      }
+
       const snapshot = query.state.data;
       const hasPendingMutation = snapshot?.mutations.some((mutation) => mutation.status === 'pending');
       const hasOpenTickets = snapshot?.ticketWorkspace.inbox.some((ticket) => ticket.isOpen);
@@ -122,17 +125,6 @@ export function useSignOutDashboard() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       queryClient.removeQueries({ queryKey: ['dashboard', 'snapshot'] });
-    },
-  });
-}
-
-export function useExchangeDashboardCode() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: exchangeDashboardCodeForSession,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['dashboard'] });
     },
   });
 }
