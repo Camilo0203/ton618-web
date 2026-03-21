@@ -33,7 +33,7 @@ export default {
         },
       },
       letterSpacing: {
-        'tightest': '-0.075em',
+        'tightest': '0em',
         'widest-xl': '0.5em',
         'premium': '0.15em',
       },

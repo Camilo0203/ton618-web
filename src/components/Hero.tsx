@@ -151,7 +151,7 @@ export default function Hero() {
               className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md"
             >
               <div className={`h-1.5 w-1.5 rounded-full bg-cyan-400 ${shouldReduceMotion ? '' : 'animate-pulse'}`}></div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-cyan-100">{t('hero.badge')}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-cyan-100">{t('hero.badge')}</span>
               <Activity className="h-3.5 w-3.5 text-cyan-300/70" />
             </motion.div>
 
@@ -239,7 +239,7 @@ export default function Hero() {
             aria-label={t('hero.highlightsAria')}
           >
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-80"></div>
-            <p className="mb-6 text-[10px] font-black uppercase tracking-[0.1em] text-indigo-300">{t('hero.panelLabel')}</p>
+            <p className="mb-6 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('hero.panelLabel')}</p>
             <div className="space-y-4">
               {proofPoints.map((point) => (
                 <div key={point} className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">
@@ -260,7 +260,7 @@ export default function Hero() {
         className={`pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 ${shouldReduceMotion ? 'opacity-30' : 'opacity-40 transition-all duration-700 hover:opacity-100'}`}
       >
         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
-        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-indigo-200/60">{t('hero.scroll')}</span>
+        <span className="text-[10px] font-black uppercase tracking-wide-readable text-indigo-200/60">{t('hero.scroll')}</span>
       </motion.div>
     </section>
   );

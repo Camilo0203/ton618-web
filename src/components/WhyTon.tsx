@@ -51,7 +51,7 @@ export default function WhyTon() {
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <div className="mb-8 flex items-center gap-4">
               <div className="h-px w-12 bg-indigo-500"></div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-indigo-400">{t('why.tag')}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('why.tag')}</span>
             </div>
 
             <h2 id="why-heading" className="mb-8 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl">
@@ -66,9 +66,9 @@ export default function WhyTon() {
             <div className="grid gap-4 sm:grid-cols-2">
               {highlights.map((item) => (
                 <div key={item.label} className="cinematic-glass rounded-2xl p-6">
-                  <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-indigo-300">{item.label}</div>
+                  <div className="mb-2 text-[11px] font-bold uppercase tracking-tight-readable text-indigo-300">{item.label}</div>
                   <div className="mb-2 text-3xl font-bold text-white">{item.value}</div>
-                  <div className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">{item.sub}</div>
+                  <div className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-500">{item.sub}</div>
                 </div>
               ))}
             </div>

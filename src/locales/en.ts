@@ -151,6 +151,31 @@ export const en = {
             card2Desc:
                 'Move from invite to configuration to daily operations with a single system, rather than stitching together multiple niche bots and panels.',
         },
+        gallery: {
+            tag: 'Dashboard In Action',
+            title: 'See The System',
+            titleAccent: 'In Operation',
+            description:
+                'Explore the interfaces your staff will use to moderate, automate and manage your community from one place.',
+            screenshots: {
+                overview: {
+                    title: 'Overview',
+                    desc: 'Main panel with key metrics and real-time server status.',
+                },
+                moderation: {
+                    title: 'Moderation',
+                    desc: 'Action logs, active cases and enforcement tools for your team.',
+                },
+                automation: {
+                    title: 'Automation',
+                    desc: 'Flow configuration, triggers and scheduled actions for your server.',
+                },
+                analytics: {
+                    title: 'Analytics',
+                    desc: 'Live metrics, activity charts and performance reports.',
+                },
+            },
+        },
         why: {
             tag: 'Why Teams Choose TON618',
             title: 'Reliable Where',

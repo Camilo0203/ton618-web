@@ -111,7 +111,7 @@ function Navbar() {
         href={link.href}
         target={isHash ? undefined : '_blank'}
         rel={isHash ? undefined : 'noopener noreferrer'}
-        className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+        className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-tight-readable text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
       >
         <span>{link.label}</span>
         {!isHash ? <ExternalLink className="h-3 w-3" /> : null}
@@ -140,7 +140,7 @@ function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="relative text-[10px] font-bold uppercase tracking-[0.08em] text-slate-400 transition-all duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="relative text-[10px] font-bold uppercase tracking-tight-readable text-slate-400 transition-all duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   {link.name}
                   <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-all duration-500 hover:w-full"></span>

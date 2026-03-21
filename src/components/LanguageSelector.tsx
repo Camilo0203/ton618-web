@@ -166,7 +166,7 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
                 onClick={() => toggleLanguage(language.code)}
                 aria-pressed={isActive}
                 aria-label={language.name}
-                className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-[0.08em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+                className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-tight-readable transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
                   isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -192,7 +192,7 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
           aria-controls={isOpen ? 'language-selector-menu' : undefined}
         >
           <Globe className="h-4 w-4 text-indigo-400 transition-transform duration-500 group-hover:rotate-12" />
-          <span className="text-[10px] font-black uppercase tracking-[0.08em] text-white">
+          <span className="text-[10px] font-black uppercase tracking-tight-readable text-white">
             {currentLanguage.short}
           </span>
           <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />

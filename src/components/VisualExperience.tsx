@@ -72,13 +72,13 @@ export default function VisualExperience() {
 
           <div className="grid gap-4">
             <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="tech-card">
-              <p className="mb-3 text-[10px] font-black uppercase tracking-[0.1em] text-cyan-300">{t('experience.card1Eyebrow')}</p>
+              <p className="mb-3 text-[10px] font-black uppercase tracking-wide-readable text-cyan-300">{t('experience.card1Eyebrow')}</p>
               <h3 className="mb-3 text-xl font-bold text-white">{t('experience.card1Title')}</h3>
               <p className="text-sm leading-relaxed text-slate-400">{t('experience.card1Desc')}</p>
             </motion.article>
 
             <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="tech-card">
-              <p className="mb-3 text-[10px] font-black uppercase tracking-[0.1em] text-indigo-300">{t('experience.card2Eyebrow')}</p>
+              <p className="mb-3 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('experience.card2Eyebrow')}</p>
               <h3 className="mb-3 text-xl font-bold text-white">{t('experience.card2Title')}</h3>
               <p className="text-sm leading-relaxed text-slate-400">{t('experience.card2Desc')}</p>
             </motion.article>

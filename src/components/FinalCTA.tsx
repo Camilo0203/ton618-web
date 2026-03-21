@@ -50,7 +50,7 @@ export default function FinalCTA() {
         <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2">
             <Zap className="h-3 w-3 fill-indigo-400 text-indigo-400" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-indigo-300">{t('final.tag')}</span>
+            <span className="text-[10px] font-bold uppercase tracking-tight-readable text-indigo-300">{t('final.tag')}</span>
           </div>
 
           <h2 id="final-heading" className="mb-8 text-4xl font-black uppercase leading-[0.9] tracking-tightest text-white sm:text-6xl lg:text-7xl">

@@ -33,7 +33,7 @@ const FeatureCard = memo(({ feature, variants }: FeatureCardProps) => {
       </p>
 
       <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-6">
-        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500 transition-colors duration-500 group-hover:text-slate-300">
+        <span className="text-[10px] font-bold uppercase tracking-normal-readable text-slate-500 transition-colors duration-500 group-hover:text-slate-300">
           {feature.status}
         </span>
         <div className="h-1.5 w-1.5 rounded-full bg-white/20 transition-colors duration-500 group-hover:bg-cyan-300"></div>
@@ -78,7 +78,7 @@ export default function Features() {
           <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="mb-8 flex items-center gap-4">
               <div className="h-px w-8 bg-indigo-500/30"></div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-indigo-400">{t('features.tag')}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('features.tag')}</span>
             </motion.div>
 
             <motion.h2

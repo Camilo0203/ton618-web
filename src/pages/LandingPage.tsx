@@ -12,6 +12,7 @@ import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
 
 const Features = lazy(() => import('../components/Features'));
 const VisualExperience = lazy(() => import('../components/VisualExperience'));
+const ScreenshotGallery = lazy(() => import('../components/ScreenshotGallery'));
 const WhyTon = lazy(() => import('../components/WhyTon'));
 const DocsSection = lazy(() => import('../components/DocsSection'));
 const LiveStats = lazy(() => import('../components/LiveStats'));
@@ -101,6 +102,9 @@ export default function LandingPage() {
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
             <VisualExperience />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ScreenshotGallery />
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
             <WhyTon />

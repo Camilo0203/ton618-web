@@ -151,6 +151,31 @@ export const es = {
             card2Desc:
                 'Pasa de la invitación a la configuración y a la operación diaria con un solo sistema, en vez de coser varios bots y paneles de nicho.',
         },
+        gallery: {
+            tag: 'Dashboard En Acción',
+            title: 'Ve El Sistema',
+            titleAccent: 'En Funcionamiento',
+            description:
+                'Explora las interfaces que tu staff usará para moderar, automatizar y gestionar tu comunidad desde un solo lugar.',
+            screenshots: {
+                overview: {
+                    title: 'Vista General',
+                    desc: 'Panel principal con métricas clave y estado del servidor en tiempo real.',
+                },
+                moderation: {
+                    title: 'Moderación',
+                    desc: 'Logs de acciones, casos activos y herramientas de enforcement para tu equipo.',
+                },
+                automation: {
+                    title: 'Automatización',
+                    desc: 'Configuración de flujos, triggers y acciones programadas para tu servidor.',
+                },
+                analytics: {
+                    title: 'Analítica',
+                    desc: 'Métricas en vivo, gráficas de actividad y reportes de rendimiento.',
+                },
+            },
+        },
         why: {
             tag: 'Por Qué Eligen TON618',
             title: 'Confiable Donde',

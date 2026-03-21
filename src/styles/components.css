@@ -37,11 +37,6 @@
     @apply bg-gradient-to-br from-indigo-400 via-indigo-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(99,102,241,0.4)];
   }
 
-  /* Utility classes */
-  .tracking-tightest {
-    letter-spacing: -0.04em;
-  }
-
   /* Visual effects */
   .nebula-blur {
     @apply pointer-events-none absolute rounded-full opacity-60 blur-[120px];

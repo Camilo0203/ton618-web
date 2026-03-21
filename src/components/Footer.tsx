@@ -114,7 +114,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-[0.08em] text-white">{t('footer.product.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.product.title')}</h3>
             <ul className="space-y-4">
               {productLinks.map((item) => (
                 <li key={item.href}>
@@ -125,7 +125,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-[0.08em] text-white">{t('footer.resources.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.resources.title')}</h3>
             <ul className="space-y-4">
               {resourceLinks.map((item) => (
                 <li key={item.href}>
@@ -136,7 +136,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-[0.08em] text-white">{t('footer.support.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.support.title')}</h3>
             <ul className="space-y-4">
               {supportLinks.map((item) => (
                 <li key={item.href}>
@@ -160,18 +160,18 @@ export default function Footer({ onOpenLegal }: FooterProps) {
 
         <div className="flex flex-col gap-6 border-t border-white/5 pt-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-5">
-            <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-600">
+            <span className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-600">
               {t('footer.copyright', { year: currentYear })}
             </span>
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 rounded-full bg-indigo-500/60"></div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">
+              <span className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-500">
                 {t('footer.stabilized')}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.08em] text-slate-600">
+          <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-tight-readable text-slate-600">
             <Map className="h-3 w-3" />
             <span>{t('footer.commanded')}</span>
           </div>

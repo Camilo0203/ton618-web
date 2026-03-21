@@ -46,7 +46,7 @@ export default function DocsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-end">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-indigo-400">{t('docsSection.eyebrow')}</span>
+            <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('docsSection.eyebrow')}</span>
             <h2 id="docs-heading" className="text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl">
               {t('docsSection.title')}
               <br />

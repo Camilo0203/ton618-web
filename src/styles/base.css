@@ -54,3 +54,17 @@
     font-family: var(--font-mono);
   }
 }
+
+@layer utilities {
+  .tracking-tight-readable {
+    letter-spacing: 0.01em;
+  }
+  
+  .tracking-normal-readable {
+    letter-spacing: 0.02em;
+  }
+  
+  .tracking-wide-readable {
+    letter-spacing: 0.05em;
+  }
+}

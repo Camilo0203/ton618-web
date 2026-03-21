@@ -68,8 +68,8 @@ const StatCard = memo(({ icon: Icon, label, value, sub, index, loading }: StatCa
         </div>
 
         <div className="space-y-2">
-          <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-200">{label}</div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500">{sub}</div>
+          <div className="text-[11px] font-bold uppercase tracking-tight-readable text-slate-200">{label}</div>
+          <div className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-500">{sub}</div>
         </div>
 
         {loading ? (
@@ -195,7 +195,7 @@ export default function LiveStats() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14 text-center">
           <div className="premium-pill mb-8 px-6 py-2">
             <div className={`h-2 w-2 rounded-full ${badgeToneClass} ${shouldReduceMotion ? '' : 'animate-pulse'}`}></div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-white">{badgeLabel}</span>
+            <span className="text-[10px] font-bold uppercase tracking-wide-readable text-white">{badgeLabel}</span>
           </div>
 
           <h2 id="stats-heading" className="mb-6 text-4xl font-black uppercase leading-none tracking-tightest text-white sm:text-6xl lg:text-7xl">
@@ -226,7 +226,7 @@ export default function LiveStats() {
             </div>
 
             <div className="grid gap-1">
-              <p className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-300">{sourceLabel}</p>
+              <p className="text-[10px] font-black uppercase tracking-wide-readable text-slate-300">{sourceLabel}</p>
               {statusMessage ? <p className="text-sm font-semibold text-white md:text-base">{statusMessage}</p> : null}
               {fallbackDetail ? <p className="text-sm leading-relaxed text-slate-400">{fallbackDetail}</p> : null}
               {formattedLastUpdated ? (
