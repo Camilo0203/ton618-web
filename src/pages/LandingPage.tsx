@@ -13,10 +13,22 @@ import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
 const Features = lazy(() => import('../components/Features'));
 const VisualExperience = lazy(() => import('../components/VisualExperience'));
 const ScreenshotGallery = lazy(() => import('../components/ScreenshotGallery'));
+const InteractiveDemo = lazy(() => import('../components/InteractiveDemo'));
 const WhyTon = lazy(() => import('../components/WhyTon'));
+const ComparisonTable = lazy(() => import('../components/ComparisonTable'));
+const Testimonials = lazy(() => import('../components/Testimonials'));
 const DocsSection = lazy(() => import('../components/DocsSection'));
+const Integrations = lazy(() => import('../components/Integrations'));
 const LiveStats = lazy(() => import('../components/LiveStats'));
+const FAQ = lazy(() => import('../components/FAQ'));
 const FinalCTA = lazy(() => import('../components/FinalCTA'));
+const LiveNotifications = lazy(() => import('../components/LiveNotifications'));
+const CommandPreview = lazy(() => import('../components/CommandPreview'));
+const Pricing = lazy(() => import('../components/Pricing'));
+const Changelog = lazy(() => import('../components/Changelog'));
+const Roadmap = lazy(() => import('../components/Roadmap'));
+const ScrollToTop = lazy(() => import('../components/ScrollToTop'));
+const StickyInviteCTA = lazy(() => import('../components/StickyInviteCTA'));
 
 type LegalModalType = 'terms' | 'privacy' | 'cookies' | null;
 
@@ -107,18 +119,55 @@ export default function LandingPage() {
             <ScreenshotGallery />
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
+            <InteractiveDemo />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
             <WhyTon />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <ComparisonTable />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <Testimonials />
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
             <DocsSection />
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
+            <Integrations />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
             <LiveStats />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <CommandPreview />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <FAQ />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <Pricing />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <Changelog />
+          </Suspense>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <Roadmap />
           </Suspense>
           <Suspense fallback={<LoadingSkeleton />}>
             <FinalCTA />
           </Suspense>
         </main>
+
+        <Suspense fallback={null}>
+          <LiveNotifications />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
+        <Suspense fallback={null}>
+          <StickyInviteCTA />
+        </Suspense>
 
         <Footer onOpenLegal={setLegalModalType} />
 

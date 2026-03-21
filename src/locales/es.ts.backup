@@ -131,12 +131,6 @@ export const es = {
                     status: 'CONFIGURABLE',
                 },
                 comms: {
-                    title: 'UX Nativa De Discord',
-                    desc: 'Cada interacción se siente alineada con cómo trabajan los equipos serios de Discord: soporte, moderación y onboarding.',
-                    status: 'AJUSTE NATIVO',
-                },
-            },
-        },
         experience: {
             title: 'Mira La',
             titleAccent: 'Capa De Control',
@@ -175,62 +169,29 @@ export const es = {
                     desc: 'Métricas en vivo, gráficas de actividad y reportes de rendimiento.',
                 },
             },
-            ctas: { overview: { primary: 'Ver Dashboard', secondary: 'Leer Docs' }, moderation: { primary: 'Explorar Moderación', secondary: 'Ver Casos de Uso' }, automation: { primary: 'Configurar Flujos', secondary: 'Ver Ejemplos' }, analytics: { primary: 'Ver Métricas', secondary: 'Entender Analítica' } },
-            modal: { close: 'Cerrar', previous: 'Anterior', next: 'Siguiente', position: '{{current}} de {{total}}' },
-        },
-        demo: { tag: 'Pruébalo Ahora', title: 'Experimenta El', titleAccent: 'Dashboard En Vivo', description: 'Navega entre las vistas que tu equipo usará a diario para operar, moderar y automatizar tu servidor.', tabs: { moderation: 'Moderación', automation: 'Automatización', tickets: 'Tickets', analytics: 'Analítica' }, moderation: { action1: 'AutoMod bloqueó spam en #general', action2: 'Warn aplicado a Usuario#4521', action3: 'Timeout 10min a Usuario#8832', action4: 'Mensaje eliminado en #off-topic', action5: 'Rol removido a Usuario#1290' }, automation: { node1: 'Nuevo miembro', node2: 'Verificación', node3: 'Asignar rol', node4: 'Mensaje de bienvenida', node5: 'Log de auditoría' }, tickets: { t1: { subject: 'No puedo acceder al canal VIP', status: 'Abierto', priority: 'Alta' }, t2: { subject: 'Solicitud de partnership', status: 'En espera', priority: 'Media' }, t3: { subject: 'Bug en comandos de música', status: 'Resuelto', priority: 'Baja' }, t4: { subject: 'Reporte de usuario tóxico', status: 'Escalado', priority: 'Alta' } }, analytics: { label1: 'Mensajes/hora', label2: 'Miembros activos', label3: 'Comandos/día', label4: 'Tiempo respuesta' } },
-        comparison: { tag: 'Compara Y Decide', title: 'TON618 vs', titleAccent: 'La Competencia', description: 'Mira cómo TON618 se compara con otros bots populares en las funciones que más importan a equipos serios.', features: { moderation: 'Moderación avanzada', automation: 'Flujos de automatización', dashboard: 'Dashboard web', analytics: 'Analítica en vivo', verification: 'Verificación de miembros', tickets: 'Sistema de tickets', liveUptime: 'Uptime en vivo', customFlows: 'Flujos personalizados' }, bots: { ton618: 'TON618', mee6: 'MEE6', dyno: 'Dyno', carlbot: 'Carl-bot' }, legend: { full: 'Soporte completo', partial: 'Soporte parcial', none: 'No disponible' } },
-        testimonials: { tag: 'Comunidades Reales', title: 'Lo Que Dicen', titleAccent: 'Los Equipos', description: 'Servidores que ya confían en TON618 para sus operaciones diarias.', items: { t1: { name: 'Alex R.', role: 'Owner', server: 'Horizon Gaming', members: '12K miembros', quote: 'Desde que migramos a TON618 redujimos el tiempo de moderación en un 60%. El dashboard hace todo más claro para el staff.' }, t2: { name: 'María S.', role: 'Admin', server: 'Código Latam', members: '8K miembros', quote: 'Los flujos de automatización nos salvaron. Onboarding, verificación y soporte funcionan solos ahora.' }, t3: { name: 'Jake T.', role: 'Head Mod', server: 'Creative Hub', members: '25K miembros', quote: 'La analítica en vivo y los logs de moderación nos dan visibilidad total. No volvería a otro bot.' } } },
-        integrations: { tag: 'Ecosistema Técnico', title: 'Construido Con', titleAccent: 'Tecnología Premium', description: 'TON618 se integra con las mejores herramientas del ecosistema para ofrecer rendimiento, seguridad y escalabilidad.', items: { discord: { name: 'Discord API', desc: 'Integración nativa con la API oficial' }, supabase: { name: 'Supabase', desc: 'Base de datos y autenticación en tiempo real' }, nodejs: { name: 'Node.js', desc: 'Runtime de alto rendimiento' }, typescript: { name: 'TypeScript', desc: 'Tipado estricto para estabilidad' }, react: { name: 'React', desc: 'Dashboard interactivo y moderno' }, tailwind: { name: 'Tailwind CSS', desc: 'UI premium y consistente' } } },
-        faq: { tag: 'Preguntas Frecuentes', title: 'Resolvemos', titleAccent: 'Tus Dudas', items: { q1: { question: '¿Cómo invito TON618 a mi servidor?', answer: 'Haz clic en "Invitar bot" en esta página, autoriza los permisos y TON618 estará listo. Luego abre el dashboard para configurar módulos.' }, q2: { question: '¿TON618 es gratuito?', answer: 'TON618 ofrece un plan gratuito con funciones esenciales. Los planes premium desbloquean automatizaciones avanzadas, analítica detallada y soporte prioritario.' }, q3: { question: '¿Puedo migrar desde otro bot?', answer: 'Sí. TON618 funciona junto a otros bots durante la transición. Configura los módulos que necesites y desactiva los del bot anterior cuando estés listo.' }, q4: { question: '¿Qué tan rápido responde el bot?', answer: 'TON618 está optimizado para baja latencia. Los comandos y acciones de moderación se ejecutan en milisegundos, incluso en servidores con alta actividad.' }, q5: { question: '¿El dashboard es seguro?', answer: 'El dashboard usa autenticación OAuth de Discord y Supabase. Solo los administradores del servidor pueden acceder a la configuración.' }, q6: { question: '¿Hay soporte si tengo problemas?', answer: 'Sí. Tenemos un servidor de soporte activo, documentación detallada y un equipo que responde rápido a incidencias y consultas.' } } },
-        notifications: { dismiss: 'Cerrar notificaciones', events: { e1: '🛡️ AutoMod bloqueó spam en #general', e2: '✅ Nuevo miembro verificado exitosamente', e3: '📊 Reporte diario generado', e4: '🎫 Ticket #847 resuelto por staff', e5: '⚡ Flujo de bienvenida ejecutado', e6: '🔒 Permisos actualizados en #admin', e7: '📈 Pico de actividad detectado', e8: '🤖 Comando /config ejecutado' } },
-        pricing: { tag: 'Planes Y Precios', title: 'Elige Tu', titleAccent: 'Plan Ideal', description: 'Desde comunidades que empiezan hasta servidores enterprise con miles de miembros.', toggle: { monthly: 'Mensual', yearly: 'Anual' }, yearlyDiscount: 'Ahorra 20%', plans: { free: { name: 'Free', price: { monthly: '$0', yearly: '$0' }, period: '/mes', desc: 'Para servidores que empiezan.', cta: 'Empezar gratis', features: ['Moderación básica', 'Hasta 3 flujos', 'Verificación simple', 'Soporte comunidad'] }, pro: { name: 'Pro', price: { monthly: '$9', yearly: '$7' }, period: '/mes', desc: 'Para equipos que necesitan más.', cta: 'Actualizar a Pro', popular: 'Más popular', features: ['Todo en Free', 'Flujos ilimitados', 'Analítica en vivo', 'Sistema de tickets', 'Dashboard completo', 'Soporte prioritario'] }, enterprise: { name: 'Enterprise', price: { monthly: '$29', yearly: '$23' }, period: '/mes', desc: 'Para servidores a gran escala.', cta: 'Contactar ventas', features: ['Todo en Pro', 'API dedicada', 'SLA garantizado', 'Onboarding guiado', 'Multi-servidor', 'Soporte 24/7'] } } },
-        changelog: { tag: 'Últimas Actualizaciones', title: 'Qué Hay', titleAccent: 'De Nuevo', entries: { e1: { version: 'v2.4.0', date: 'Mar 2026', title: 'Sistema de tickets rediseñado', desc: 'Nuevo panel de tickets con SLA, escalado automático y transcripciones.' }, e2: { version: 'v2.3.0', date: 'Feb 2026', title: 'Analítica en tiempo real', desc: 'Métricas de actividad, gráficas de uso y reportes automáticos.' }, e3: { version: 'v2.2.0', date: 'Ene 2026', title: 'Flujos de automatización v2', desc: 'Editor visual de flujos con triggers condicionales y acciones en cadena.' }, e4: { version: 'v2.1.0', date: 'Dic 2025', title: 'Dashboard premium', desc: 'Rediseño completo del dashboard con módulos configurables.' } } },
-        roadmap: { tag: 'Próximamente', title: 'Hacia', titleAccent: 'Dónde Vamos', description: 'Funcionalidades confirmadas en desarrollo activo.', items: { r1: { quarter: 'Q2 2026', title: 'AI Moderation', desc: 'Detección inteligente de spam, toxicidad y raids con modelos de lenguaje.', status: 'En desarrollo' }, r2: { quarter: 'Q2 2026', title: 'Webhooks personalizados', desc: 'Conecta TON618 con servicios externos vía webhooks configurables.', status: 'En desarrollo' }, r3: { quarter: 'Q3 2026', title: 'App móvil', desc: 'Dashboard nativo para iOS y Android con notificaciones push.', status: 'Planeado' }, r4: { quarter: 'Q4 2026', title: 'Marketplace de plugins', desc: 'Instala módulos creados por la comunidad desde un marketplace.', status: 'Próximamente' } } },
-        commandPreview: { tag: 'Comandos Populares', title: 'Potencia Al', titleAccent: 'Alcance De Un Slash', description: 'Los comandos más usados por equipos de staff en servidores activos.', commands: { c1: { name: '/mod warn', desc: 'Aplica una advertencia a un usuario con razón y evidencia.', example: '/mod warn @user Spam en #general' }, c2: { name: '/ticket create', desc: 'Abre un ticket de soporte con categoría y prioridad.', example: '/ticket create "No puedo verificarme" --priority alta' }, c3: { name: '/flow run', desc: 'Ejecuta un flujo de automatización manualmente.', example: '/flow run welcome-sequence' }, c4: { name: '/analytics report', desc: 'Genera un reporte de actividad del servidor.', example: '/analytics report --period 7d' }, c5: { name: '/config module', desc: 'Activa o desactiva un módulo del bot.', example: '/config module tickets --enable' } } },
-        stickyInvite: { cta: 'Invitar TON618' },
-        scrollToTop: { label: 'Volver arriba' },
-        verifiedBadge: { label: 'Bot verificado' },
-        heroTyping: { phrases: ['Modera con precisión', 'Automatiza flujos', 'Analiza en vivo', 'Escala sin límites', 'Opera con confianza'] },
-        faqSearch: { placeholder: 'Buscar preguntas...', noResults: 'No se encontraron preguntas con ese término.' },
-        footerShare: { label: 'Compartir', twitter: 'Compartir en X', discord: 'Unirse al servidor' },
-        why: {
-            tag: 'Por Qué Eligen TON618',
-            title: 'Confiable Donde',
-            titleAccent: 'Más Importa',
-            description:
-                'Las comunidades serias necesitan más que comandos vistosos. TON618 prioriza confianza operativa: comportamiento estable, métricas visibles, módulos configurables y una experiencia más limpia para owners, moderadores y soporte.',
-            stats: {
-                uptime: 'Confiabilidad',
-                uptimeValue: 'Respaldada en vivo',
-                uptimeSub: 'Estado visible en la landing',
-                speed: 'Ajuste operativo',
-                speedValue: 'Hecho para equipos',
-                speedSub: 'De la invitación al uso diario',
-            },
-            reasons: {
-                precision: {
-                    title: 'Valor de producto claro',
-                    desc: 'La landing y el dashboard explican con claridad qué resuelve TON618: moderación, automatizaciones, verificación, soporte y visibilidad en vivo.',
+            ctas: {
+                overview: {
+                    primary: 'Ver Dashboard',
+                    secondary: 'Leer Docs',
                 },
-                performance: {
-                    title: 'Mejor ejecución del staff',
-                    desc: 'Los flujos reutilizables reducen trabajo manual y ayudan a responder con más consistencia en crecimiento o picos de actividad.',
+                moderation: {
+                    primary: 'Explorar Moderación',
+                    secondary: 'Ver Casos de Uso',
                 },
-                security: {
-                    title: 'Experiencia orientada a confianza',
-                    desc: 'La telemetría en vivo, los fallbacks elegantes y el framing del producto centrado en estabilidad mejoran la confianza de quienes evalúan el bot.',
+                automation: {
+                    primary: 'Configurar Flujos',
+                    secondary: 'Ver Ejemplos',
                 },
-                integration: {
-                    title: 'Un sistema, menos huecos',
-                    desc: 'Dashboard, docs, soporte y status quedan en un mismo recorrido para pasar de interés a setup sin fricción.',
+                analytics: {
+                    primary: 'Ver Métricas',
+                    secondary: 'Entender Analítica',
                 },
             },
-        },
-        stats: {
-            badgeOnline: 'Datos en vivo online',
-            badgeLoading: 'Actualizando datos en vivo',
-            badgeOffline: 'Mostrando snapshot base',
+            modal: {
+                close: 'Cerrar',
+                previous: 'Anterior',
+                next: 'Siguiente',
+                position: '{{current}} de {{total}}',
             title: 'Confianza',
             titleAccent: 'En Vivo',
             description:

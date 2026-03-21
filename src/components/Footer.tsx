@@ -158,6 +158,30 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
         </div>
 
+        <div className="flex items-center justify-center gap-4 border-t border-white/5 pt-8 pb-6">
+          <span className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-500">{t('footerShare.label')}</span>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out TON618 — premium Discord bot for moderation, automations and ops')}&url=${encodeURIComponent(config.siteUrl || '')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition hover:border-white/20 hover:text-white"
+          >
+            <Twitter className="h-3 w-3" />
+            {t('footerShare.twitter')}
+          </a>
+          {config.supportServerUrl && (
+            <a
+              href={config.supportServerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition hover:border-white/20 hover:text-white"
+            >
+              <MessageCircle className="h-3 w-3" />
+              {t('footerShare.discord')}
+            </a>
+          )}
+        </div>
+
         <div className="flex flex-col gap-6 border-t border-white/5 pt-8 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap items-center gap-5">
             <span className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-600">

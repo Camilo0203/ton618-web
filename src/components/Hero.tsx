@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ChevronRight, Sparkles, Activity, BookOpen } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl, getDashboardUrl } from '../config';
 import Logo from './Logo';
 import { useHeavyMedia } from '../hooks/useHeavyMedia';
+import StarfieldBackground from './StarfieldBackground';
+import VerifiedBadge from './VerifiedBadge';
 
 export default function Hero() {
   const { t } = useTranslation();
@@ -89,6 +91,38 @@ export default function Hero() {
     };
   }, [shouldLoadVideo, shouldReduceMotion]);
 
+  const typingPhrases = t('heroTyping.phrases', { returnObjects: true }) as string[];
+  const [typingIndex, setTypingIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (shouldReduceMotion || !typingPhrases?.length) {
+      setDisplayedText(typingPhrases?.[0] || '');
+      return;
+    }
+
+    const phrase = typingPhrases[typingIndex % typingPhrases.length];
+    const speed = isDeleting ? 30 : 60;
+
+    if (!isDeleting && displayedText === phrase) {
+      const pause = setTimeout(() => setIsDeleting(true), 2000);
+      return () => clearTimeout(pause);
+    }
+
+    if (isDeleting && displayedText === '') {
+      setIsDeleting(false);
+      setTypingIndex((prev) => prev + 1);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setDisplayedText(isDeleting ? phrase.slice(0, displayedText.length - 1) : phrase.slice(0, displayedText.length + 1));
+    }, speed);
+
+    return () => clearTimeout(timer);
+  }, [displayedText, isDeleting, typingIndex, shouldReduceMotion, typingPhrases]);
+
   const proofPoints = [t('hero.proof.one'), t('hero.proof.two'), t('hero.proof.three')];
 
   return (
@@ -98,6 +132,7 @@ export default function Hero() {
       className="relative flex min-h-[92dvh] items-start justify-center overflow-hidden bg-[#000] pb-12 pt-28 md:pt-32 lg:pt-36"
     >
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
+        <StarfieldBackground />
         <div
           className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
             }`}
@@ -155,6 +190,10 @@ export default function Hero() {
               <Activity className="h-3.5 w-3.5 text-cyan-300/70" />
             </motion.div>
 
+            <motion.div {...fadeInUp} className="mb-4 flex justify-center lg:justify-start">
+              <VerifiedBadge />
+            </motion.div>
+
             <motion.div {...fadeInScale} className="mb-8 flex justify-center lg:justify-start">
               <Logo
                 size="xl"
@@ -180,6 +219,9 @@ export default function Hero() {
             >
               {t('hero.description')}
               <span className="mt-3 block text-sm font-normal text-slate-400 sm:text-base">{t('hero.descriptionSub')}</span>
+              <span className="mt-2 block h-7 font-mono text-sm font-semibold text-indigo-300 sm:text-base">
+                {displayedText}<span className="animate-pulse">|</span>
+              </span>
             </motion.p>
 
             <motion.div
