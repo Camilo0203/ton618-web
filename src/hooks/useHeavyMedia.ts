@@ -11,9 +11,14 @@ export function useHeavyMedia(shouldReduceMotion: boolean): boolean {
         }
 
         // Detectar ahorro de datos o conexiones lentas (2G o peor)
-        const nav = navigator as any;
+        const nav = navigator as Navigator & {
+            connection?: { saveData?: boolean; effectiveType?: string };
+            mozConnection?: { saveData?: boolean; effectiveType?: string };
+            webkitConnection?: { saveData?: boolean; effectiveType?: string };
+        };
         const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
-        if (connection && (connection.saveData || ['slow-2g', '2g'].includes(connection.effectiveType))) {
+        const effectiveType = connection?.effectiveType ?? '';
+        if (connection && (connection.saveData || ['slow-2g', '2g'].includes(effectiveType))) {
             setShouldLoad(false);
             return;
         }

@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +29,13 @@ import { useDashboardDarkMode } from './hooks/useDashboardDarkMode';
 import { useMinimumDisplayState } from './hooks/useMinimumDisplayState';
 import { getDashboardSectionStates } from './utils';
 import type { ConfigMutationSectionId } from './types';
+import {
+  addSentryModuleNavigation,
+  clearSentryDashboardGuild,
+  clearSentryDashboardUser,
+  setSentryDashboardGuild,
+  setSentryDashboardUser,
+} from '../lib/sentryEnrich';
 
 type DashboardEntryStage =
   | 'auth-loading'
@@ -177,6 +184,30 @@ export default function DashboardPage() {
   useEffect(() => {
     setConfigSaveError(null);
   }, [selectedGuildId]);
+
+  useEffect(() => {
+    if (authState.user) {
+      setSentryDashboardUser(authState.user.id, authState.user.email);
+    } else {
+      clearSentryDashboardUser();
+    }
+  }, [authState.user]);
+
+  useEffect(() => {
+    if (selectedGuild) {
+      setSentryDashboardGuild(selectedGuild.guildId, selectedGuild.guildName);
+    } else {
+      clearSentryDashboardGuild();
+    }
+  }, [selectedGuild]);
+
+  const previousSectionRef = useRef(activeSection);
+  useEffect(() => {
+    if (previousSectionRef.current !== activeSection) {
+      addSentryModuleNavigation(previousSectionRef.current, activeSection);
+      previousSectionRef.current = activeSection;
+    }
+  }, [activeSection]);
 
   const pageHelmet = (
     <Helmet>

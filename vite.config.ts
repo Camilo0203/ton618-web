@@ -79,18 +79,24 @@ ${siteUrl ? `Sitemap: ${siteUrl}/sitemap.xml` : '# Set VITE_SITE_URL to emit the
       include: ['lucide-react'],
     },
     build: {
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 500,
       sourcemap: isProd ? false : true,
       minify: 'terser',
+      target: 'es2020',
       terserOptions: {
         compress: {
           drop_console: isProd,
           drop_debugger: isProd,
           pure_funcs: isProd ? ['console.log', 'console.info', 'console.debug'] : [],
+          passes: 2,
+        },
+        mangle: {
+          safari10: true,
         },
       },
       rollupOptions: {
         output: {
+          experimentalMinChunkSize: 20000,
           manualChunks(id) {
             if (!id.includes('node_modules')) {
               if (id.includes('src/dashboard/')) {

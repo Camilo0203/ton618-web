@@ -101,26 +101,46 @@ function mergeOptimisticConfig(
 }
 
 function shouldRetryDashboardRequest(failureCount: number, error: unknown) {
-  if (failureCount >= 2) {
+  if (failureCount >= 3) {
     return false;
   }
 
   if (!(error instanceof Error)) {
-    return failureCount < 1;
+    return failureCount < 2;
   }
 
   const normalizedMessage = error.message.toLowerCase();
-  return [
+  
+  const nonRetryableErrors = [
+    'unauthorized',
+    'forbidden',
+    'not found',
+    '401',
+    '403',
+    '404',
+    'invalid',
+    'malformed',
+  ];
+  
+  if (nonRetryableErrors.some((token) => normalizedMessage.includes(token))) {
+    return false;
+  }
+
+  const retryableErrors = [
     'timeout',
     'tempor',
     'network',
     'fetch',
+    'aborted',
+    'econnreset',
     '429',
     '500',
     '502',
     '503',
     '504',
-  ].some((token) => normalizedMessage.includes(token));
+  ];
+  
+  return retryableErrors.some((token) => normalizedMessage.includes(token));
 }
 
 export function useDashboardAuth() {

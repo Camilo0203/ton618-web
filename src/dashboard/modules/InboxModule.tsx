@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDebouncedValue } from '../../lib/rateLimiting';
 import { motion } from 'framer-motion';
 import { LifeBuoy } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -77,8 +78,10 @@ export default function InboxModule({
     [workspace.inbox],
   );
 
+  const debouncedSearch = useDebouncedValue(search, 250);
+
   const filteredInbox = useMemo(() => {
-    const query = search.trim().toLowerCase();
+    const query = debouncedSearch.trim().toLowerCase();
 
     return workspace.inbox
       .filter((ticket) => (openStateFilter === 'all' ? true : openStateFilter === 'open' ? ticket.isOpen : !ticket.isOpen))
@@ -117,7 +120,7 @@ export default function InboxModule({
         if (priorityDelta !== 0) return priorityDelta;
         return (right.lastActivityAt ?? right.updatedAt).localeCompare(left.lastActivityAt ?? left.updatedAt);
       });
-  }, [assignmentFilter, categoryFilter, openStateFilter, priorityFilter, search, slaFilter, workspace.inbox]);
+  }, [assignmentFilter, categoryFilter, openStateFilter, priorityFilter, debouncedSearch, slaFilter, workspace.inbox]);
 
   useEffect(() => {
     if (!filteredInbox.length) {

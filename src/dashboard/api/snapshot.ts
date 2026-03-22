@@ -417,7 +417,7 @@ async function fetchGuildTicketEvents(guildId: string): Promise<TicketConversati
       )
       .eq('guild_id', resolvedGuildId)
       .order('created_at', { ascending: false })
-      .limit(300)
+      .limit(200)
       .returns<GuildTicketEventRow[]>(),
   );
 

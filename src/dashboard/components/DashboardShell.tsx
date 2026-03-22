@@ -20,6 +20,7 @@ import {
 } from '../utils';
 import { config, getDiscordInviteUrl } from '../../config';
 import Logo from '../../components/Logo';
+import { usePrefetchSnapshot } from '../hooks/usePrefetchSnapshot';
 
 interface DashboardShellProps {
   user: User;
@@ -59,6 +60,7 @@ function SidebarContent({
   closeOnNavigate,
 }: SidebarProps) {
   const { t } = useTranslation();
+  const prefetchSnapshot = usePrefetchSnapshot();
   const dashboardBrandLabel = `${config.botName} Dashboard`;
   const sectionMetaMap = new Map(dashboardSections.map((section) => [section.id, section]));
 
@@ -122,7 +124,11 @@ function SidebarContent({
                 <option value="">{t('dashboard.shell.selectServer')}</option>
               ) : null}
               {guilds.map((guild) => (
-                <option key={guild.guildId} value={guild.guildId}>
+                <option 
+                  key={guild.guildId} 
+                  value={guild.guildId}
+                  onMouseEnter={() => prefetchSnapshot(guild.guildId)}
+                >
                   {guild.guildName}
                 </option>
               ))}

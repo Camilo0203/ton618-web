@@ -3,6 +3,7 @@ import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import StateCard from './StateCard';
 import DashboardDegradationNotice from './DashboardDegradationNotice';
+import ErrorBoundary from './ErrorBoundary';
 import type {
   ConfigMutationSectionId,
   DashboardGuild,
@@ -41,10 +42,33 @@ const AnalyticsModule = lazy(() => import('../modules/AnalyticsModule'));
 function ConfigModuleFallback() {
   return (
     <div className="space-y-6">
-      <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+      <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+        <div className="mb-4 h-6 w-48 rounded bg-white/40 dark:bg-surface-700/60" />
+        <div className="h-4 w-full max-w-2xl rounded bg-white/30 dark:bg-surface-700/40" />
+      </div>
       <div className="grid gap-6 xl:grid-cols-2">
-        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
-        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+          <div className="mb-6 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+          <div className="space-y-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-3 w-24 rounded bg-white/30 dark:bg-surface-700/40" />
+                <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+          <div className="mb-6 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+          <div className="space-y-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-3 w-24 rounded bg-white/30 dark:bg-surface-700/40" />
+                <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -53,20 +77,71 @@ function ConfigModuleFallback() {
 function OverviewModuleFallback() {
   return (
     <div className="space-y-6">
-      <div className="dashboard-skeleton h-48 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+      <div className="dashboard-skeleton h-48 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+        <div className="mb-4 h-7 w-56 rounded bg-white/40 dark:bg-surface-700/60" />
+        <div className="mb-3 h-4 w-full max-w-3xl rounded bg-white/30 dark:bg-surface-700/40" />
+        <div className="h-4 w-2/3 rounded bg-white/30 dark:bg-surface-700/40" />
+      </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="dashboard-skeleton h-36 rounded-[1.6rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+          <div key={index} className="dashboard-skeleton h-36 rounded-[1.6rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
+            <div className="mb-3 h-4 w-20 rounded bg-white/30 dark:bg-surface-700/40" />
+            <div className="mb-2 h-8 w-24 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="h-3 w-32 rounded bg-white/30 dark:bg-surface-700/40" />
+          </div>
         ))}
       </div>
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
-          <div className="dashboard-skeleton h-72 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
-          <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+          <div className="dashboard-skeleton h-72 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+            <div className="mb-5 h-5 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="h-3 w-3 rounded-full bg-white/40 dark:bg-surface-700/60" />
+                  <div className="h-4 flex-1 rounded bg-white/30 dark:bg-surface-700/40" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+            <div className="mb-5 h-5 w-36 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="flex items-center justify-between rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
+                  <div className="h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+                  <div className="h-4 w-20 rounded bg-white/40 dark:bg-surface-700/60" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="space-y-6">
-          <div className="dashboard-skeleton h-64 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
-          <div className="dashboard-skeleton h-56 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+          <div className="dashboard-skeleton h-64 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+            <div className="mb-5 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="mt-1 h-4 w-4 rounded bg-white/40 dark:bg-surface-700/60" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 w-full rounded bg-white/30 dark:bg-surface-700/40" />
+                    <div className="h-3 w-2/3 rounded bg-white/20 dark:bg-surface-700/30" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="dashboard-skeleton h-56 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+            <div className="mb-5 h-5 w-36 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
+                  <div className="mb-2 h-4 w-28 rounded bg-white/40 dark:bg-surface-700/60" />
+                  <div className="h-3 w-full rounded bg-white/20 dark:bg-surface-700/30" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -76,15 +151,65 @@ function OverviewModuleFallback() {
 function InboxModuleFallback() {
   return (
     <div className="space-y-6">
-      <div className="dashboard-skeleton h-40 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+      <div className="dashboard-skeleton h-40 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+        <div className="mb-4 h-6 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
+        <div className="flex gap-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="h-9 w-24 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+          ))}
+        </div>
+      </div>
       <div className="grid gap-6 xl:grid-cols-[minmax(340px,420px)_minmax(0,1fr)]">
         <div className="space-y-4">
-          <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
-          <div className="dashboard-skeleton h-[32rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+          <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
+            <div className="mb-4 h-5 w-24 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="h-3 w-16 rounded bg-white/30 dark:bg-surface-700/40" />
+                  <div className="h-9 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="dashboard-skeleton h-[32rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
+            <div className="mb-4 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="space-y-2">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3 rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
+                  <div className="h-10 w-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 w-3/4 rounded bg-white/40 dark:bg-surface-700/60" />
+                    <div className="h-3 w-1/2 rounded bg-white/30 dark:bg-surface-700/40" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="space-y-6">
-          <div className="dashboard-skeleton h-24 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
-          <div className="dashboard-skeleton h-[48rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75" />
+          <div className="dashboard-skeleton h-24 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
+            <div className="mb-3 h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="h-5 w-48 rounded bg-white/40 dark:bg-surface-700/60" />
+          </div>
+          <div className="dashboard-skeleton h-[48rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
+            <div className="mb-5 h-5 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
+            <div className="mb-6 space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="rounded-lg bg-white/30 p-4 dark:bg-surface-700/40">
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full bg-white/40 dark:bg-surface-700/60" />
+                    <div className="h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
+                  </div>
+                  <div className="h-3 w-full rounded bg-white/20 dark:bg-surface-700/30" />
+                </div>
+              ))}
+            </div>
+            <div className="space-y-2">
+              <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
+              <div className="h-9 rounded-lg bg-white/30 dark:bg-surface-700/40" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -328,154 +453,180 @@ export default function DashboardModuleViewport({
         ) : null}
 
         {activeSection === 'overview' ? (
-          <OverviewModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            events={snapshot.events}
-            metrics={snapshot.metrics}
-            mutations={snapshot.mutations}
-            backups={snapshot.backups}
-            syncStatus={snapshot.syncStatus}
-            workspace={snapshot.ticketWorkspace}
-            onSectionChange={onSectionChange}
-            sectionStates={sectionStates}
-            checklist={checklist}
-            quickActions={quickActions}
-            partialFailures={partialFailures}
-          />
+          <ErrorBoundary moduleLabel="Overview" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <OverviewModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              events={snapshot.events}
+              metrics={snapshot.metrics}
+              mutations={snapshot.mutations}
+              backups={snapshot.backups}
+              syncStatus={snapshot.syncStatus}
+              workspace={snapshot.ticketWorkspace}
+              onSectionChange={onSectionChange}
+              sectionStates={sectionStates}
+              checklist={checklist}
+              quickActions={quickActions}
+              partialFailures={partialFailures}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'inbox' ? (
-          <InboxModule
-            guild={selectedGuild}
-            workspace={snapshot.ticketWorkspace}
-            mutation={snapshot.mutations.find((entry) => entry.mutationType === 'ticket_action') ?? null}
-            syncStatus={snapshot.syncStatus}
-            isMutating={requestTicketActionPending}
-            onAction={onTicketAction}
-            partialFailures={inboxFailures}
-          />
+          <ErrorBoundary moduleLabel="Inbox" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <InboxModule
+              guild={selectedGuild}
+              workspace={snapshot.ticketWorkspace}
+              mutation={snapshot.mutations.find((entry) => entry.mutationType === 'ticket_action') ?? null}
+              syncStatus={snapshot.syncStatus}
+              isMutating={requestTicketActionPending}
+              onAction={onTicketAction}
+              partialFailures={inboxFailures}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'general' ? (
-          <GeneralModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'general')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) =>
-              onConfigSave('general', {
-                generalSettings: values.generalSettings,
-                dashboardPreferences: values.dashboardPreferences,
-              })
-            }
-          />
+          <ErrorBoundary moduleLabel="General" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <GeneralModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'general')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) =>
+                onConfigSave('general', {
+                  generalSettings: values.generalSettings,
+                  dashboardPreferences: values.dashboardPreferences,
+                })
+              }
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'server_roles' ? (
-          <ServerRolesModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'server_roles_channels')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('server_roles_channels', values)}
-          />
+          <ErrorBoundary moduleLabel="Server Roles" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <ServerRolesModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'server_roles_channels')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('server_roles_channels', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'tickets' ? (
-          <TicketsModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'tickets')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('tickets', values)}
-          />
+          <ErrorBoundary moduleLabel="Tickets" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <TicketsModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'tickets')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('tickets', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'verification' ? (
-          <VerificationModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'verification')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('verification', values)}
-          />
+          <ErrorBoundary moduleLabel="Verification" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <VerificationModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'verification')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('verification', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'welcome' ? (
-          <WelcomeModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'welcome')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('welcome', values)}
-          />
+          <ErrorBoundary moduleLabel="Welcome" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <WelcomeModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'welcome')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('welcome', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'suggestions' ? (
-          <SuggestionsModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'suggestions')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('suggestions', values)}
-          />
+          <ErrorBoundary moduleLabel="Suggestions" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <SuggestionsModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'suggestions')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('suggestions', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'modlogs' ? (
-          <ModlogsModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'modlogs')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('modlogs', values)}
-          />
+          <ErrorBoundary moduleLabel="Modlogs" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <ModlogsModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'modlogs')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('modlogs', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'commands' ? (
-          <CommandsModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            inventory={snapshot.inventory}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'commands')}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            onSave={(values) => onConfigSave('commands', values)}
-          />
+          <ErrorBoundary moduleLabel="Commands" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <CommandsModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              inventory={snapshot.inventory}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'commands')}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              onSave={(values) => onConfigSave('commands', values)}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'system' ? (
-          <SystemModule
-            guild={selectedGuild}
-            config={snapshot.config}
-            backups={snapshot.backups}
-            mutation={getLatestMutationForSection(snapshot.mutations, 'system')}
-            backupMutation={backupMutation}
-            syncStatus={snapshot.syncStatus}
-            isSaving={requestConfigChangePending}
-            isRequestingBackup={requestBackupActionPending}
-            onSave={(values) => onConfigSave('system', values)}
-            onCreateBackup={onCreateBackup}
-            onRestoreBackup={onRestoreBackup}
-          />
+          <ErrorBoundary moduleLabel="System" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <SystemModule
+              guild={selectedGuild}
+              config={snapshot.config}
+              backups={snapshot.backups}
+              mutation={getLatestMutationForSection(snapshot.mutations, 'system')}
+              backupMutation={backupMutation}
+              syncStatus={snapshot.syncStatus}
+              isSaving={requestConfigChangePending}
+              isRequestingBackup={requestBackupActionPending}
+              onSave={(values) => onConfigSave('system', values)}
+              onCreateBackup={onCreateBackup}
+              onRestoreBackup={onRestoreBackup}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'activity' ? (
-          <ActivityModule
-            guild={selectedGuild}
-            events={snapshot.events}
-            mutations={snapshot.mutations}
-            partialFailure={activityFailure}
-          />
+          <ErrorBoundary moduleLabel="Activity" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <ActivityModule
+              guild={selectedGuild}
+              events={snapshot.events}
+              mutations={snapshot.mutations}
+              partialFailure={activityFailure}
+            />
+          </ErrorBoundary>
         ) : null}
         {activeSection === 'analytics' ? (
-          <AnalyticsModule
-            guild={selectedGuild}
-            metrics={snapshot.metrics}
-            partialFailure={metricsFailure}
-          />
+          <ErrorBoundary moduleLabel="Analytics" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <AnalyticsModule
+              guild={selectedGuild}
+              metrics={snapshot.metrics}
+              partialFailure={metricsFailure}
+            />
+          </ErrorBoundary>
         ) : null}
       </div>
     </Suspense>

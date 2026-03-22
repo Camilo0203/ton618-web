@@ -8,6 +8,7 @@ import { ThemeProvider } from './components/ThemeProvider';
 import ErrorBoundary from './components/ErrorBoundary';
 import App from './App.tsx';
 import { queryClient } from './lib/queryClient';
+import { initPerformanceMonitoring, reportWebVitals } from './lib/performance';
 import './locales/i18n.ts';
 import './index.css';
 
@@ -27,6 +28,8 @@ if (import.meta.env.VITE_SENTRY_DSN) {
   });
 }
 
+initPerformanceMonitoring();
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
@@ -42,3 +45,15 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+if (typeof window !== 'undefined' && 'onCLS' in window) {
+  import('web-vitals').then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
+    onCLS(reportWebVitals);
+    onINP(reportWebVitals);
+    onLCP(reportWebVitals);
+    onFCP(reportWebVitals);
+    onTTFB(reportWebVitals);
+  }).catch(() => {
+    // Web Vitals not available
+  });
+}
