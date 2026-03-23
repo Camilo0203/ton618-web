@@ -12,25 +12,33 @@ import {
   defaultTicketsSettings,
   defaultVerificationSettings,
   defaultWelcomeSettings,
+  customerMemorySchema,
   guildBackupManifestSchema,
   guildConfigSchema,
   guildInventorySchema,
   guildMutationSchema,
   guildSyncStatusSchema,
+  playbookDefinitionSchema,
+  playbookRunSchema,
   ticketConversationEventSchema,
   ticketInboxItemSchema,
   ticketMacroSchema,
+  ticketRecommendationSchema,
 } from '../schemas';
 import type {
   CommandRateLimitOverride,
+  CustomerMemory,
   GuildBackupManifest,
   GuildConfig,
   GuildConfigMutation,
   GuildInventory,
   GuildSyncStatus,
+  PlaybookDefinition,
+  PlaybookRun,
   TicketConversationEvent,
   TicketInboxItem,
   TicketMacro,
+  TicketRecommendation,
 } from '../types';
 
 interface GuildConfigRow {
@@ -162,6 +170,82 @@ interface GuildTicketMacroRow {
   visibility?: string | null;
   sort_order?: number | null;
   is_system?: boolean | null;
+}
+
+interface GuildPlaybookDefinitionRow {
+  guild_id?: string | null;
+  playbook_id?: string | null;
+  key?: string | null;
+  label?: string | null;
+  description?: string | null;
+  tier?: string | null;
+  execution_mode?: string | null;
+  summary?: string | null;
+  trigger_summary?: string | null;
+  is_enabled?: boolean | null;
+  sort_order?: number | null;
+  updated_at?: string | null;
+}
+
+interface GuildPlaybookRunRow {
+  run_id?: string | null;
+  guild_id?: string | null;
+  playbook_id?: string | null;
+  ticket_id?: string | null;
+  user_id?: string | null;
+  status?: string | null;
+  tone?: string | null;
+  title?: string | null;
+  summary?: string | null;
+  reason?: string | null;
+  suggested_action?: string | null;
+  suggested_priority?: string | null;
+  suggested_status?: string | null;
+  suggested_macro_id?: string | null;
+  confidence?: number | null;
+  sort_order?: number | null;
+  metadata?: Record<string, unknown> | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+interface GuildCustomerMemoryRow {
+  guild_id?: string | null;
+  user_id?: string | null;
+  display_label?: string | null;
+  total_tickets?: number | null;
+  open_tickets?: number | null;
+  resolved_tickets?: number | null;
+  breached_tickets?: number | null;
+  recent_tags?: string[] | null;
+  last_ticket_at?: string | null;
+  last_resolved_at?: string | null;
+  risk_level?: string | null;
+  summary?: string | null;
+  updated_at?: string | null;
+}
+
+interface GuildTicketRecommendationRow {
+  recommendation_id?: string | null;
+  guild_id?: string | null;
+  ticket_id?: string | null;
+  user_id?: string | null;
+  playbook_id?: string | null;
+  status?: string | null;
+  tone?: string | null;
+  title?: string | null;
+  summary?: string | null;
+  reason?: string | null;
+  suggested_action?: string | null;
+  suggested_priority?: string | null;
+  suggested_status?: string | null;
+  suggested_macro_id?: string | null;
+  confidence?: number | null;
+  customer_risk_level?: string | null;
+  customer_summary?: string | null;
+  metadata?: Record<string, unknown> | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 function normalizeDashboardPreferencesInput(value: unknown) {
@@ -497,4 +581,148 @@ export function normalizeGuildTicketMacros(
     .filter((result) => result.success)
     .map((result) => result.data)
     .sort((left, right) => left.sortOrder - right.sortOrder || left.label.localeCompare(right.label));
+}
+
+export function normalizeGuildPlaybookDefinitions(
+  guildId: string,
+  rows: GuildPlaybookDefinitionRow[] | null | undefined,
+): PlaybookDefinition[] {
+  return (rows ?? [])
+    .map((row) =>
+      playbookDefinitionSchema.safeParse({
+        guildId: row.guild_id ?? guildId,
+        playbookId: row.playbook_id ?? '',
+        key: row.key ?? row.playbook_id ?? '',
+        label: row.label ?? 'Playbook',
+        description: row.description ?? 'Operational playbook',
+        tier: row.tier ?? 'free',
+        executionMode: row.execution_mode ?? 'assistive',
+        summary: row.summary ?? 'Operational guidance for staff.',
+        triggerSummary: row.trigger_summary ?? 'Configured from the support workspace.',
+        isEnabled: row.is_enabled ?? true,
+        sortOrder: row.sort_order ?? 0,
+        updatedAt: row.updated_at ?? null,
+      }),
+    )
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .sort((left, right) => left.sortOrder - right.sortOrder || left.label.localeCompare(right.label));
+}
+
+export function normalizeGuildPlaybookRuns(
+  guildId: string,
+  rows: GuildPlaybookRunRow[] | null | undefined,
+): PlaybookRun[] {
+  return (rows ?? [])
+    .map((row) =>
+      playbookRunSchema.safeParse({
+        runId: row.run_id ?? '',
+        guildId: row.guild_id ?? guildId,
+        playbookId: row.playbook_id ?? '',
+        ticketId: row.ticket_id ?? '',
+        userId: row.user_id ?? '',
+        status: row.status ?? 'pending',
+        tone: row.tone ?? 'neutral',
+        title: row.title ?? 'Playbook run',
+        summary: row.summary ?? 'Pending operational action.',
+        reason: row.reason ?? 'No reason supplied.',
+        suggestedAction: row.suggested_action ?? null,
+        suggestedPriority: row.suggested_priority ?? null,
+        suggestedStatus: row.suggested_status ?? null,
+        suggestedMacroId: row.suggested_macro_id ?? null,
+        confidence: row.confidence ?? 0,
+        sortOrder: row.sort_order ?? 0,
+        metadata: row.metadata ?? {},
+        createdAt: row.created_at ?? row.updated_at ?? new Date().toISOString(),
+        updatedAt: row.updated_at ?? row.created_at ?? null,
+      }),
+    )
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .sort((left, right) => {
+      if (left.status !== right.status) {
+        return left.status === 'pending' ? -1 : 1;
+      }
+      return (right.updatedAt ?? right.createdAt).localeCompare(left.updatedAt ?? left.createdAt);
+    });
+}
+
+export function normalizeGuildCustomerMemory(
+  guildId: string,
+  rows: GuildCustomerMemoryRow[] | null | undefined,
+): CustomerMemory[] {
+  return (rows ?? [])
+    .map((row) =>
+      customerMemorySchema.safeParse({
+        guildId: row.guild_id ?? guildId,
+        userId: row.user_id ?? '',
+        displayLabel: row.display_label ?? row.user_id ?? 'Customer',
+        totalTickets: row.total_tickets ?? 0,
+        openTickets: row.open_tickets ?? 0,
+        resolvedTickets: row.resolved_tickets ?? 0,
+        breachedTickets: row.breached_tickets ?? 0,
+        recentTags: Array.isArray(row.recent_tags) ? row.recent_tags : [],
+        lastTicketAt: row.last_ticket_at ?? null,
+        lastResolvedAt: row.last_resolved_at ?? null,
+        riskLevel: row.risk_level ?? 'new',
+        summary: row.summary ?? 'Customer context will appear here.',
+        updatedAt: row.updated_at ?? null,
+      }),
+    )
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .sort((left, right) => {
+      if (left.riskLevel !== right.riskLevel) {
+        if (left.riskLevel === 'watch') return -1;
+        if (right.riskLevel === 'watch') return 1;
+        if (left.riskLevel === 'returning') return -1;
+        if (right.riskLevel === 'returning') return 1;
+      }
+      return (right.lastTicketAt ?? '').localeCompare(left.lastTicketAt ?? '');
+    });
+}
+
+export function normalizeGuildTicketRecommendations(
+  guildId: string,
+  rows: GuildTicketRecommendationRow[] | null | undefined,
+): TicketRecommendation[] {
+  return (rows ?? [])
+    .map((row) =>
+      ticketRecommendationSchema.safeParse({
+        recommendationId: row.recommendation_id ?? '',
+        guildId: row.guild_id ?? guildId,
+        ticketId: row.ticket_id ?? '',
+        userId: row.user_id ?? '',
+        playbookId: row.playbook_id ?? '',
+        status: row.status ?? 'pending',
+        tone: row.tone ?? 'neutral',
+        title: row.title ?? 'Operational recommendation',
+        summary: row.summary ?? 'Suggested next step for staff.',
+        reason: row.reason ?? 'No reason supplied.',
+        suggestedAction: row.suggested_action ?? null,
+        suggestedPriority: row.suggested_priority ?? null,
+        suggestedStatus: row.suggested_status ?? null,
+        suggestedMacroId: row.suggested_macro_id ?? null,
+        confidence: row.confidence ?? 0,
+        customerRiskLevel: row.customer_risk_level ?? 'new',
+        customerSummary: row.customer_summary ?? 'Customer context is not available yet.',
+        metadata: row.metadata ?? {},
+        createdAt: row.created_at ?? row.updated_at ?? new Date().toISOString(),
+        updatedAt: row.updated_at ?? row.created_at ?? null,
+      }),
+    )
+    .filter((result) => result.success)
+    .map((result) => result.data)
+    .sort((left, right) => {
+      const toneWeight = { danger: 4, warning: 3, info: 2, success: 1, neutral: 0 };
+      const leftWeight = toneWeight[left.tone];
+      const rightWeight = toneWeight[right.tone];
+      if (left.status !== right.status) {
+        return left.status === 'pending' ? -1 : 1;
+      }
+      if (leftWeight !== rightWeight) {
+        return rightWeight - leftWeight;
+      }
+      return (right.updatedAt ?? right.createdAt).localeCompare(left.updatedAt ?? left.createdAt);
+    });
 }

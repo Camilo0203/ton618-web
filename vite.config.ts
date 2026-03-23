@@ -22,6 +22,8 @@ export default defineConfig(({ mode }) => {
   return {
     test: {
       setupFiles: ['./src/test-setup.ts'],
+      include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+      exclude: ['src/tests/**', 'tests/**', 'node_modules/**'],
     },
     plugins: [
       react(),
@@ -96,7 +98,6 @@ ${siteUrl ? `Sitemap: ${siteUrl}/sitemap.xml` : '# Set VITE_SITE_URL to emit the
       },
       rollupOptions: {
         output: {
-          experimentalMinChunkSize: 20000,
           manualChunks(id) {
             if (!id.includes('node_modules')) {
               if (id.includes('src/dashboard/')) {
@@ -136,17 +137,14 @@ ${siteUrl ? `Sitemap: ${siteUrl}/sitemap.xml` : '# Set VITE_SITE_URL to emit the
             }
 
             if (id.includes('lucide-react')) {
-              if (id.includes('/esm/icons/')) {
-                return 'icons-vendor';
-              }
-              return 'lucide-core';
+              return 'icons-vendor';
             }
 
             if (id.includes('@sentry')) {
               return 'sentry-vendor';
             }
 
-            return 'vendor';
+            return undefined;
           },
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name?.split('.');

@@ -176,6 +176,82 @@ export interface GuildTicketMacroRow {
   is_system: boolean | null;
 }
 
+export interface GuildPlaybookDefinitionRow {
+  guild_id: string;
+  playbook_id: string;
+  key: string;
+  label: string | null;
+  description: string | null;
+  tier: string | null;
+  execution_mode: string | null;
+  summary: string | null;
+  trigger_summary: string | null;
+  is_enabled: boolean | null;
+  sort_order: number | null;
+  updated_at: string | null;
+}
+
+export interface GuildPlaybookRunRow {
+  run_id: string;
+  guild_id: string;
+  playbook_id: string;
+  ticket_id: string;
+  user_id: string;
+  status: string | null;
+  tone: string | null;
+  title: string | null;
+  summary: string | null;
+  reason: string | null;
+  suggested_action: string | null;
+  suggested_priority: string | null;
+  suggested_status: string | null;
+  suggested_macro_id: string | null;
+  confidence: number | null;
+  sort_order: number | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface GuildCustomerMemoryRow {
+  guild_id: string;
+  user_id: string;
+  display_label: string | null;
+  total_tickets: number | null;
+  open_tickets: number | null;
+  resolved_tickets: number | null;
+  breached_tickets: number | null;
+  recent_tags: string[] | null;
+  last_ticket_at: string | null;
+  last_resolved_at: string | null;
+  risk_level: string | null;
+  summary: string | null;
+  updated_at: string | null;
+}
+
+export interface GuildTicketRecommendationRow {
+  recommendation_id: string;
+  guild_id: string;
+  ticket_id: string;
+  user_id: string;
+  playbook_id: string;
+  status: string | null;
+  tone: string | null;
+  title: string | null;
+  summary: string | null;
+  reason: string | null;
+  suggested_action: string | null;
+  suggested_priority: string | null;
+  suggested_status: string | null;
+  suggested_macro_id: string | null;
+  confidence: number | null;
+  customer_risk_level: string | null;
+  customer_summary: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 function getMissingSupabaseConfigKeys(): string[] {
   const missingKeys: string[] = [];
 

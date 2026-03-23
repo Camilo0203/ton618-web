@@ -63,14 +63,17 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const items = [
-    { question: t('faq.items.q1.question'), answer: t('faq.items.q1.answer') },
-    { question: t('faq.items.q2.question'), answer: t('faq.items.q2.answer') },
-    { question: t('faq.items.q3.question'), answer: t('faq.items.q3.answer') },
-    { question: t('faq.items.q4.question'), answer: t('faq.items.q4.answer') },
-    { question: t('faq.items.q5.question'), answer: t('faq.items.q5.answer') },
-    { question: t('faq.items.q6.question'), answer: t('faq.items.q6.answer') },
-  ];
+  const items = useMemo(
+    () => [
+      { question: t('faq.items.q1.question'), answer: t('faq.items.q1.answer') },
+      { question: t('faq.items.q2.question'), answer: t('faq.items.q2.answer') },
+      { question: t('faq.items.q3.question'), answer: t('faq.items.q3.answer') },
+      { question: t('faq.items.q4.question'), answer: t('faq.items.q4.answer') },
+      { question: t('faq.items.q5.question'), answer: t('faq.items.q5.answer') },
+      { question: t('faq.items.q6.question'), answer: t('faq.items.q6.answer') },
+    ],
+    [t],
+  );
 
   const filteredItems = useMemo(() => {
     if (!searchQuery.trim()) return items;

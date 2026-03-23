@@ -27,6 +27,7 @@ import {
 
 const OverviewModule = lazy(() => import('../modules/OverviewModule'));
 const InboxModule = lazy(() => import('../modules/InboxModule'));
+const PlaybooksModule = lazy(() => import('../modules/PlaybooksModule'));
 const GeneralModule = lazy(() => import('../modules/GeneralModule'));
 const ServerRolesModule = lazy(() => import('../modules/ServerRolesModule'));
 const TicketsModule = lazy(() => import('../modules/TicketsModule'));
@@ -268,7 +269,7 @@ function buildDerivedViewModel(
   const mutations = snapshot?.mutations ?? [];
   const syncStatus = snapshot?.syncStatus ?? null;
   const sectionStates = snapshot && selectedGuild
-    ? getDashboardSectionStates(snapshot.config, selectedGuild, syncStatus, snapshot.backups, mutations)
+    ? getDashboardSectionStates(snapshot.config, selectedGuild, syncStatus, snapshot.backups, mutations, snapshot.playbooks)
     : [];
   const checklist = snapshot && selectedGuild
     ? getDashboardChecklist(selectedGuild, sectionStates, snapshot.backups, syncStatus)
@@ -406,7 +407,19 @@ export default function DashboardModuleViewport({
   const activityFailure = partialFailures.find((failure) => failure.id === 'activity') ?? null;
   const metricsFailure = partialFailures.find((failure) => failure.id === 'metrics') ?? null;
   const inboxFailures = partialFailures.filter(
-    (failure) => failure.id === 'ticket_events' || failure.id === 'ticket_macros',
+    (failure) =>
+      failure.id === 'ticket_inbox'
+      || failure.id === 'ticket_events'
+      || failure.id === 'ticket_macros'
+      || failure.id === 'customer_memory'
+      || failure.id === 'ticket_recommendations',
+  );
+  const playbookFailures = partialFailures.filter(
+    (failure) =>
+      failure.id === 'playbook_definitions'
+      || failure.id === 'playbook_runs'
+      || failure.id === 'customer_memory'
+      || failure.id === 'ticket_recommendations',
   );
   const activeConfigSection: ConfigMutationSectionId | null = (() => {
     switch (activeSection) {
@@ -463,6 +476,7 @@ export default function DashboardModuleViewport({
               backups={snapshot.backups}
               syncStatus={snapshot.syncStatus}
               workspace={snapshot.ticketWorkspace}
+              playbooks={snapshot.playbooks}
               onSectionChange={onSectionChange}
               sectionStates={sectionStates}
               checklist={checklist}
@@ -476,11 +490,23 @@ export default function DashboardModuleViewport({
             <InboxModule
               guild={selectedGuild}
               workspace={snapshot.ticketWorkspace}
+              playbooks={snapshot.playbooks}
               mutation={snapshot.mutations.find((entry) => entry.mutationType === 'ticket_action') ?? null}
               syncStatus={snapshot.syncStatus}
               isMutating={requestTicketActionPending}
               onAction={onTicketAction}
               partialFailures={inboxFailures}
+            />
+          </ErrorBoundary>
+        ) : null}
+        {activeSection === 'playbooks' ? (
+          <ErrorBoundary moduleLabel="Playbooks" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+            <PlaybooksModule
+              guild={selectedGuild}
+              playbooks={snapshot.playbooks}
+              workspace={snapshot.ticketWorkspace}
+              onSectionChange={onSectionChange}
+              partialFailures={playbookFailures}
             />
           </ErrorBoundary>
         ) : null}

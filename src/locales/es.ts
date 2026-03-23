@@ -569,7 +569,7 @@ export const es = {
                 locale: { title: 'Idioma y operacion', desc: 'Estos ajustes definen el tono base del bot, la zona horaria que usaran los reportes y como invocan comandos los miembros.', language: { label: 'Idioma base', hint: 'Este idioma se usa en mensajes, paneles y respuestas principales del bot.', es: 'Espanol', en: 'English' }, timezone: { label: 'Zona horaria', hint: 'Afecta horarios visibles, reportes y automatizaciones programadas.' }, commandMode: { label: 'Modo de comandos', hint: 'Elige si el usuario invoca al bot por mencion o con un prefijo corto.', mention: 'Mencion del bot', prefix: 'Prefijo' }, prefix: { label: 'Prefijo', hint: 'Solo se usa si activas el modo por prefijo.' } },
                 moderation: { title: 'Preset general de moderacion', desc: 'Sirve como intencion operativa para el backend y deja claro que nivel de intervencion espera el staff.', relaxed: { label: 'Relajado', desc: 'Mas flexible y menos intervencion automatica.' }, balanced: { label: 'Balanceado', desc: 'Equilibrio entre proteccion y comodidad.' }, strict: { label: 'Estricto', desc: 'Mas disciplina y menos tolerancia al ruido.' } },
                 prefs: { eyebrow: 'Panel', title: 'Preferencias del equipo', desc: 'Ajustes de presentacion para que el equipo vuelva directo a la tarea que mas usa.', defaultSection: 'Pantalla inicial', compactMode: { label: 'Modo compacto', desc: 'Reduce densidad visual para sesiones largas de moderacion.' }, advancedCards: { label: 'Tarjetas avanzadas', desc: 'Muestra contexto extra, recomendaciones y salud operativa ampliada.' }, notice: 'Los cambios se envian a una cola auditada. El bot los aplica y confirma despues en la vista Resumen.' },
-                sections: { overview: 'Inicio', inbox: 'Bandeja de soporte', general: 'Configuracion inicial', server_roles: 'Roles y canales', tickets: 'Tickets', verification: 'Verificacion de acceso', welcome: 'Bienvenida', suggestions: 'Sugerencias de la comunidad', modlogs: 'Registro de moderacion', commands: 'Comandos', system: 'Sistema del bot', activity: 'Actividad reciente', analytics: 'Analitica' }
+                sections: { overview: 'Inicio', inbox: 'Bandeja de soporte', playbooks: 'Playbooks vivos', general: 'Configuracion inicial', server_roles: 'Roles y canales', tickets: 'Tickets', verification: 'Verificacion de acceso', welcome: 'Bienvenida', suggestions: 'Sugerencias de la comunidad', modlogs: 'Registro de moderacion', commands: 'Comandos', system: 'Sistema del bot', activity: 'Actividad reciente', analytics: 'Analitica' }
             },
             analytics: {
                 noComparison: 'Sin comparacion',
@@ -753,6 +753,7 @@ export const es = {
             sections: {
                 overview: { label: 'Inicio', description: 'Lo que ya funciona, lo que falta y que deberías hacer ahora.' },
                 inbox: { label: 'Bandeja de soporte', description: 'Cola activa, macros y seguimiento.' },
+                playbooks: { label: 'Playbooks vivos', description: 'Sugerencias operativas, memoria ligera y decisiones guiadas.' },
                 general: { label: 'Configuración inicial', description: 'Idioma, comandos y base del panel.' },
                 server_roles: { label: 'Roles y canales', description: 'Canales clave, staff y permisos que destraban el resto.' },
                 tickets: { label: 'Tickets', description: 'Flujo de soporte, SLA y automatización.' },
@@ -786,6 +787,7 @@ export const es = {
                 'community-autoroles': { label: 'Autoroles', description: 'Se gestiona desde bienvenida.' },
                 'support-tickets': { label: 'Tickets', description: 'Reglas, límites y automatizaciones.' },
                 'support-inbox': { label: 'Bandeja', description: 'Cola activa y conversaciones abiertas.' },
+                'support-playbooks': { label: 'Playbooks', description: 'Recomendaciones vivas y memoria operativa.' },
                 'support-macros': { label: 'Macros', description: 'Acceso rápido desde la bandeja.' },
                 'support-sla': { label: 'SLA', description: 'Objetivos de respuesta y alertas.' },
                 'moderation-log': { label: 'Registro', description: 'Eventos que quedan guardados.' },

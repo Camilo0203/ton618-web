@@ -679,7 +679,7 @@ export const en = {
                 locale: { title: 'Language and operation', desc: 'These settings define the bot\'s base tone, the timezone for reports, and how members invoke commands.', language: { label: 'Base language', hint: 'This language is used in messages, panels, and main bot replies.', es: 'Spanish', en: 'English' }, timezone: { label: 'Timezone', hint: 'Affects visible times, reports, and scheduled automations.' }, commandMode: { label: 'Command mode', hint: 'Choose if the user invokes the bot by mention or with a short prefix.', mention: 'Bot mention', prefix: 'Prefix' }, prefix: { label: 'Prefix', hint: 'Only used if you enable prefix mode.' } },
                 moderation: { title: 'General moderation preset', desc: 'Acts as an operational intent for the backend and makes clear what level of intervention the staff expects.', relaxed: { label: 'Relaxed', desc: 'More flexible and less automatic intervention.' }, balanced: { label: 'Balanced', desc: 'Balance between protection and comfort.' }, strict: { label: 'Strict', desc: 'More discipline and less tolerance to noise.' } },
                 prefs: { eyebrow: 'Dashboard', title: 'Team preferences', desc: 'Presentation settings so the team goes straight back to their most used task.', defaultSection: 'Initial screen', compactMode: { label: 'Compact mode', desc: 'Reduces visual density for long moderation sessions.' }, advancedCards: { label: 'Advanced cards', desc: 'Shows extra context, recommendations, and extended operational health.' }, notice: 'Changes are sent to an audited queue. The bot applies and confirms them later in the Overview view.' },
-                sections: { overview: 'Overview', inbox: 'Support inbox', general: 'Initial configuration', server_roles: 'Roles and channels', tickets: 'Tickets', verification: 'Access verification', welcome: 'Welcome', suggestions: 'Community suggestions', modlogs: 'Moderation logs', commands: 'Commands', system: 'Bot system', activity: 'Recent activity', analytics: 'Analytics' }
+                sections: { overview: 'Overview', inbox: 'Support inbox', playbooks: 'Live playbooks', general: 'Initial configuration', server_roles: 'Roles and channels', tickets: 'Tickets', verification: 'Access verification', welcome: 'Welcome', suggestions: 'Community suggestions', modlogs: 'Moderation logs', commands: 'Commands', system: 'Bot system', activity: 'Recent activity', analytics: 'Analytics' }
             },
             serverRoles: {
                 onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para publicar canales y roles en la dashboard', desc: 'Este modulo usa inventario real del servidor. Cuando el bot este dentro, cargaremos canales, roles y paneles disponibles.' },
@@ -1053,6 +1053,7 @@ export const en = {
             sections: {
                 overview: { label: 'Home', description: 'What already works, what is missing and what you should do now.' },
                 inbox: { label: 'Support inbox', description: 'Active queue, macros and follow-up.' },
+                playbooks: { label: 'Live playbooks', description: 'Operational suggestions, lightweight memory and guided decisions.' },
                 general: { label: 'Initial setup', description: 'Language, commands and panel basics.' },
                 server_roles: { label: 'Roles & channels', description: 'Key channels, staff and permissions that unlock the rest.' },
                 tickets: { label: 'Tickets', description: 'Support flow, SLA and automation.' },
@@ -1086,6 +1087,7 @@ export const en = {
                 'community-autoroles': { label: 'Autoroles', description: 'Managed from welcome settings.' },
                 'support-tickets': { label: 'Tickets', description: 'Rules, limits and automations.' },
                 'support-inbox': { label: 'Inbox', description: 'Active queue and open conversations.' },
+                'support-playbooks': { label: 'Playbooks', description: 'Live recommendations and operational memory.' },
                 'support-macros': { label: 'Macros', description: 'Quick access from the inbox.' },
                 'support-sla': { label: 'SLA', description: 'Response targets and alerts.' },
                 'moderation-log': { label: 'Log', description: 'Events that are recorded.' },

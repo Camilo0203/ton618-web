@@ -1,15 +1,20 @@
 import { guildEventSchema, guildMetricsSchema } from '../schemas';
 import {
   normalizeGuildBackups,
+  normalizeGuildCustomerMemory,
   normalizeGuildConfig,
   normalizeGuildInventory,
   normalizeGuildMutations,
+  normalizeGuildPlaybookDefinitions,
+  normalizeGuildPlaybookRuns,
   normalizeGuildSyncStatus,
   normalizeGuildTicketEvents,
   normalizeGuildTicketInbox,
   normalizeGuildTicketMacros,
+  normalizeGuildTicketRecommendations,
 } from '../utils';
 import type {
+  CustomerMemory,
   DashboardPartialFailure,
   DashboardPartialFailureId,
   GuildBackupManifest,
@@ -17,24 +22,31 @@ import type {
   GuildDashboardSnapshot,
   GuildEvent,
   GuildMetricsDaily,
+  PlaybookDefinition,
+  PlaybookRun,
   TicketConversationEvent,
   TicketInboxItem,
   TicketMacro,
+  TicketRecommendation,
 } from '../types';
 import {
   createDashboardError,
   ensureGuildId,
   getSupabaseClient,
+  GuildCustomerMemoryRow,
   GuildBackupRow,
   GuildConfigRow,
   GuildEventRow,
   GuildInventoryRow,
   GuildMetricsRow,
   GuildMutationRow,
+  GuildPlaybookDefinitionRow,
+  GuildPlaybookRunRow,
   GuildSyncStatusRow,
   GuildTicketEventRow,
   GuildTicketInboxRow,
   GuildTicketMacroRow,
+  GuildTicketRecommendationRow,
   runQueryWithTimeout,
 } from './shared';
 
@@ -65,6 +77,22 @@ const OPTIONAL_SNAPSHOT_METADATA: Record<
   ticket_inbox: {
     label: 'Bandeja de tickets',
     contextHint: 'Revisa guild_ticket_inbox y la bandeja de tickets.',
+  },
+  playbook_definitions: {
+    label: 'Playbooks activos',
+    contextHint: 'Revisa guild_playbook_definitions y el bridge operativo.',
+  },
+  playbook_runs: {
+    label: 'Ejecuciones de playbooks',
+    contextHint: 'Revisa guild_playbook_runs y la resolucion de recomendaciones.',
+  },
+  customer_memory: {
+    label: 'Memoria operativa',
+    contextHint: 'Revisa guild_customer_memory y el historial contextual de usuarios.',
+  },
+  ticket_recommendations: {
+    label: 'Recomendaciones operativas',
+    contextHint: 'Revisa guild_ticket_recommendations y la generacion de sugerencias.',
   },
 };
 
@@ -456,6 +484,180 @@ async function fetchGuildTicketMacros(guildId: string): Promise<TicketMacro[]> {
   return normalizeGuildTicketMacros(resolvedGuildId, data);
 }
 
+async function fetchGuildPlaybookDefinitions(guildId: string): Promise<PlaybookDefinition[]> {
+  const resolvedGuildId = ensureGuildId(guildId, 'cargar los playbooks');
+  const client = getSupabaseClient();
+  const { data, error } = await runQueryWithTimeout(
+    `snapshot.playbook-definitions.${resolvedGuildId}`,
+    client
+      .from('guild_playbook_definitions')
+      .select(
+        [
+          'guild_id',
+          'playbook_id',
+          'key',
+          'label',
+          'description',
+          'tier',
+          'execution_mode',
+          'summary',
+          'trigger_summary',
+          'is_enabled',
+          'sort_order',
+          'updated_at',
+        ].join(', '),
+      )
+      .eq('guild_id', resolvedGuildId)
+      .order('sort_order', { ascending: true })
+      .returns<GuildPlaybookDefinitionRow[]>(),
+  );
+
+  if (error) {
+    throw createDashboardError(
+      `snapshot.playbook-definitions.${resolvedGuildId}`,
+      error,
+      'No se pudieron cargar los playbooks del servidor.',
+    );
+  }
+
+  return normalizeGuildPlaybookDefinitions(resolvedGuildId, data);
+}
+
+async function fetchGuildPlaybookRuns(guildId: string): Promise<PlaybookRun[]> {
+  const resolvedGuildId = ensureGuildId(guildId, 'cargar las ejecuciones de playbooks');
+  const client = getSupabaseClient();
+  const { data, error } = await runQueryWithTimeout(
+    `snapshot.playbook-runs.${resolvedGuildId}`,
+    client
+      .from('guild_playbook_runs')
+      .select(
+        [
+          'run_id',
+          'guild_id',
+          'playbook_id',
+          'ticket_id',
+          'user_id',
+          'status',
+          'tone',
+          'title',
+          'summary',
+          'reason',
+          'suggested_action',
+          'suggested_priority',
+          'suggested_status',
+          'suggested_macro_id',
+          'confidence',
+          'sort_order',
+          'metadata',
+          'created_at',
+          'updated_at',
+        ].join(', '),
+      )
+      .eq('guild_id', resolvedGuildId)
+      .order('sort_order', { ascending: true })
+      .returns<GuildPlaybookRunRow[]>(),
+  );
+
+  if (error) {
+    throw createDashboardError(
+      `snapshot.playbook-runs.${resolvedGuildId}`,
+      error,
+      'No se pudieron cargar las ejecuciones de playbooks.',
+    );
+  }
+
+  return normalizeGuildPlaybookRuns(resolvedGuildId, data);
+}
+
+async function fetchGuildCustomerMemory(guildId: string): Promise<CustomerMemory[]> {
+  const resolvedGuildId = ensureGuildId(guildId, 'cargar la memoria operativa');
+  const client = getSupabaseClient();
+  const { data, error } = await runQueryWithTimeout(
+    `snapshot.customer-memory.${resolvedGuildId}`,
+    client
+      .from('guild_customer_memory')
+      .select(
+        [
+          'guild_id',
+          'user_id',
+          'display_label',
+          'total_tickets',
+          'open_tickets',
+          'resolved_tickets',
+          'breached_tickets',
+          'recent_tags',
+          'last_ticket_at',
+          'last_resolved_at',
+          'risk_level',
+          'summary',
+          'updated_at',
+        ].join(', '),
+      )
+      .eq('guild_id', resolvedGuildId)
+      .order('updated_at', { ascending: false })
+      .limit(100)
+      .returns<GuildCustomerMemoryRow[]>(),
+  );
+
+  if (error) {
+    throw createDashboardError(
+      `snapshot.customer-memory.${resolvedGuildId}`,
+      error,
+      'No se pudo cargar la memoria operativa del servidor.',
+    );
+  }
+
+  return normalizeGuildCustomerMemory(resolvedGuildId, data);
+}
+
+async function fetchGuildTicketRecommendations(guildId: string): Promise<TicketRecommendation[]> {
+  const resolvedGuildId = ensureGuildId(guildId, 'cargar las recomendaciones operativas');
+  const client = getSupabaseClient();
+  const { data, error } = await runQueryWithTimeout(
+    `snapshot.ticket-recommendations.${resolvedGuildId}`,
+    client
+      .from('guild_ticket_recommendations')
+      .select(
+        [
+          'recommendation_id',
+          'guild_id',
+          'ticket_id',
+          'user_id',
+          'playbook_id',
+          'status',
+          'tone',
+          'title',
+          'summary',
+          'reason',
+          'suggested_action',
+          'suggested_priority',
+          'suggested_status',
+          'suggested_macro_id',
+          'confidence',
+          'customer_risk_level',
+          'customer_summary',
+          'metadata',
+          'created_at',
+          'updated_at',
+        ].join(', '),
+      )
+      .eq('guild_id', resolvedGuildId)
+      .order('updated_at', { ascending: false })
+      .limit(200)
+      .returns<GuildTicketRecommendationRow[]>(),
+  );
+
+  if (error) {
+    throw createDashboardError(
+      `snapshot.ticket-recommendations.${resolvedGuildId}`,
+      error,
+      'No se pudieron cargar las recomendaciones operativas.',
+    );
+  }
+
+  return normalizeGuildTicketRecommendations(resolvedGuildId, data);
+}
+
 function buildPartialFailure(id: DashboardPartialFailureId, error: unknown): DashboardPartialFailure {
   const metadata = OPTIONAL_SNAPSHOT_METADATA[id];
   const baseMessage = error instanceof Error && error.message
@@ -483,6 +685,10 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     metricsResult,
     ticketEventsResult,
     ticketMacrosResult,
+    playbookDefinitionsResult,
+    playbookRunsResult,
+    customerMemoryResult,
+    ticketRecommendationsResult,
   ] = await Promise.allSettled([
     fetchGuildConfig(resolvedGuildId),
     fetchGuildInventory(resolvedGuildId),
@@ -494,6 +700,10 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
     fetchGuildMetrics(resolvedGuildId),
     fetchGuildTicketEvents(resolvedGuildId),
     fetchGuildTicketMacros(resolvedGuildId),
+    fetchGuildPlaybookDefinitions(resolvedGuildId),
+    fetchGuildPlaybookRuns(resolvedGuildId),
+    fetchGuildCustomerMemory(resolvedGuildId),
+    fetchGuildTicketRecommendations(resolvedGuildId),
   ]);
 
   const partialFailures: DashboardPartialFailure[] = [];
@@ -537,6 +747,10 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
   const metrics = getOptional(metricsResult, 'metrics', [] as GuildMetricsDaily[]);
   const ticketEvents = getOptional(ticketEventsResult, 'ticket_events', [] as TicketConversationEvent[]);
   const ticketMacros = getOptional(ticketMacrosResult, 'ticket_macros', [] as TicketMacro[]);
+  const playbookDefinitions = getOptional(playbookDefinitionsResult, 'playbook_definitions', [] as PlaybookDefinition[]);
+  const playbookRuns = getOptional(playbookRunsResult, 'playbook_runs', [] as PlaybookRun[]);
+  const customerMemory = getOptional(customerMemoryResult, 'customer_memory', [] as CustomerMemory[]);
+  const ticketRecommendations = getOptional(ticketRecommendationsResult, 'ticket_recommendations', [] as TicketRecommendation[]);
 
   return {
     config,
@@ -550,6 +764,12 @@ export async function fetchGuildDashboardSnapshot(guildId: string): Promise<Guil
       inbox: ticketInbox,
       events: ticketEvents,
       macros: ticketMacros,
+    },
+    playbooks: {
+      definitions: playbookDefinitions,
+      runs: playbookRuns,
+      customerMemory,
+      recommendations: ticketRecommendations,
     },
     partialFailures,
   };

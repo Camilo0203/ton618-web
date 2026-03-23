@@ -12,8 +12,11 @@ import {
 import PanelCard from '../../components/PanelCard';
 import SectionMutationBanner from '../../components/SectionMutationBanner';
 import type {
+  CustomerMemory,
   GuildConfigMutation,
   GuildSyncStatus,
+  PlaybookRun,
+  TicketRecommendation,
   TicketConversationEvent,
   TicketDashboardActionId,
   TicketInboxItem,
@@ -43,6 +46,9 @@ interface InboxTicketDetailProps {
   actionFeedback: ActionFeedback | null;
   timeline: TicketConversationEvent[];
   customerProfile: CustomerProfile | null;
+  customerMemory: CustomerMemory | null;
+  recommendations: TicketRecommendation[];
+  playbookRuns: PlaybookRun[];
   workflowOptions: Array<{ value: TicketWorkflowStatus; label: string }>;
   priorityOptions: Array<{ value: PriorityFilter; label: string }>;
   statusDraft: TicketWorkflowStatus;
@@ -71,8 +77,26 @@ function getFeedbackIcon(tone: ActionFeedback['tone']) {
   return <Clock3 className="mt-0.5 h-4 w-4 flex-shrink-0" />;
 }
 
+function getRecommendationToneClass(tone: TicketRecommendation['tone']) {
+  switch (tone) {
+    case 'danger':
+      return 'border-rose-200/70 bg-rose-50/90 text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-100';
+    case 'warning':
+      return 'border-amber-200/70 bg-amber-50/90 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100';
+    case 'info':
+      return 'border-sky-200/70 bg-sky-50/90 text-sky-900 dark:border-sky-900/40 dark:bg-sky-950/20 dark:text-sky-100';
+    case 'success':
+      return 'border-emerald-200/70 bg-emerald-50/90 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-100';
+    default:
+      return 'border-slate-200/70 bg-slate-50/90 text-slate-900 dark:border-surface-600 dark:bg-surface-700/70 dark:text-slate-100';
+  }
+}
+
 export default function InboxTicketDetail(props: InboxTicketDetailProps) {
   const ticket = props.ticket;
+  const isEnglish = props.t('nav.docs') === 'Docs';
+  const runsByPlaybook = new Map(props.playbookRuns.map((run) => [run.playbookId, run]));
+  const macrosById = new Map(props.macros.map((macro) => [macro.macroId, macro]));
 
   return (
     <PanelCard
@@ -111,6 +135,104 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
         </div>
       ) : null}
 
+      {props.recommendations.length ? (
+        <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-white/70 p-5 dark:bg-surface-800/75">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="dashboard-panel-label">{isEnglish ? 'Live playbooks' : 'Playbooks vivos'}</p>
+              <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                {isEnglish ? 'Guided actions for this ticket' : 'Acciones guiadas para este ticket'}
+              </h3>
+            </div>
+            <span className="dashboard-status-pill-compact dashboard-neutral-pill">{props.recommendations.length}</span>
+          </div>
+          <div className="mt-4 space-y-3">
+            {props.recommendations.map((recommendation) => {
+              const run = runsByPlaybook.get(recommendation.playbookId);
+              const recommendationMeta = {
+                recommendationId: recommendation.recommendationId,
+                runId: run?.runId ?? null,
+              };
+              const macro = recommendation.suggestedMacroId ? macrosById.get(recommendation.suggestedMacroId) ?? null : null;
+
+              const applyPrimaryAction = () => {
+                if (recommendation.suggestedAction === 'post_macro' && recommendation.suggestedMacroId) {
+                  props.onAction('post_macro', { macroId: recommendation.suggestedMacroId, ...recommendationMeta });
+                  return;
+                }
+                if (recommendation.suggestedAction === 'set_status' && recommendation.suggestedStatus) {
+                  props.onAction('set_status', { workflowStatus: recommendation.suggestedStatus, ...recommendationMeta });
+                  return;
+                }
+                if (recommendation.suggestedAction === 'set_priority' && recommendation.suggestedPriority) {
+                  props.onAction('set_priority', { priority: recommendation.suggestedPriority, ...recommendationMeta });
+                  return;
+                }
+                props.onAction('confirm_recommendation', recommendationMeta);
+              };
+
+              const primaryLabel = (() => {
+                if (recommendation.suggestedAction === 'post_macro' && macro) {
+                  return isEnglish ? `Post macro: ${macro.label}` : `Publicar macro: ${macro.label}`;
+                }
+                if (recommendation.suggestedAction === 'set_status' && recommendation.suggestedStatus) {
+                  return isEnglish
+                    ? `Set status to ${getTicketStatusLabel(recommendation.suggestedStatus)}`
+                    : `Cambiar estado a ${getTicketStatusLabel(recommendation.suggestedStatus)}`;
+                }
+                if (recommendation.suggestedAction === 'set_priority' && recommendation.suggestedPriority) {
+                  return isEnglish
+                    ? `Set priority to ${getPriorityLabel(recommendation.suggestedPriority, props.t)}`
+                    : `Subir prioridad a ${getPriorityLabel(recommendation.suggestedPriority, props.t)}`;
+                }
+                return isEnglish ? 'Confirm recommendation' : 'Confirmar recomendacion';
+              })();
+
+              return (
+                <article key={recommendation.recommendationId} className={`rounded-[1.35rem] border p-4 ${getRecommendationToneClass(recommendation.tone)}`}>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold">{recommendation.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-current/85">{recommendation.summary}</p>
+                      <p className="mt-2 text-xs uppercase tracking-[0.16em] text-current/65">{recommendation.reason}</p>
+                    </div>
+                    <span className="dashboard-status-pill-compact dashboard-neutral-pill">
+                      {Math.round(recommendation.confidence * 100)}%
+                    </span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={applyPrimaryAction}
+                      disabled={props.isMutating}
+                      className="dashboard-primary-button"
+                    >
+                      {primaryLabel}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => props.onAction('confirm_recommendation', recommendationMeta)}
+                      disabled={props.isMutating}
+                      className="dashboard-secondary-button"
+                    >
+                      {isEnglish ? 'Confirm' : 'Confirmar'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => props.onAction('dismiss_recommendation', recommendationMeta)}
+                      disabled={props.isMutating}
+                      className="dashboard-secondary-button"
+                    >
+                      {isEnglish ? 'Dismiss' : 'Descartar'}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-8 grid gap-6 2xl:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
         <div className="space-y-6">
           <div className="dashboard-grid-fit-standard">
@@ -143,6 +265,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                 [props.t('dashboard.inbox.detail.customer.user'), ticket.userLabel ?? ticket.userId],
                 [props.t('dashboard.inbox.detail.customer.claimOwner'), ticket.claimedByLabel ?? props.t('dashboard.inbox.list.unclaimed')],
                 [props.t('dashboard.inbox.detail.customer.assignee'), ticket.assigneeLabel ?? props.t('dashboard.inbox.list.unassigned')],
+                [isEnglish ? 'Operational memory' : 'Memoria operativa', props.customerMemory?.summary ?? (isEnglish ? 'No customer memory yet.' : 'Aun no existe memoria operativa.')],
                 [props.t('dashboard.inbox.detail.customer.firstResponse'), formatDateTime(ticket.firstResponseAt)],
                 [props.t('dashboard.inbox.detail.customer.lastCustomer'), formatDateTime(ticket.lastCustomerMessageAt)],
                 [props.t('dashboard.inbox.detail.customer.lastStaff'), formatDateTime(ticket.lastStaffMessageAt)],

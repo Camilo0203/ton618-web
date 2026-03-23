@@ -196,6 +196,10 @@ export function useGuildDashboardSnapshot(guildId: string | null, enabled: boole
       'guild_ticket_inbox',
       'guild_ticket_events',
       'guild_ticket_macros',
+      'guild_playbook_definitions',
+      'guild_playbook_runs',
+      'guild_customer_memory',
+      'guild_ticket_recommendations',
     ];
 
     realtimeTables.forEach((table) => {

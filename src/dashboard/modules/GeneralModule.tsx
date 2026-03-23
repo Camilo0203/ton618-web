@@ -233,6 +233,7 @@ export default function GeneralModule({
             >
               <option value="overview">{t('dashboard.general.sections.overview')}</option>
               <option value="inbox">{t('dashboard.general.sections.inbox')}</option>
+              <option value="playbooks">{t('dashboard.general.sections.playbooks')}</option>
               <option value="general">{t('dashboard.general.sections.general')}</option>
               <option value="server_roles">{t('dashboard.general.sections.server_roles')}</option>
               <option value="tickets">{t('dashboard.general.sections.tickets')}</option>

@@ -4,6 +4,7 @@ import type {
   DashboardQuickAction,
 } from './utils';
 import type {
+  PlaybookWorkspaceSnapshot,
   DashboardGuild,
   GuildBackupManifest,
   GuildConfig,
@@ -305,6 +306,7 @@ export function formatTimelineTimestamp(value: string): { absolute: string; rela
 function buildOverviewActions(
   quickActions: DashboardQuickAction[],
   workspace: TicketWorkspaceSnapshot,
+  playbooks: PlaybookWorkspaceSnapshot | null,
   syncStatus: GuildSyncStatus | null,
   sectionStates: DashboardSectionState[],
 ): OverviewAction[] {
@@ -318,9 +320,18 @@ function buildOverviewActions(
 
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen).length;
   const breachedTickets = workspace.inbox.filter((ticket) => ticket.slaState === 'breached').length;
+  const pendingRecommendations = playbooks?.recommendations.filter((recommendation) => recommendation.status === 'pending').length ?? 0;
   const needsAttention = sectionStates.find((section) => section.status === 'needs_attention');
 
-  if (breachedTickets > 0) {
+  if (pendingRecommendations > 0) {
+    actions.unshift({
+      id: 'playbooks-pending',
+      label: 'Revisar playbooks pendientes',
+      description: `${pendingRecommendations} recomendacion(es) operativa(s) esperan confirmacion o descarte.`,
+      sectionId: 'playbooks',
+      tone: pendingRecommendations > 2 ? 'warning' : 'info',
+    });
+  } else if (breachedTickets > 0) {
     actions.unshift({
       id: 'tickets-breached',
       label: 'Atender tickets con SLA vencido',
@@ -372,6 +383,7 @@ export function getOverviewInsight(
   sectionStates: DashboardSectionState[],
   checklist: DashboardChecklistStep[],
   quickActions: DashboardQuickAction[],
+  playbooks: PlaybookWorkspaceSnapshot | null = null,
 ): OverviewInsight {
   const summary = getMetricsSummary(metrics);
   const activeModules = getActiveModules(config);
@@ -384,6 +396,8 @@ export function getOverviewInsight(
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen).length;
   const breachedTickets = workspace.inbox.filter((ticket) => ticket.slaState === 'breached').length;
   const warningTickets = workspace.inbox.filter((ticket) => ticket.slaState === 'warning').length;
+  const pendingRecommendations = playbooks?.recommendations.filter((recommendation) => recommendation.status === 'pending').length ?? 0;
+  const watchCustomers = playbooks?.customerMemory.filter((memory) => memory.riskLevel === 'watch').length ?? 0;
   const completedChecklist = checklist.filter((step) => step.complete).length;
   const staleSync = syncStatus?.lastHeartbeatAt ? Date.now() - new Date(syncStatus.lastHeartbeatAt).getTime() > 1000 * 60 * 90 : true;
 
@@ -422,6 +436,17 @@ export function getOverviewInsight(
             ? 'No hay tickets vencidos en este momento.'
             : 'No hay tickets abiertos ahora mismo.',
       tone: (breachedTickets ? 'danger' : warningTickets ? 'warning' : 'success') as InsightTone,
+    },
+    {
+      id: 'playbooks',
+      label: 'Playbooks vivos',
+      value: pendingRecommendations.toLocaleString('es-CO'),
+      note: watchCustomers
+        ? `${watchCustomers} usuario(s) con memoria operativa en seguimiento.`
+        : pendingRecommendations
+          ? 'Las sugerencias viven en la bandeja y en la consola de playbooks.'
+          : 'No hay recomendaciones pendientes ahora mismo.',
+      tone: (pendingRecommendations > 2 ? 'warning' : pendingRecommendations > 0 ? 'info' : 'success') as InsightTone,
     },
     {
       id: 'changes',
@@ -479,6 +504,14 @@ export function getOverviewInsight(
           tone: 'warning' as const,
         }
       : null,
+    pendingRecommendations > 0
+      ? {
+          id: 'pending-playbooks',
+          title: `${pendingRecommendations} playbooks esperan respuesta`,
+          description: 'Hay sugerencias operativas listas para confirmar, descartar o ejecutar desde la inbox.',
+          tone: 'info' as const,
+        }
+      : null,
     !latestBackup
       ? {
           id: 'backup-missing',
@@ -500,6 +533,6 @@ export function getOverviewInsight(
   return {
     kpis,
     actionItems,
-    operationalActions: buildOverviewActions(quickActions, workspace, syncStatus, sectionStates),
+    operationalActions: buildOverviewActions(quickActions, workspace, playbooks, syncStatus, sectionStates),
   };
 }

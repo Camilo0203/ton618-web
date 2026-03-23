@@ -9,9 +9,71 @@ const planKeys = ['free', 'pro', 'enterprise'] as const;
 
 export default function Pricing() {
   const { t } = useTranslation();
+  const isEnglish = t('nav.docs') === 'Docs';
   const shouldReduceMotion = useReducedMotion();
   const [cycle, setCycle] = useState<BillingCycle>('monthly');
   const inviteUrl = getDiscordInviteUrl();
+  const copy = isEnglish
+    ? {
+        tag: 'Operational plans',
+        title: 'Price The',
+        titleAccent: 'Operations Layer',
+        description: 'Free gets the server installed. Pro turns support into an operational system. Enterprise is for guided rollout across multiple communities.',
+        toggle: { monthly: 'Monthly', yearly: 'Yearly', discount: 'Save 20%' },
+        plans: {
+          free: {
+            name: 'Free',
+            desc: 'Install the base layer and prove the workflow.',
+            cta: 'Start free',
+            popular: null,
+            features: ['Basic setup and dashboard', 'Simple tickets', 'Verification', 'Basic operational metrics'],
+          },
+          pro: {
+            name: 'Pro operativo',
+            desc: 'For staff teams that need inbox, SLA and guided decisions.',
+            cta: 'Upgrade to Pro',
+            popular: 'Core plan',
+            features: ['Everything in Free', 'Advanced web inbox', 'Macros, SLA and escalation', 'Live playbooks and incident mode', 'Operational analytics and backups'],
+          },
+          enterprise: {
+            name: 'Enterprise rollout',
+            desc: 'For staged launches, multiple servers and white-glove onboarding.',
+            cta: 'Contact sales',
+            popular: null,
+            features: ['Everything in Pro', 'Guided onboarding', 'Multi-server rollout', 'Priority support', 'Custom operating defaults'],
+          },
+        },
+      }
+    : {
+        tag: 'Planes operativos',
+        title: 'Ponle Precio A',
+        titleAccent: 'La Capa Operativa',
+        description: 'Free instala la base. Pro convierte soporte en sistema operativo. Enterprise sirve para rollout guiado entre varias comunidades.',
+        toggle: { monthly: 'Mensual', yearly: 'Anual', discount: 'Ahorra 20%' },
+        plans: {
+          free: {
+            name: 'Free',
+            desc: 'Instala la base y valida el flujo.',
+            cta: 'Empezar gratis',
+            popular: null,
+            features: ['Setup base y dashboard', 'Tickets simples', 'Verificacion', 'Metricas operativas basicas'],
+          },
+          pro: {
+            name: 'Pro operativo',
+            desc: 'Para staffs que necesitan inbox, SLA y decisiones guiadas.',
+            cta: 'Subir a Pro',
+            popular: 'Plan core',
+            features: ['Todo en Free', 'Inbox web avanzado', 'Macros, SLA y escalado', 'Playbooks vivos e incident mode', 'Analitica operativa y backups'],
+          },
+          enterprise: {
+            name: 'Enterprise rollout',
+            desc: 'Para betas cuidadas, multi-servidor y onboarding white-glove.',
+            cta: 'Contactar ventas',
+            popular: null,
+            features: ['Todo en Pro', 'Onboarding guiado', 'Rollout multi-servidor', 'Soporte prioritario', 'Defaults operativos a medida'],
+          },
+        },
+      };
 
   return (
     <section id="pricing" aria-labelledby="pricing-heading" className="relative overflow-hidden bg-black py-24">
@@ -27,7 +89,7 @@ export default function Pricing() {
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <CreditCard className="h-3 w-3 text-indigo-400" />
-            <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-300">{t('pricing.tag')}</span>
+            <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-300">{copy.tag}</span>
           </motion.div>
 
           <motion.h2
@@ -38,8 +100,8 @@ export default function Pricing() {
             transition={{ delay: 0.1 }}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
-            {t('pricing.title')} <br />
-            <span className="headline-accent headline-accent-solid">{t('pricing.titleAccent')}</span>
+            {copy.title} <br />
+            <span className="headline-accent headline-accent-solid">{copy.titleAccent}</span>
           </motion.h2>
 
           <motion.p
@@ -49,7 +111,7 @@ export default function Pricing() {
             transition={{ delay: 0.2 }}
             className="mx-auto mb-10 max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
-            {t('pricing.description')}
+            {copy.description}
           </motion.p>
 
           <motion.div
@@ -62,14 +124,14 @@ export default function Pricing() {
               onClick={() => setCycle('monthly')}
               className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${cycle === 'monthly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
-              {t('pricing.toggle.monthly')}
+              {copy.toggle.monthly}
             </button>
             <button
               onClick={() => setCycle('yearly')}
               className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${cycle === 'yearly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
-              {t('pricing.toggle.yearly')}
-              <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">{t('pricing.yearlyDiscount')}</span>
+              {copy.toggle.yearly}
+              <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">{copy.toggle.discount}</span>
             </button>
           </motion.div>
         </div>
@@ -77,8 +139,9 @@ export default function Pricing() {
         <div className="grid gap-6 lg:grid-cols-3">
           {planKeys.map((plan, i) => {
             const isPro = plan === 'pro';
-            const features = t(`pricing.plans.${plan}.features`, { returnObjects: true }) as string[];
-            const popular = isPro ? (t(`pricing.plans.${plan}.popular`) as string) : null;
+            const planCopy = copy.plans[plan];
+            const features = planCopy.features;
+            const popular = planCopy.popular;
 
             return (
               <motion.div
@@ -100,8 +163,8 @@ export default function Pricing() {
                 )}
 
                 <div className="mb-8">
-                  <h3 className="mb-2 text-lg font-bold text-white">{t(`pricing.plans.${plan}.name`)}</h3>
-                  <p className="text-sm text-slate-400">{t(`pricing.plans.${plan}.desc`)}</p>
+                  <h3 className="mb-2 text-lg font-bold text-white">{planCopy.name}</h3>
+                  <p className="text-sm text-slate-400">{planCopy.desc}</p>
                 </div>
 
                 <div className="mb-8">
@@ -123,7 +186,7 @@ export default function Pricing() {
                   className={isPro ? 'btn-premium-primary w-full' : 'btn-premium-outline w-full'}
                 >
                   {isPro && <Sparkles className="h-4 w-4" />}
-                  <span>{t(`pricing.plans.${plan}.cta`)}</span>
+                  <span>{planCopy.cta}</span>
                 </a>
               </motion.div>
             );

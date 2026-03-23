@@ -20,6 +20,10 @@ export {
   normalizeGuildTicketInbox,
   normalizeGuildTicketEvents,
   normalizeGuildTicketMacros,
+  normalizeGuildPlaybookDefinitions,
+  normalizeGuildPlaybookRuns,
+  normalizeGuildCustomerMemory,
+  normalizeGuildTicketRecommendations,
 } from './normalize';
 
 export {

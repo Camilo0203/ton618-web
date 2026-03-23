@@ -3,6 +3,7 @@ import type { Session, User } from '@supabase/supabase-js';
 export type DashboardSectionId =
   | 'overview'
   | 'inbox'
+  | 'playbooks'
   | 'general'
   | 'server_roles'
   | 'tickets'
@@ -405,12 +406,103 @@ export type TicketDashboardActionId =
   | 'remove_tag'
   | 'reply_customer'
   | 'post_macro'
-  | 'set_priority';
+  | 'set_priority'
+  | 'confirm_recommendation'
+  | 'dismiss_recommendation';
 
 export interface TicketWorkspaceSnapshot {
   inbox: TicketInboxItem[];
   events: TicketConversationEvent[];
   macros: TicketMacro[];
+}
+
+export type PlaybookTier = 'free' | 'pro' | 'enterprise';
+export type PlaybookExecutionMode = 'assistive' | 'manual' | 'guided';
+export type PlaybookRecommendationStatus = 'pending' | 'applied' | 'dismissed';
+export type PlaybookRiskLevel = 'new' | 'returning' | 'watch';
+export type PlaybookTone = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
+
+export interface PlaybookDefinition {
+  guildId: string;
+  playbookId: string;
+  key: string;
+  label: string;
+  description: string;
+  tier: PlaybookTier;
+  executionMode: PlaybookExecutionMode;
+  summary: string;
+  triggerSummary: string;
+  isEnabled: boolean;
+  sortOrder: number;
+  updatedAt: string | null;
+}
+
+export interface PlaybookRun {
+  runId: string;
+  guildId: string;
+  playbookId: string;
+  ticketId: string;
+  userId: string;
+  status: PlaybookRecommendationStatus;
+  tone: PlaybookTone;
+  title: string;
+  summary: string;
+  reason: string;
+  suggestedAction: string | null;
+  suggestedPriority: TicketInboxItem['priority'] | null;
+  suggestedStatus: TicketWorkflowStatus | null;
+  suggestedMacroId: string | null;
+  confidence: number;
+  sortOrder: number;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface CustomerMemory {
+  guildId: string;
+  userId: string;
+  displayLabel: string;
+  totalTickets: number;
+  openTickets: number;
+  resolvedTickets: number;
+  breachedTickets: number;
+  recentTags: string[];
+  lastTicketAt: string | null;
+  lastResolvedAt: string | null;
+  riskLevel: PlaybookRiskLevel;
+  summary: string;
+  updatedAt: string | null;
+}
+
+export interface TicketRecommendation {
+  recommendationId: string;
+  guildId: string;
+  ticketId: string;
+  userId: string;
+  playbookId: string;
+  status: PlaybookRecommendationStatus;
+  tone: PlaybookTone;
+  title: string;
+  summary: string;
+  reason: string;
+  suggestedAction: string | null;
+  suggestedPriority: TicketInboxItem['priority'] | null;
+  suggestedStatus: TicketWorkflowStatus | null;
+  suggestedMacroId: string | null;
+  confidence: number;
+  customerRiskLevel: PlaybookRiskLevel;
+  customerSummary: string;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface PlaybookWorkspaceSnapshot {
+  definitions: PlaybookDefinition[];
+  runs: PlaybookRun[];
+  customerMemory: CustomerMemory[];
+  recommendations: TicketRecommendation[];
 }
 
 export type DashboardPartialFailureId =
@@ -419,7 +511,11 @@ export type DashboardPartialFailureId =
   | 'ticket_events'
   | 'ticket_macros'
   | 'backups'
-  | 'ticket_inbox';
+  | 'ticket_inbox'
+  | 'playbook_definitions'
+  | 'playbook_runs'
+  | 'customer_memory'
+  | 'ticket_recommendations';
 
 export interface DashboardPartialFailure {
   id: DashboardPartialFailureId;
@@ -479,6 +575,7 @@ export interface GuildDashboardSnapshot {
   backups: GuildBackupManifest[];
   syncStatus: GuildSyncStatus | null;
   ticketWorkspace: TicketWorkspaceSnapshot;
+  playbooks: PlaybookWorkspaceSnapshot;
   partialFailures: DashboardPartialFailure[];
 }
 

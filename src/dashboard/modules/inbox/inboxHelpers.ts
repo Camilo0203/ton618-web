@@ -123,6 +123,10 @@ export function getActionLabel(action: TicketDashboardActionId, t: T) {
       return t('dashboard.inbox.actions.postMacro');
     case 'set_priority':
       return t('dashboard.inbox.actions.setPriority');
+    case 'confirm_recommendation':
+      return 'confirmar la recomendacion';
+    case 'dismiss_recommendation':
+      return 'descartar la recomendacion';
     default:
       return t('dashboard.inbox.actions.fallback');
   }

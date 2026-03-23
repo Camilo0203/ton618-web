@@ -7,6 +7,7 @@ import type {
   GuildConfig,
   GuildConfigMutation,
   GuildSyncStatus,
+  PlaybookWorkspaceSnapshot,
 } from '../types';
 import { formatRelativeTime } from './format';
 
@@ -133,6 +134,7 @@ export function getDashboardSectionStates(
   syncStatus: GuildSyncStatus | null,
   backups: GuildBackupManifest[],
   mutations: GuildConfigMutation[],
+  playbooks: PlaybookWorkspaceSnapshot | null = null,
 ): DashboardSectionState[] {
   const channels = config.serverRolesChannelsSettings;
   const tickets = config.ticketsSettings;
@@ -272,6 +274,21 @@ export function getDashboardSectionStates(
 
   const failedMutations = syncStatus?.failedMutations ?? mutations.filter((entry) => entry.status === 'failed').length;
   const pendingMutations = syncStatus?.pendingMutations ?? mutations.filter((entry) => entry.status === 'pending').length;
+  const enabledPlaybooks = playbooks?.definitions.filter((definition) => definition.isEnabled).length ?? 0;
+  const pendingRecommendations = playbooks?.recommendations.filter((recommendation) => recommendation.status === 'pending').length ?? 0;
+  const watchCustomers = playbooks?.customerMemory.filter((memory) => memory.riskLevel === 'watch').length ?? 0;
+  const playbookChecks = [
+    guild.botInstalled,
+    tickets.maxTickets > 0,
+    enabledPlaybooks > 0,
+  ];
+  const playbookMessages = [
+    !guild.botInstalled ? 'Instala el bot para publicar playbooks y recomendaciones en vivo.' : null,
+    tickets.maxTickets <= 0 ? 'Activa el flujo de tickets para que la consola operativa pueda sugerir acciones.' : null,
+    enabledPlaybooks === 0 ? 'Todavia no se sincronizan playbooks activos para este servidor.' : null,
+    pendingRecommendations > 0 ? `${pendingRecommendations} recomendacion(es) pendiente(s) esperan confirmacion del staff.` : null,
+    watchCustomers > 0 ? `${watchCustomers} usuario(s) estan bajo seguimiento por historial o riesgo SLA.` : null,
+  ].filter((message): message is string => Boolean(message));
   const systemChecks = [
     guild.botInstalled,
     syncStatus?.bridgeStatus !== 'error',
@@ -300,6 +317,7 @@ export function getDashboardSectionStates(
     ].filter((message): message is string => Boolean(message))),
     buildSectionState('server_roles', ratioFromChecks(rolesChannelsChecks), rolesChannelsMessages),
     buildSectionState('tickets', ratioFromChecks(ticketChecks), ticketMessages),
+    buildSectionState('playbooks', ratioFromChecks(playbookChecks), playbookMessages),
     buildSectionState('verification', ratioFromChecks(verificationChecks), verificationMessages),
     buildSectionState('welcome', ratioFromChecks(welcomeChecks), welcomeMessages),
     buildSectionState('suggestions', ratioFromChecks(suggestionChecks), suggestionMessages),

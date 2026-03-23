@@ -9,10 +9,14 @@ import PanelCard from '../components/PanelCard';
 import StateCard from '../components/StateCard';
 import { fadeInVariants, staggerContainerVariants } from '../motion';
 import type {
+  CustomerMemory,
   DashboardGuild,
   DashboardPartialFailure,
   GuildConfigMutation,
   GuildSyncStatus,
+  PlaybookRun,
+  PlaybookWorkspaceSnapshot,
+  TicketRecommendation,
   TicketDashboardActionId,
   TicketInboxItem,
   TicketWorkspaceSnapshot,
@@ -28,6 +32,7 @@ import { getActionLabel, getAssignmentOptions, getOpenStateOptions, getPriorityO
 interface InboxModuleProps {
   guild: DashboardGuild;
   workspace: TicketWorkspaceSnapshot;
+  playbooks: PlaybookWorkspaceSnapshot;
   mutation: GuildConfigMutation | null;
   syncStatus: GuildSyncStatus | null;
   isMutating: boolean;
@@ -38,6 +43,7 @@ interface InboxModuleProps {
 export default function InboxModule({
   guild,
   workspace,
+  playbooks,
   mutation,
   syncStatus,
   isMutating,
@@ -169,6 +175,31 @@ export default function InboxModule({
   const selectedMacro = useMemo(
     () => workspace.macros.find((macro) => macro.macroId === selectedMacroId) ?? null,
     [selectedMacroId, workspace.macros],
+  );
+  const selectedRecommendations = useMemo<TicketRecommendation[]>(
+    () =>
+      selectedTicket
+        ? playbooks.recommendations.filter(
+            (recommendation) =>
+              recommendation.ticketId === selectedTicket.ticketId
+              && recommendation.status === 'pending',
+          )
+        : [],
+    [playbooks.recommendations, selectedTicket],
+  );
+  const selectedPlaybookRuns = useMemo<PlaybookRun[]>(
+    () =>
+      selectedTicket
+        ? playbooks.runs.filter((run) => run.ticketId === selectedTicket.ticketId)
+        : [],
+    [playbooks.runs, selectedTicket],
+  );
+  const selectedCustomerMemory = useMemo<CustomerMemory | null>(
+    () =>
+      selectedTicket
+        ? playbooks.customerMemory.find((memory) => memory.userId === selectedTicket.userId) ?? null
+        : null,
+    [playbooks.customerMemory, selectedTicket],
   );
 
   const activeFiltersCount = [
@@ -311,6 +342,9 @@ export default function InboxModule({
             actionFeedback={actionFeedback}
             timeline={timeline}
             customerProfile={customerProfile}
+            customerMemory={selectedCustomerMemory}
+            recommendations={selectedRecommendations}
+            playbookRuns={selectedPlaybookRuns}
             workflowOptions={workflowOptions}
             priorityOptions={priorityOptions}
             statusDraft={statusDraft}

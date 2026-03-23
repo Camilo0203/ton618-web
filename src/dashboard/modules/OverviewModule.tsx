@@ -15,6 +15,7 @@ import DashboardDegradationNotice from '../components/DashboardDegradationNotice
 import { useTranslation } from 'react-i18next';
 import PanelCard from '../components/PanelCard';
 import type {
+  PlaybookWorkspaceSnapshot,
   DashboardPartialFailure,
   DashboardGuild,
   DashboardSectionId,
@@ -45,6 +46,7 @@ interface OverviewModuleProps {
   backups: GuildBackupManifest[];
   syncStatus: GuildSyncStatus | null;
   workspace: TicketWorkspaceSnapshot;
+  playbooks: PlaybookWorkspaceSnapshot;
   onSectionChange: (section: DashboardSectionId) => void;
   sectionStates: DashboardSectionState[];
   checklist: DashboardChecklistStep[];
@@ -117,6 +119,7 @@ export default function OverviewModule({
   backups,
   syncStatus,
   workspace,
+  playbooks,
   onSectionChange,
   sectionStates,
   checklist,
@@ -149,6 +152,7 @@ export default function OverviewModule({
     sectionStates,
     checklist,
     quickActions,
+    playbooks,
   );
   const latestBackup = backups[0] ?? null;
   const nextStep = checklist.find((step) => !step.complete) ?? null;
@@ -162,6 +166,8 @@ export default function OverviewModule({
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen);
   const breachedTickets = openTickets.filter((ticket) => ticket.slaState === 'breached');
   const warningTickets = openTickets.filter((ticket) => ticket.slaState === 'warning');
+  const pendingRecommendations = playbooks.recommendations.filter((recommendation) => recommendation.status === 'pending').slice(0, 3);
+  const watchCustomers = playbooks.customerMemory.filter((memory) => memory.riskLevel === 'watch').slice(0, 3);
 
   const syncFacts = [
     [t('dashboard.overview.syncFacts.bridge'), getHealthLabel(syncStatus)],
@@ -640,6 +646,53 @@ export default function OverviewModule({
             ) : (
               <div className="dashboard-empty-state">
                 {t('dashboard.overview.notes.empty')}
+              </div>
+            )}
+          </div>
+        </PanelCard>
+
+        <PanelCard
+          title={i18n.language.startsWith('en') ? 'Live playbooks' : 'Playbooks vivos'}
+          description={i18n.language.startsWith('en')
+            ? 'Operational recommendations generated from tickets, SLA and customer context.'
+            : 'Recomendaciones operativas generadas desde tickets, SLA y memoria del usuario.'}
+          variant="soft"
+        >
+          <div className="space-y-3">
+            {pendingRecommendations.length ? (
+              pendingRecommendations.map((recommendation) => (
+                <button
+                  key={recommendation.recommendationId}
+                  type="button"
+                  onClick={() => onSectionChange('playbooks')}
+                  className="dashboard-data-card w-full text-left"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-slate-950 dark:text-white">{recommendation.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{recommendation.summary}</p>
+                    </div>
+                    <span className="dashboard-status-pill-compact dashboard-neutral-pill">#{recommendation.ticketId}</span>
+                  </div>
+                </button>
+              ))
+            ) : watchCustomers.length ? (
+              watchCustomers.map((memory) => (
+                <button
+                  key={memory.userId}
+                  type="button"
+                  onClick={() => onSectionChange('playbooks')}
+                  className="dashboard-data-card w-full text-left"
+                >
+                  <p className="font-semibold text-slate-950 dark:text-white">{memory.displayLabel}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{memory.summary}</p>
+                </button>
+              ))
+            ) : (
+              <div className="dashboard-empty-state">
+                {i18n.language.startsWith('en')
+                  ? 'Playbooks are synced and waiting for the next support event.'
+                  : 'Los playbooks ya estan sincronizados y esperan el siguiente evento operativo.'}
               </div>
             )}
           </div>

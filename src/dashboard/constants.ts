@@ -1,6 +1,7 @@
 import {
   Activity,
   BarChart3,
+  BrainCircuit,
   Bot,
   Command,
   Compass,
@@ -60,6 +61,12 @@ export const dashboardSections: DashboardSectionMeta[] = [
     label: 'dashboard.sections.inbox.label',
     description: 'dashboard.sections.inbox.description',
     icon: Inbox,
+  },
+  {
+    id: 'playbooks',
+    label: 'dashboard.sections.playbooks.label',
+    description: 'dashboard.sections.playbooks.description',
+    icon: BrainCircuit,
   },
   {
     id: 'general',
@@ -222,7 +229,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
     label: 'dashboard.taskGroups.support.label',
     description: 'dashboard.taskGroups.support.description',
     icon: Ticket,
-    sections: ['tickets', 'inbox'],
+    sections: ['tickets', 'inbox', 'playbooks'],
     shortcuts: [
       {
         id: 'support-tickets',
@@ -241,6 +248,12 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
         label: 'dashboard.shortcuts.support-macros.label',
         description: 'dashboard.shortcuts.support-macros.description',
         sectionId: 'inbox',
+      },
+      {
+        id: 'support-playbooks',
+        label: 'dashboard.shortcuts.support-playbooks.label',
+        description: 'dashboard.shortcuts.support-playbooks.description',
+        sectionId: 'playbooks',
       },
       {
         id: 'support-sla',
@@ -318,6 +331,7 @@ export const dashboardSectionToMutationSection: Record<
 > = {
   overview: null,
   inbox: null,
+  playbooks: null,
   general: 'general',
   server_roles: 'server_roles_channels',
   tickets: 'tickets',

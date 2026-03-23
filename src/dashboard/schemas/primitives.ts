@@ -4,6 +4,7 @@ import type { DashboardSectionId, ConfigMutationSectionId } from '../types';
 export const dashboardSectionIds = [
   'overview',
   'inbox',
+  'playbooks',
   'general',
   'server_roles',
   'tickets',

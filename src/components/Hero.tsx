@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronRight, Sparkles, Activity, BookOpen } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import VerifiedBadge from './VerifiedBadge';
 
 export default function Hero() {
   const { t } = useTranslation();
+  const isEnglish = t('nav.docs') === 'Docs';
   const shouldReduceMotion = useReducedMotion();
   const shouldLoadVideo = useHeavyMedia(Boolean(shouldReduceMotion));
   const [videoReady, setVideoReady] = useState(false);
@@ -91,7 +92,14 @@ export default function Hero() {
     };
   }, [shouldLoadVideo, shouldReduceMotion]);
 
-  const typingPhrases = t('heroTyping.phrases', { returnObjects: true }) as string[];
+  const typingPhrases = useMemo(
+    () => (
+      isEnglish
+        ? ['Triage support faster', 'Escalate SLA before it breaks', 'Run incident mode with context', 'Guide staff with live playbooks']
+        : ['Haz triage mas rapido', 'Escala SLA antes de romperlo', 'Activa incident mode con contexto', 'Guia al staff con playbooks vivos']
+    ),
+    [isEnglish],
+  );
   const [typingIndex, setTypingIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -123,7 +131,41 @@ export default function Hero() {
     return () => clearTimeout(timer);
   }, [displayedText, isDeleting, typingIndex, shouldReduceMotion, typingPhrases]);
 
-  const proofPoints = [t('hero.proof.one'), t('hero.proof.two'), t('hero.proof.three')];
+  const heroCopy = isEnglish
+    ? {
+        badge: 'Ops console for Discord staff teams',
+        titleMain: 'Run Support',
+        titleAccent: 'Without Chaos',
+        description: 'TON618 is not launching as another utility bot. It is a Discord operations console for teams living inside tickets, SLA pressure, incidents and staff coordination.',
+        descriptionSub: 'Web inbox, live playbooks, lightweight customer memory, incident mode and guided decisions so your team does not rely on tribal knowledge.',
+        ctaPrimary: 'Install beta',
+        ctaSecondary: 'Open ops console',
+        ctaTertiary: 'Read launch docs',
+        panelLabel: 'Why this feels different',
+        proof: [
+          'Live playbooks for triage, SLA escalation and incident response',
+          'Web inbox with macros, claims and customer context',
+          'Operational memory, sync health and staff-visible follow-up',
+        ],
+      }
+    : {
+        badge: 'Ops console para staffs de Discord',
+        titleMain: 'Opera Soporte',
+        titleAccent: 'Sin Caos',
+        description: 'TON618 no sale como otro bot de utilidades. Sale como una consola operativa para equipos que viven entre tickets, SLA, incidentes y coordinacion real de staff.',
+        descriptionSub: 'Inbox web, playbooks vivos, memoria operativa ligera, incident mode y decisiones guiadas para que el equipo no dependa de conocimiento tribal.',
+        ctaPrimary: 'Instalar beta',
+        ctaSecondary: 'Abrir ops console',
+        ctaTertiary: 'Ver docs de salida',
+        panelLabel: 'Por que esto se siente distinto',
+        proof: [
+          'Playbooks vivos para triage, SLA e incidentes',
+          'Inbox web con macros, claims y contexto del usuario',
+          'Memoria operativa, salud del bridge y seguimiento visible',
+        ],
+      };
+
+  const proofPoints = heroCopy.proof;
 
   return (
     <section
@@ -186,7 +228,7 @@ export default function Hero() {
               className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md"
             >
               <div className={`h-1.5 w-1.5 rounded-full bg-cyan-400 ${shouldReduceMotion ? '' : 'animate-pulse'}`}></div>
-              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-cyan-100">{t('hero.badge')}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-cyan-100">{heroCopy.badge}</span>
               <Activity className="h-3.5 w-3.5 text-cyan-300/70" />
             </motion.div>
 
@@ -209,16 +251,16 @@ export default function Hero() {
               {...fadeInBody}
               className="mb-6 text-[14vw] font-black leading-[0.84] tracking-tightest uppercase sm:text-[11vw] md:text-[8vw] lg:text-[6.35rem]"
             >
-              {t('hero.titleMain')} <br />
-              <span className="headline-accent headline-accent-solid">{t('hero.titleAccent')}</span>
+              {heroCopy.titleMain} <br />
+              <span className="headline-accent headline-accent-solid">{heroCopy.titleAccent}</span>
             </motion.h1>
 
             <motion.p
               {...fadeInBody}
               className="mx-auto mb-10 max-w-3xl text-base leading-relaxed text-slate-100/95 sm:text-lg md:text-xl lg:mx-0"
             >
-              {t('hero.description')}
-              <span className="mt-3 block text-sm font-normal text-slate-400 sm:text-base">{t('hero.descriptionSub')}</span>
+              {heroCopy.description}
+              <span className="mt-3 block text-sm font-normal text-slate-400 sm:text-base">{heroCopy.descriptionSub}</span>
               <span className="mt-2 block h-7 font-mono text-sm font-semibold text-indigo-300 sm:text-base">
                 {displayedText}<span className="animate-pulse">|</span>
               </span>
@@ -233,7 +275,7 @@ export default function Hero() {
               {canInvite ? (
                 <a href={inviteUrl} className="btn-premium-primary group w-full sm:w-auto">
                   <Sparkles className={`h-5 w-5 ${shouldReduceMotion ? '' : 'transition-transform duration-500 group-hover:rotate-12'}`} />
-                  <span>{t('hero.ctaPrimary')}</span>
+                  <span>{heroCopy.ctaPrimary}</span>
                 </a>
               ) : (
                 <button
@@ -243,18 +285,18 @@ export default function Hero() {
                   title={t('hero.inviteUnavailable')}
                 >
                   <Sparkles className="h-5 w-5" />
-                  <span>{t('hero.ctaPrimary')}</span>
+                  <span>{heroCopy.ctaPrimary}</span>
                 </button>
               )}
 
               {dashboardUrl.startsWith('/') ? (
                 <Link to={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
-                  <span>{t('hero.ctaSecondary')}</span>
+                  <span>{heroCopy.ctaSecondary}</span>
                   <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
                 </Link>
               ) : (
                 <a href={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
-                  <span>{t('hero.ctaSecondary')}</span>
+                  <span>{heroCopy.ctaSecondary}</span>
                   <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
                 </a>
               )}
@@ -267,7 +309,7 @@ export default function Hero() {
                   className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white"
                 >
                   <BookOpen className="h-4 w-4" />
-                  <span>{t('hero.ctaTertiary')}</span>
+                  <span>{heroCopy.ctaTertiary}</span>
                 </a>
               ) : null}
             </motion.div>
@@ -281,7 +323,7 @@ export default function Hero() {
             aria-label={t('hero.highlightsAria')}
           >
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-80"></div>
-            <p className="mb-6 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('hero.panelLabel')}</p>
+            <p className="mb-6 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{heroCopy.panelLabel}</p>
             <div className="space-y-4">
               {proofPoints.map((point) => (
                 <div key={point} className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">

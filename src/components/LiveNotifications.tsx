@@ -43,7 +43,7 @@ export default function LiveNotifications() {
     }, 3000);
 
     return () => clearTimeout(initialDelay);
-  }, [dismissed, shouldReduceMotion]);
+  }, [dismissed, shouldReduceMotion, showNext]);
 
   useEffect(() => {
     if (dismissed || shouldReduceMotion || eventIndex === 0) return;
