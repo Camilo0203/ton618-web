@@ -1,11 +1,12 @@
 import { BookOpen, ExternalLink, LifeBuoy, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { config, getDashboardUrl } from '../config';
+import { config, getPublicDashboardUrl } from '../config';
 
 export default function DocsSection() {
   const { t } = useTranslation();
   const supportHref = config.supportServerUrl || (config.contactEmail ? `mailto:${config.contactEmail}` : '#join');
+  const publicDashboardUrl = getPublicDashboardUrl();
   const resourceCards = [
     {
       id: 'docs',
@@ -16,15 +17,17 @@ export default function DocsSection() {
       external: Boolean(config.docsUrl),
       cta: config.docsUrl ? t('docsSection.cards.docs.ctaExternal') : t('docsSection.cards.docs.ctaFallback'),
     },
-    {
-      id: 'dashboard',
-      title: t('docsSection.cards.dashboard.title'),
-      description: t('docsSection.cards.dashboard.description'),
-      icon: ShieldCheck,
-      href: getDashboardUrl(),
-      external: getDashboardUrl().startsWith('http'),
-      cta: t('docsSection.cards.dashboard.cta'),
-    },
+    publicDashboardUrl
+      ? {
+          id: 'dashboard',
+          title: t('docsSection.cards.dashboard.title'),
+          description: t('docsSection.cards.dashboard.description'),
+          icon: ShieldCheck,
+          href: publicDashboardUrl,
+          external: publicDashboardUrl.startsWith('http'),
+          cta: t('docsSection.cards.dashboard.cta'),
+        }
+      : null,
     {
       id: 'support',
       title: t('docsSection.cards.support.title'),
@@ -36,7 +39,15 @@ export default function DocsSection() {
         ? t('docsSection.cards.support.ctaExternal')
         : t('docsSection.cards.support.ctaFallback'),
     },
-  ];
+  ].filter(Boolean) as Array<{
+    id: string;
+    title: string;
+    description: string;
+    icon: typeof BookOpen;
+    href: string;
+    external: boolean;
+    cta: string;
+  }>;
 
   return (
     <section id="docs" aria-labelledby="docs-heading" className="relative overflow-hidden bg-black py-24">
@@ -59,7 +70,7 @@ export default function DocsSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+        <div className={`mt-12 grid gap-6 ${resourceCards.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
           {resourceCards.map((card) => {
             const Icon = card.icon;
 

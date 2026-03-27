@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { getCTALinks, getGradient, getIcon, type ScreenshotType } from './galleryHelpers';
 
@@ -28,6 +29,14 @@ export default function DashboardScreenshot({
   const Icon = getIcon(type);
   const gradient = getGradient(type);
   const links = getCTALinks(type);
+  const actions = [
+    links.primary
+      ? { href: links.primary, label: t(`gallery.ctas.${type}.primary`) }
+      : null,
+    links.secondary
+      ? { href: links.secondary, label: t(`gallery.ctas.${type}.secondary`) }
+      : null,
+  ].filter(Boolean) as Array<{ href: string; label: string }>;
 
   return (
     <motion.div
@@ -55,22 +64,41 @@ export default function DashboardScreenshot({
           <p className="text-sm font-medium leading-relaxed text-slate-400">{description}</p>
         </div>
 
-        <div className="mt-4 flex gap-2 border-t border-white/10 pt-4">
-          <a
-            href={links.primary}
-            onClick={(event) => event.stopPropagation()}
-            className="flex-1 rounded-lg bg-indigo-500 px-4 py-2 text-center text-xs font-semibold text-white transition-all hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/50"
-          >
-            {t(`gallery.ctas.${type}.primary`)}
-          </a>
-          <a
-            href={links.secondary}
-            onClick={(event) => event.stopPropagation()}
-            className="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-center text-xs font-semibold text-slate-300 transition-all hover:bg-white/10"
-          >
-            {t(`gallery.ctas.${type}.secondary`)}
-          </a>
-        </div>
+        {actions.length > 0 ? (
+          <div className="mt-4 flex gap-2 border-t border-white/10 pt-4">
+            {actions.map((action, index) => {
+              const className = `${
+                index === 0
+                  ? 'bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/50'
+                  : 'border border-white/20 bg-white/5 text-slate-300 hover:bg-white/10'
+              } ${actions.length === 1 ? 'w-full' : 'flex-1'} rounded-lg px-4 py-2 text-center text-xs font-semibold transition-all`;
+
+              if (action.href.startsWith('/')) {
+                return (
+                  <Link
+                    key={action.href}
+                    to={action.href}
+                    onClick={(event) => event.stopPropagation()}
+                    className={className}
+                  >
+                    {action.label}
+                  </Link>
+                );
+              }
+
+              return (
+                <a
+                  key={action.href}
+                  href={action.href}
+                  onClick={(event) => event.stopPropagation()}
+                  className={className}
+                >
+                  {action.label}
+                </a>
+              );
+            })}
+          </div>
+        ) : null}
 
         <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           <div className={`absolute inset-0 rounded-[1.5rem] bg-gradient-to-br ${gradient} blur-xl`} />

@@ -1,5 +1,5 @@
 import { Monitor, Shield, Zap, BarChart3 } from 'lucide-react';
-import { config } from '../../config';
+import { config, getPublicDashboardUrl } from '../../config';
 
 export type ScreenshotType = 'overview' | 'moderation' | 'automation' | 'analytics';
 
@@ -34,16 +34,18 @@ export function getIcon(type: string) {
 }
 
 export function getCTALinks(type: string) {
+  const publicDashboardUrl = getPublicDashboardUrl();
+
   switch (type) {
     case 'overview':
-      return { primary: config.dashboardUrl, secondary: config.docsUrl };
+      return { primary: publicDashboardUrl, secondary: config.docsUrl || '#docs' };
     case 'moderation':
-      return { primary: '#features', secondary: config.docsUrl };
+      return { primary: '#features', secondary: config.docsUrl || '#docs' };
     case 'automation':
-      return { primary: '#features', secondary: config.docsUrl };
+      return { primary: '#features', secondary: config.docsUrl || '#docs' };
     case 'analytics':
-      return { primary: '#stats', secondary: config.docsUrl };
+      return { primary: '#stats', secondary: config.docsUrl || '#docs' };
     default:
-      return { primary: config.dashboardUrl, secondary: config.docsUrl };
+      return { primary: publicDashboardUrl, secondary: config.docsUrl || '#docs' };
   }
 }

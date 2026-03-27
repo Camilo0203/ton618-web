@@ -2,21 +2,16 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import {
   appleTouchIconPath,
-  buildAbsoluteUrl,
-  defaultMetaDescription,
   defaultMetaTitle,
   faviconPath,
   manifestPath,
   normalizeSiteUrl,
-  socialImagePath,
 } from './src/siteMetadata';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const siteUrl = normalizeSiteUrl(env.VITE_SITE_URL);
-  const siteRootUrl = siteUrl ? `${siteUrl}/` : '/';
-  const socialImageUrl = buildAbsoluteUrl(siteUrl, socialImagePath);
   const isProd = mode === 'production';
 
   return {
@@ -32,23 +27,27 @@ export default defineConfig(({ mode }) => {
         transformIndexHtml(html) {
           return html
             .replaceAll('__DEFAULT_META_TITLE__', defaultMetaTitle)
-            .replaceAll('__DEFAULT_META_DESCRIPTION__', defaultMetaDescription)
             .replaceAll('__FAVICON_PATH__', faviconPath)
             .replaceAll('__APPLE_TOUCH_ICON_PATH__', appleTouchIconPath)
-            .replaceAll('__MANIFEST_PATH__', manifestPath)
-            .replaceAll('__SITE_URL__', siteUrl)
-            .replaceAll('__SITE_ROOT_URL__', siteRootUrl)
-            .replaceAll('__SOCIAL_IMAGE_URL__', socialImageUrl);
+            .replaceAll('__MANIFEST_PATH__', manifestPath);
         },
         generateBundle() {
+          const sitemapPaths = ['/', '/terms', '/privacy', '/cookies'];
           const sitemap = siteUrl
             ? `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${siteUrl}/</loc>
+${sitemapPaths
+  .map((path) => {
+    const location = path === '/' ? `${siteUrl}/` : `${siteUrl}${path}`;
+    const priority = path === '/' ? '1.0' : '0.7';
+
+    return `  <url>
+    <loc>${location}</loc>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+    <priority>${priority}</priority>
+  </url>`;
+  })
+  .join('\n')}
 </urlset>
 `
             : `<?xml version="1.0" encoding="UTF-8"?>

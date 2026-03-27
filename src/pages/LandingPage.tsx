@@ -1,11 +1,10 @@
 import { Helmet } from 'react-helmet-async';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer';
-import LegalModal from '../components/LegalModal';
 import ScrollProgress from '../components/ScrollProgress';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import LazyViewportSection from '../components/LazyViewportSection';
@@ -31,12 +30,9 @@ const Roadmap = lazy(() => import('../components/Roadmap'));
 const ScrollToTop = lazy(() => import('../components/ScrollToTop'));
 const StickyInviteCTA = lazy(() => import('../components/StickyInviteCTA'));
 
-type LegalModalType = 'terms' | 'privacy' | 'cookies' | null;
-
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const [legalModalType, setLegalModalType] = useState<LegalModalType>(null);
   const title = t('meta.title');
   const description = t('meta.description');
   const canonicalUrl = getCanonicalUrl(location.pathname);
@@ -200,13 +196,7 @@ export default function LandingPage() {
           <StickyInviteCTA />
         </Suspense>
 
-        <Footer onOpenLegal={setLegalModalType} />
-
-        <LegalModal
-          type={legalModalType}
-          onClose={() => setLegalModalType(null)}
-          botName={config.botName}
-        />
+        <Footer />
       </div>
     </div>
   );

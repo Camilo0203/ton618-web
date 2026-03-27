@@ -1,12 +1,8 @@
 import { Twitter, Github, MessageCircle, Mail, Map, ExternalLink } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
+import { config, getDiscordInviteUrl, getPublicDashboardUrl } from '../config';
 import Logo from './Logo';
-
-interface FooterProps {
-  onOpenLegal: (type: 'terms' | 'privacy' | 'cookies') => void;
-}
 
 function FooterLink({
   href,
@@ -42,11 +38,11 @@ function FooterLink({
   );
 }
 
-export default function Footer({ onOpenLegal }: FooterProps) {
+export default function Footer() {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const inviteUrl = getDiscordInviteUrl();
-  const dashboardUrl = getDashboardUrl();
+  const publicDashboardUrl = getPublicDashboardUrl();
 
   const productLinks = [
     { href: '#features', label: t('footer.nav.features') },
@@ -57,7 +53,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
 
   const resourceLinks = [
     inviteUrl ? { href: inviteUrl, label: t('footer.nav.invite') } : null,
-    { href: dashboardUrl, label: t('footer.nav.dashboard') },
+    publicDashboardUrl ? { href: publicDashboardUrl, label: t('footer.nav.dashboard') } : null,
     config.docsUrl ? { href: config.docsUrl, label: t('footer.nav.docs') } : null,
     config.statusUrl ? { href: config.statusUrl, label: t('footer.nav.status') } : null,
     config.githubUrl ? { href: config.githubUrl, label: t('footer.nav.github') } : null,
@@ -114,7 +110,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.product.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.productTitle')}</h3>
             <ul className="space-y-4">
               {productLinks.map((item) => (
                 <li key={item.href}>
@@ -125,7 +121,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.resources.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.resourcesTitle')}</h3>
             <ul className="space-y-4">
               {resourceLinks.map((item) => (
                 <li key={item.href}>
@@ -136,7 +132,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.support.title')}</h3>
+            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.supportTitle')}</h3>
             <ul className="space-y-4">
               {supportLinks.map((item) => (
                 <li key={item.href}>
@@ -145,13 +141,7 @@ export default function Footer({ onOpenLegal }: FooterProps) {
               ))}
               {(['terms', 'privacy', 'cookies'] as const).map((type) => (
                 <li key={type}>
-                  <button
-                    type="button"
-                    onClick={() => onOpenLegal(type)}
-                    className="text-left text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
-                  >
-                    {t(`footer.gov.${type}`)}
-                  </button>
+                  <FooterLink href={`/${type}`} label={t(`footer.gov.${type}`)} />
                 </li>
               ))}
             </ul>

@@ -7,7 +7,7 @@ export const en = {
         },
         nav: {
             features: 'Capabilities',
-            architecture: 'Dashboard',
+            architecture: 'Experience',
             whyTon: 'Reliability',
             network: 'Live stats',
             docs: 'Docs',
@@ -462,7 +462,7 @@ export const en = {
             govTitle: 'Legal',
             nav: {
                 features: 'Capabilities',
-                experience: 'Dashboard',
+                experience: 'Experience',
                 why: 'Reliability',
                 stats: 'Live stats',
                 invite: 'Invite bot',
@@ -487,20 +487,89 @@ export const en = {
             core: 'Core Policy',
             update: 'Last policy review',
             status: 'Published',
+            lastUpdatedDate: 'March 27, 2026',
+            page: {
+                eyebrow: 'Public legal page',
+                publicLabel: 'Public policy',
+                backToSite: 'Back to site',
+                navLabel: 'Legal document navigation',
+                relatedTitle: 'Related legal documents',
+                contactTitle: 'Questions or requests',
+                contactDescription:
+                    'If you need clarification about these policies or want to request data review or removal, use the support path below.',
+                supportCta: 'Open support',
+            },
             terms: {
                 title: 'Terms of Service',
+                metaDescription:
+                    'Review the public terms of service for TON618, including acceptable use, service changes and support contact guidance.',
                 content:
                     'By using TON618 you agree to use the bot responsibly, comply with Discord policies and avoid abuse, spam or attempts to disrupt the service. Features, limits and availability may change as the product evolves.',
+                sections: [
+                    {
+                        heading: 'Responsible use',
+                        body:
+                            'TON618 is provided for legitimate Discord moderation, automation, support and operations workflows. You agree not to use the service for abuse, spam, harassment, policy violations or attempts to disrupt the bot, website or connected systems.',
+                    },
+                    {
+                        heading: 'Service changes and availability',
+                        body:
+                            'Features, quotas, dashboards and operational flows may change as TON618 evolves. We may improve, limit or discontinue parts of the product when needed for security, reliability, compliance or product direction.',
+                    },
+                    {
+                        heading: 'Support and policy updates',
+                        body:
+                            'If you need clarification about acceptable use, contact TON618 through the support paths published on this site. Continued use of the service after an updated version is published means you accept the revised terms.',
+                    },
+                ],
             },
             privacy: {
                 title: 'Privacy Policy',
+                metaDescription:
+                    'Review how TON618 processes operational, account and support data for the bot, website and dashboard.',
                 content:
                     'TON618 only processes the data required to operate bot features, moderation flows, analytics and dashboard access. We do not sell personal data. Server owners can contact support to request data review or removal where applicable.',
+                sections: [
+                    {
+                        heading: 'Data we process',
+                        body:
+                            'TON618 processes the data needed to operate the bot, website and support workflows. This can include Discord account identifiers, server configuration data, moderation or ticket events, analytics signals and authentication details required for dashboard access.',
+                    },
+                    {
+                        heading: 'How data is used',
+                        body:
+                            'Data is used to provide core product functionality, maintain service security, measure operational health, troubleshoot incidents and improve the quality of the experience. TON618 does not sell personal data to third parties.',
+                    },
+                    {
+                        heading: 'Requests and retention',
+                        body:
+                            'Server owners or authorized operators can contact support to request review or deletion of applicable data. We keep data only as long as reasonably necessary for service delivery, security, compliance and legitimate operational records.',
+                    },
+                ],
             },
             cookies: {
                 title: 'Cookies Policy',
+                metaDescription:
+                    'Review how TON618 uses essential and analytics cookies on the public website.',
                 content:
                     'This site may use essential and analytics cookies to maintain performance, understand product usage and improve the landing and dashboard experience. Cookie behavior can be controlled from your browser settings.',
+                sections: [
+                    {
+                        heading: 'Essential cookies',
+                        body:
+                            'Essential cookies may be used to keep the public website stable, remember basic preferences and support secure functionality such as session continuity when those features are enabled.',
+                    },
+                    {
+                        heading: 'Analytics cookies',
+                        body:
+                            'Analytics cookies may be used to understand site performance, measure usage patterns and improve the clarity of the public experience. These signals help prioritize fixes and product improvements.',
+                    },
+                    {
+                        heading: 'Browser controls',
+                        body:
+                            'You can control or block cookies from your browser settings. Some site features may behave differently if essential cookies are disabled.',
+                    },
+                ],
             },
         },
         dashboardAuth: {
@@ -1104,6 +1173,7 @@ export const en = {
         notFound: {
             title: 'This route does not exist',
             description: 'The landing page is still available and the dashboard can be found at its internal route.',
+            descriptionNoDashboard: 'The landing page is still available and the public legal pages remain online.',
             pageTitle: 'Page not found',
             goHome: 'Back to site',
             goDashboard: 'Go to dashboard',

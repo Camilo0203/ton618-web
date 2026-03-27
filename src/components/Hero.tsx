@@ -3,7 +3,7 @@ import { ChevronRight, Sparkles, Activity, BookOpen } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { config, getDiscordInviteUrl, getDashboardUrl } from '../config';
+import { config, getDiscordInviteUrl, getPublicDashboardUrl } from '../config';
 import Logo from './Logo';
 import { useHeavyMedia } from '../hooks/useHeavyMedia';
 import StarfieldBackground from './StarfieldBackground';
@@ -18,7 +18,7 @@ export default function Hero() {
   const [videoFailed, setVideoFailed] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const inviteUrl = getDiscordInviteUrl();
-  const dashboardUrl = getDashboardUrl();
+  const publicDashboardUrl = getPublicDashboardUrl();
   const canInvite = Boolean(inviteUrl);
   const hasDocs = Boolean(config.docsUrl);
   const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
@@ -289,17 +289,19 @@ export default function Hero() {
                 </button>
               )}
 
-              {dashboardUrl.startsWith('/') ? (
-                <Link to={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
-                  <span>{heroCopy.ctaSecondary}</span>
-                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
-                </Link>
-              ) : (
-                <a href={dashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
-                  <span>{heroCopy.ctaSecondary}</span>
-                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
-                </a>
-              )}
+              {publicDashboardUrl ? (
+                publicDashboardUrl.startsWith('/') ? (
+                  <Link to={publicDashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
+                    <span>{heroCopy.ctaSecondary}</span>
+                    <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
+                  </Link>
+                ) : (
+                  <a href={publicDashboardUrl} className="btn-premium-outline group w-full sm:w-auto shadow-lg hover:shadow-indigo-500/10">
+                    <span>{heroCopy.ctaSecondary}</span>
+                    <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
+                  </a>
+                )
+              ) : null}
 
               {hasDocs ? (
                 <a

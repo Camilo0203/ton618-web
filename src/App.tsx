@@ -7,6 +7,7 @@ import LandingPage from './pages/LandingPage';
 
 const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
+const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function AppLoadingFallback() {
@@ -57,6 +58,9 @@ export default function App() {
     <Suspense fallback={<AppLoadingFallback />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/terms" element={<LegalPage type="terms" />} />
+        <Route path="/privacy" element={<LegalPage type="privacy" />} />
+        <Route path="/cookies" element={<LegalPage type="cookies" />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
         <Route path="*" element={<NotFoundPage />} />

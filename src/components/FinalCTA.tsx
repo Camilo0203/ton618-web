@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight, Zap, BookOpen, LifeBuoy } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
+import { config, getDiscordInviteUrl, getPublicDashboardUrl } from '../config';
 import Logo from './Logo';
 
 export default function FinalCTA() {
   const { t } = useTranslation();
   const isEnglish = t('nav.docs') === 'Docs';
   const inviteUrl = getDiscordInviteUrl();
-  const dashboardUrl = getDashboardUrl();
+  const publicDashboardUrl = getPublicDashboardUrl();
   const canInvite = Boolean(inviteUrl);
   const copy = isEnglish
     ? {
@@ -111,17 +111,19 @@ export default function FinalCTA() {
               </button>
             )}
 
-            {dashboardUrl.startsWith('/') ? (
-              <Link to={dashboardUrl} className="btn-premium-outline group !px-8 !py-5">
-                <span>{copy.secondaryCta}</span>
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            ) : (
-              <a href={dashboardUrl} className="btn-premium-outline group !px-8 !py-5">
-                <span>{copy.secondaryCta}</span>
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </a>
-            )}
+            {publicDashboardUrl ? (
+              publicDashboardUrl.startsWith('/') ? (
+                <Link to={publicDashboardUrl} className="btn-premium-outline group !px-8 !py-5">
+                  <span>{copy.secondaryCta}</span>
+                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              ) : (
+                <a href={publicDashboardUrl} className="btn-premium-outline group !px-8 !py-5">
+                  <span>{copy.secondaryCta}</span>
+                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+              )
+            ) : null}
 
             {config.docsUrl ? (
               <a href={config.docsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white">

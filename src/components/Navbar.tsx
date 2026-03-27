@@ -3,7 +3,7 @@ import { Menu, X, ChevronRight, ExternalLink, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { config, getDashboardUrl, getDiscordInviteUrl } from '../config';
+import { config, getDiscordInviteUrl, getPublicDashboardUrl } from '../config';
 import LanguageSelector from './LanguageSelector';
 import Logo from './Logo';
 
@@ -45,7 +45,7 @@ function Navbar() {
   const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const dashboardUrl = getDashboardUrl();
+  const publicDashboardUrl = getPublicDashboardUrl();
   const inviteUrl = getDiscordInviteUrl();
   const canInvite = Boolean(inviteUrl);
 
@@ -158,7 +158,9 @@ function Navbar() {
 
             <LanguageSelector mode="desktop" />
 
-            <NavAction href={dashboardUrl} label={t('nav.secondaryCta')} />
+            {publicDashboardUrl ? (
+              <NavAction href={publicDashboardUrl} label={t('nav.secondaryCta')} />
+            ) : null}
 
             {canInvite ? (
               <a href={inviteUrl} className="btn-premium-primary !px-5 !py-3 !text-[10px] !rounded-xl">
@@ -238,7 +240,13 @@ function Navbar() {
                 ) : null}
 
                 <div className="grid gap-3 border-t border-white/8 pt-4">
-                  <NavAction href={dashboardUrl} label={t('nav.mobileSecondaryCta')} onClick={() => setMobileMenuOpen(false)} />
+                  {publicDashboardUrl ? (
+                    <NavAction
+                      href={publicDashboardUrl}
+                      label={t('nav.mobileSecondaryCta')}
+                      onClick={() => setMobileMenuOpen(false)}
+                    />
+                  ) : null}
 
                   {canInvite ? (
                     <a

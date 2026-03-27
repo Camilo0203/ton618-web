@@ -7,7 +7,7 @@ export const es = {
         },
         nav: {
             features: 'Capacidades',
-            architecture: 'Dashboard',
+            architecture: 'Experiencia',
             whyTon: 'Confiabilidad',
             network: 'Métricas en vivo',
             docs: 'Docs',
@@ -282,7 +282,7 @@ export const es = {
             govTitle: 'Legal',
             nav: {
                 features: 'Capacidades',
-                experience: 'Dashboard',
+                experience: 'Experiencia',
                 why: 'Confiabilidad',
                 stats: 'Métricas en vivo',
                 invite: 'Invitar bot',
@@ -307,20 +307,89 @@ export const es = {
             core: 'Política Central',
             update: 'Última revisión',
             status: 'Publicado',
+            lastUpdatedDate: '27 de marzo de 2026',
+            page: {
+                eyebrow: 'Página legal pública',
+                publicLabel: 'Política pública',
+                backToSite: 'Volver al sitio',
+                navLabel: 'Navegación de documentos legales',
+                relatedTitle: 'Documentos legales relacionados',
+                contactTitle: 'Preguntas o solicitudes',
+                contactDescription:
+                    'Si necesitas aclaraciones sobre estas políticas o quieres solicitar revisión o eliminación de datos, usa la ruta de soporte indicada abajo.',
+                supportCta: 'Abrir soporte',
+            },
             terms: {
                 title: 'Términos de Servicio',
+                metaDescription:
+                    'Consulta los términos de servicio públicos de TON618, incluyendo uso aceptable, cambios del servicio y contacto de soporte.',
                 content:
                     'Al usar TON618 aceptas utilizar el bot de forma responsable, cumplir las políticas de Discord y evitar abuso, spam o intentos de afectar el servicio. Las funciones, límites y disponibilidad pueden cambiar a medida que el producto evoluciona.',
+                sections: [
+                    {
+                        heading: 'Uso responsable',
+                        body:
+                            'TON618 se ofrece para flujos legítimos de moderación, automatización, soporte y operaciones en Discord. Aceptas no usar el servicio para abuso, spam, acoso, violaciones de políticas o intentos de afectar al bot, el sitio o sistemas conectados.',
+                    },
+                    {
+                        heading: 'Cambios y disponibilidad del servicio',
+                        body:
+                            'Las funciones, cuotas, dashboards y flujos operativos pueden cambiar mientras TON618 evoluciona. Podemos mejorar, limitar o retirar partes del producto cuando sea necesario por seguridad, confiabilidad, cumplimiento o dirección del producto.',
+                    },
+                    {
+                        heading: 'Soporte y actualizaciones de política',
+                        body:
+                            'Si necesitas aclaraciones sobre el uso aceptable, contacta a TON618 por los canales de soporte publicados en este sitio. El uso continuado del servicio después de publicar una versión actualizada implica aceptación de los términos revisados.',
+                    },
+                ],
             },
             privacy: {
                 title: 'Política de Privacidad',
+                metaDescription:
+                    'Consulta cómo TON618 procesa datos operativos, de cuenta y de soporte para el bot, el sitio web y el dashboard.',
                 content:
                     'TON618 solo procesa los datos necesarios para operar funciones del bot, flujos de moderación, analítica y acceso al dashboard. No vendemos datos personales. Los owners de servidores pueden contactar soporte para revisar o solicitar eliminación de datos cuando aplique.',
+                sections: [
+                    {
+                        heading: 'Datos que procesamos',
+                        body:
+                            'TON618 procesa los datos necesarios para operar el bot, el sitio web y los flujos de soporte. Esto puede incluir identificadores de cuentas de Discord, configuración de servidores, eventos de moderación o tickets, señales analíticas y datos de autenticación requeridos para acceso al dashboard.',
+                    },
+                    {
+                        heading: 'Cómo se usan los datos',
+                        body:
+                            'Los datos se usan para prestar la funcionalidad principal del producto, mantener la seguridad del servicio, medir salud operativa, diagnosticar incidencias y mejorar la calidad de la experiencia. TON618 no vende datos personales a terceros.',
+                    },
+                    {
+                        heading: 'Solicitudes y retención',
+                        body:
+                            'Los owners de servidores o operadores autorizados pueden contactar soporte para solicitar revisión o eliminación de datos aplicables. Conservamos los datos solo durante el tiempo razonablemente necesario para operación, seguridad, cumplimiento y registros legítimos del servicio.',
+                    },
+                ],
             },
             cookies: {
                 title: 'Política de Cookies',
+                metaDescription:
+                    'Consulta cómo TON618 usa cookies esenciales y analíticas en el sitio web público.',
                 content:
                     'Este sitio puede usar cookies esenciales y de analítica para mantener el rendimiento, entender el uso del producto y mejorar la experiencia de la landing y del dashboard. El comportamiento de cookies puede controlarse desde la configuración del navegador.',
+                sections: [
+                    {
+                        heading: 'Cookies esenciales',
+                        body:
+                            'Las cookies esenciales pueden usarse para mantener estable el sitio público, recordar preferencias básicas y soportar funcionalidad segura como continuidad de sesión cuando esas funciones estén habilitadas.',
+                    },
+                    {
+                        heading: 'Cookies analíticas',
+                        body:
+                            'Las cookies analíticas pueden usarse para entender el rendimiento del sitio, medir patrones de uso y mejorar la claridad de la experiencia pública. Estas señales ayudan a priorizar correcciones y mejoras del producto.',
+                    },
+                    {
+                        heading: 'Controles del navegador',
+                        body:
+                            'Puedes controlar o bloquear cookies desde la configuración de tu navegador. Algunas funciones del sitio pueden comportarse de forma diferente si se desactivan cookies esenciales.',
+                    },
+                ],
             },
         },
         dashboardAuth: {
@@ -804,6 +873,7 @@ export const es = {
         notFound: {
             title: 'Esta ruta no existe',
             description: 'La landing sigue disponible y la dashboard se encuentra en su ruta interna.',
+            descriptionNoDashboard: 'La landing sigue disponible y las páginas legales públicas continúan en línea.',
             pageTitle: 'Página no encontrada',
             goHome: 'Volver al sitio',
             goDashboard: 'Ir al panel',

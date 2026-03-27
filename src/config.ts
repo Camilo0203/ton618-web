@@ -11,6 +11,24 @@ import {
 
 const siteUrl = normalizeSiteUrl(import.meta.env.VITE_SITE_URL);
 
+function parseBooleanEnv(value: string | undefined, fallback: boolean): boolean {
+  if (!value) {
+    return fallback;
+  }
+
+  const normalizedValue = value.trim().toLowerCase();
+
+  if (['1', 'true', 'yes', 'on'].includes(normalizedValue)) {
+    return true;
+  }
+
+  if (['0', 'false', 'no', 'off'].includes(normalizedValue)) {
+    return false;
+  }
+
+  return fallback;
+}
+
 export const config = {
   botName: 'TON618',
   brandMarkPath: '/logo-ton618-transparent.png',
@@ -20,6 +38,8 @@ export const config = {
   manifestPath,
   defaultMetaTitle,
   defaultMetaDescription,
+  // Keep public dashboard promotion disabled unless explicitly enabled for this site.
+  enableDashboard: parseBooleanEnv(import.meta.env.VITE_ENABLE_DASHBOARD, false),
   discordClientId: import.meta.env.VITE_DISCORD_CLIENT_ID || '',
   discordPermissions: import.meta.env.VITE_DISCORD_PERMISSIONS || '8',
   supportServerUrl: import.meta.env.VITE_SUPPORT_SERVER_URL || '',
@@ -58,6 +78,18 @@ export function getSiteOrigin(): string {
 
 export function getDashboardUrl(): string {
   return config.dashboardUrl || config.dashboardInternalPath;
+}
+
+export function isPublicDashboardEnabled(): boolean {
+  return config.enableDashboard;
+}
+
+export function getPublicDashboardUrl(): string | null {
+  if (!config.enableDashboard) {
+    return null;
+  }
+
+  return getDashboardUrl();
 }
 
 export function isDashboardExternal(): boolean {
