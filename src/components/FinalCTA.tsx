@@ -1,20 +1,23 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { ChevronRight, Zap, BookOpen, LifeBuoy } from 'lucide-react';
 import { config, getDiscordInviteUrl } from '../config';
 import Logo from './Logo';
+import { instantReveal, motionViewport, sectionIntro } from '../lib/motion';
 
 export default function FinalCTA() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const inviteUrl = getDiscordInviteUrl();
   const canInvite = Boolean(inviteUrl);
   const supportHref = config.supportServerUrl || (config.contactEmail ? `mailto:${config.contactEmail}` : '');
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
 
   return (
     <section id="join" aria-labelledby="final-heading" className="relative overflow-hidden bg-black py-28">
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
         <div className="absolute left-1/2 top-1/2 h-[800px] w-[1200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/4 blur-[180px]"></div>
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/6 blur-[120px] animate-pulse-slow"></div>
+        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/6 blur-[120px] animate-pulse-slow motion-reduce:animate-none"></div>
 
         <div
           className="absolute left-1/2 top-1/2 h-screen w-screen -translate-x-1/2 -translate-y-1/2 opacity-[0.16] mix-blend-screen"
@@ -31,7 +34,7 @@ export default function FinalCTA() {
             preload="auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: shouldReduceMotion ? 0.01 : 0.3 }}
             aria-hidden="true"
             className="h-full w-full scale-125 object-contain"
           >
@@ -43,7 +46,7 @@ export default function FinalCTA() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-        <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+        <motion.div variants={introReveal} initial="hidden" whileInView="show" viewport={motionViewport}>
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2">
             <Zap className="h-3 w-3 fill-indigo-400 text-indigo-400" />
             <span className="text-[10px] font-bold uppercase tracking-tight-readable text-indigo-300">{t('final.tag')}</span>
@@ -63,7 +66,7 @@ export default function FinalCTA() {
               <a href={inviteUrl} target="_blank" rel="noopener noreferrer" className="btn-premium-primary group text-base sm:text-lg !px-8 !py-5">
                 <Logo size="xs" withText={false} frameClassName="border-black/5 bg-white/10 shadow-none" imageClassName="scale-[1.02]" />
                 <span>{t('final.cta')}</span>
-                <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
             ) : (
               <button
@@ -82,7 +85,7 @@ export default function FinalCTA() {
               <a href={config.docsUrl} target="_blank" rel="noopener noreferrer" className="btn-premium-outline group !px-8 !py-5">
                 <BookOpen className="h-4 w-4" />
                 <span>{t('final.docsCta')}</span>
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
             ) : null}
 
@@ -91,7 +94,7 @@ export default function FinalCTA() {
                 href={supportHref}
                 target={supportHref.startsWith('mailto:') ? undefined : '_blank'}
                 rel={supportHref.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
               >
                 <LifeBuoy className="h-4 w-4" />
                 <span>{t('final.supportCta')}</span>

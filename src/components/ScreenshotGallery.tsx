@@ -1,15 +1,19 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Monitor } from 'lucide-react';
 import { useState } from 'react';
 import DashboardScreenshot from './gallery/DashboardScreenshot';
 import ScreenshotModal from './gallery/ScreenshotModal';
 import { buildScreenshotEntries } from './gallery/screenshotData';
+import { instantReveal, motionStagger, motionViewport, sectionIntro, withDelay } from '../lib/motion';
 
 export default function ScreenshotGallery() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
 
   const screenshots = buildScreenshotEntries(t);
 
@@ -26,9 +30,10 @@ export default function ScreenshotGallery() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Monitor className="h-3 w-3 text-indigo-400" />
@@ -37,10 +42,10 @@ export default function ScreenshotGallery() {
 
           <motion.h2
             id="gallery-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('gallery.title')} <br />
@@ -48,10 +53,10 @@ export default function ScreenshotGallery() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('gallery.description')}
@@ -66,7 +71,7 @@ export default function ScreenshotGallery() {
               title={screenshot.title}
               description={screenshot.description}
               image={screenshot.image}
-              delay={index * 0.1}
+              delay={index * 0.05}
               onClick={() => handleOpenModal(index)}
             />
           ))}

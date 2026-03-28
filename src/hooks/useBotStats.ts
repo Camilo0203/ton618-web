@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 export interface BotStats {
@@ -24,13 +24,20 @@ export const defaultBotStats: BotStats = {
 };
 
 export type BotStatsErrorKind = 'none' | 'config' | 'network' | 'query';
+export type BotStatsDataState = 'live' | 'refreshing' | 'stale' | 'unavailable';
+export const BOT_STATS_STALE_AFTER_MS = 10 * 60 * 1000;
+export const BOT_STATS_STALE_AFTER_MINUTES = BOT_STATS_STALE_AFTER_MS / 60000;
 
 interface UseBotStatsResult {
   stats: BotStats;
   loading: boolean;
+  refreshing: boolean;
   error: string;
   errorKind: BotStatsErrorKind;
   lastUpdated: string;
+  hasData: boolean;
+  isStale: boolean;
+  dataState: BotStatsDataState;
 }
 
 function resolveStatsErrorKind(error: unknown): Exclude<BotStatsErrorKind, 'none' | 'config'> {
@@ -53,16 +60,42 @@ function resolveStatsErrorKind(error: unknown): Exclude<BotStatsErrorKind, 'none
     : 'query';
 }
 
+function hasBotStatsData(stats: BotStats, lastUpdated: string): boolean {
+  return (
+    Boolean(lastUpdated) ||
+    stats.servers > 0 ||
+    stats.users > 0 ||
+    stats.commands > 0 ||
+    stats.uptimePercentage > 0
+  );
+}
+
+function getStatsAgeMs(lastUpdated: string): number | null {
+  if (!lastUpdated) {
+    return null;
+  }
+
+  const parsedDate = new Date(lastUpdated);
+  if (Number.isNaN(parsedDate.getTime())) {
+    return null;
+  }
+
+  return Math.max(0, Date.now() - parsedDate.getTime());
+}
+
 export function useBotStats(): UseBotStatsResult {
   const [stats, setStats] = useState<BotStats>(defaultBotStats);
   const [loading, setLoading] = useState<boolean>(Boolean(supabase));
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [errorKind, setErrorKind] = useState<BotStatsErrorKind>('none');
   const [lastUpdated, setLastUpdated] = useState<string>('');
+  const initialFetchSettledRef = useRef(false);
 
   useEffect(() => {
     if (!supabase) {
       setLoading(false);
+      setRefreshing(false);
       setError('Supabase not configured');
       setErrorKind('config');
       return undefined;
@@ -87,6 +120,15 @@ export function useBotStats(): UseBotStatsResult {
         return;
       }
 
+      const isInitialFetch = !initialFetchSettledRef.current;
+      if (isInitialFetch) {
+        setLoading(true);
+      } else {
+        setRefreshing(true);
+      }
+      setError('');
+      setErrorKind('none');
+
       try {
         const { data, error: queryError } = await client
           .from('bot_stats')
@@ -103,6 +145,8 @@ export function useBotStats(): UseBotStatsResult {
           setError('Live stats unavailable');
           setErrorKind(queryError ? resolveStatsErrorKind(queryError) : 'query');
           setLoading(false);
+          setRefreshing(false);
+          initialFetchSettledRef.current = true;
           scheduleNextPoll(120000);
           return;
         }
@@ -117,6 +161,8 @@ export function useBotStats(): UseBotStatsResult {
         setError('');
         setErrorKind('none');
         setLoading(false);
+        setRefreshing(false);
+        initialFetchSettledRef.current = true;
         scheduleNextPoll(30000);
       } catch (fetchError: unknown) {
         if (!isMounted) {
@@ -126,6 +172,8 @@ export function useBotStats(): UseBotStatsResult {
         setError('Live stats unavailable');
         setErrorKind(resolveStatsErrorKind(fetchError));
         setLoading(false);
+        setRefreshing(false);
+        initialFetchSettledRef.current = true;
         scheduleNextPoll(180000);
       }
     };
@@ -140,5 +188,10 @@ export function useBotStats(): UseBotStatsResult {
     };
   }, []);
 
-  return { stats, loading, error, errorKind, lastUpdated };
+  const hasData = hasBotStatsData(stats, lastUpdated);
+  const isStale = hasData && (Boolean(error) || (getStatsAgeMs(lastUpdated) ?? 0) > BOT_STATS_STALE_AFTER_MS);
+  const dataState: BotStatsDataState =
+    loading || refreshing ? 'refreshing' : hasData ? (isStale ? 'stale' : 'live') : 'unavailable';
+
+  return { stats, loading, refreshing, error, errorKind, lastUpdated, hasData, isStale, dataState };
 }

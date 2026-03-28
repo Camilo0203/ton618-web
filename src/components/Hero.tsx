@@ -7,6 +7,17 @@ import Logo from './Logo';
 import { useHeavyMedia } from '../hooks/useHeavyMedia';
 import StarfieldBackground from './StarfieldBackground';
 import VerifiedBadge from './VerifiedBadge';
+import {
+  instantReveal,
+  motionDurations,
+  motionEase,
+  motionStagger,
+  revealScale,
+  revealSide,
+  revealUp,
+  withDelay,
+  withDuration,
+} from '../lib/motion';
 
 export default function Hero() {
   const { t } = useTranslation();
@@ -20,16 +31,16 @@ export default function Hero() {
   const hasDocs = Boolean(config.docsUrl);
   const supportHref = config.supportServerUrl || (config.contactEmail ? `mailto:${config.contactEmail}` : '');
   const hasSupport = Boolean(supportHref);
-  const instantReveal = { initial: false, animate: { opacity: 1 }, transition: { duration: 0.01 } };
-  const fadeInUp = shouldReduceMotion
-    ? instantReveal
-    : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6 } };
-  const fadeInScale = shouldReduceMotion
-    ? instantReveal
-    : { initial: { opacity: 0, scale: 0.985 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.8, delay: 0.1 } };
-  const fadeInBody = shouldReduceMotion
-    ? instantReveal
-    : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.2 } };
+  const heroReveal = shouldReduceMotion ? instantReveal : revealUp;
+  const heroBadgeReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, motionDurations.fast);
+  const heroLogoReveal = shouldReduceMotion ? instantReveal : withDelay(revealScale, motionStagger.tight);
+  const heroTitleReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, motionDurations.base), 0.06);
+  const heroBodyReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, motionDurations.base), 0.1);
+  const heroCtaReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, motionDurations.base), 0.12);
+  const heroAsideReveal =
+    shouldReduceMotion
+      ? instantReveal
+      : withDelay(revealSide('right', { duration: motionDurations.base }), 0.14);
 
   useEffect(() => {
     if (!shouldLoadVideo || shouldReduceMotion) {
@@ -106,14 +117,15 @@ export default function Hero() {
   useEffect(() => {
     if (shouldReduceMotion || !typingPhrases?.length) {
       setDisplayedText(typingPhrases?.[0] || '');
+      setIsDeleting(false);
       return;
     }
 
     const phrase = typingPhrases[typingIndex % typingPhrases.length];
-    const speed = isDeleting ? 30 : 60;
+    const speed = isDeleting ? 18 : 36;
 
     if (!isDeleting && displayedText === phrase) {
-      const pause = setTimeout(() => setIsDeleting(true), 2000);
+      const pause = setTimeout(() => setIsDeleting(true), 900);
       return () => clearTimeout(pause);
     }
 
@@ -145,7 +157,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <StarfieldBackground />
         <div
-          className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-700 ${videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
+          className={`absolute inset-0 bg-[#02030a] bg-cover bg-center bg-no-repeat transition-opacity duration-[380ms] ${videoReady && !videoFailed ? 'opacity-0' : 'opacity-100'
             }`}
           style={{ backgroundImage: 'url("/hero-poster.jpg")' }}
           aria-hidden="true"
@@ -168,7 +180,7 @@ export default function Hero() {
             setVideoReady(false);
             setVideoFailed(true);
           }}
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady && !videoFailed ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-[380ms] ${videoReady && !videoFailed ? 'opacity-100' : 'opacity-0'
             }`}
         >
           <source src="/videos/ton618-hero.webm" type="video/webm" />
@@ -193,7 +205,9 @@ export default function Hero() {
         <div className="grid w-full items-center gap-14 py-4 md:py-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-12">
           <div className="text-center lg:text-left">
             <motion.div
-              {...fadeInUp}
+              variants={heroBadgeReveal}
+              initial="hidden"
+              animate="show"
               className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md"
             >
               <div className={`h-1.5 w-1.5 rounded-full bg-cyan-400 ${shouldReduceMotion ? '' : 'animate-pulse'}`}></div>
@@ -201,11 +215,11 @@ export default function Hero() {
               <Activity className="h-3.5 w-3.5 text-cyan-300/70" />
             </motion.div>
 
-            <motion.div {...fadeInUp} className="mb-4 flex justify-center lg:justify-start">
+            <motion.div variants={heroReveal} initial="hidden" animate="show" className="mb-4 flex justify-center lg:justify-start">
               <VerifiedBadge />
             </motion.div>
 
-            <motion.div {...fadeInScale} className="mb-8 flex justify-center lg:justify-start">
+            <motion.div variants={heroLogoReveal} initial="hidden" animate="show" className="mb-8 flex justify-center lg:justify-start">
               <Logo
                 size="xl"
                 subtitle={t('hero.logoSubtitle')}
@@ -217,7 +231,9 @@ export default function Hero() {
 
             <motion.h1
               id="hero-heading"
-              {...fadeInBody}
+              variants={heroTitleReveal}
+              initial="hidden"
+              animate="show"
               className="mb-6 text-[14vw] font-black leading-[0.84] tracking-tightest uppercase sm:text-[11vw] md:text-[8vw] lg:text-[6.35rem]"
             >
               {t('hero.titleMain')} <br />
@@ -225,25 +241,27 @@ export default function Hero() {
             </motion.h1>
 
             <motion.p
-              {...fadeInBody}
+              variants={heroBodyReveal}
+              initial="hidden"
+              animate="show"
               className="mx-auto mb-10 max-w-3xl text-base leading-relaxed text-slate-100/95 sm:text-lg md:text-xl lg:mx-0"
             >
               {t('hero.description')}
               <span className="mt-3 block text-sm font-normal text-slate-400 sm:text-base">{t('hero.descriptionSub')}</span>
               <span className="mt-2 block h-7 font-mono text-sm font-semibold text-indigo-300 sm:text-base">
-                {displayedText}<span className="animate-pulse">|</span>
+                {displayedText}<span className={shouldReduceMotion ? '' : 'animate-pulse'}>|</span>
               </span>
             </motion.p>
 
             <motion.div
-              {...(shouldReduceMotion
-                ? instantReveal
-                : { initial: { opacity: 0, y: 15 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay: 0.45 } })}
+              variants={heroCtaReveal}
+              initial="hidden"
+              animate="show"
               className="flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center lg:justify-start"
             >
               {canInvite ? (
                 <a href={inviteUrl} className="btn-premium-primary group w-full sm:w-auto">
-                  <Sparkles className={`h-5 w-5 ${shouldReduceMotion ? '' : 'transition-transform duration-500 group-hover:rotate-12'}`} />
+                  <Sparkles className={`h-5 w-5 ${shouldReduceMotion ? '' : 'transition-transform duration-200 group-hover:rotate-12'}`} />
                   <span>{t('hero.ctaPrimary')}</span>
                 </a>
               ) : (
@@ -267,7 +285,7 @@ export default function Hero() {
                 >
                   <BookOpen className="h-4 w-4" />
                   <span>{t('hero.ctaSecondary')}</span>
-                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-all duration-300 group-hover:translate-x-1'}`} />
+                  <ChevronRight className={`h-4 w-4 ${shouldReduceMotion ? '' : 'transition-transform duration-200 group-hover:translate-x-1'}`} />
                 </a>
               ) : null}
 
@@ -276,7 +294,7 @@ export default function Hero() {
                   href={supportHref}
                   target={supportHref.startsWith('mailto:') ? undefined : '_blank'}
                   rel={supportHref.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/5 hover:text-white"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 transition-colors duration-200 hover:bg-white/5 hover:text-white"
                 >
                   <span>{t(hasDocs ? 'hero.ctaTertiary' : 'hero.ctaSecondary')}</span>
                 </a>
@@ -285,9 +303,9 @@ export default function Hero() {
           </div>
 
           <motion.aside
-            {...(shouldReduceMotion
-              ? instantReveal
-              : { initial: { opacity: 0, x: 20 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.75, delay: 0.25 } })}
+            variants={heroAsideReveal}
+            initial="hidden"
+            animate="show"
             className="cinematic-glass relative overflow-hidden rounded-[2rem] border-white/10 p-6 md:p-7"
             aria-label={t('hero.highlightsAria')}
           >
@@ -308,9 +326,9 @@ export default function Hero() {
       </div>
 
       <motion.div
-        animate={shouldReduceMotion ? { opacity: 0.3 } : { y: [0, 8, 0] }}
-        transition={shouldReduceMotion ? { duration: 0.01 } : { duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className={`pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 ${shouldReduceMotion ? 'opacity-30' : 'opacity-40 transition-all duration-700 hover:opacity-100'}`}
+        animate={shouldReduceMotion ? { opacity: 0.3 } : { y: [0, 5, 0] }}
+        transition={shouldReduceMotion ? { duration: 0.01 } : { duration: 2.4, repeat: Infinity, ease: motionEase }}
+        className={`pointer-events-none absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 ${shouldReduceMotion ? 'opacity-30' : 'opacity-40 transition-opacity duration-200 hover:opacity-100'}`}
       >
         <div className="h-12 w-[1px] bg-gradient-to-b from-transparent via-indigo-500/50 to-transparent"></div>
         <span className="text-[10px] font-black uppercase tracking-wide-readable text-indigo-200/60">{t('hero.scroll')}</span>

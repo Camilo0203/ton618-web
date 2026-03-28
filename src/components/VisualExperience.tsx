@@ -1,10 +1,14 @@
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cardStagger, instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay } from '../lib/motion';
 
 export default function VisualExperience() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const gridReveal = shouldReduceMotion ? instantReveal : cardStagger;
+  const cardReveal = shouldReduceMotion ? instantReveal : revealUp;
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -58,29 +62,29 @@ export default function VisualExperience() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-center">
           <div className="text-center lg:text-left">
             <div className="absolute inset-x-10 top-1/2 h-48 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(2,3,8,0.88)_0%,rgba(2,3,8,0.72)_48%,rgba(2,3,8,0.16)_78%,transparent_100%)] blur-2xl" aria-hidden="true" />
-            <h2 id="experience-heading" className="relative z-10 mb-6 text-4xl font-black uppercase leading-[0.88] tracking-tightest text-white sm:text-6xl lg:text-7xl">
+            <motion.h2 variants={introReveal} initial="hidden" whileInView="show" viewport={motionViewport} id="experience-heading" className="relative z-10 mb-6 text-4xl font-black uppercase leading-[0.88] tracking-tightest text-white sm:text-6xl lg:text-7xl">
               {t('experience.title')} <br />
               <span className="headline-accent headline-accent-solid">{t('experience.titleAccent')}</span>
-            </h2>
+            </motion.h2>
 
-            <p className="relative z-10 max-w-2xl text-base font-medium leading-relaxed text-slate-300 md:text-lg">
+            <motion.p variants={shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight)} initial="hidden" whileInView="show" viewport={motionViewport} className="relative z-10 max-w-2xl text-base font-medium leading-relaxed text-slate-300 md:text-lg">
               {t('experience.subtitle')}
-            </p>
+            </motion.p>
           </div>
 
-          <div className="grid gap-4">
-            <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="tech-card">
+          <motion.div variants={gridReveal} initial="hidden" whileInView="show" viewport={motionViewport} className="grid gap-4">
+            <motion.article variants={cardReveal} className="tech-card">
               <p className="mb-3 text-[10px] font-black uppercase tracking-wide-readable text-cyan-300">{t('experience.card1Eyebrow')}</p>
               <h3 className="mb-3 text-xl font-bold text-white">{t('experience.card1Title')}</h3>
               <p className="text-sm leading-relaxed text-slate-400">{t('experience.card1Desc')}</p>
             </motion.article>
 
-            <motion.article initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="tech-card">
+            <motion.article variants={shouldReduceMotion ? instantReveal : withDelay(cardReveal, motionStagger.tight)} className="tech-card">
               <p className="mb-3 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('experience.card2Eyebrow')}</p>
               <h3 className="mb-3 text-xl font-bold text-white">{t('experience.card2Title')}</h3>
               <p className="text-sm leading-relaxed text-slate-400">{t('experience.card2Desc')}</p>
             </motion.article>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </section>

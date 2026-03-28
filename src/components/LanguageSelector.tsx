@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe, ChevronDown } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { instantTransition, motionDurations, motionEase } from '../lib/motion';
 
 const languages = [
   { code: 'en', name: 'English', short: 'EN' },
@@ -29,18 +30,28 @@ function restoreScrollPosition(scrollX: number, scrollY: number) {
 }
 
 type LanguageSelectorMode = 'auto' | 'mobile' | 'desktop';
+type DesktopMenuPlacement = 'bottom' | 'top';
 
 interface LanguageSelectorProps {
   mode?: LanguageSelectorMode;
+  desktopMenuPlacement?: DesktopMenuPlacement;
 }
 
-export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProps) {
+export default function LanguageSelector({
+  mode = 'auto',
+  desktopMenuPlacement = 'bottom',
+}: LanguageSelectorProps) {
   const { i18n, t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const normalizedLanguage = normalizeLanguageCode(i18n.resolvedLanguage || i18n.language);
+  const desktopMenuPositionClass =
+    desktopMenuPlacement === 'top'
+      ? 'bottom-[calc(100%+0.75rem)] origin-bottom-right'
+      : 'top-[calc(100%+0.75rem)] origin-top-right';
 
   const currentLanguage =
     languages.find((language) => language.code === normalizedLanguage) || languages[0];
@@ -153,7 +164,7 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
   }
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative shrink-0">
       {showMobileSelector ? (
         <div className={`cinematic-glass items-center rounded-xl border border-white/5 ${mode === 'mobile' ? 'flex' : 'flex sm:hidden'}`}>
           {languages.map((language) => {
@@ -166,7 +177,7 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
                 onClick={() => toggleLanguage(language.code)}
                 aria-pressed={isActive}
                 aria-label={language.name}
-                className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-tight-readable transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+                className={`flex min-w-[3.25rem] items-center justify-center px-3 py-2 text-[10px] font-black uppercase tracking-tight-readable transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
                   isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -183,7 +194,7 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
           type="button"
           onClick={() => setIsOpen((open) => !open)}
           onKeyDown={handleTriggerKeyDown}
-          className={`cinematic-glass group items-center gap-2 rounded-xl border border-white/5 px-4 py-2 transition-all duration-300 hover:border-indigo-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+          className={`cinematic-glass group items-center gap-2 rounded-xl border border-white/5 px-4 py-2 transition-[border-color,background-color,color,transform] duration-200 hover:border-indigo-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
             mode === 'desktop' ? 'inline-flex' : 'hidden sm:flex'
           }`}
           aria-label={t('languageSelector.triggerLabel')}
@@ -191,11 +202,11 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
           aria-expanded={isOpen}
           aria-controls={isOpen ? 'language-selector-menu' : undefined}
         >
-          <Globe className="h-4 w-4 text-indigo-400 transition-transform duration-500 group-hover:rotate-12" />
+          <Globe className="h-4 w-4 text-indigo-400 transition-transform duration-200 group-hover:rotate-12" />
           <span className="text-[10px] font-black uppercase tracking-tight-readable text-white">
             {currentLanguage.short}
           </span>
-          <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`h-3 w-3 text-slate-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
         </button>
       ) : null}
 
@@ -203,13 +214,13 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
         {showDesktopSelector && isOpen ? (
           <motion.div
             id="language-selector-menu"
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
+            exit={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 6, scale: 0.98 }}
+            transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.enter, ease: motionEase }}
             role="menu"
             aria-label={t('languageSelector.menuLabel')}
-            className={`cinematic-glass shadow-3xl absolute right-0 top-[calc(100%+0.75rem)] z-[140] w-40 overflow-hidden rounded-2xl border border-white/10 ${
+            className={`cinematic-glass shadow-3xl absolute right-0 z-[140] w-40 overflow-hidden rounded-2xl border border-white/10 ${desktopMenuPositionClass} ${
               mode === 'desktop' ? 'block' : 'hidden sm:block'
             }`}
           >
@@ -229,14 +240,14 @@ export default function LanguageSelector({ mode = 'auto' }: LanguageSelectorProp
                     role="menuitemradio"
                     aria-checked={isActive}
                     aria-label={language.name}
-                    className={`group flex items-center justify-between rounded-xl px-4 py-3 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
+                    className={`group flex items-center justify-between rounded-xl px-4 py-3 transition-[background-color,color,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
                       isActive
                         ? 'bg-indigo-500/20 text-white'
                         : 'text-slate-400 hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     <span className="text-[10px] font-bold uppercase tracking-widest">{language.name}</span>
-                    {isActive ? <div className="h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" aria-hidden="true" /> : null}
+                    {isActive ? <div className={`h-1.5 w-1.5 rounded-full bg-indigo-500 ${shouldReduceMotion ? '' : 'animate-pulse'}`} aria-hidden="true" /> : null}
                   </button>
                 );
               })}

@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Rocket, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { cardStagger, instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 const itemIds = ['r1', 'r2', 'r3', 'r4'] as const;
 
@@ -16,6 +17,10 @@ const statusIcon: Record<string, typeof Clock> = {
 export default function Roadmap() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
+  const gridReveal = shouldReduceMotion ? instantReveal : cardStagger;
+  const itemReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, 0.28);
 
   return (
     <section id="roadmap" aria-labelledby="roadmap-heading" className="relative overflow-hidden bg-black py-24">
@@ -25,9 +30,10 @@ export default function Roadmap() {
       <div className="relative z-10 mx-auto max-w-5xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Rocket className="h-3 w-3 text-indigo-400" />
@@ -36,10 +42,10 @@ export default function Roadmap() {
 
           <motion.h2
             id="roadmap-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('roadmap.title')}{' '}
@@ -47,29 +53,32 @@ export default function Roadmap() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('roadmap.description')}
           </motion.p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2">
-          {itemIds.map((id, i) => {
+        <motion.div
+          variants={gridReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
+          className="grid gap-6 sm:grid-cols-2"
+        >
+          {itemIds.map((id) => {
             const status = t(`roadmap.items.${id}.status`) as string;
             const Icon = statusIcon[status] || Clock;
 
             return (
               <motion.div
                 key={id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : i * 0.08 }}
-                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-8 backdrop-blur-xl transition-all duration-500 hover:border-white/20 hover:-translate-y-1"
+                variants={itemReveal}
+                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] p-8 backdrop-blur-xl transition-[border-color,box-shadow,transform] duration-300 hover:border-white/20 hover:-translate-y-1 motion-reduce:hover:translate-y-0"
               >
                 <div className="mb-4 flex items-center gap-3">
                   <span className="rounded-full bg-indigo-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-indigo-300">
@@ -90,7 +99,7 @@ export default function Roadmap() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

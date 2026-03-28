@@ -1,158 +1,143 @@
 import type { Variants } from 'framer-motion';
+import {
+  accordionTransition,
+  cardStagger,
+  instantReveal,
+  modalBackdrop,
+  modalPanel,
+  motionDurations,
+  motionEase,
+  motionOffsets,
+  motionScales,
+  motionViewport,
+  revealScale,
+  revealSide,
+  revealUp,
+  withDelay,
+  withDuration,
+} from './motion';
 
-/**
- * Variantes de animación reutilizables para Framer Motion
- * Centralizadas para mantener consistencia en toda la aplicación
- */
-
-// Animaciones básicas de fade
 export const fadeIn: Variants = {
   initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    transition: { duration: motionDurations.fast, ease: motionEase },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: motionDurations.exit, ease: motionEase },
+  },
 };
 
 export const fadeInUp: Variants = {
-  initial: { opacity: 0, y: 15 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 15 },
+  initial: revealUp.hidden,
+  animate: revealUp.show,
+  exit: revealUp.exit,
 };
 
 export const fadeInDown: Variants = {
-  initial: { opacity: 0, y: -15 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -15 },
+  initial: { opacity: 0, y: -motionOffsets.md },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: motionDurations.base, ease: motionEase },
+  },
+  exit: {
+    opacity: 0,
+    y: -motionOffsets.sm,
+    transition: { duration: motionDurations.exit, ease: motionEase },
+  },
 };
 
+const revealLeft = revealSide('left');
+const revealRight = revealSide('right');
+
 export const fadeInLeft: Variants = {
-  initial: { opacity: 0, x: -15 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -15 },
+  initial: revealLeft.hidden,
+  animate: revealLeft.show,
+  exit: revealLeft.exit,
 };
 
 export const fadeInRight: Variants = {
-  initial: { opacity: 0, x: 15 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: 15 },
+  initial: revealRight.hidden,
+  animate: revealRight.show,
+  exit: revealRight.exit,
 };
 
-// Animaciones con escala
 export const fadeInScale: Variants = {
-  initial: { opacity: 0, scale: 0.985 },
-  animate: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.985 },
+  initial: revealScale.hidden,
+  animate: revealScale.show,
+  exit: revealScale.exit,
 };
 
 export const scaleIn: Variants = {
-  initial: { scale: 0.95, opacity: 0 },
-  animate: { scale: 1, opacity: 1 },
-  exit: { scale: 0.95, opacity: 0 },
+  initial: { scale: motionScales.emphasis, opacity: 0 },
+  animate: {
+    scale: 1,
+    opacity: 1,
+    transition: { duration: motionDurations.base, ease: motionEase },
+  },
+  exit: {
+    scale: motionScales.soft,
+    opacity: 0,
+    transition: { duration: motionDurations.exit, ease: motionEase },
+  },
 };
 
-// Animaciones para listas (con stagger)
 export const staggerContainer: Variants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.1,
-    },
+    transition:
+      cardStagger.show && typeof cardStagger.show === 'object' && 'transition' in cardStagger.show
+        ? cardStagger.show.transition
+        : undefined,
   },
 };
 
 export const staggerItem: Variants = {
-  initial: { opacity: 0, scale: 0.98, y: 20 },
+  initial: { opacity: 0, scale: motionScales.soft, y: motionOffsets.md },
   animate: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
+    transition: { duration: motionDurations.base, ease: motionEase },
   },
-};
-
-// Animaciones para modales y overlays
-export const modalBackdrop: Variants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
+  exit: {
+    opacity: 0,
+    scale: motionScales.subtle,
+    y: motionOffsets.sm,
+    transition: { duration: motionDurations.exit, ease: motionEase },
+  },
 };
 
 export const modalContent: Variants = {
-  initial: { opacity: 0, scale: 0.95, y: 20 },
-  animate: { 
-    opacity: 1, 
-    scale: 1, 
-    y: 0,
-    transition: { type: 'spring', damping: 25, stiffness: 300 }
-  },
-  exit: { opacity: 0, scale: 0.95, y: 20 },
+  initial: modalPanel.hidden,
+  animate: modalPanel.show,
+  exit: modalPanel.exit,
 };
 
-// Animaciones para menús desplegables
 export const dropdownMenu: Variants = {
   initial: { opacity: 0, height: 0 },
-  animate: { opacity: 1, height: 'auto' },
-  exit: { opacity: 0, height: 0 },
+  animate: {
+    opacity: 1,
+    height: 'auto',
+    transition: accordionTransition,
+  },
+  exit: {
+    opacity: 0,
+    height: 0,
+    transition: { duration: motionDurations.exit, ease: motionEase },
+  },
 };
 
-// Variantes instantáneas (para reduced motion)
-export const instantReveal: Variants = {
-  initial: { opacity: 1 },
-  animate: { opacity: 1 },
-  exit: { opacity: 1 },
-};
+export { instantReveal, modalBackdrop, withDelay, withDuration };
 
-/**
- * Función helper para crear variantes con delays personalizados
- */
-export function withDelay(variants: Variants, delay: number): Variants {
-  return {
-    ...variants,
-    animate: {
-      ...variants.animate,
-      transition: {
-        ...(typeof variants.animate === 'object' && 'transition' in variants.animate 
-          ? variants.animate.transition 
-          : {}),
-        delay,
-      },
-    },
-  };
-}
-
-/**
- * Función helper para crear variantes con duración personalizada
- */
-export function withDuration(variants: Variants, duration: number): Variants {
-  return {
-    ...variants,
-    animate: {
-      ...variants.animate,
-      transition: {
-        ...(typeof variants.animate === 'object' && 'transition' in variants.animate 
-          ? variants.animate.transition 
-          : {}),
-        duration,
-      },
-    },
-  };
-}
-
-/**
- * Configuraciones de transición comunes
- */
 export const transitions = {
-  smooth: { duration: 0.6, ease: 'easeOut' },
-  spring: { type: 'spring', damping: 25, stiffness: 300 },
-  fast: { duration: 0.3, ease: 'easeOut' },
-  slow: { duration: 0.8, ease: 'easeOut' },
+  smooth: { duration: motionDurations.emphasis, ease: motionEase },
+  spring: { type: 'spring', damping: 24, stiffness: 340 },
+  fast: { duration: motionDurations.fast, ease: motionEase },
+  slow: { duration: motionDurations.emphasis, ease: motionEase },
 } as const;
 
-/**
- * Viewport settings para whileInView
- */
-export const viewportSettings = {
-  once: true,
-  margin: '-50px',
-} as const;
+export const viewportSettings = motionViewport;

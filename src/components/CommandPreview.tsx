@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Terminal } from 'lucide-react';
+import { instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 const commandGroups = [
   { id: 'public', commands: ['help', 'perfil', 'poll', 'suggest'] },
@@ -11,6 +12,10 @@ const commandGroups = [
 export default function CommandPreview() {
   const { t } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
+  const groupReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, 0.28);
+  const commandReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, 0.2);
 
   return (
     <section id="commands" aria-labelledby="commands-heading" className="relative overflow-hidden bg-black py-24">
@@ -20,9 +25,10 @@ export default function CommandPreview() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Terminal className="h-3 w-3 text-indigo-400" />
@@ -31,10 +37,10 @@ export default function CommandPreview() {
 
           <motion.h2
             id="commands-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('commandPreview.title')} <br />
@@ -42,10 +48,10 @@ export default function CommandPreview() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('commandPreview.description')}
@@ -56,10 +62,10 @@ export default function CommandPreview() {
           {commandGroups.map((group, groupIndex) => (
             <motion.article
               key={group.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: shouldReduceMotion ? 0 : groupIndex * 0.08 }}
+              variants={shouldReduceMotion ? instantReveal : withDelay(groupReveal, groupIndex * motionStagger.tight)}
+              initial="hidden"
+              whileInView="show"
+              viewport={motionViewport}
               className="tech-card flex h-full flex-col overflow-hidden"
             >
               <div className="mb-8">
@@ -78,10 +84,10 @@ export default function CommandPreview() {
                 {group.commands.map((commandId, commandIndex) => (
                   <motion.div
                     key={commandId}
-                    initial={{ opacity: 0, x: -12 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: shouldReduceMotion ? 0 : groupIndex * 0.08 + commandIndex * 0.04 }}
+                    variants={shouldReduceMotion ? instantReveal : withDelay(commandReveal, commandIndex * 0.02)}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={motionViewport}
                     className="rounded-2xl border border-white/8 bg-white/[0.03] p-4"
                   >
                     <code className="block font-mono text-sm font-bold text-cyan-200">

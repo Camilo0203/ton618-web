@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Puzzle } from 'lucide-react';
 import { memo } from 'react';
+import { instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 interface IntegrationItemProps {
   id: string;
@@ -14,13 +15,14 @@ interface IntegrationItemProps {
 
 const IntegrationItem = memo(({ name, desc, index, gradient, icon }: IntegrationItemProps) => {
   const shouldReduceMotion = useReducedMotion();
+  const itemReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, 0.28), index * motionStagger.tight);
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : index * 0.06 }}
+      variants={itemReveal}
+      initial="hidden"
+      whileInView="show"
+      viewport={motionViewport}
       className="tech-card group flex flex-col items-center overflow-hidden text-center"
     >
       <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-60" />
@@ -48,6 +50,9 @@ const integrationsMeta = [
 
 export default function Integrations() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
 
   const items = integrationsMeta.map((meta) => ({
     ...meta,
@@ -63,9 +68,10 @@ export default function Integrations() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Puzzle className="h-3 w-3 text-indigo-400" />
@@ -74,10 +80,10 @@ export default function Integrations() {
 
           <motion.h2
             id="integrations-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('integrations.title')} <br />
@@ -85,10 +91,10 @@ export default function Integrations() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('integrations.description')}

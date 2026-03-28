@@ -2,6 +2,7 @@ import { Twitter, Github, MessageCircle, Mail, Map, ExternalLink } from 'lucide-
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl } from '../config';
+import { LEGAL_DOCUMENT_TYPES } from '../lib/legalDocuments';
 import Logo from './Logo';
 
 function FooterLink({
@@ -16,7 +17,7 @@ function FooterLink({
 
   if (isHash) {
     return (
-      <a href={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
+      <a href={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
         <span>{label}</span>
       </a>
     );
@@ -24,14 +25,14 @@ function FooterLink({
 
   if (isInternal) {
     return (
-      <Link to={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
+      <Link to={href} className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
         <span>{label}</span>
       </Link>
     );
   }
 
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black">
       <span>{label}</span>
       <ExternalLink className="h-3.5 w-3.5" />
     </a>
@@ -98,7 +99,7 @@ export default function Footer() {
                   href={url!}
                   target={label !== 'Email' ? '_blank' : undefined}
                   rel={label !== 'Email' ? 'noopener noreferrer' : undefined}
-                  className="cinematic-glass flex h-12 w-12 items-center justify-center rounded-xl text-slate-400 transition-all duration-500 hover:scale-105 hover:text-white"
+                  className="cinematic-glass flex h-12 w-12 items-center justify-center rounded-xl text-slate-400 transition-[color,transform,border-color,background-color] duration-200 hover:scale-[1.02] hover:text-white motion-reduce:hover:scale-100"
                   aria-label={label}
                 >
                   <Icon className="h-5 w-5" />
@@ -137,7 +138,7 @@ export default function Footer() {
                   <FooterLink href={item.href} label={item.label} />
                 </li>
               ))}
-              {(['terms', 'privacy', 'cookies'] as const).map((type) => (
+              {LEGAL_DOCUMENT_TYPES.map((type) => (
                 <li key={type}>
                   <FooterLink href={`/${type}`} label={t(`footer.gov.${type}`)} />
                 </li>
@@ -152,7 +153,7 @@ export default function Footer() {
             href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('Check out TON618, a Discord bot for moderation, tickets and verification')}&url=${encodeURIComponent(config.siteUrl || '')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition hover:border-white/20 hover:text-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition-colors duration-200 hover:border-white/20 hover:text-white"
           >
             <Twitter className="h-3 w-3" />
             {t('footerShare.twitter')}
@@ -162,7 +163,7 @@ export default function Footer() {
               href={config.supportServerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition hover:border-white/20 hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-slate-400 transition-colors duration-200 hover:border-white/20 hover:text-white"
             >
               <MessageCircle className="h-3 w-3" />
               {t('footerShare.discord')}

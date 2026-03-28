@@ -2,6 +2,17 @@ import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Monitor, Shield, Zap, BarChart3, Ticket, Settings, Clock, AlertTriangle, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import {
+  instantReveal,
+  instantTransition,
+  motionDurations,
+  motionEase,
+  motionStagger,
+  motionViewport,
+  sectionIntro,
+  tabPanelTransition,
+  withDelay,
+} from '../lib/motion';
 
 type TabKey = 'moderation' | 'automation' | 'tickets' | 'analytics';
 
@@ -17,7 +28,7 @@ function ModerationView({ t }: { t: (key: string) => string }) {
     setVisibleLines(0);
     const interval = setInterval(() => {
       setVisibleLines((prev) => (prev < 5 ? prev + 1 : prev));
-    }, 800);
+    }, 450);
     return () => clearInterval(interval);
   }, [shouldReduceMotion]);
 
@@ -31,22 +42,20 @@ function ModerationView({ t }: { t: (key: string) => string }) {
 
   return (
     <div className="space-y-2">
-      {actions.map((action, i) => {
+      {actions.slice(0, visibleLines).map((action, i) => {
         const Icon = action.icon;
         return (
-          <AnimatePresence key={i}>
-            {i < visibleLines && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center gap-3 rounded-lg bg-white/[0.03] px-4 py-3"
-              >
-                <Icon className={`h-4 w-4 flex-shrink-0 ${action.color}`} />
-                <span className="flex-1 text-sm text-slate-300">{action.text}</span>
-                <span className="text-[10px] font-mono text-slate-600">{action.time}</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <motion.div
+            key={i}
+            initial={shouldReduceMotion ? false : { opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.fast, ease: motionEase }}
+            className="flex items-center gap-3 rounded-lg bg-white/[0.03] px-4 py-3"
+          >
+            <Icon className={`h-4 w-4 flex-shrink-0 ${action.color}`} />
+            <span className="flex-1 text-sm text-slate-300">{action.text}</span>
+            <span className="text-[10px] font-mono text-slate-600">{action.time}</span>
+          </motion.div>
         );
       })}
     </div>
@@ -65,7 +74,7 @@ function AutomationView({ t }: { t: (key: string) => string }) {
     setActiveNode(0);
     const interval = setInterval(() => {
       setActiveNode((prev) => (prev < 4 ? prev + 1 : 0));
-    }, 1200);
+    }, 800);
     return () => clearInterval(interval);
   }, [shouldReduceMotion]);
 
@@ -83,10 +92,11 @@ function AutomationView({ t }: { t: (key: string) => string }) {
         <div key={i} className="flex w-full items-center gap-3">
           <motion.div
             animate={{
-              scale: activeNode === i ? 1.05 : 1,
+              scale: activeNode === i ? 1.02 : 1,
               borderColor: activeNode === i ? 'rgba(99,102,241,0.6)' : undefined,
             }}
-            className={`flex-1 rounded-xl border px-4 py-3 text-center text-sm font-semibold text-slate-200 transition-all ${
+            transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.fast, ease: motionEase }}
+            className={`flex-1 rounded-xl border px-4 py-3 text-center text-sm font-semibold text-slate-200 transition-[background-color,border-color,color,transform] duration-200 ${
               activeNode >= i ? node.color : 'border-white/5 bg-white/[0.02] text-slate-500'
             }`}
           >
@@ -95,6 +105,7 @@ function AutomationView({ t }: { t: (key: string) => string }) {
           {i < nodes.length - 1 && (
             <motion.div
               animate={{ opacity: activeNode > i ? 1 : 0.2 }}
+              transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.fast, ease: motionEase }}
               className="flex-shrink-0"
             >
               <ArrowRight className="h-4 w-4 rotate-90 text-indigo-500/60" />
@@ -107,6 +118,7 @@ function AutomationView({ t }: { t: (key: string) => string }) {
 }
 
 function TicketsView({ t }: { t: (key: string) => string }) {
+  const shouldReduceMotion = useReducedMotion();
   const tickets = [
     { ...getTicket(t, 't1'), statusColor: 'bg-emerald-400' },
     { ...getTicket(t, 't2'), statusColor: 'bg-amber-400' },
@@ -119,9 +131,13 @@ function TicketsView({ t }: { t: (key: string) => string }) {
       {tickets.map((ticket, i) => (
         <motion.div
           key={i}
-          initial={{ opacity: 0, y: 10 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
+          transition={
+            shouldReduceMotion
+              ? instantTransition
+              : { duration: motionDurations.fast, delay: i * motionStagger.base, ease: motionEase }
+          }
           className="flex items-center gap-4 rounded-lg bg-white/[0.03] px-4 py-3"
         >
           <div className={`h-2 w-2 flex-shrink-0 rounded-full ${ticket.statusColor}`} />
@@ -153,16 +169,24 @@ function AnalyticsView({ t }: { t: (key: string) => string }) {
         {labels.map((label, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1 }}
+            transition={
+              shouldReduceMotion
+                ? instantTransition
+                : { duration: motionDurations.fast, delay: i * motionStagger.base, ease: motionEase }
+            }
             className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-center"
           >
             <div className="text-[10px] font-bold uppercase tracking-tight-readable text-slate-500">{label}</div>
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 + i * 0.1 }}
+              transition={
+                shouldReduceMotion
+                  ? instantTransition
+                  : { duration: motionDurations.fast, delay: 0.12 + i * motionStagger.base, ease: motionEase }
+              }
               className="mt-1 text-xl font-bold tabular-nums text-white"
             >
               {values[i].toLocaleString()}
@@ -178,7 +202,11 @@ function AnalyticsView({ t }: { t: (key: string) => string }) {
               key={i}
               initial={{ height: 0 }}
               animate={{ height: `${h}px` }}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.6, delay: shouldReduceMotion ? 0 : 0.2 + i * 0.1 }}
+              transition={
+                shouldReduceMotion
+                  ? instantTransition
+                  : { duration: 0.4, delay: 0.08 + i * motionStagger.base, ease: motionEase }
+              }
               className="w-8 rounded-t bg-gradient-to-t from-indigo-500/60 to-indigo-400/40"
             />
           ))}
@@ -207,6 +235,8 @@ export default function InteractiveDemo() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabKey>('moderation');
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
 
   const tabs: TabKey[] = ['moderation', 'automation', 'tickets', 'analytics'];
 
@@ -218,9 +248,10 @@ export default function InteractiveDemo() {
       <div className="relative z-10 mx-auto max-w-4xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Monitor className="h-3 w-3 text-indigo-400" />
@@ -229,10 +260,10 @@ export default function InteractiveDemo() {
 
           <motion.h2
             id="demo-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('demo.title')} <br />
@@ -240,10 +271,10 @@ export default function InteractiveDemo() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('demo.description')}
@@ -251,9 +282,10 @@ export default function InteractiveDemo() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={secondaryIntroReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
           className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-xl"
         >
           {/* Window header */}
@@ -277,7 +309,7 @@ export default function InteractiveDemo() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex flex-1 items-center justify-center gap-2 px-4 py-3 text-xs font-semibold transition-all ${
+                  className={`flex flex-1 items-center justify-center gap-2 px-4 py-3 text-xs font-semibold transition-[background-color,border-color,color] duration-200 ${
                     activeTab === tab
                       ? 'border-b-2 border-indigo-500 bg-indigo-500/5 text-indigo-300'
                       : 'text-slate-500 hover:bg-white/[0.02] hover:text-slate-300'
@@ -292,13 +324,13 @@ export default function InteractiveDemo() {
 
           {/* Content */}
           <div className="p-6">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+                exit={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
+                transition={shouldReduceMotion ? instantTransition : tabPanelTransition}
               >
                 {activeTab === 'moderation' && <ModerationView t={t} />}
                 {activeTab === 'automation' && <AutomationView t={t} />}

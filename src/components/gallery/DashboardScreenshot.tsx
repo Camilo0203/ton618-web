@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { getCTALinks, getGradient, getIcon, type ScreenshotType } from './galleryHelpers';
+import { instantReveal, motionViewport, revealUp, withDelay, withDuration } from '../../lib/motion';
 
 interface DashboardScreenshotProps {
   title: string;
@@ -28,6 +29,7 @@ export default function DashboardScreenshot({
   const isInView = useInView(ref, { once: true });
   const Icon = getIcon(type);
   const gradient = getGradient(type);
+  const cardReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, 0.28), delay);
   const links = getCTALinks(type);
   const actions = [
     links.primary
@@ -41,23 +43,23 @@ export default function DashboardScreenshot({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : delay }}
+      variants={cardReveal}
+      initial="hidden"
+      whileInView="show"
+      viewport={motionViewport}
       className="group relative"
     >
-      <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-6 text-left backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-white/20 hover:shadow-[0_20px_60px_rgba(99,102,241,0.2)]">
+      <div className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.02] p-6 text-left backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 hover:scale-[1.01] hover:border-white/20 hover:shadow-[0_18px_54px_rgba(99,102,241,0.18)] motion-reduce:hover:scale-100">
         <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-2">
             <Icon className="h-4 w-4 text-indigo-400" />
             <span className="text-xs font-semibold text-slate-300">{title}</span>
           </div>
-          <ArrowUpRight className="h-4 w-4 text-slate-500 transition-colors group-hover:text-white" />
+          <ArrowUpRight className="h-4 w-4 text-slate-500 transition-colors duration-200 group-hover:text-white" />
         </div>
 
         <button type="button" onClick={onClick} aria-label={`View ${title} in detail`} className={`block w-full overflow-hidden rounded-[1.25rem] border border-white/10 bg-gradient-to-br ${gradient}`}>
-          <img src={image} alt={title} loading="lazy" decoding="async" className={`aspect-[16/10] w-full object-cover transition-transform duration-700 ${isInView && !shouldReduceMotion ? 'scale-[1.015]' : ''}`} />
+          <img src={image} alt={title} loading="lazy" decoding="async" className={`aspect-[16/10] w-full object-cover transition-transform duration-300 ${isInView && !shouldReduceMotion ? 'scale-[1.01]' : ''}`} />
         </button>
 
         <div className="mt-4 border-t border-white/10 pt-4">
@@ -71,7 +73,7 @@ export default function DashboardScreenshot({
                 index === 0
                   ? 'bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/50'
                   : 'border border-white/20 bg-white/5 text-slate-300 hover:bg-white/10'
-              } ${actions.length === 1 ? 'w-full' : 'flex-1'} rounded-lg px-4 py-2 text-center text-xs font-semibold transition-all`;
+              } ${actions.length === 1 ? 'w-full' : 'flex-1'} rounded-lg px-4 py-2 text-center text-xs font-semibold transition-[background-color,border-color,color,box-shadow] duration-200`;
 
               if (action.href.startsWith('/')) {
                 return (
@@ -100,7 +102,7 @@ export default function DashboardScreenshot({
           </div>
         ) : null}
 
-        <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className={`absolute inset-0 rounded-[1.5rem] bg-gradient-to-br ${gradient} blur-xl`} />
         </div>
       </div>

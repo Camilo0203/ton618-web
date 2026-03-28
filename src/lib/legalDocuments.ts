@@ -1,6 +1,7 @@
 import type { TFunction } from 'i18next';
 
 export type LegalDocumentType = 'terms' | 'privacy' | 'cookies';
+export const LEGAL_DOCUMENT_TYPES: LegalDocumentType[] = ['terms', 'privacy', 'cookies'];
 
 export interface LegalDocumentSection {
   heading: string;

@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { GitCompareArrows, Check, Minus, X } from 'lucide-react';
+import { instantReveal, motionStagger, motionViewport, sectionIntro, withDelay } from '../lib/motion';
 
 type Support = 'full' | 'partial' | 'none';
 
@@ -90,6 +91,9 @@ export default function ComparisonTable() {
   const { t } = useTranslation();
   const isEnglish = t('nav.docs') === 'Docs';
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
+  const tableReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.base);
   const copy = isEnglish
     ? {
         tag: 'Operational differentiation',
@@ -134,9 +138,10 @@ export default function ComparisonTable() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <GitCompareArrows className="h-3 w-3 text-indigo-400" />
@@ -145,10 +150,10 @@ export default function ComparisonTable() {
 
           <motion.h2
             id="comparison-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {copy.title} <br />
@@ -156,10 +161,10 @@ export default function ComparisonTable() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {copy.description}
@@ -167,10 +172,10 @@ export default function ComparisonTable() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: shouldReduceMotion ? 0 : 0.2 }}
+          variants={tableReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
           className="overflow-x-auto"
         >
           <table className="w-full min-w-[640px] border-collapse">
@@ -198,13 +203,9 @@ export default function ComparisonTable() {
               </tr>
             </thead>
             <tbody>
-              {featureKeys.map((featureKey, i) => (
-                <motion.tr
+              {featureKeys.map((featureKey) => (
+                <tr
                   key={featureKey}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: shouldReduceMotion ? 0 : i * 0.03 }}
                   className="border-t border-white/5 transition-colors hover:bg-white/[0.02]"
                 >
                   <td className="px-4 py-4 text-sm font-semibold text-slate-300">
@@ -217,16 +218,17 @@ export default function ComparisonTable() {
                       </div>
                     </td>
                   ))}
-                </motion.tr>
+                </tr>
               ))}
             </tbody>
           </table>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          variants={tableReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
           className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold text-slate-500"
         >
           <div className="flex items-center gap-2">

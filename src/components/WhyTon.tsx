@@ -1,9 +1,14 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Target, Zap, ShieldCheck, Cpu, ArrowUpRight } from 'lucide-react';
+import { cardStagger, instantReveal, motionViewport, revealUp, sectionIntro, withDuration } from '../lib/motion';
 
 export default function WhyTon() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const gridReveal = shouldReduceMotion ? instantReveal : cardStagger;
+  const reasonReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, 0.28);
 
   const reasons = [
     {
@@ -48,7 +53,7 @@ export default function WhyTon() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
-          <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+          <motion.div variants={introReveal} initial="hidden" whileInView="show" viewport={motionViewport}>
             <div className="mb-8 flex items-center gap-4">
               <div className="h-px w-12 bg-indigo-500"></div>
               <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('why.tag')}</span>
@@ -74,14 +79,17 @@ export default function WhyTon() {
             </div>
           </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2">
-            {reasons.map((reason, index) => (
+          <motion.div
+            variants={gridReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
+            className="grid gap-6 sm:grid-cols-2"
+          >
+            {reasons.map((reason) => (
               <motion.article
                 key={reason.title}
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55, delay: index * 0.08 }}
+                variants={reasonReveal}
                 className="tech-card overflow-hidden group"
               >
                 <div className="relative z-10">
@@ -90,13 +98,13 @@ export default function WhyTon() {
                   </div>
                   <h3 className="mb-3 flex items-center justify-between text-lg font-bold tracking-tight text-white">
                     {reason.title}
-                    <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-40" />
+                    <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity duration-200 group-hover:opacity-40" />
                   </h3>
                   <p className="text-sm font-medium leading-relaxed text-slate-400">{reason.description}</p>
                 </div>
               </motion.article>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

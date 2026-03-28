@@ -3,7 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import Logo from './components/Logo';
+import RouteScrollManager from './components/RouteScrollManager';
 import LandingPage from './pages/LandingPage';
+import { LEGAL_DOCUMENT_TYPES } from './lib/legalDocuments';
 
 const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
@@ -55,16 +57,19 @@ function AppLoadingFallback() {
 
 export default function App() {
   return (
-    <Suspense fallback={<AppLoadingFallback />}>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/terms" element={<LegalPage type="terms" />} />
-        <Route path="/privacy" element={<LegalPage type="privacy" />} />
-        <Route path="/cookies" element={<LegalPage type="cookies" />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/auth/callback" element={<AuthCallbackPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </Suspense>
+    <>
+      <RouteScrollManager />
+      <Suspense fallback={<AppLoadingFallback />}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          {LEGAL_DOCUMENT_TYPES.map((type) => (
+            <Route key={type} path={`/${type}`} element={<LegalPage type={type} />} />
+          ))}
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
+    </>
   );
 }

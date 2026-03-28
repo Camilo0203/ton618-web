@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { CreditCard, Check, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { getDiscordInviteUrl } from '../config';
+import { cardStagger, instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 type BillingCycle = 'monthly' | 'yearly';
 const planKeys = ['free', 'pro', 'enterprise'] as const;
@@ -11,6 +12,10 @@ export default function Pricing() {
   const { t } = useTranslation();
   const isEnglish = t('nav.docs') === 'Docs';
   const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
+  const gridReveal = shouldReduceMotion ? instantReveal : cardStagger;
+  const planReveal = shouldReduceMotion ? instantReveal : withDuration(revealUp, 0.28);
   const [cycle, setCycle] = useState<BillingCycle>('monthly');
   const inviteUrl = getDiscordInviteUrl();
   const copy = isEnglish
@@ -83,9 +88,10 @@ export default function Pricing() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <CreditCard className="h-3 w-3 text-indigo-400" />
@@ -94,10 +100,10 @@ export default function Pricing() {
 
           <motion.h2
             id="pricing-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {copy.title} <br />
@@ -105,30 +111,31 @@ export default function Pricing() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto mb-10 max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {copy.description}
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 p-1"
           >
             <button
               onClick={() => setCycle('monthly')}
-              className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${cycle === 'monthly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition-[background-color,color,box-shadow] duration-200 ${cycle === 'monthly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
               {copy.toggle.monthly}
             </button>
             <button
               onClick={() => setCycle('yearly')}
-              className={`rounded-full px-5 py-2 text-sm font-semibold transition-all ${cycle === 'yearly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition-[background-color,color,box-shadow] duration-200 ${cycle === 'yearly' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
               {copy.toggle.yearly}
               <span className="ml-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">{copy.toggle.discount}</span>
@@ -136,8 +143,14 @@ export default function Pricing() {
           </motion.div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
-          {planKeys.map((plan, i) => {
+        <motion.div
+          variants={gridReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
+          className="grid gap-6 lg:grid-cols-3"
+        >
+          {planKeys.map((plan) => {
             const isPro = plan === 'pro';
             const planCopy = copy.plans[plan];
             const features = planCopy.features;
@@ -146,11 +159,8 @@ export default function Pricing() {
             return (
               <motion.div
                 key={plan}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : i * 0.1 }}
-                className={`relative flex flex-col overflow-hidden rounded-[2rem] border p-8 backdrop-blur-xl transition-all duration-500 ${
+                variants={planReveal}
+                className={`relative flex flex-col overflow-hidden rounded-[2rem] border p-8 backdrop-blur-xl transition-[border-color,box-shadow,transform] duration-300 ${
                   isPro
                     ? 'border-indigo-500/30 bg-gradient-to-br from-indigo-500/10 to-purple-500/5 shadow-[0_0_64px_rgba(99,102,241,0.12)]'
                     : 'border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02]'
@@ -191,7 +201,7 @@ export default function Pricing() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

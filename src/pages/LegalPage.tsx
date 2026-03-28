@@ -5,9 +5,11 @@ import { ArrowLeft, ExternalLink, Mail, MessageCircle } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import Logo from '../components/Logo';
 import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
-import { getLegalDocumentContent, type LegalDocumentType } from '../lib/legalDocuments';
-
-const legalDocumentTypes: LegalDocumentType[] = ['terms', 'privacy', 'cookies'];
+import {
+  LEGAL_DOCUMENT_TYPES,
+  getLegalDocumentContent,
+  type LegalDocumentType,
+} from '../lib/legalDocuments';
 
 interface LegalPageProps {
   type: LegalDocumentType;
@@ -76,14 +78,14 @@ export default function LegalPage({ type }: LegalPageProps) {
 
       <div className="relative z-10">
         <header className="border-b border-white/8 bg-black/45 backdrop-blur-2xl">
-          <div className="mx-auto flex max-w-5xl flex-col gap-5 px-6 py-6 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-center justify-between gap-4">
+          <div className="mx-auto flex max-w-5xl flex-col gap-5 px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+            <div className="flex items-center justify-between gap-4 sm:gap-5 lg:min-w-0">
               <Link
                 to="/"
-                className="inline-flex items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 transition hover:border-white/15 hover:bg-white/[0.05]"
+                className="inline-flex min-w-0 items-center gap-4 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 transition hover:border-white/15 hover:bg-white/[0.05]"
               >
                 <Logo size="md" subtitle={config.botName} withText={false} frameClassName="h-14 w-14" />
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] font-black uppercase tracking-[0.28em] text-indigo-300">
                     {t('legal.page.eyebrow')}
                   </p>
@@ -91,17 +93,17 @@ export default function LegalPage({ type }: LegalPageProps) {
                 </div>
               </Link>
 
-              <div className="lg:hidden">
+              <div className="shrink-0 lg:hidden">
                 <LanguageSelector />
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 lg:items-end">
+            <div className="flex flex-col gap-4 lg:min-w-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-end lg:gap-4">
               <nav
                 aria-label={t('legal.page.navLabel')}
-                className="flex flex-wrap gap-2"
+                className="flex flex-wrap gap-2 lg:min-w-0 lg:flex-1 lg:justify-end"
               >
-                {legalDocumentTypes.map((documentType) => {
+                {LEGAL_DOCUMENT_TYPES.map((documentType) => {
                   const href = `/${documentType}`;
                   const isActive = location.pathname === href;
 
@@ -122,8 +124,8 @@ export default function LegalPage({ type }: LegalPageProps) {
                 })}
               </nav>
 
-              <div className="hidden lg:block">
-                <LanguageSelector mode="desktop" />
+              <div className="hidden lg:block lg:shrink-0">
+                <LanguageSelector mode="desktop" desktopMenuPlacement="bottom" />
               </div>
             </div>
           </div>
@@ -177,7 +179,7 @@ export default function LegalPage({ type }: LegalPageProps) {
               <section className="rounded-[1.5rem] border border-white/8 bg-white/[0.03] p-6">
                 <h2 className="text-lg font-bold text-white">{t('legal.page.relatedTitle')}</h2>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  {legalDocumentTypes.map((documentType) => (
+                  {LEGAL_DOCUMENT_TYPES.map((documentType) => (
                     <Link
                       key={documentType}
                       to={`/${documentType}`}

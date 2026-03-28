@@ -2,6 +2,16 @@ import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { HelpCircle, ChevronDown, Search } from 'lucide-react';
 import { useState, useMemo, memo } from 'react';
+import {
+  accordionTransition,
+  instantReveal,
+  motionDurations,
+  motionStagger,
+  motionViewport,
+  revealUp,
+  sectionIntro,
+  withDelay,
+} from '../lib/motion';
 
 interface FAQItemProps {
   question: string;
@@ -13,24 +23,25 @@ interface FAQItemProps {
 
 const FAQItem = memo(({ question, answer, isOpen, onToggle, index }: FAQItemProps) => {
   const shouldReduceMotion = useReducedMotion();
+  const itemReveal = shouldReduceMotion ? instantReveal : withDelay(revealUp, index * motionStagger.tight);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : index * 0.05 }}
+      variants={itemReveal}
+      initial="hidden"
+      whileInView="show"
+      viewport={motionViewport}
       className="group"
     >
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] px-6 py-5 text-left backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(99,102,241,0.1)]"
+        className="flex w-full items-center justify-between gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.02] px-6 py-5 text-left backdrop-blur-xl transition-[border-color,box-shadow,background-color] duration-200 hover:border-white/20 hover:shadow-[0_8px_28px_rgba(99,102,241,0.08)]"
         aria-expanded={isOpen}
       >
         <span className="text-base font-semibold text-white">{question}</span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={shouldReduceMotion ? { duration: 0.01 } : { duration: motionDurations.exit }}
           className="flex-shrink-0"
         >
           <ChevronDown className="h-5 w-5 text-slate-400 transition-colors group-hover:text-indigo-400" />
@@ -43,7 +54,7 @@ const FAQItem = memo(({ question, answer, isOpen, onToggle, index }: FAQItemProp
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
+            transition={shouldReduceMotion ? { duration: 0.01 } : accordionTransition}
             className="overflow-hidden"
           >
             <div className="px-6 pb-2 pt-4">
@@ -60,8 +71,11 @@ FAQItem.displayName = 'FAQItem';
 
 export default function FAQ() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const searchReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
 
   const items = useMemo(
     () => [
@@ -89,9 +103,10 @@ export default function FAQ() {
       <div className="relative z-10 mx-auto max-w-3xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <HelpCircle className="h-3 w-3 text-indigo-400" />
@@ -100,10 +115,10 @@ export default function FAQ() {
 
           <motion.h2
             id="faq-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={searchReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('faq.title')} <br />
@@ -112,9 +127,10 @@ export default function FAQ() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={searchReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
           className="relative mb-8"
         >
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />

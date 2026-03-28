@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Quote, Star, Users } from 'lucide-react';
 import { memo } from 'react';
+import { instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 interface TestimonialCardProps {
   name: string;
@@ -15,13 +16,14 @@ interface TestimonialCardProps {
 
 const TestimonialCard = memo(({ name, role, server, members, quote, index, accentColor }: TestimonialCardProps) => {
   const shouldReduceMotion = useReducedMotion();
+  const cardReveal = shouldReduceMotion ? instantReveal : withDelay(withDuration(revealUp, 0.28), index * motionStagger.tight);
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : index * 0.1 }}
+      variants={cardReveal}
+      initial="hidden"
+      whileInView="show"
+      viewport={motionViewport}
       className="tech-card group flex h-full flex-col overflow-hidden"
     >
       <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-60" />
@@ -55,6 +57,9 @@ TestimonialCard.displayName = 'TestimonialCard';
 
 export default function Testimonials() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
+  const introReveal = shouldReduceMotion ? instantReveal : sectionIntro;
+  const secondaryIntroReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
 
   const testimonials = [
     {
@@ -79,9 +84,10 @@ export default function Testimonials() {
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={introReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-8 inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-4 py-2"
           >
             <Users className="h-3 w-3 text-indigo-400" />
@@ -90,10 +96,10 @@ export default function Testimonials() {
 
           <motion.h2
             id="testimonials-heading"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
           >
             {t('testimonials.title')} <br />
@@ -101,10 +107,10 @@ export default function Testimonials() {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={secondaryIntroReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={motionViewport}
             className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg"
           >
             {t('testimonials.description')}

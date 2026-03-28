@@ -1,14 +1,16 @@
 import { useEffect, useState, memo, useMemo, useCallback } from 'react';
 import { Menu, X, ChevronRight, ExternalLink, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl } from '../config';
 import LanguageSelector from './LanguageSelector';
 import Logo from './Logo';
+import { instantTransition, motionDurations, motionEase } from '../lib/motion';
 
 function Navbar() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
@@ -85,18 +87,18 @@ function Navbar() {
   }
 
   return (
-    <nav className={`fixed left-0 right-0 top-0 z-[90] transition-all duration-500 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
+    <nav className={`fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className={`relative flex items-center justify-between overflow-visible rounded-[1.75rem] px-4 py-3 transition-all duration-500 md:px-6 ${navbarClassName}`}>
+        <div className={`relative flex items-center justify-between overflow-visible rounded-[1.75rem] px-4 py-3 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-6 ${navbarClassName}`}>
           <div className="flex min-w-0 items-center gap-6 lg:gap-10">
             <Link to="/" className="flex min-w-0 items-center gap-3 group" aria-label={t('nav.homeAria')}>
               <Logo
                 size="lg"
                 subtitle="TON618"
-                className="transition-transform duration-500 group-hover:scale-[1.02]"
-                textClassName="transition-colors duration-500 group-hover:text-indigo-200"
+                className="transition-transform duration-300 group-hover:scale-[1.01]"
+                textClassName="transition-colors duration-300 group-hover:text-indigo-200"
                 frameClassName="h-[4.7rem] w-[4.7rem] md:h-[5.1rem] md:w-[5.1rem]"
-                imageClassName="transition-transform duration-500 group-hover:scale-[1.9]"
+                imageClassName="transition-transform duration-300 group-hover:scale-[1.82]"
               />
             </Link>
 
@@ -105,10 +107,10 @@ function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="relative text-[10px] font-bold uppercase tracking-tight-readable text-slate-400 transition-all duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="relative text-[10px] font-bold uppercase tracking-tight-readable text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   {link.name}
-                  <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-all duration-500 hover:w-full"></span>
+                  <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-[width] duration-300 hover:w-full"></span>
                 </a>
               ))}
             </div>
@@ -147,7 +149,7 @@ function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:border-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+              className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-200 transition-colors duration-200 hover:border-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
               aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
@@ -159,12 +161,13 @@ function Navbar() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:hidden">
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {mobileMenuOpen ? (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, height: 0, y: -8 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 1, height: 'auto', y: 0 } : { opacity: 0, height: 0, y: -6 }}
+              transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.enter, ease: motionEase }}
               id="mobile-navigation"
               className="relative z-[95] overflow-hidden pt-2"
             >
@@ -175,7 +178,7 @@ function Navbar() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-base font-bold text-white transition hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+                      className="rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-base font-bold text-white transition-[background-color,border-color,color] duration-200 hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                     >
                       {link.name}
                     </a>
@@ -191,7 +194,7 @@ function Navbar() {
                         target={link.href.startsWith('#') ? undefined : '_blank'}
                         rel={link.href.startsWith('#') ? undefined : 'noopener noreferrer'}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+                        className="inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition-[background-color,border-color,color] duration-200 hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                       >
                         <span>{link.label}</span>
                         {link.href.startsWith('#') ? null : <ExternalLink className="h-4 w-4" />}

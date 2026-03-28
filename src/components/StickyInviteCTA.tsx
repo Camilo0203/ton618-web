@@ -1,11 +1,13 @@
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useScroll } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getDiscordInviteUrl } from '../config';
+import { instantTransition, motionDurations, motionEase } from '../lib/motion';
 
 export default function StickyInviteCTA() {
   const { t } = useTranslation();
+  const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const [visible, setVisible] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
@@ -17,13 +19,13 @@ export default function StickyInviteCTA() {
   if (!inviteUrl) return null;
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {visible && (
         <motion.div
-          initial={{ y: 80, opacity: 0 }}
+          initial={shouldReduceMotion ? false : { y: 32, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 80, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          exit={shouldReduceMotion ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
+          transition={shouldReduceMotion ? instantTransition : { duration: motionDurations.enter, ease: motionEase }}
           className="fixed bottom-6 right-6 z-40 sm:bottom-auto sm:left-1/2 sm:right-auto sm:top-[calc(100dvh-4rem)] sm:-translate-x-1/2 md:hidden"
         >
           <a
