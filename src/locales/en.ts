@@ -8,7 +8,7 @@ export const en = {
         nav: {
             features: 'Capabilities',
             setup: 'Setup',
-            commands: 'Commands',
+            commands: 'Workflow',
             stats: 'Live stats',
             docs: 'Docs',
             status: 'Status',
@@ -58,20 +58,20 @@ export const en = {
             title: 'Everything Needed',
             titleAccent: 'To Launch Confidently',
             description:
-                'The public site stays focused on practical next steps: setup, commands, support, status and legal routes.',
+                'The public site stays focused on practical next steps: setup, workflow, support, status and legal routes.',
             cards: {
                 setup: {
                     title: 'Setup guide',
                     description:
-                        'Start with /setup wizard, publish tickets and verification, and connect staff roles without guesswork.',
+                        'Start with /setup, then activate tickets and verification once the server baseline is ready.',
                     ctaExternal: 'Open setup guide',
                     ctaFallback: 'Read the setup path',
                 },
                 commands: {
-                    title: 'Command reference',
+                    title: 'Current workflow',
                     description:
-                        'Browse the real slash commands available to members, staff and admins in TON618.',
-                    cta: 'View commands',
+                        'Review the rollout order and the commands that matter to admins, staff and operators today.',
+                    cta: 'See workflow',
                 },
                 support: {
                     title: 'Support and status',
@@ -87,52 +87,52 @@ export const en = {
             title: 'Built For',
             titleAccent: 'Discord Operations',
             description:
-                'TON618 is grounded in the bot that actually ships: moderation, ticket handling, verification, setup, logs, staff workflows and utility commands.',
+                'TON618 is grounded in the bot that actually ships: setup, tickets, verification, staff operations, live configuration and diagnostics.',
             useCases: {
-                moderation: 'Moderate faster with warnings, logs and safer defaults.',
-                onboarding: 'Publish verification and onboarding flows from real setup commands.',
-                support: 'Keep tickets, staff workload and follow-up organized.',
+                moderation: 'Launch with setup, verification and audit visibility instead of scattered tooling.',
+                onboarding: 'Activate tickets and verification from the same command-first rollout path.',
+                support: 'Keep staff workload, live settings and follow-up organized inside Discord.',
             },
             items: {
                 moderation: {
-                    title: 'Moderation and warnings',
-                    desc: 'Use warning workflows and moderation logs to keep enforcement consistent.',
-                    status: '/warn + /modlogs',
+                    title: 'Audit trail',
+                    desc: 'Keep traceability for operational actions and staff review when the team needs a reliable history.',
+                    status: '/audit',
                 },
                 autonomy: {
                     title: 'Ticket workflows',
-                    desc: 'Handle claims, notes, transcripts, priorities and staff handoff inside the ticket flow.',
+                    desc: 'Open the support flow inside Discord and keep cases moving with a staff-first support queue.',
                     status: '/ticket',
                 },
                 latency: {
                     title: 'Verification and onboarding',
-                    desc: 'Set up verification modes, welcome messages and safer onboarding for new members.',
+                    desc: 'Protect server access for new members before they reach the operational flows.',
                     status: '/verify',
                 },
                 security: {
                     title: 'Server setup',
-                    desc: 'Get a new server ready with guided setup, role mapping and configuration status checks.',
+                    desc: 'Prepare the server baseline so roles, channels and defaults are ready before staff starts operating.',
                     status: '/setup',
                 },
                 analytics: {
-                    title: 'Logs and reporting',
-                    desc: 'Review ticket metrics, SLA performance and exportable audit data when staff needs visibility.',
-                    status: '/stats + /audit',
+                    title: 'Metrics and health',
+                    desc: 'Track workload, usage and operational pressure without leaving Discord.',
+                    status: '/stats',
                 },
                 network: {
                     title: 'Staff coordination',
-                    desc: 'Track workload, away status and open tickets without relying on scattered staff habits.',
+                    desc: 'Coordinate daily workload inside the server instead of spreading staff routines across multiple tools.',
                     status: '/staff',
                 },
                 modular: {
-                    title: 'Community feedback',
-                    desc: 'Collect suggestions and run polls with the same bot your team already uses daily.',
-                    status: '/suggest + /poll',
+                    title: 'Configuration center',
+                    desc: 'Review and adjust live operating settings once the baseline is in place.',
+                    status: '/config center',
                 },
                 comms: {
-                    title: 'Discord-native utility',
-                    desc: 'Help members find commands and check profiles without leaving the server.',
-                    status: '/help + /perfil',
+                    title: 'Diagnostics',
+                    desc: 'Inspect deeper debug paths when the operation needs technical verification or controlled troubleshooting.',
+                    status: '/debug',
                 },
             },
         },
@@ -140,15 +140,15 @@ export const en = {
             title: 'From Invite',
             titleAccent: 'To Live Server',
             subtitle:
-                'TON618 stays command-first: invite the bot, run the setup steps, publish panels, and keep moderation and support workflows inside Discord.',
+                'TON618 stays command-first: invite the bot, run /setup, activate /ticket and /verify, and keep daily operations inside Discord.',
             card1Eyebrow: 'Setup path',
             card1Title: 'Use real commands to go live',
             card1Desc:
-                'Start with /setup wizard, /setup tickets panel, /verify panel and /config status to make the server usable quickly.',
+                'Start with /setup, then activate /ticket and /verify, and review /config center once the server baseline is live.',
             card2Eyebrow: 'Daily workflow',
             card2Title: 'Give staff tools they will actually use',
             card2Desc:
-                'Staff can claim tickets, add notes, review workload, issue warnings and inspect stats without relying on extra web tooling.',
+                'Staff works daily with /staff, while admins and owners use /stats, /audit and /debug when they need visibility or diagnosis.',
         },
         gallery: {
             tag: 'Server Workflows',
@@ -279,7 +279,7 @@ export const en = {
                 q2: { question: 'Is TON618 free?', answer: 'The invite flow and base setup are available so teams can get started. Some advanced reporting or commercial features can depend on the server plan configured by the bot owner.' },
                 q3: { question: 'Can I migrate from another bot?', answer: 'Yes. TON618 works alongside other bots during the transition. Configure the modules you need and disable the old bot when ready.' },
                 q4: { question: 'How fast does the bot respond?', answer: 'TON618 is optimized for low latency. Commands and moderation actions execute in milliseconds, even on high-activity servers.' },
-                q5: { question: 'Which commands should I start with?', answer: 'Use /setup wizard, /config status and /verify panel or /setup tickets panel depending on what your server needs first.' },
+                q5: { question: 'Which commands should I start with?', answer: 'Start with /setup, then activate /ticket and /verify. Once the server is live, use /staff, /stats and /config center to operate and adjust.' },
                 q6: { question: 'Is there support if I have issues?', answer: 'Yes. The public site keeps support, docs, status and legal pages visible so teams know where to go when they need help.' },
             },
         },
@@ -355,86 +355,108 @@ export const en = {
             },
         },
         commandPreview: {
-            tag: 'Real Commands',
-            title: 'Slash Commands',
-            titleAccent: 'That Actually Ship',
-            description: 'TON618 uses real Discord command groups for members, staff and admins. The examples below come from the bot repo.',
-            groups: {
-                public: {
-                    label: 'Members',
-                    title: 'Public utility commands',
-                    description: 'Commands members use for help, profiles, polls and suggestions.',
-                    commands: {
-                        help: {
-                            path: '/help',
-                            description: 'Open the interactive help view and only show the commands available in that server.',
-                        },
-                        perfil: {
-                            path: '/perfil ver',
-                            description: 'Show a member profile with level and economy progress.',
-                        },
-                        poll: {
-                            path: '/poll crear',
-                            description: 'Create an interactive poll with options and a duration.',
-                        },
-                        suggest: {
-                            path: '/suggest',
-                            description: 'Open the suggestion flow so members can submit ideas for the server.',
-                        },
-                    },
+            tag: 'Current workflow',
+            title: 'How To Use TON618',
+            titleAccent: 'Today',
+            description:
+                'TON618 is staff-first and command-first. Teams start in Discord, set the server baseline, turn on member-facing flows, and keep operations inside the same command surface.',
+            note: {
+                eyebrow: 'Current operating model',
+                title: 'No public dashboard required to start',
+                description:
+                    'The current rollout lives in slash commands. Docs and support can help during rollout, but they stay optional paths instead of required product surfaces.',
+                points: {
+                    point1: 'Invite the bot, run /setup, and prepare roles, channels and defaults before exposing panels to members.',
+                    point2: 'Turn on /ticket and /verify only after the baseline is ready so routing and access controls are correct from day one.',
+                    point3: 'Keep daily staff work, metrics and deeper checks inside Discord with the commands that already exist today.',
                 },
-                staff: {
-                    label: 'Staff',
-                    title: 'Moderation and support workflows',
-                    description: 'Commands moderators and support staff use during daily operations.',
-                    commands: {
-                        ticketClaim: {
-                            path: '/ticket claim',
-                            description: 'Claim the current ticket so the team knows who owns the case.',
-                        },
-                        ticketNote: {
-                            path: '/ticket note add',
-                            description: 'Leave an internal note for handoff, follow-up or context.',
-                        },
-                        staffTickets: {
-                            path: '/staff my-tickets',
-                            description: 'Review the open tickets currently assigned to you.',
-                        },
-                        warnAdd: {
-                            path: '/warn add',
-                            description: 'Apply a warning with a reason and keep the moderation record consistent.',
-                        },
+            },
+            summary: {
+                items: {
+                    launch: {
+                        label: 'Launch',
+                        title: 'Setup, tickets and verification',
+                        description: 'Configure the server, open support and protect member entry from the same rollout path.',
                     },
-                },
-                admin: {
-                    label: 'Admins',
-                    title: 'Setup, verification and reporting',
-                    description: 'Commands owners and administrators use to launch and maintain the server.',
-                    commands: {
-                        setupWizard: {
-                            path: '/setup wizard',
-                            description: 'Apply a guided baseline setup for a new server.',
-                        },
-                        verifyPanel: {
-                            path: '/verify panel',
-                            description: 'Send or refresh the verification panel for new members.',
-                        },
-                        configStatus: {
-                            path: '/config status',
-                            description: 'Review the current live configuration at a glance.',
-                        },
-                        statsSla: {
-                            path: '/stats sla',
-                            description: 'Check SLA compliance and escalation pressure for ticket operations.',
-                        },
+                    operate: {
+                        label: 'Operate',
+                        title: 'Staff workflow and live checks',
+                        description: 'Run the daily queue inside Discord and keep a quick read on workload once the server is active.',
+                    },
+                    control: {
+                        label: 'Control',
+                        title: 'Configuration, audits and diagnosis',
+                        description: 'Adjust live settings, review traceability and debug deeper issues only when the operation needs it.',
                     },
                 },
             },
+            workflow: {
+                eyebrow: 'Rollout order',
+                title: 'The order teams follow today',
+                description: 'This sequence reflects the current product: configure first, activate member-facing flows second, then operate and inspect.',
+            },
+            steps: {
+                setup: {
+                    role: 'Admin',
+                    title: 'Configure the server',
+                    description: 'Invite TON618 and run the initial setup so channels, staff permissions and defaults are ready before the server goes live.',
+                },
+                tickets: {
+                    role: 'Admin',
+                    title: 'Turn on tickets',
+                    description: 'Activate the support flow after setup so the queue opens with the right routing, ownership and operational context.',
+                },
+                verify: {
+                    role: 'Admin',
+                    title: 'Protect member access',
+                    description: 'Add verification when your server needs controlled entry and safer onboarding before new members reach the live operation.',
+                },
+                staff: {
+                    role: 'Staff',
+                    title: 'Run daily staff work',
+                    description: 'Use the live staff flow to coordinate queue ownership, execution and day-to-day workload directly inside Discord.',
+                },
+                measure: {
+                    role: 'Admin + Owner',
+                    title: 'Measure and tune',
+                    description: 'Review usage and live configuration to understand load, verify outcomes and adjust the server without guesswork.',
+                },
+                audit: {
+                    role: 'Owner / Operator',
+                    title: 'Audit and diagnose',
+                    description: 'Use the deeper paths when the operation needs traceability or controlled troubleshooting, without implying a public dashboard is always available.',
+                },
+            },
+            roles: {
+                eyebrow: 'Who uses what',
+                title: 'One bot, three responsibilities',
+                description:
+                    'Admins launch the server flow, staff works it daily, and owners or operators keep oversight on metrics, configuration and incidents.',
+                items: {
+                    admin: {
+                        eyebrow: 'Administrator',
+                        title: 'Owns setup and live activation',
+                        description: 'Uses the admin-first commands that prepare the server and expose tickets or verification at the right moment.',
+                    },
+                    staff: {
+                        eyebrow: 'Staff',
+                        title: 'Runs the queue inside Discord',
+                        description: 'Focuses on the operational commands that keep support and coordination moving once the server is live.',
+                    },
+                    owner: {
+                        eyebrow: 'Owner / Operator',
+                        title: 'Watches the system and intervenes when needed',
+                        description: 'Keeps an eye on metrics, configuration, audit trails and debugging paths when the operation needs deeper control.',
+                    },
+                },
+            },
+            commandsLabel: 'Key commands',
+            commandsAria: 'Commands for {{context}}',
         },
         stickyInvite: { cta: 'Invite TON618' },
         scrollToTop: { label: 'Back to top' },
         verifiedBadge: { label: 'Verified bot' },
-        heroTyping: { phrases: ['Claim faster with /ticket claim', 'Refresh access with /verify panel', 'Check health with /config status', 'Track SLA with /stats sla'] },
+        heroTyping: { phrases: ['Launch faster with /setup', 'Open support with /ticket', 'Protect access with /verify', 'Check health with /stats'] },
         faqSearch: { placeholder: 'Search questions...', noResults: 'No questions found matching that term.' },
         footerShare: { label: 'Share', twitter: 'Share on X', discord: 'Join server' },
         why: {
@@ -454,11 +476,11 @@ export const en = {
             reasons: {
                 precision: {
                     title: 'Real command inventory',
-                    desc: 'The site now references commands such as /help, /ticket claim, /setup wizard and /stats sla instead of invented command trees.',
+                    desc: 'The site now references /setup, /ticket, /verify, /staff, /stats, /config center, /audit and /debug instead of invented command trees.',
                 },
                 performance: {
                     title: 'Support-ready workflows',
-                    desc: 'Tickets, staff workload, warnings, verification and suggestions are described because they are already part of TON618.',
+                    desc: 'Tickets, staff workload, verification, configuration and diagnostics are described because they already belong to TON618 today.',
                 },
                 security: {
                     title: 'Credible public presence',
@@ -537,7 +559,7 @@ export const en = {
             nav: {
                 features: 'Capabilities',
                 setup: 'Setup',
-                commands: 'Commands',
+                commands: 'Workflow',
                 stats: 'Live stats',
                 invite: 'Invite bot',
                 docs: 'Documentation',
