@@ -11,7 +11,7 @@ export default function FilterField({
 }) {
   return (
     <label htmlFor={htmlFor} className="grid gap-2">
-      <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+      <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
         {label}
       </span>
       {children}

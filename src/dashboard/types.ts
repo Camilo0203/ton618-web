@@ -2,9 +2,6 @@ import type { Session, User } from '@supabase/supabase-js';
 
 export type DashboardSectionId =
   | 'overview'
-  | 'inbox'
-  | 'playbooks'
-  | 'billing'
   | 'general'
   | 'server_roles'
   | 'tickets'

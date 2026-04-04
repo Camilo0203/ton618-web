@@ -27,15 +27,15 @@ interface AnalyticsModuleProps {
 function getToneRing(tone: AnalyticsSeriesCard['tone']) {
   switch (tone) {
     case 'success':
-      return 'border-emerald-200/70 dark:border-emerald-900/30';
+      return 'border-emerald-900/30';
     case 'warning':
-      return 'border-amber-200/70 dark:border-amber-900/30';
+      return 'border-amber-900/30';
     case 'danger':
-      return 'border-rose-200/70 dark:border-rose-900/30';
+      return 'border-rose-900/30';
     case 'info':
-      return 'border-sky-200/70 dark:border-sky-900/30';
+      return 'border-sky-900/30';
     default:
-      return 'border-slate-200/70 dark:border-surface-600';
+      return 'border-white/[0.07]';
   }
 }
 
@@ -82,16 +82,16 @@ export default function AnalyticsModule({
 
   function renderDelta(delta: ReturnType<typeof getMetricDelta>) {
     if (!delta) {
-      return <span className="text-slate-500 dark:text-slate-400">{t('dashboard.analytics.noComparison')}</span>;
+      return <span className="text-slate-400">{t('dashboard.analytics.noComparison')}</span>;
     }
 
     if (delta.direction === 'flat') {
-      return <span className="text-slate-500 dark:text-slate-400">{delta.label}</span>;
+      return <span className="text-slate-400">{delta.label}</span>;
     }
 
     const positive = delta.direction === 'up';
     return (
-      <span className={positive ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'}>
+      <span className={positive ? 'text-emerald-300' : 'text-rose-300'}>
         {positive ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
         {delta.label}
       </span>
@@ -167,22 +167,22 @@ export default function AnalyticsModule({
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <p className="dashboard-data-label">{card.label}</p>
-                    <p className="mt-2 text-[1.7rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white">{card.value}</p>
+                    <p className="mt-2 text-[1.7rem] font-bold tracking-[-0.05em] text-white">{card.value}</p>
                   </div>
                   <div className="flex items-center gap-1 text-xs font-semibold">
                     {renderDelta(card.delta)}
                   </div>
                 </div>
 
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{card.helper}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{card.helper}</p>
 
-                <div className="mt-4 rounded-[1.2rem] border border-slate-200/70 bg-white/70 px-3 py-3 dark:border-surface-600 dark:bg-surface-700/60">
+                <div className="mt-4 rounded-[1.2rem] border border-white/[0.07] bg-white/[0.04] px-3 py-3">
                   {path && !card.empty ? (
                     <svg viewBox="0 0 100 100" className="h-16 w-full" aria-hidden="true" preserveAspectRatio="none">
                       <path d={path} fill="none" stroke="currentColor" strokeWidth="3" className="text-brand-500" strokeLinecap="round" />
                     </svg>
                   ) : (
-                    <div className="flex h-16 items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+                    <div className="flex h-16 items-center justify-center text-sm text-slate-400">
                       {t('dashboard.analytics.trends.emptySeries')}
                     </div>
                   )}
@@ -215,14 +215,14 @@ export default function AnalyticsModule({
                       style={{ height: `${getBarHeight(Math.max(metric.ticketsOpened, metric.ticketsClosed, metric.openTickets), maxTickets)}%` }}
                       title={t('dashboard.analytics.activity.tooltipTickets', { opened: metric.ticketsOpened, closed: metric.ticketsClosed, open: metric.openTickets })}
                     />
-                    <p className="text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                    <p className="text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
                       {formatMetricDate(metric.metricDate)}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300">
+            <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-300">
               <span className="inline-flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-brand-500" aria-hidden="true" />
                 {t('dashboard.analytics.activity.legendCommands')}
@@ -232,7 +232,7 @@ export default function AnalyticsModule({
                 {t('dashboard.analytics.activity.legendTickets')}
               </span>
             </div>
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+            <p className="mt-3 text-xs text-slate-400">
               {t('dashboard.analytics.activity.mobileHint')}
             </p>
           </div>
@@ -257,7 +257,7 @@ export default function AnalyticsModule({
             ].map(([label, value]) => (
               <article key={label} className="dashboard-kpi-card">
                 <p className="dashboard-data-label">{label}</p>
-                <p className="mt-2 text-[1.45rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white">{value}</p>
+                <p className="mt-2 text-[1.45rem] font-bold tracking-[-0.05em] text-white">{value}</p>
               </article>
             ))}
           </div>
@@ -279,7 +279,7 @@ export default function AnalyticsModule({
           ].map(([label, value]) => (
             <article key={label} className="dashboard-kpi-card">
               <p className="dashboard-data-label">{label}</p>
-              <p className="mt-2 text-[1.45rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white">{value}</p>
+              <p className="mt-2 text-[1.45rem] font-bold tracking-[-0.05em] text-white">{value}</p>
             </article>
           ))}
         </div>
@@ -300,8 +300,8 @@ export default function AnalyticsModule({
                 <article key={metric.metricDate} className="dashboard-data-card">
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <p className="text-lg font-semibold text-slate-950 dark:text-white">{formatMetricDate(metric.metricDate)}</p>
-                      <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                      <p className="text-lg font-semibold text-white">{formatMetricDate(metric.metricDate)}</p>
+                      <p className="mt-1 text-sm text-slate-400">
                         {metric.modulesActive.length
                           ? t('dashboard.analytics.daily.modulesActive', { count: metric.modulesActive.length })
                           : t('dashboard.analytics.daily.noModules')}
@@ -314,21 +314,21 @@ export default function AnalyticsModule({
                   <div className="dashboard-grid-fit-compact mt-4">
                     <div>
                       <p className="dashboard-data-label">{t('dashboard.analytics.daily.commands')}</p>
-                      <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{metric.commandsExecuted.toLocaleString('es-CO')}</p>
+                      <p className="mt-2 text-lg font-semibold text-white">{metric.commandsExecuted.toLocaleString('es-CO')}</p>
                     </div>
                     <div>
                       <p className="dashboard-data-label">{t('dashboard.analytics.daily.tickets')}</p>
-                      <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
+                      <p className="mt-2 text-lg font-semibold text-white">
                         {metric.ticketsOpened} / {metric.ticketsClosed} / {metric.openTickets}
                       </p>
                     </div>
                     <div>
                       <p className="dashboard-data-label">{t('dashboard.analytics.daily.frt')}</p>
-                      <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{formatMinutes(metric.avgFirstResponseMinutes)}</p>
+                      <p className="mt-2 text-lg font-semibold text-white">{formatMinutes(metric.avgFirstResponseMinutes)}</p>
                     </div>
                     <div>
                       <p className="dashboard-data-label">{t('dashboard.analytics.daily.sla')}</p>
-                      <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{t('dashboard.analytics.daily.slaBreaches', { count: metric.slaBreaches })}</p>
+                      <p className="mt-2 text-lg font-semibold text-white">{t('dashboard.analytics.daily.slaBreaches', { count: metric.slaBreaches })}</p>
                     </div>
                   </div>
                 </article>

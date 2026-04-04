@@ -195,7 +195,7 @@ export default function TicketsModule({
                   <input
                     type="checkbox"
                     {...register(field as keyof TicketsSettings)}
-                    className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                    className="dashboard-module-checkbox mt-1"
                   />
                 </ToggleCard>
               ))}
@@ -211,7 +211,7 @@ export default function TicketsModule({
               <select
                 {...register('slaEscalationRoleId')}
                 disabled={!slaEscalationEnabled}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700"
+                className="w-full rounded-2xl border dashboard-module-select"
               >
                 <option value="">{t('dashboard.tickets.escalation.notConfigured')}</option>
                 {roleOptions.map((option) => (
@@ -226,7 +226,7 @@ export default function TicketsModule({
               <select
                 {...register('slaEscalationChannelId')}
                 disabled={!slaEscalationEnabled}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700"
+                className="w-full rounded-2xl border dashboard-module-select"
               >
                 <option value="">{t('dashboard.tickets.escalation.notConfigured')}</option>
                 {channelOptions.map((option) => (
@@ -241,7 +241,7 @@ export default function TicketsModule({
               <select
                 {...register('dailySlaReportChannelId')}
                 disabled={!dailySlaReportEnabled}
-                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700"
+                className="w-full rounded-2xl border dashboard-module-select"
               >
                 <option value="">{t('dashboard.tickets.escalation.useFallback')}</option>
                 {channelOptions.map((option) => (
@@ -265,11 +265,11 @@ export default function TicketsModule({
         <PanelCard title={t('dashboard.tickets.advanced.title')} description={t('dashboard.tickets.advanced.desc')}>
           <div className="space-y-6">
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dashboard.tickets.advanced.slaOverrides')}</p>
+              <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.slaOverrides')}</p>
               <div className="mt-3 grid gap-4 md:grid-cols-2">
                 {priorityLabels.map(([key, label]) => (
                   <label key={key} className="block">
-                    <span className="mb-2 block text-sm text-slate-600 dark:text-slate-300">{label}</span>
+                    <span className="mb-2 block text-sm text-slate-300">{label}</span>
                     <input
                       type="number"
                       min={0}
@@ -282,7 +282,7 @@ export default function TicketsModule({
                         else delete next[key];
                         setValue('slaOverridesPriority', next, { shouldDirty: true });
                       }}
-                      className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 dark:border-surface-600 dark:bg-surface-700"
+                      className="w-full rounded-2xl border dashboard-module-select"
                     />
                   </label>
                 ))}
@@ -290,7 +290,7 @@ export default function TicketsModule({
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dashboard.tickets.advanced.pausedCategories')}</p>
+              <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.pausedCategories')}</p>
               <div className="mt-3 grid gap-3">
                 {categoryOptions.length ? (
                   categoryOptions.map((category) => {
@@ -298,7 +298,7 @@ export default function TicketsModule({
                     return (
                       <label
                         key={category.value}
-                        className="flex items-start gap-3 rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70"
+                        className="flex items-start gap-3 rounded-3xl border dashboard-module-card p-4"
                       >
                         <input
                           type="checkbox"
@@ -309,12 +309,12 @@ export default function TicketsModule({
                             else next.delete(category.value);
                             setValue('incidentPausedCategories', Array.from(next), { shouldDirty: true });
                           }}
-                          className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                          className="dashboard-module-checkbox mt-1"
                         />
                         <span>
-                          <span className="block font-semibold text-slate-950 dark:text-white">{category.label}</span>
+                          <span className="block font-semibold text-white">{category.label}</span>
                           {category.description ? (
-                            <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                            <span className="mt-1 block text-sm text-slate-300">
                               {category.description}
                             </span>
                           ) : null}
@@ -323,7 +323,7 @@ export default function TicketsModule({
                     );
                   })
                 ) : (
-                  <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-5 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+                  <div className="rounded-3xl border dashboard-module-empty p-5 text-sm text-slate-500">
                     {t('dashboard.tickets.advanced.noCategories')}
                   </div>
                 )}

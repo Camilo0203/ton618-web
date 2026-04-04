@@ -22,7 +22,7 @@ export default function InboxMacroPanel(props: InboxMacroPanelProps) {
         <Sparkles className="h-4 w-4 text-brand-500" />
         <div>
           <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.ops.macrosEyebrow')}</p>
-          <h3 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.ops.macrosTitle')}</h3>
+          <h3 className="mt-1 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.ops.macrosTitle')}</h3>
         </div>
       </div>
 
@@ -41,10 +41,10 @@ export default function InboxMacroPanel(props: InboxMacroPanelProps) {
                   <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getMacroVisibilityLabel(props.selectedMacro, props.t)}</span>
                   {props.selectedMacro.isSystem ? <span className="dashboard-status-pill-compact dashboard-neutral-pill">System</span> : null}
                 </div>
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-slate-300">{props.selectedMacro.content}</p>
+                <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-300">{props.selectedMacro.content}</p>
               </div>
 
-              <label className="flex items-start gap-3 rounded-[1.2rem] border border-slate-200/70 bg-white/60 p-3 text-sm text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+              <label className="flex items-start gap-3 rounded-[1.2rem] border border-white/[0.07] bg-white/[0.04] p-3 text-sm text-slate-700 text-slate-300">
                 <input type="checkbox" checked={props.macroConfirmed} onChange={(event) => props.onMacroConfirmedChange(event.target.checked)} className="mt-1" />
                 <span>{props.t('dashboard.inbox.detail.ops.macroConfirm')}</span>
               </label>

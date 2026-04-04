@@ -3,9 +3,6 @@ import type { DashboardSectionId, ConfigMutationSectionId } from '../types';
 
 export const dashboardSectionIds = [
   'overview',
-  'inbox',
-  'playbooks',
-  'billing',
   'general',
   'server_roles',
   'tickets',

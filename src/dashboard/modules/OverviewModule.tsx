@@ -12,6 +12,8 @@ import {
   Zap,
 } from 'lucide-react';
 import DashboardDegradationNotice from '../components/DashboardDegradationNotice';
+import { motion } from 'framer-motion';
+import { staggerContainerVariants, fadeUpVariants } from '../motion';
 import { useTranslation } from 'react-i18next';
 import PanelCard from '../components/PanelCard';
 import type {
@@ -57,13 +59,13 @@ interface OverviewModuleProps {
 function getStatusClasses(status: DashboardSectionState['status']) {
   switch (status) {
     case 'active':
-      return 'border-emerald-200/70 bg-emerald-50/90 text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-100';
+      return 'border-emerald-900/40 bg-emerald-950/20 text-emerald-100';
     case 'basic':
-      return 'border-sky-200/70 bg-sky-50/90 text-sky-800 dark:border-sky-900/40 dark:bg-sky-950/20 dark:text-sky-100';
+      return 'border-sky-900/40 bg-sky-950/20 text-sky-100';
     case 'needs_attention':
-      return 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100';
+      return 'border-amber-900/40 bg-amber-950/20 text-amber-100';
     default:
-      return 'border-slate-200/70 bg-slate-50/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/70 dark:text-slate-200';
+      return 'border-white/[0.07] bg-white/[0.04] text-slate-200';
   }
 }
 
@@ -83,15 +85,15 @@ function getAreaToneClass(status: DashboardSectionState['status']) {
 function getToneClasses(tone: 'neutral' | 'info' | 'success' | 'warning' | 'danger') {
   switch (tone) {
     case 'success':
-      return 'border-emerald-200/60 bg-emerald-50/90 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/25 dark:text-emerald-100';
+      return 'border-emerald-900/40 bg-emerald-950/25 text-emerald-100';
     case 'warning':
-      return 'border-amber-200/60 bg-amber-50/90 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/25 dark:text-amber-100';
+      return 'border-amber-900/40 bg-amber-950/25 text-amber-100';
     case 'danger':
-      return 'border-rose-200/60 bg-rose-50/90 text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/25 dark:text-rose-100';
+      return 'border-rose-900/40 bg-rose-950/25 text-rose-100';
     case 'info':
-      return 'border-sky-200/60 bg-sky-50/90 text-sky-900 dark:border-sky-900/40 dark:bg-sky-950/25 dark:text-sky-100';
+      return 'border-sky-900/40 bg-sky-950/25 text-sky-100';
     default:
-      return 'border-slate-200/70 bg-slate-50/90 text-slate-800 dark:border-surface-600 dark:bg-surface-700/70 dark:text-slate-100';
+      return 'border-white/[0.07] bg-white/[0.04] text-slate-100';
   }
 }
 
@@ -162,12 +164,11 @@ export default function OverviewModule({
   const completedChecklist = checklist.filter((step) => step.complete).length;
   const progressRatio = checklist.length ? completedChecklist / checklist.length : 0;
   const recentEvents = events.slice(0, 4);
-  const areas = sectionStates.filter((section) => !['overview', 'activity', 'analytics', 'inbox'].includes(section.sectionId));
+  const areas = sectionStates.filter((section) => !['overview', 'activity', 'analytics'].includes(section.sectionId));
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen);
   const breachedTickets = openTickets.filter((ticket) => ticket.slaState === 'breached');
   const warningTickets = openTickets.filter((ticket) => ticket.slaState === 'warning');
-  const pendingRecommendations = playbooks.recommendations.filter((recommendation) => recommendation.status === 'pending').slice(0, 3);
-  const watchCustomers = playbooks.customerMemory.filter((memory) => memory.riskLevel === 'watch').slice(0, 3);
+
 
   const syncFacts = [
     [t('dashboard.overview.syncFacts.bridge'), getHealthLabel(syncStatus)],
@@ -184,8 +185,13 @@ export default function OverviewModule({
   ];
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(23rem,0.95fr)] 2xl:grid-cols-[minmax(0,1.52fr)_minmax(24rem,0.88fr)]">
-      <div className="space-y-6">
+    <motion.div
+      variants={staggerContainerVariants}
+      initial="hidden"
+      animate="show"
+      className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(23rem,0.95fr)] 2xl:grid-cols-[minmax(0,1.52fr)_minmax(24rem,0.88fr)]"
+    >
+      <motion.div variants={staggerContainerVariants} className="space-y-6">
         <DashboardDegradationNotice
           failures={partialFailures}
           title={t('dashboard.overview.degraded')}
@@ -197,20 +203,20 @@ export default function OverviewModule({
           description={t('dashboard.overview.center.desc')}
           variant="highlight"
           titleClassName="text-[1.75rem] lg:text-[2.15rem]"
-          descriptionClassName="max-w-4xl text-[1rem] text-slate-600 dark:text-slate-300"
+          descriptionClassName="max-w-4xl text-[1rem] text-slate-300"
         >
           <div className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)]">
             <section className="dashboard-next-step-card">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="max-w-3xl">
                   <p className="dashboard-panel-label">{t('dashboard.overview.nextStep.label')}</p>
-                  <h3 className="mt-3 text-[1.55rem] font-semibold tracking-[-0.05em] text-slate-950 dark:text-white lg:text-[1.85rem]">
+                  <h3 className="mt-3 text-[1.55rem] font-semibold tracking-[-0.05em] text-white lg:text-[1.85rem]">
                     {nextStep?.label ?? t('dashboard.overview.nextStep.ready')}
                   </h3>
-                  <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
                     {nextStep?.description ?? t('dashboard.overview.nextStep.emptyDesc')}
                   </p>
-                  <p className="mt-3 text-sm font-medium text-slate-800 dark:text-slate-100">
+                  <p className="mt-3 text-sm font-medium text-slate-100">
                     {nextStep?.summary ?? t('dashboard.overview.nextStep.emptySummary')}
                   </p>
                 </div>
@@ -238,14 +244,14 @@ export default function OverviewModule({
                 ) : null}
                 <button
                   type="button"
-                  onClick={() => onSectionChange(openTickets.length ? 'inbox' : 'activity')}
+                  onClick={() => onSectionChange(openTickets.length ? 'tickets' : 'activity')}
                   className="dashboard-secondary-button"
                 >
                   {openTickets.length ? t('dashboard.overview.nextStep.toSupport') : t('dashboard.overview.nextStep.toActivity')}
                 </button>
               </div>
 
-              <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200/70 dark:bg-surface-700/80">
+              <div className="mt-6 h-3 overflow-hidden rounded-full bg-white/[0.06]">
                 <div
                   className="h-full rounded-full bg-[linear-gradient(90deg,rgba(88,101,242,0.95),rgba(34,211,238,0.9))]"
                   style={{ width: `${Math.max(8, Math.round(progressRatio * 100))}%` }}
@@ -283,8 +289,8 @@ export default function OverviewModule({
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400">{item.label}</p>
-                        <p className="text-[0.95rem] font-semibold leading-5 text-slate-950 dark:text-white">{item.value}</p>
+                        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.15em] text-slate-400">{item.label}</p>
+                        <p className="text-[0.95rem] font-semibold leading-5 text-white">{item.value}</p>
                       </div>
                       <p className="dashboard-overview-quick-copy">{item.copy}</p>
                     </div>
@@ -296,10 +302,10 @@ export default function OverviewModule({
             <section className="space-y-3">
               <div className="dashboard-overview-summary-card">
                 <p className="dashboard-panel-label">{t('dashboard.overview.summary.label')}</p>
-                <p className="mt-2 text-lg font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                <p className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">
                   {insight.actionItems[0]?.title ?? t('dashboard.overview.summary.fallbackTitle')}
                 </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm leading-6 text-slate-300">
                   {insight.actionItems[0]?.description ?? t('dashboard.overview.summary.fallbackDesc')}
                 </p>
               </div>
@@ -308,10 +314,10 @@ export default function OverviewModule({
                 {insight.kpis.map((card) => (
                   <article key={card.id} className={`dashboard-kpi-card ${getToneClasses(card.tone)}`}>
                     <p className="dashboard-data-label">{card.label}</p>
-                    <p className="mt-3 text-[1.45rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white lg:text-[1.7rem]">
+                    <p className="mt-3 text-[1.45rem] font-bold tracking-[-0.05em] text-white lg:text-[1.7rem]">
                       {card.value}
                     </p>
-                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{card.note}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{card.note}</p>
                   </article>
                 ))}
               </div>
@@ -341,13 +347,13 @@ export default function OverviewModule({
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="text-base font-semibold text-slate-950 dark:text-white">{step.label}</p>
+                        <p className="text-base font-semibold text-white">{step.label}</p>
                         <span className={`dashboard-status-pill-compact ${getStatusClasses(step.status)}`}>
                           {step.complete ? t('dashboard.overview.checklist.ctaReady') : getStatusLabel(step.status)}
                         </span>
                       </div>
-                      <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
-                      <p className="mt-2 text-sm font-medium text-slate-700 dark:text-slate-200">{step.summary}</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-300">{step.description}</p>
+                      <p className="mt-2 text-sm font-medium text-slate-200">{step.summary}</p>
                     </div>
                     <ArrowRight className="mt-1 h-4 w-4 flex-shrink-0 text-slate-400" />
                   </div>
@@ -360,7 +366,7 @@ export default function OverviewModule({
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="dashboard-panel-label">{t('dashboard.overview.actions.label')}</p>
-                    <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                    <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">
                       {t('dashboard.overview.actions.title')}
                     </h3>
                   </div>
@@ -378,12 +384,12 @@ export default function OverviewModule({
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <p className="font-semibold text-slate-950 dark:text-white">{action.label}</p>
+                            <p className="font-semibold text-white">{action.label}</p>
                             {index === 0 ? (
                               <span className="dashboard-overview-badge dashboard-overview-badge-progress">{t('dashboard.overview.actions.now')}</span>
                             ) : null}
                           </div>
-                          <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{action.description}</p>
+                          <p className="mt-2 text-sm leading-6 text-slate-300">{action.description}</p>
                         </div>
                         <ArrowRight className="mt-1 h-4 w-4 flex-shrink-0 text-slate-400" />
                       </div>
@@ -396,7 +402,7 @@ export default function OverviewModule({
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="dashboard-panel-label">{t('dashboard.overview.alerts.label')}</p>
-                    <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+                    <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">
                       {t('dashboard.overview.alerts.title')}
                     </h3>
                   </div>
@@ -460,7 +466,7 @@ export default function OverviewModule({
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="dashboard-panel-label">{group.title}</p>
-                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{group.description}</p>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{group.description}</p>
                   </div>
                   <span className="dashboard-overview-count">{group.sections.length}</span>
                 </div>
@@ -475,13 +481,13 @@ export default function OverviewModule({
                         className={`dashboard-area-card w-full text-left ${getAreaToneClass(section.status)}`}
                       >
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-semibold text-slate-950 dark:text-white">{section.label}</p>
+                          <p className="font-semibold text-white">{section.label}</p>
                           <span className={`dashboard-status-pill-compact ${getStatusClasses(section.status)}`}>
                             {getStatusLabel(section.status)}
                           </span>
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{section.summary}</p>
-                        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200/70 dark:bg-surface-700">
+                        <p className="mt-2 text-sm leading-6 text-slate-300">{section.summary}</p>
+                        <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/[0.06]">
                           <div
                             className="h-full rounded-full bg-[linear-gradient(90deg,rgba(88,101,242,0.95),rgba(34,211,238,0.9))]"
                             style={{ width: `${Math.max(6, Math.round(section.progress * 100))}%` }}
@@ -497,10 +503,10 @@ export default function OverviewModule({
             ))}
           </div>
         </PanelCard>
-      </div>
+      </motion.div>
 
-      <div className="space-y-6">
-        <article className="dashboard-live-panel relative overflow-hidden rounded-[1.6rem] p-5 text-white lg:p-6">
+      <motion.div variants={staggerContainerVariants} className="space-y-6">
+        <motion.article variants={fadeUpVariants} className="dashboard-live-panel relative overflow-hidden rounded-[1.6rem] p-5 text-white lg:p-6">
           <div className="absolute -right-10 top-0 h-32 w-32 rounded-full bg-brand-500/16 blur-3xl" />
           <div className="relative z-[1] flex items-start justify-between gap-4">
             <div>
@@ -567,7 +573,7 @@ export default function OverviewModule({
               </article>
             ))}
           </div>
-        </article>
+        </motion.article>
 
         <PanelCard
           title={t('dashboard.overview.pulseStats.title')}
@@ -578,7 +584,7 @@ export default function OverviewModule({
             {coverageFacts.map(([label, value]) => (
               <div key={label} className="dashboard-kpi-card">
                 <p className="dashboard-data-label">{label}</p>
-                <p className="mt-2 text-2xl font-bold tracking-[-0.04em] text-slate-950 dark:text-white">{value}</p>
+                <p className="mt-2 text-2xl font-bold tracking-[-0.04em] text-white">{value}</p>
               </div>
             ))}
           </div>
@@ -586,7 +592,7 @@ export default function OverviewModule({
           {metrics.length ? (
             <div className="mt-4 dashboard-action-note">
               <Clock3 className="mt-0.5 h-4 w-4 flex-shrink-0" />
-              <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+              <p className="text-sm leading-6 text-slate-300">
                 {t('dashboard.overview.pulseStats.info', {
                   commands: formatCompactNumber(metrics[0]?.commandsExecuted ?? null),
                   members: formatCompactNumber(metrics[0]?.activeMembers ?? null)
@@ -607,8 +613,8 @@ export default function OverviewModule({
                 <article key={event.id} className="dashboard-data-card">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="break-words font-semibold text-slate-950 dark:text-white">{event.title}</p>
-                      <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">{event.description}</p>
+                      <p className="break-words font-semibold text-white">{event.title}</p>
+                      <p className="mt-1 text-sm text-slate-300">{event.description}</p>
                     </div>
                     <Clock3 className="h-4 w-4 flex-shrink-0 text-slate-400" />
                   </div>
@@ -651,53 +657,8 @@ export default function OverviewModule({
           </div>
         </PanelCard>
 
-        <PanelCard
-          title={i18n.language.startsWith('en') ? 'Live playbooks' : 'Playbooks vivos'}
-          description={i18n.language.startsWith('en')
-            ? 'Operational recommendations generated from tickets, SLA and customer context.'
-            : 'Recomendaciones operativas generadas desde tickets, SLA y memoria del usuario.'}
-          variant="soft"
-        >
-          <div className="space-y-3">
-            {pendingRecommendations.length ? (
-              pendingRecommendations.map((recommendation) => (
-                <button
-                  key={recommendation.recommendationId}
-                  type="button"
-                  onClick={() => onSectionChange('playbooks')}
-                  className="dashboard-data-card w-full text-left"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-semibold text-slate-950 dark:text-white">{recommendation.title}</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{recommendation.summary}</p>
-                    </div>
-                    <span className="dashboard-status-pill-compact dashboard-neutral-pill">#{recommendation.ticketId}</span>
-                  </div>
-                </button>
-              ))
-            ) : watchCustomers.length ? (
-              watchCustomers.map((memory) => (
-                <button
-                  key={memory.userId}
-                  type="button"
-                  onClick={() => onSectionChange('playbooks')}
-                  className="dashboard-data-card w-full text-left"
-                >
-                  <p className="font-semibold text-slate-950 dark:text-white">{memory.displayLabel}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{memory.summary}</p>
-                </button>
-              ))
-            ) : (
-              <div className="dashboard-empty-state">
-                {i18n.language.startsWith('en')
-                  ? 'Playbooks are synced and waiting for the next support event.'
-                  : 'Los playbooks ya estan sincronizados y esperan el siguiente evento operativo.'}
-              </div>
-            )}
-          </div>
-        </PanelCard>
-      </div>
-    </div>
+
+      </motion.div>
+    </motion.div>
   );
 }

@@ -127,7 +127,7 @@ export default function SuggestionsModule({
             title={t('dashboard.suggestions.destinations.enableLabel')}
             description={t('dashboard.suggestions.destinations.enableDesc')}
           >
-            <input type="checkbox" {...register('enabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+            <input type="checkbox" {...register('enabled')} className="dashboard-module-checkbox mt-1" />
           </ToggleCard>
 
           <FormSection
@@ -142,7 +142,7 @@ export default function SuggestionsModule({
                 ['rejectedChannelId', t('dashboard.suggestions.destinations.rejected.label'), t('dashboard.suggestions.destinations.rejected.hint')],
               ].map(([field, label, hint]) => (
                 <FieldShell key={field} label={label} hint={hint} error={errors[field as keyof typeof errors]?.message as string | undefined}>
-                  <select {...register(field as keyof SuggestionSettings)} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                  <select {...register(field as keyof SuggestionSettings)} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                     <option value="">{t('dashboard.suggestions.notConfigured')}</option>
                     {channelOptions.map((option) => (
                       <option key={option.value} value={option.value}>{option.label}</option>
@@ -171,7 +171,7 @@ export default function SuggestionsModule({
             ['anonymous', t('dashboard.suggestions.moderation.anonymous.label'), t('dashboard.suggestions.moderation.anonymous.desc')],
           ].map(([field, label, description]) => (
             <ToggleCard key={field} title={label} description={description}>
-              <input type="checkbox" {...register(field as keyof SuggestionSettings)} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <input type="checkbox" {...register(field as keyof SuggestionSettings)} className="dashboard-module-checkbox mt-1" />
             </ToggleCard>
           ))}
         </div>

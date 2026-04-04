@@ -20,9 +20,9 @@ export function FormSection({
   return (
     <section className="space-y-4">
       <div>
-        <h3 className="text-base font-semibold text-slate-950 dark:text-white">{title}</h3>
+        <h3 className="text-base font-semibold text-white">{title}</h3>
         {description ? (
-          <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p>
+          <p className="mt-1 text-sm leading-6 text-slate-300">{description}</p>
         ) : null}
       </div>
       {children}
@@ -56,15 +56,15 @@ export function FieldShell({
 
   return (
     <label htmlFor={fieldId} className="block">
-      <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</span>
+      <span className="mb-2 block text-sm font-semibold text-slate-200">{label}</span>
       {hint ? (
-        <span id={hintId} className="mb-2 block text-xs leading-5 text-slate-500 dark:text-slate-400">
+        <span id={hintId} className="mb-2 block text-xs leading-5 text-slate-400">
           {hint}
         </span>
       ) : null}
       {child}
       {error ? (
-        <span id={errorId} className="mt-2 block text-sm font-medium text-rose-600 dark:text-rose-300">
+        <span id={errorId} className="mt-2 block text-sm font-medium text-rose-300">
           {error}
         </span>
       ) : null}
@@ -82,12 +82,12 @@ export function ToggleCard({
   children: ReactNode;
 }) {
   return (
-    <label className="dashboard-toggle-card flex items-start gap-3 focus-within:border-brand-300 focus-within:bg-brand-50/70 focus-within:shadow-[0_0_0_4px_rgba(99,102,241,0.14)] dark:focus-within:border-brand-700 dark:focus-within:bg-brand-950/20">
+    <label className="dashboard-toggle-card flex items-start gap-3 focus-within:border-indigo-500/30 focus-within:bg-indigo-500/[0.06] focus-within:shadow-[0_0_0_3px_rgba(99,102,241,0.14)]">
       {children}
       <span>
-        <span className="block font-semibold text-slate-950 dark:text-white">{title}</span>
+        <span className="block font-semibold text-white">{title}</span>
         {description ? (
-          <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">{description}</span>
+          <span className="mt-1 block text-sm text-slate-300">{description}</span>
         ) : null}
       </span>
     </label>
@@ -105,8 +105,8 @@ export function InventoryNotice({
 }) {
   const classes =
     tone === 'warning'
-      ? 'border-amber-200 bg-amber-50/80 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/20 dark:text-amber-100'
-      : 'border-slate-200 bg-slate-50/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/60 dark:text-slate-200';
+      ? 'dashboard-module-notice-warning'
+      : 'dashboard-module-notice-neutral';
 
   return (
     <div className={`rounded-[1.4rem] border p-4 ${classes}`} role="status">
@@ -128,7 +128,7 @@ export function ValidationSummary({ errors }: { errors: string[] }) {
 
   return (
     <div
-      className="rounded-[1.4rem] border border-rose-200 bg-rose-50/80 p-4 text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/20 dark:text-rose-100"
+      className="dashboard-module-notice-danger"
       role="alert"
       aria-live="polite"
     >

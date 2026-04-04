@@ -1384,6 +1384,7 @@ export const en = {
                 system: { label: 'Bot system', description: 'Backups, sync and technical health.' },
                 activity: { label: 'Recent activity', description: 'Changes, queue and recent events.' },
                 analytics: { label: 'Analytics', description: 'Real usage, tickets and performance.' },
+                billing: { label: 'Billing', description: 'Plans, subscriptions and paid beta controls.' },
             },
             taskGroups: {
                 home: { label: 'Home', description: 'Server operational landing and next steps.' },
@@ -1416,6 +1417,7 @@ export const en = {
                 'system-backups': { label: 'Backups', description: 'Copies and restoration.' },
                 'system-diagnostics': { label: 'Diagnostics', description: 'General technical status.' },
                 'system-analytics': { label: 'Analytics', description: 'Bot usage and performance.' },
+                'system-billing': { label: 'Billing', description: 'Subscriptions and Pro activation.' },
             },
         },
         notFound: {

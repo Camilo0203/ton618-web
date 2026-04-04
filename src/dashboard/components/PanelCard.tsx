@@ -44,12 +44,10 @@ export default function PanelCard({
   return (
     <motion.section
       variants={fadeUpVariants}
-      initial="hidden"
-      animate="show"
       className={`dashboard-surface dashboard-interactive-card p-5 sm:p-6 lg:p-7 ${variantClasses[variant]} ${className}`}
     >
-      <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-brand-300/70 to-transparent" />
-      <div className="absolute -right-10 top-0 h-24 w-24 rounded-full bg-brand-400/8 blur-3xl" />
+      <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+      <div className="absolute -right-10 top-0 h-24 w-24 rounded-full bg-indigo-500/[0.06] blur-3xl" />
 
       {title || description || eyebrow || actions ? (
         <div className={`relative z-[1] flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between ${headerClassName}`}>
@@ -60,12 +58,12 @@ export default function PanelCard({
               </p>
             ) : null}
             {title ? (
-              <h2 className={`mt-2 break-words text-[1.35rem] font-bold tracking-[-0.04em] text-slate-950 dark:text-white lg:text-[1.55rem] ${titleClassName}`}>
+              <h2 className={`mt-2 break-words text-[1.35rem] font-bold tracking-[-0.04em] text-white lg:text-[1.55rem] ${titleClassName}`}>
                 {title}
               </h2>
             ) : null}
             {description ? (
-              <p className={`mt-2 max-w-3xl text-[0.96rem] leading-6 text-slate-700 dark:text-slate-300 ${descriptionClassName}`}>
+              <p className={`mt-2 max-w-3xl text-[0.96rem] leading-6 text-slate-300 ${descriptionClassName}`}>
                 {description}
               </p>
             ) : null}

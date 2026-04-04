@@ -39,14 +39,14 @@ export default function InboxTicketList({ tickets, selectedTicketId, onSelectTic
               animate="show"
               onClick={() => onSelectTicket(ticket.ticketId)}
               aria-pressed={active}
-              className={`absolute left-0 top-0 w-full rounded-[1.55rem] border p-4 text-left ${active ? 'border-brand-300/55 bg-[linear-gradient(135deg,rgba(88,101,242,0.12),rgba(20,184,166,0.06))] shadow-[0_18px_40px_rgba(88,101,242,0.12)] dark:border-brand-700/60 dark:bg-brand-950/18' : 'dashboard-data-card hover:border-brand-200/80 hover:bg-white/95 dark:hover:border-brand-800'}`}
+              className={`absolute left-0 top-0 w-full rounded-[1.55rem] border p-4 text-left ${active ? 'border-brand-700/60 bg-brand-950/18 shadow-[0_18px_40px_rgba(88,101,242,0.12)]' : 'dashboard-data-card hover:border-brand-800'}`}
               style={{ transform: `translateY(${virtualRow.start}px)` }}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-500">{t('dashboard.inbox.list.ticketPrefix', { id: ticket.ticketId })}</p>
-                  <p className="mt-2 break-words text-lg font-semibold text-slate-950 dark:text-white">{ticket.subject || ticket.categoryLabel}</p>
-                  <p className="mt-2 break-words text-sm text-slate-700 dark:text-slate-300">{ticket.userLabel ?? ticket.userId}</p>
+                  <p className="mt-2 break-words text-lg font-semibold text-white">{ticket.subject || ticket.categoryLabel}</p>
+                  <p className="mt-2 break-words text-sm text-slate-300">{ticket.userLabel ?? ticket.userId}</p>
                 </div>
                 <div className="flex min-w-[7rem] flex-col items-end gap-2">
                   <span className={`dashboard-status-pill ${getStatusTone(ticket.workflowStatus)}`}>{getTicketStatusLabel(ticket.workflowStatus)}</span>

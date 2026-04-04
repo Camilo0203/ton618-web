@@ -37,32 +37,32 @@ function getSeverityStyles(severity: InsightTone) {
     case 'success':
       return {
         dot: 'bg-emerald-500',
-        pill: 'border-emerald-200/70 bg-emerald-50/90 text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-100',
-        card: 'border-emerald-200/70 dark:border-emerald-900/30',
+        pill: 'border-emerald-900/40 bg-emerald-950/20 text-emerald-100',
+        card: 'border-emerald-900/30',
       };
     case 'warning':
       return {
         dot: 'bg-amber-500',
-        pill: 'border-amber-200/70 bg-amber-50/90 text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100',
-        card: 'border-amber-200/70 dark:border-amber-900/30',
+        pill: 'border-amber-900/40 bg-amber-950/20 text-amber-100',
+        card: 'border-amber-900/30',
       };
     case 'danger':
       return {
         dot: 'bg-rose-500',
-        pill: 'border-rose-200/70 bg-rose-50/90 text-rose-800 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-100',
-        card: 'border-rose-200/70 dark:border-rose-900/30',
+        pill: 'border-rose-900/40 bg-rose-950/20 text-rose-100',
+        card: 'border-rose-900/30',
       };
     case 'info':
       return {
         dot: 'bg-sky-500',
-        pill: 'border-sky-200/70 bg-sky-50/90 text-sky-800 dark:border-sky-900/40 dark:bg-sky-950/20 dark:text-sky-100',
-        card: 'border-sky-200/70 dark:border-sky-900/30',
+        pill: 'border-sky-900/40 bg-sky-950/20 text-sky-100',
+        card: 'border-sky-900/30',
       };
     default:
       return {
         dot: 'bg-slate-400',
-        pill: 'border-slate-200/70 bg-slate-50/90 text-slate-700 dark:border-surface-600 dark:bg-surface-700/70 dark:text-slate-200',
-        card: 'border-slate-200/70 dark:border-surface-600',
+        pill: 'border-white/[0.07] bg-white/[0.04] text-slate-200',
+        card: 'border-white/[0.07]',
       };
   }
 }
@@ -225,7 +225,7 @@ export default function ActivityModule({
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
-                              <p className="break-words text-base font-semibold text-slate-950 dark:text-white">{item.title}</p>
+                              <p className="break-words text-base font-semibold text-white">{item.title}</p>
                               <span className={`dashboard-status-pill-compact ${styles.pill}`}>
                                 {getSeverityLabel(item.severity)}
                               </span>
@@ -233,11 +233,11 @@ export default function ActivityModule({
                                 {item.sourceLabel}
                               </span>
                             </div>
-                            <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{item.description}</p>
+                            <p className="mt-2 text-sm leading-6 text-slate-300">{item.description}</p>
                           </div>
 
                           <div className="min-w-[8.5rem] text-left sm:text-right">
-                            <p className="text-sm font-semibold text-slate-950 dark:text-white">{timestamp.relative}</p>
+                            <p className="text-sm font-semibold text-white">{timestamp.relative}</p>
                             <p className="mt-1 text-xs uppercase tracking-[0.16em] text-slate-500">{timestamp.absolute}</p>
                           </div>
                         </div>
@@ -253,10 +253,10 @@ export default function ActivityModule({
                         </div>
 
                         {relatedMutation ? (
-                          <div className="mt-4 rounded-[1.1rem] border border-slate-200/70 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 dark:border-surface-600 dark:bg-surface-700/65 dark:text-slate-300">
+                          <div className="mt-4 rounded-[1.1rem] border border-white/[0.07] bg-white/[0.03] px-4 py-3 text-sm text-slate-300">
                             {t('dashboard.activity.timeline.payload')}: {summarizeMutationPayload(relatedMutation.requestedPayload)}
                             {relatedMutation.errorMessage ? (
-                              <p className="mt-2 text-rose-600 dark:text-rose-300">{relatedMutation.errorMessage}</p>
+                              <p className="mt-2 text-rose-300">{relatedMutation.errorMessage}</p>
                             ) : null}
                           </div>
                         ) : null}
@@ -308,7 +308,7 @@ export default function ActivityModule({
                     <p className="dashboard-data-label">{item.label}</p>
                     <item.icon className="h-4 w-4 text-slate-400" />
                   </div>
-                  <p className="mt-3 text-[1.7rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white">{item.value}</p>
+                  <p className="mt-3 text-[1.7rem] font-bold tracking-[-0.05em] text-white">{item.value}</p>
                 </article>
               ))}
             </div>
@@ -323,19 +323,19 @@ export default function ActivityModule({
             <div className="space-y-3">
               <div className="dashboard-action-note">
                 <Clock3 className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                <p className="text-sm leading-6 text-slate-300">
                   {t('dashboard.activity.reading.guide1')}
                 </p>
               </div>
               <div className="dashboard-action-note">
                 <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                <p className="text-sm leading-6 text-slate-300">
                   {t('dashboard.activity.reading.guide2')}
                 </p>
               </div>
               <div className="dashboard-action-note">
                 <Filter className="mt-0.5 h-4 w-4 flex-shrink-0" />
-                <p className="text-sm leading-6 text-slate-700 dark:text-slate-300">
+                <p className="text-sm leading-6 text-slate-300">
                   {t('dashboard.activity.reading.guide3')}
                 </p>
               </div>

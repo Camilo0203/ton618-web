@@ -133,7 +133,7 @@ export default function WelcomeModule({
             title={t('dashboard.welcome.welcome.enableLabel')}
             description={t('dashboard.welcome.welcome.enableDesc')}
           >
-            <input type="checkbox" {...register('welcomeEnabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+            <input type="checkbox" {...register('welcomeEnabled')} className="dashboard-module-checkbox mt-1" />
           </ToggleCard>
 
           <FormSection
@@ -142,7 +142,7 @@ export default function WelcomeModule({
           >
             <div className="grid gap-5 md:grid-cols-2">
               <FieldShell label={t('dashboard.welcome.welcome.channelLabel')} error={errors.welcomeChannelId?.message}>
-                <select {...register('welcomeChannelId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('welcomeChannelId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.welcome.notConfigured')}</option>
                   {channelOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -150,7 +150,7 @@ export default function WelcomeModule({
                 </select>
               </FieldShell>
               <FieldShell label={t('dashboard.welcome.welcome.autoroleLabel')}>
-                <select {...register('welcomeAutoroleId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('welcomeAutoroleId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.welcome.notConfigured')}</option>
                   {roleOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -178,10 +178,10 @@ export default function WelcomeModule({
             </FieldShell>
             <div className="grid gap-4 md:grid-cols-2">
               <ToggleCard title={t('dashboard.welcome.welcome.thumbnailLabel')}>
-                <input type="checkbox" {...register('welcomeThumbnail')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                <input type="checkbox" {...register('welcomeThumbnail')} className="dashboard-module-checkbox mt-1" />
               </ToggleCard>
               <ToggleCard title={t('dashboard.welcome.welcome.dmLabel')}>
-                <input type="checkbox" {...register('welcomeDm')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                <input type="checkbox" {...register('welcomeDm')} className="dashboard-module-checkbox mt-1" />
               </ToggleCard>
             </div>
             <FieldShell label={t('dashboard.welcome.welcome.dmMessageLabel')} error={errors.welcomeDmMessage?.message}>
@@ -197,10 +197,10 @@ export default function WelcomeModule({
             title={t('dashboard.welcome.goodbye.enableLabel')}
             description={t('dashboard.welcome.goodbye.enableDesc')}
           >
-            <input type="checkbox" {...register('goodbyeEnabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+            <input type="checkbox" {...register('goodbyeEnabled')} className="dashboard-module-checkbox mt-1" />
           </ToggleCard>
           <FieldShell label={t('dashboard.welcome.goodbye.channelLabel')} error={errors.goodbyeChannelId?.message}>
-            <select {...register('goodbyeChannelId')} disabled={!goodbyeEnabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+            <select {...register('goodbyeChannelId')} disabled={!goodbyeEnabled} className="w-full rounded-2xl border dashboard-module-select">
               <option value="">{t('dashboard.welcome.notConfigured')}</option>
               {channelOptions.map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -218,7 +218,7 @@ export default function WelcomeModule({
               <input {...register('goodbyeColor')} className="dashboard-form-field" />
             </FieldShell>
             <ToggleCard title={t('dashboard.welcome.goodbye.thumbnailLabel')}>
-              <input type="checkbox" {...register('goodbyeThumbnail')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <input type="checkbox" {...register('goodbyeThumbnail')} className="dashboard-module-checkbox mt-1" />
             </ToggleCard>
           </div>
           <FieldShell label={t('dashboard.welcome.goodbye.footerLabel')}>

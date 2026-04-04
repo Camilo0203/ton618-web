@@ -4,14 +4,13 @@ import { useTranslation } from 'react-i18next';
 import DashboardModuleViewport from './components/DashboardModuleViewport';
 import DashboardShell from './components/DashboardShell';
 import { usePersistentDashboardSection } from './hooks/usePersistentDashboardSection';
-import { applyDemoTicketAction, createDemoSnapshot, demoDashboardGuild, demoDashboardUser } from './demoSnapshot';
+import { createDemoSnapshot, demoDashboardGuild, demoDashboardUser } from './demoSnapshot';
 import type {
   ConfigMutationSectionId,
   GuildBackupManifest,
   GuildConfig,
   GuildConfigMutation,
   GuildDashboardSnapshot,
-  TicketDashboardActionId,
 } from './types';
 import { getDashboardSectionStates } from './utils';
 
@@ -267,7 +266,6 @@ export default function DashboardDemoPage() {
         <DashboardModuleViewport
           activeSection={activeSection}
           selectedGuild={demoDashboardGuild}
-          isGuildAccessFresh
           invalidRequestedGuildId={null}
           fallbackGuildId={null}
           setSelectedGuildId={() => undefined}
@@ -282,7 +280,6 @@ export default function DashboardDemoPage() {
           requestConfigChangeErrorMessage=""
           requestConfigChangeErrorSection={null}
           requestBackupActionPending={false}
-          requestTicketActionPending={false}
           onSectionChange={setActiveSection}
           onConfigSave={async (section, payload) => {
             setSnapshot((current) => applyDemoConfigChange(current, section, payload));
@@ -292,14 +289,6 @@ export default function DashboardDemoPage() {
           }}
           onRestoreBackup={async (backupId) => {
             setSnapshot((current) => applyDemoBackupAction(current, 'restore_backup', backupId));
-          }}
-          onTicketAction={async (action: TicketDashboardActionId, payload: Record<string, unknown>) => {
-            setSnapshot((current) =>
-              withAppliedMutation(
-                applyDemoTicketAction(current, action, payload),
-                createMutation(current, 'ticket_action', 'tickets', { action, payload }),
-              ),
-            );
           }}
         />
       </DashboardShell>

@@ -42,3 +42,16 @@
     }
   }
 }
+
+.mouse-glow::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(800px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(255, 255, 255, 0.04), transparent 40%);
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 500ms;
+}

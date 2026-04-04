@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { Toaster } from 'sonner';
 import Logo from './components/Logo';
 import RouteScrollManager from './components/RouteScrollManager';
 import LandingPage from './pages/LandingPage';
@@ -58,6 +59,7 @@ function AppLoadingFallback() {
 export default function App() {
   return (
     <>
+      <Toaster theme="dark" position="bottom-right" richColors />
       <RouteScrollManager />
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>

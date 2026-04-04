@@ -210,7 +210,7 @@ export default function ServerRolesModule({
           </div>
         </FormSection>
 
-        <div className="mt-8 rounded-3xl border border-brand-200 bg-brand-50/70 p-4 text-sm text-brand-800 dark:border-brand-900/50 dark:bg-brand-950/20 dark:text-brand-200">
+        <div className="mt-8 rounded-3xl border border-brand-900/50 bg-brand-950/20 p-4 text-sm text-brand-200">
           {t('dashboard.serverRoles.footerNote')}
         </div>
       </PanelCard>

@@ -1,8 +1,11 @@
 import { Suspense, lazy } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { moduleTransitionVariants, instantVariants } from '../motion';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import StateCard from './StateCard';
 import DashboardDegradationNotice from './DashboardDegradationNotice';
+import DashboardLoadingSkeleton from './DashboardLoadingSkeleton';
 import ErrorBoundary from './ErrorBoundary';
 import type {
   ConfigMutationSectionId,
@@ -12,7 +15,6 @@ import type {
   GuildConfigMutation,
   GuildDashboardSnapshot,
   GuildSyncStatus,
-  TicketDashboardActionId,
 } from '../types';
 import {
   getDashboardChecklist,
@@ -26,9 +28,6 @@ import {
 } from '../utils';
 
 const OverviewModule = lazy(() => import('../modules/OverviewModule'));
-const InboxModule = lazy(() => import('../modules/InboxModule'));
-const PlaybooksModule = lazy(() => import('../modules/PlaybooksModule'));
-const BillingModule = lazy(() => import('../modules/BillingModule'));
 const GeneralModule = lazy(() => import('../modules/GeneralModule'));
 const ServerRolesModule = lazy(() => import('../modules/ServerRolesModule'));
 const TicketsModule = lazy(() => import('../modules/TicketsModule'));
@@ -41,199 +40,16 @@ const SystemModule = lazy(() => import('../modules/SystemModule'));
 const ActivityModule = lazy(() => import('../modules/ActivityModule'));
 const AnalyticsModule = lazy(() => import('../modules/AnalyticsModule'));
 
-function ConfigModuleFallback() {
-  return (
-    <div className="space-y-6">
-      <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-        <div className="mb-4 h-6 w-48 rounded bg-white/40 dark:bg-surface-700/60" />
-        <div className="h-4 w-full max-w-2xl rounded bg-white/30 dark:bg-surface-700/40" />
-      </div>
-      <div className="grid gap-6 xl:grid-cols-2">
-        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-          <div className="mb-6 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-          <div className="space-y-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="space-y-2">
-                <div className="h-3 w-24 rounded bg-white/30 dark:bg-surface-700/40" />
-                <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-          <div className="mb-6 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-          <div className="space-y-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="space-y-2">
-                <div className="h-3 w-24 rounded bg-white/30 dark:bg-surface-700/40" />
-                <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OverviewModuleFallback() {
-  return (
-    <div className="space-y-6">
-      <div className="dashboard-skeleton h-48 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-        <div className="mb-4 h-7 w-56 rounded bg-white/40 dark:bg-surface-700/60" />
-        <div className="mb-3 h-4 w-full max-w-3xl rounded bg-white/30 dark:bg-surface-700/40" />
-        <div className="h-4 w-2/3 rounded bg-white/30 dark:bg-surface-700/40" />
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="dashboard-skeleton h-36 rounded-[1.6rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
-            <div className="mb-3 h-4 w-20 rounded bg-white/30 dark:bg-surface-700/40" />
-            <div className="mb-2 h-8 w-24 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="h-3 w-32 rounded bg-white/30 dark:bg-surface-700/40" />
-          </div>
-        ))}
-      </div>
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="space-y-6">
-          <div className="dashboard-skeleton h-72 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-            <div className="mb-5 h-5 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="h-3 w-3 rounded-full bg-white/40 dark:bg-surface-700/60" />
-                  <div className="h-4 flex-1 rounded bg-white/30 dark:bg-surface-700/40" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="dashboard-skeleton h-80 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-            <div className="mb-5 h-5 w-36 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="flex items-center justify-between rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
-                  <div className="h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-                  <div className="h-4 w-20 rounded bg-white/40 dark:bg-surface-700/60" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="space-y-6">
-          <div className="dashboard-skeleton h-64 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-            <div className="mb-5 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-3">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="mt-1 h-4 w-4 rounded bg-white/40 dark:bg-surface-700/60" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 w-full rounded bg-white/30 dark:bg-surface-700/40" />
-                    <div className="h-3 w-2/3 rounded bg-white/20 dark:bg-surface-700/30" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="dashboard-skeleton h-56 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-            <div className="mb-5 h-5 w-36 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
-                  <div className="mb-2 h-4 w-28 rounded bg-white/40 dark:bg-surface-700/60" />
-                  <div className="h-3 w-full rounded bg-white/20 dark:bg-surface-700/30" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function InboxModuleFallback() {
-  return (
-    <div className="space-y-6">
-      <div className="dashboard-skeleton h-40 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-        <div className="mb-4 h-6 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
-        <div className="flex gap-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-9 w-24 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-          ))}
-        </div>
-      </div>
-      <div className="grid gap-6 xl:grid-cols-[minmax(340px,420px)_minmax(0,1fr)]">
-        <div className="space-y-4">
-          <div className="dashboard-skeleton h-52 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
-            <div className="mb-4 h-5 w-24 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-3">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="h-3 w-16 rounded bg-white/30 dark:bg-surface-700/40" />
-                  <div className="h-9 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="dashboard-skeleton h-[32rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
-            <div className="mb-4 h-5 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="space-y-2">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3 rounded-lg bg-white/30 p-3 dark:bg-surface-700/40">
-                  <div className="h-10 w-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 w-3/4 rounded bg-white/40 dark:bg-surface-700/60" />
-                    <div className="h-3 w-1/2 rounded bg-white/30 dark:bg-surface-700/40" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="space-y-6">
-          <div className="dashboard-skeleton h-24 rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-5">
-            <div className="mb-3 h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="h-5 w-48 rounded bg-white/40 dark:bg-surface-700/60" />
-          </div>
-          <div className="dashboard-skeleton h-[48rem] rounded-[2rem] border border-white/10 bg-white/70 dark:bg-surface-800/75 p-6">
-            <div className="mb-5 h-5 w-40 rounded bg-white/40 dark:bg-surface-700/60" />
-            <div className="mb-6 space-y-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="rounded-lg bg-white/30 p-4 dark:bg-surface-700/40">
-                  <div className="mb-2 flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-white/40 dark:bg-surface-700/60" />
-                    <div className="h-4 w-32 rounded bg-white/40 dark:bg-surface-700/60" />
-                  </div>
-                  <div className="h-3 w-full rounded bg-white/20 dark:bg-surface-700/30" />
-                </div>
-              ))}
-            </div>
-            <div className="space-y-2">
-              <div className="h-10 rounded-lg bg-white/40 dark:bg-surface-700/60" />
-              <div className="h-9 rounded-lg bg-white/30 dark:bg-surface-700/40" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ModuleFallback({ activeSection }: { activeSection: DashboardSectionId }) {
-  if (activeSection === 'overview') {
-    return <OverviewModuleFallback />;
-  }
+  if (activeSection === 'overview') return <DashboardLoadingSkeleton variant="overview" />;
+  if (activeSection === 'system') return <DashboardLoadingSkeleton variant="system" />;
 
-  if (activeSection === 'inbox') {
-    return <InboxModuleFallback />;
-  }
-
-  return <ConfigModuleFallback />;
+  return <DashboardLoadingSkeleton variant="config" />;
 }
 
 interface DashboardModuleViewportProps {
   activeSection: DashboardSectionId;
   selectedGuild: DashboardGuild | null;
-  isGuildAccessFresh: boolean;
   invalidRequestedGuildId: string | null;
   fallbackGuildId: string | null;
   setSelectedGuildId: (guildId: string) => void;
@@ -248,12 +64,10 @@ interface DashboardModuleViewportProps {
   requestConfigChangeErrorMessage: string;
   requestConfigChangeErrorSection: ConfigMutationSectionId | null;
   requestBackupActionPending: boolean;
-  requestTicketActionPending: boolean;
   onSectionChange: (section: DashboardSectionId) => void;
   onConfigSave: (section: ConfigMutationSectionId, payload: unknown) => Promise<void>;
   onCreateBackup: () => Promise<void>;
   onRestoreBackup: (backupId: string) => Promise<void>;
-  onTicketAction: (action: TicketDashboardActionId, payload: Record<string, unknown>) => Promise<void>;
 }
 
 function buildDerivedViewModel(
@@ -294,7 +108,6 @@ function buildDerivedViewModel(
 export default function DashboardModuleViewport({
   activeSection,
   selectedGuild,
-  isGuildAccessFresh,
   invalidRequestedGuildId,
   fallbackGuildId,
   setSelectedGuildId,
@@ -309,14 +122,14 @@ export default function DashboardModuleViewport({
   requestConfigChangeErrorMessage,
   requestConfigChangeErrorSection,
   requestBackupActionPending,
-  requestTicketActionPending,
   onSectionChange,
   onConfigSave,
   onCreateBackup,
   onRestoreBackup,
-  onTicketAction,
 }: DashboardModuleViewportProps) {
   const { t } = useTranslation();
+  const shouldReduce = useReducedMotion();
+  const variants = shouldReduce ? instantVariants : moduleTransitionVariants;
   const {
     sectionStates,
     checklist,
@@ -370,18 +183,6 @@ export default function DashboardModuleViewport({
     );
   }
 
-  if (activeSection === 'billing') {
-    return (
-      <Suspense fallback={<ModuleFallback activeSection={activeSection} />}>
-        <BillingModule
-          guild={selectedGuild}
-          isGuildAccessFresh={isGuildAccessFresh}
-          onSyncGuildAccess={syncGuildAccess}
-          isSyncing={isSyncing}
-        />
-      </Suspense>
-    );
-  }
 
   if (isSnapshotError) {
     return (
@@ -422,21 +223,6 @@ export default function DashboardModuleViewport({
 
   const activityFailure = partialFailures.find((failure) => failure.id === 'activity') ?? null;
   const metricsFailure = partialFailures.find((failure) => failure.id === 'metrics') ?? null;
-  const inboxFailures = partialFailures.filter(
-    (failure) =>
-      failure.id === 'ticket_inbox'
-      || failure.id === 'ticket_events'
-      || failure.id === 'ticket_macros'
-      || failure.id === 'customer_memory'
-      || failure.id === 'ticket_recommendations',
-  );
-  const playbookFailures = partialFailures.filter(
-    (failure) =>
-      failure.id === 'playbook_definitions'
-      || failure.id === 'playbook_runs'
-      || failure.id === 'customer_memory'
-      || failure.id === 'ticket_recommendations',
-  );
   const activeConfigSection: ConfigMutationSectionId | null = (() => {
     switch (activeSection) {
       case 'general':
@@ -466,17 +252,26 @@ export default function DashboardModuleViewport({
     && Boolean(activeConfigSection)
     && requestConfigChangeErrorSection === activeConfigSection;
 
+
   return (
-    <Suspense fallback={<ModuleFallback activeSection={activeSection} />}>
-      <div className="space-y-6">
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activeSection}
+        variants={variants}
+        initial="hidden"
+        animate="show"
+        exit="exit"
+      >
+        <Suspense fallback={<ModuleFallback activeSection={activeSection} />}>
+          <div className="space-y-6">
         <DashboardDegradationNotice failures={partialFailures} />
         {showConfigError ? (
           <div
-            className="rounded-[1.55rem] border border-rose-200/80 bg-[linear-gradient(135deg,rgba(255,241,242,0.98),rgba(255,245,245,0.92))] p-4 text-rose-900 dark:border-rose-900/40 dark:bg-[linear-gradient(135deg,rgba(72,22,38,0.76),rgba(46,18,28,0.68))] dark:text-rose-100"
+            className="rounded-[1.55rem] border dashboard-module-notice-danger"
             role="alert"
             aria-live="polite"
           >
-            <p className="font-semibold">No se pudo enviar la solicitud de cambio</p>
+            <p className="font-semibold">{t('dashboard.shell.configSaveError')}</p>
             <p className="mt-2 text-sm text-current/85">{requestConfigChangeErrorMessage}</p>
           </div>
         ) : null}
@@ -501,31 +296,7 @@ export default function DashboardModuleViewport({
             />
           </ErrorBoundary>
         ) : null}
-        {activeSection === 'inbox' ? (
-          <ErrorBoundary moduleLabel="Inbox" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <InboxModule
-              guild={selectedGuild}
-              workspace={snapshot.ticketWorkspace}
-              playbooks={snapshot.playbooks}
-              mutation={snapshot.mutations.find((entry) => entry.mutationType === 'ticket_action') ?? null}
-              syncStatus={snapshot.syncStatus}
-              isMutating={requestTicketActionPending}
-              onAction={onTicketAction}
-              partialFailures={inboxFailures}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'playbooks' ? (
-          <ErrorBoundary moduleLabel="Playbooks" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <PlaybooksModule
-              guild={selectedGuild}
-              playbooks={snapshot.playbooks}
-              workspace={snapshot.ticketWorkspace}
-              onSectionChange={onSectionChange}
-              partialFailures={playbookFailures}
-            />
-          </ErrorBoundary>
-        ) : null}
+
         {activeSection === 'general' ? (
           <ErrorBoundary moduleLabel="General" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <GeneralModule
@@ -674,6 +445,8 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
       </div>
-    </Suspense>
+        </Suspense>
+      </motion.div>
+    </AnimatePresence>
   );
 }

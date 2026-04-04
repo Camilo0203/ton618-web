@@ -95,18 +95,6 @@ export default function GeneralModule({
       done: config.ticketsSettings.slaMinutes > 0,
       section: 'tickets' as const,
     },
-    {
-      id: 'playbooks',
-      label: 'Playbooks vivos',
-      done: config.generalSettings.opsPlan !== 'free',
-      section: 'playbooks' as const,
-    },
-    {
-      id: 'inbox',
-      label: 'Inbox web',
-      done: guild.botInstalled,
-      section: 'inbox' as const,
-    },
   ];
 
   if (!guild.botInstalled) {
@@ -246,10 +234,10 @@ export default function GeneralModule({
                     {...register('generalSettings.moderationPreset')}
                     className="sr-only"
                   />
-                  <span className="block text-lg font-semibold text-slate-950 dark:text-white">
+                  <span className="block text-lg font-semibold text-white">
                     {title}
                   </span>
-                  <span className="mt-2 block text-sm text-slate-600 dark:text-slate-300">
+                  <span className="mt-2 block text-sm text-slate-300">
                     {description}
                   </span>
                 </label>
@@ -268,7 +256,7 @@ export default function GeneralModule({
         >
           <div className="space-y-5">
             <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">
+              <span className="mb-2 block text-sm font-semibold text-slate-200">
                 {t('dashboard.general.prefs.defaultSection')}
               </span>
               <select
@@ -276,8 +264,6 @@ export default function GeneralModule({
                 className="dashboard-form-field"
               >
                 <option value="overview">{t('dashboard.general.sections.overview')}</option>
-                <option value="inbox">{t('dashboard.general.sections.inbox')}</option>
-                <option value="playbooks">{t('dashboard.general.sections.playbooks')}</option>
                 <option value="general">{t('dashboard.general.sections.general')}</option>
                 <option value="server_roles">{t('dashboard.general.sections.server_roles')}</option>
                 <option value="tickets">{t('dashboard.general.sections.tickets')}</option>
@@ -296,13 +282,13 @@ export default function GeneralModule({
               <input
                 type="checkbox"
                 {...register('dashboardPreferences.compactMode')}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                className="dashboard-module-checkbox mt-1"
               />
               <span>
-                <span className="block font-semibold text-slate-950 dark:text-white">
+                <span className="block font-semibold text-white">
                   {t('dashboard.general.prefs.compactMode.label')}
                 </span>
-                <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                <span className="mt-1 block text-sm text-slate-300">
                   {t('dashboard.general.prefs.compactMode.desc')}
                 </span>
               </span>
@@ -312,19 +298,19 @@ export default function GeneralModule({
               <input
                 type="checkbox"
                 {...register('dashboardPreferences.showAdvancedCards')}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                className="dashboard-module-checkbox mt-1"
               />
               <span>
-                <span className="block font-semibold text-slate-950 dark:text-white">
+                <span className="block font-semibold text-white">
                   {t('dashboard.general.prefs.advancedCards.label')}
                 </span>
-                <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                <span className="mt-1 block text-sm text-slate-300">
                   {t('dashboard.general.prefs.advancedCards.desc')}
                 </span>
               </span>
             </label>
 
-            <div className="rounded-[1.5rem] border border-brand-200/70 bg-brand-50/75 p-4 text-sm text-brand-800 dark:border-brand-900/50 dark:bg-brand-950/20 dark:text-brand-200">
+            <div className="rounded-[1.5rem] border border-brand-900/50 bg-brand-950/20 p-4 text-sm text-brand-200">
               {t('dashboard.general.prefs.notice')}
             </div>
           </div>
@@ -346,8 +332,8 @@ export default function GeneralModule({
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="font-semibold text-slate-950 dark:text-white">{step.label}</p>
-                    <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                    <p className="font-semibold text-white">{step.label}</p>
+                    <p className="mt-1 text-sm text-slate-300">
                       {step.done ? t('dashboard.general.launchpad.ready') : t('dashboard.general.launchpad.pending')}
                     </p>
                   </div>

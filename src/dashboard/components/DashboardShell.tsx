@@ -1,5 +1,6 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import StarfieldBackground from '../../components/StarfieldBackground';
 import type { User } from '@supabase/supabase-js';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +21,15 @@ import {
 } from '../utils';
 import { config, getDiscordInviteUrl } from '../../config';
 import Logo from '../../components/Logo';
+import LanguageSelector from '../../components/LanguageSelector';
+import CommandPalette from './CommandPalette';
 import { usePrefetchSnapshot } from '../hooks/usePrefetchSnapshot';
+
+/* ─── Glass tokens (matching Navbar scrolled state) ─── */
+const GLASS_SIDEBAR =
+  'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-2xl border border-white/[0.08] shadow-[0_18px_55px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.04)]';
+const GLASS_HEADER =
+  'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-2xl border border-white/[0.08] shadow-[0_18px_55px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.04)]';
 
 interface DashboardShellProps {
   user: User;
@@ -69,14 +78,21 @@ function SidebarContent({
       variants={fadeUpVariants}
       initial="hidden"
       animate="show"
-      // ESTILO LANDING APLICADO AL CONTENEDOR DEL SIDEBAR
-      className="relative flex h-full min-h-0 flex-col overflow-hidden text-white rounded-[1.75rem] bg-[linear-gradient(180deg,rgba(5,6,15,0.42),rgba(5,6,15,0.2))] backdrop-blur-xl border border-white/10 shadow-[0_18px_55px_rgba(0,0,0,0.52)] p-2"
+      className={`relative flex h-full min-h-0 flex-col overflow-hidden text-white rounded-[1.75rem] p-2 ${GLASS_SIDEBAR}`}
     >
-      <div className="pointer-events-none absolute -right-12 top-0 h-44 w-44 rounded-full bg-indigo-500/10 blur-3xl" />
-      
+      {/* Ambient glow — matching Navbar radial accent */}
+      <div className="pointer-events-none absolute -right-16 -top-8 h-52 w-52 rounded-full bg-indigo-500/[0.07] blur-3xl" />
+      <div className="pointer-events-none absolute -left-10 bottom-16 h-36 w-36 rounded-full bg-cyan-400/[0.04] blur-3xl" />
+      {/* Top edge light highlight — matching cinematic-glass inset */}
+      <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+
       <div className="relative z-[1] flex min-h-0 flex-1 flex-col">
+        {/* ── Brand ── */}
         <div className="shrink-0 px-2 pt-2">
-          <Link to="/" className="relative z-[1] flex items-center gap-4 rounded-2xl px-3 py-3 transition-colors hover:bg-white/[0.05]">
+          <Link
+            to="/"
+            className="relative z-[1] flex items-center gap-4 rounded-2xl px-3 py-3 transition-all duration-300 hover:bg-white/[0.04]"
+          >
             <Logo
               size="lg"
               withText={false}
@@ -93,7 +109,8 @@ function SidebarContent({
             </div>
           </Link>
 
-          <div className="relative z-[1] mt-4 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+          {/* ── Active guild block ── */}
+          <div className="relative z-[1] mt-4 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-4 backdrop-blur-sm">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
@@ -118,14 +135,14 @@ function SidebarContent({
                 onGuildChange(event.target.value);
                 closeOnNavigate?.();
               }}
-              className="mt-4 w-full rounded-xl border border-white/10 bg-[#0A0D1A] px-3 py-2.5 text-sm font-medium text-slate-200 outline-none transition focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50"
+              className="mt-4 w-full rounded-xl border border-white/[0.08] bg-[#06081a]/80 px-3 py-2.5 text-sm font-medium text-slate-200 outline-none backdrop-blur-sm transition-all duration-200 focus:border-indigo-400/50 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.12)]"
             >
               {!selectedGuild ? (
                 <option value="">{t('dashboard.shell.selectServer')}</option>
               ) : null}
               {guilds.map((guild) => (
-                <option 
-                  key={guild.guildId} 
+                <option
+                  key={guild.guildId}
                   value={guild.guildId}
                   onMouseEnter={() => prefetchSnapshot(guild.guildId)}
                 >
@@ -136,6 +153,7 @@ function SidebarContent({
           </div>
         </div>
 
+        {/* ── Navigation ── */}
         <div className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden px-2">
           <div className="relative z-[1] min-h-[10rem] flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <motion.nav variants={staggerContainerVariants} initial="hidden" animate="show" className="mt-2 space-y-4 pb-4">
@@ -157,24 +175,23 @@ function SidebarContent({
                           key={section.id}
                           type="button"
                           variants={fadeInVariants}
-                          whileTap={{ scale: 0.98 }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={() => {
                             onSectionChange(section.id);
                             closeOnNavigate?.();
                           }}
-                          // ESTILOS DE LOS BOTONES DE LA LANDING APLICADOS AQUÍ
                           className={`group w-full rounded-2xl border px-3 py-2.5 text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 ${
                             active
-                              ? 'border-indigo-500/30 bg-indigo-500/10 text-white shadow-[0_0_20px_rgba(99,102,241,0.1)]'
-                              : 'border-white/8 bg-white/[0.02] text-slate-400 hover:border-white/15 hover:bg-white/[0.05] hover:text-white'
+                              ? 'border-white/20 bg-white/[0.08] text-white shadow-[0_0_24px_rgba(255,255,255,0.06),0_0_48px_rgba(99,102,241,0.12),inset_0_1px_0_rgba(255,255,255,0.06)]'
+                              : 'border-transparent bg-white/[0.015] text-slate-400 hover:border-white/[0.08] hover:bg-white/[0.04] hover:text-white'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <Icon className={`h-4 w-4 flex-shrink-0 ${active ? 'text-indigo-400' : 'text-slate-400 group-hover:text-white'}`} />
+                            <Icon className={`h-4 w-4 flex-shrink-0 transition-colors duration-200 ${active ? 'text-white' : 'text-slate-500 group-hover:text-slate-200'}`} />
                             <p className="truncate text-sm font-semibold flex-1">
                                {t(section.label)}
                             </p>
-                            {active && <ChevronRight className="h-4 w-4 text-indigo-400" />}
+                            {active && <ChevronRight className="h-4 w-4 text-indigo-300" />}
                           </div>
                         </motion.button>
                       );
@@ -185,11 +202,15 @@ function SidebarContent({
             </motion.nav>
           </div>
 
-          <div className="relative z-[1] mt-3 shrink-0 rounded-2xl border border-white/8 bg-white/[0.02] p-3 mb-2 mx-2">
+          {/* ── Logout ── */}
+          <div className="relative z-[1] mt-3 shrink-0 rounded-2xl border border-white/[0.05] bg-white/[0.02] p-3 mb-2 mx-2 space-y-3">
+            <div className="sm:hidden flex justify-center pb-2 border-b border-white/[0.05]">
+              <LanguageSelector />
+            </div>
             <button
               type="button"
               onClick={onLogout}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-semibold text-rose-300 transition hover:bg-rose-500/20"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-500/25 bg-rose-500/[0.08] px-4 py-2 text-sm font-semibold text-rose-300 transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/[0.14] hover:shadow-[0_0_20px_rgba(244,63,94,0.1)]"
             >
               <LogOut className="h-4 w-4" />
               {t('dashboard.shell.logout')}
@@ -214,6 +235,7 @@ export default function DashboardShell({
   children,
 }: DashboardShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const shellRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
   const guildIconUrl = selectedGuild ? resolveGuildIconUrl(selectedGuild) : null;
   const inviteUrl = selectedGuild && !selectedGuild.botInstalled ? getDiscordInviteUrl(selectedGuild.guildId) : '';
@@ -226,12 +248,28 @@ export default function DashboardShell({
     return () => { document.body.style.overflow = previousOverflow; };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    const applyGlow = (e: MouseEvent) => {
+      if (!shellRef.current) return;
+      shellRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+      shellRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
+    };
+    window.addEventListener('mousemove', applyGlow);
+    return () => window.removeEventListener('mousemove', applyGlow);
+  }, []);
+
   return (
-    <div className="dashboard-shell text-white min-h-screen bg-[#05060F]">
-      {/* GRID ORIGINAL PRESERVADO PARA NO ROMPER ESTRUCTURA */}
+    <div ref={shellRef} className="dashboard-shell text-white min-h-screen bg-[#02030a] mouse-glow">
+      {/* STARFIELD BACKGROUND — same as landing Hero */}
+      <div className="pointer-events-none absolute inset-0 z-0 select-none">
+        <StarfieldBackground />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.12),transparent_42%),radial-gradient(circle_at_18%_14%,rgba(34,211,238,0.06),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.4)_0%,rgba(2,3,10,0.85)_58%,rgba(0,0,0,0.96)_100%)]" />
+      </div>
+
+      {/* ── Layout grid ── */}
       <div className="relative z-[1] mx-auto grid max-w-[1760px] gap-5 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6 2xl:grid-cols-[320px_minmax(0,1fr)]">
-        
-        {/* ASIDE ORIGINAL PRESERVADO */}
+
+        {/* ── Sidebar (desktop) ── */}
         <aside className="hidden min-h-0 lg:block">
           <div className="sticky top-4 h-[calc(100dvh-2rem)] min-h-0 max-h-[calc(100dvh-2rem)]">
             <SidebarContent
@@ -246,26 +284,29 @@ export default function DashboardShell({
         </aside>
 
         <div className="min-w-0">
+          {/* ── Header bar (glassmorphism — identical to Navbar scrolled) ── */}
           <motion.header
             variants={fadeUpVariants}
             initial="hidden"
             animate="show"
-            // ESTILO LANDING APLICADO AL HEADER PRINCIPAL (CRISTAL)
-            className="relative overflow-hidden rounded-[1.75rem] bg-[linear-gradient(180deg,rgba(5,6,15,0.42),rgba(5,6,15,0.2))] backdrop-blur-xl border border-white/10 p-5 shadow-[0_18px_55px_rgba(0,0,0,0.52)]"
+            className={`relative overflow-hidden rounded-[1.75rem] p-5 ${GLASS_HEADER}`}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.05),transparent_28%)]" />
-            
+            {/* Subtle radial accent — top right cyan like Navbar */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.04),transparent_32%)]" />
+            {/* Top edge light line — matching cinematic-glass inset */}
+            <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+
             <div className="relative z-[1] flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between 2xl:items-center">
               <div className="flex min-w-0 items-start gap-4">
                 <button
                   type="button"
                   onClick={() => setMobileOpen(true)}
-                  className="rounded-xl border border-white/10 bg-white/5 p-2.5 text-slate-200 transition hover:border-white/20 hover:text-white lg:hidden"
+                  className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-2.5 text-slate-300 transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:text-white lg:hidden"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
 
-                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[1.15rem] border border-white/10 bg-white/5 p-[3px]">
+                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[1.15rem] border border-white/[0.08] bg-white/[0.04] p-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                   {guildIconUrl ? (
                     <img src={guildIconUrl} alt="Guild" className="h-full w-full rounded-xl object-cover" />
                   ) : (
@@ -285,8 +326,9 @@ export default function DashboardShell({
 
               <div className="flex min-w-0 flex-col gap-3 xl:w-auto xl:items-end">
                 <div className="flex flex-wrap items-center gap-3">
-                  <div className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold">
+                  {/* User chip — glassmorphic */}
+                  <div className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] px-4 py-2 backdrop-blur-sm">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm">
                       {user.email?.[0]?.toUpperCase() ?? 'U'}
                     </div>
                     <div className="hidden sm:block">
@@ -296,6 +338,7 @@ export default function DashboardShell({
                     </div>
                   </div>
 
+                  {/* Invite CTA — uses btn-premium-primary (same as Navbar's "Añadir a Discord") */}
                   {showInviteCta && (
                     <a href={inviteUrl} target="_blank" rel="noopener noreferrer" className="btn-premium-primary !py-2.5 !px-4 !text-xs !rounded-xl">
                       <Sparkles className="h-3.5 w-3.5" />
@@ -303,15 +346,26 @@ export default function DashboardShell({
                     </a>
                   )}
 
+                  {/* Sync button — glassmorphic */}
                   <button
                     type="button"
                     onClick={onSync}
                     disabled={isSyncing}
-                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:shadow-[0_0_16px_rgba(255,255,255,0.03)] disabled:opacity-50"
                   >
                     <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                    {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
+                    {isSyncing ? t('dashboard.actions.syncingNow') : t('dashboard.actions.resyncNow')}
                   </button>
+
+                  <div className="hidden sm:block">
+                    <LanguageSelector />
+                  </div>
+                  
+                  {/* Cmd+K visual trigger */}
+                  <div className="hidden md:flex items-center justify-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] text-white/50 text-xs font-mono ml-2">
+                    <kbd className="opacity-70 mr-1">⌘</kbd> 
+                    <kbd className="opacity-70">K</kbd>
+                  </div>
                 </div>
               </div>
             </div>
@@ -323,11 +377,13 @@ export default function DashboardShell({
         </div>
       </div>
 
+      {/* ── Mobile drawer ── */}
       <AnimatePresence>
         {mobileOpen && (
           <div className="fixed inset-0 z-40 lg:hidden">
+            {/* Backdrop — same #02030a base as landing */}
             <motion.button
-              className="absolute inset-0 bg-[#05060F]/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#02030a]/80 backdrop-blur-md"
               variants={fadeInVariants}
               initial="hidden" animate="show" exit="hidden"
               onClick={() => setMobileOpen(false)}
@@ -345,7 +401,7 @@ export default function DashboardShell({
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="absolute right-6 top-6 rounded-xl border border-white/10 bg-white/5 p-2 text-slate-200 transition hover:text-white"
+                className="absolute right-6 top-6 rounded-xl border border-white/[0.08] bg-white/[0.04] p-2 text-slate-300 transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:text-white"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -353,6 +409,7 @@ export default function DashboardShell({
           </div>
         )}
       </AnimatePresence>
+      <CommandPalette onSelect={(id) => onSectionChange(id)} />
     </div>
   );
 }

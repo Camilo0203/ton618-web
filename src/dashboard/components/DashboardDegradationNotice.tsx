@@ -18,7 +18,7 @@ export default function DashboardDegradationNotice({
 
   return (
     <div
-      className={`rounded-[1.6rem] border border-amber-200/70 bg-amber-50/90 p-5 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100 ${className}`.trim()}
+      className={`rounded-[1.6rem] border border-amber-900/40 bg-amber-950/20 p-5 text-amber-100 ${className}`.trim()}
       role="status"
       aria-live="polite"
     >

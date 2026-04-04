@@ -121,7 +121,7 @@ export default function ModlogsModule({
             title={t('dashboard.modlogs.setup.enableLabel')}
             description={t('dashboard.modlogs.setup.enableDesc')}
           >
-            <input type="checkbox" {...register('enabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+            <input type="checkbox" {...register('enabled')} className="dashboard-module-checkbox mt-1" />
           </ToggleCard>
 
           <FieldShell
@@ -129,7 +129,7 @@ export default function ModlogsModule({
             hint={t('dashboard.modlogs.setup.channelHint')}
             error={errors.channelId?.message}
           >
-            <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+            <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
               <option value="">{t('dashboard.modlogs.notConfigured')}</option>
               {channelOptions.map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -155,7 +155,7 @@ export default function ModlogsModule({
             ['logVoice', t('dashboard.modlogs.events.logVoice')],
           ].map(([field, label]) => (
             <ToggleCard key={field} title={label}>
-              <input type="checkbox" {...register(field as keyof ModlogSettings)} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <input type="checkbox" {...register(field as keyof ModlogSettings)} className="dashboard-module-checkbox mt-1" />
             </ToggleCard>
           ))}
         </div>

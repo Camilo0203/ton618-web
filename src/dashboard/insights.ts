@@ -306,7 +306,6 @@ export function formatTimelineTimestamp(value: string): { absolute: string; rela
 function buildOverviewActions(
   quickActions: DashboardQuickAction[],
   workspace: TicketWorkspaceSnapshot,
-  playbooks: PlaybookWorkspaceSnapshot | null,
   syncStatus: GuildSyncStatus | null,
   sectionStates: DashboardSectionState[],
 ): OverviewAction[] {
@@ -320,23 +319,14 @@ function buildOverviewActions(
 
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen).length;
   const breachedTickets = workspace.inbox.filter((ticket) => ticket.slaState === 'breached').length;
-  const pendingRecommendations = playbooks?.recommendations.filter((recommendation) => recommendation.status === 'pending').length ?? 0;
   const needsAttention = sectionStates.find((section) => section.status === 'needs_attention');
 
-  if (pendingRecommendations > 0) {
-    actions.unshift({
-      id: 'playbooks-pending',
-      label: 'Revisar playbooks pendientes',
-      description: `${pendingRecommendations} recomendacion(es) operativa(s) esperan confirmacion o descarte.`,
-      sectionId: 'playbooks',
-      tone: pendingRecommendations > 2 ? 'warning' : 'info',
-    });
-  } else if (breachedTickets > 0) {
+  if (breachedTickets > 0) {
     actions.unshift({
       id: 'tickets-breached',
       label: 'Atender tickets con SLA vencido',
       description: `${breachedTickets} ticket${breachedTickets > 1 ? 's' : ''} ya supero el SLA.`,
-      sectionId: 'inbox',
+      sectionId: 'tickets',
       tone: 'danger',
     });
   } else if (openTickets > 0) {
@@ -344,7 +334,7 @@ function buildOverviewActions(
       id: 'tickets-open',
       label: 'Entrar a la bandeja operativa',
       description: `${openTickets} ticket${openTickets > 1 ? 's' : ''} abierto${openTickets > 1 ? 's' : ''} para seguimiento.`,
-      sectionId: 'inbox',
+      sectionId: 'tickets',
       tone: 'info',
     });
   }
@@ -533,6 +523,6 @@ export function getOverviewInsight(
   return {
     kpis,
     actionItems,
-    operationalActions: buildOverviewActions(quickActions, workspace, playbooks, syncStatus, sectionStates),
+    operationalActions: buildOverviewActions(quickActions, workspace, syncStatus, sectionStates),
   };
 }

@@ -3,7 +3,9 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { AlertTriangle, RefreshCcw, ServerCrash } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { config } from '../config';
+import StarfieldBackground from '../components/StarfieldBackground';
 import AuthCard from './components/AuthCard';
 import DashboardAccessStage, {
   DashboardAccessStatusPill,
@@ -19,7 +21,6 @@ import {
   useGuildDashboardSnapshot,
   useRequestGuildBackupAction,
   useRequestGuildConfigChange,
-  useRequestTicketDashboardAction,
   useSignInWithDiscord,
   useSignOutDashboard,
   useSyncDashboardGuilds,
@@ -103,7 +104,6 @@ function DashboardLivePage({
   const snapshot = snapshotQuery.data;
   const requestConfigChange = useRequestGuildConfigChange(selectedGuildId);
   const requestBackupAction = useRequestGuildBackupAction(selectedGuildId);
-  const requestTicketAction = useRequestTicketDashboardAction(selectedGuildId);
   const [configSaveError, setConfigSaveError] = useState<{
     section: ConfigMutationSectionId;
     message: string;
@@ -246,8 +246,13 @@ function DashboardLivePage({
     return (
       <>
         {pageHelmet}
-        <div className="dashboard-shell flex min-h-screen items-center justify-center px-4 py-8 text-white sm:px-6">
-          <div className={`mx-auto w-full ${maxWidthClass}`}>
+        <div className="dashboard-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-8 text-white sm:px-6 bg-[#02030a]">
+          {/* Starfield + cinematic overlay — same as landing */}
+          <div className="pointer-events-none absolute inset-0 z-0 select-none">
+            <StarfieldBackground />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.12),transparent_42%),radial-gradient(circle_at_18%_14%,rgba(34,211,238,0.06),transparent_28%),linear-gradient(180deg,rgba(5,6,15,0.4)_0%,rgba(2,3,10,0.85)_58%,rgba(0,0,0,0.96)_100%)]" />
+          </div>
+          <div className={`relative z-[1] mx-auto w-full ${maxWidthClass}`}>
             {stage}
           </div>
         </div>
@@ -482,7 +487,6 @@ function DashboardLivePage({
           <DashboardModuleViewport
             activeSection={activeSection}
             selectedGuild={selectedGuild}
-            isGuildAccessFresh={isSelectedGuildAccessFresh}
             invalidRequestedGuildId={invalidRequestedGuildId}
             fallbackGuildId={fallbackGuildId}
             setSelectedGuildId={setSelectedGuildId}
@@ -497,12 +501,12 @@ function DashboardLivePage({
             requestConfigChangeErrorMessage={configSaveError?.message ?? ''}
             requestConfigChangeErrorSection={configSaveError?.section ?? null}
             requestBackupActionPending={requestBackupAction.isPending}
-            requestTicketActionPending={requestTicketAction.isPending}
             onSectionChange={setActiveSection}
             onConfigSave={async (section, payload) => {
               try {
                 await requestConfigChange.mutateAsync({ section, payload });
                 setConfigSaveError(null);
+                toast.success(t(`dashboard.sections.${section}.label`) + ' guardado', { icon: '✅' });
               } catch (error) {
                 setConfigSaveError({
                   section,
@@ -510,23 +514,33 @@ function DashboardLivePage({
                     ? error.message
                     : t('dashboard.shell.configSaveError'),
                 });
+                toast.error(t('dashboard.shell.configSaveError'));
                 throw error;
               }
             }}
             onCreateBackup={async () => {
-              await requestBackupAction.mutateAsync({
-                action: 'create_backup',
-                payload: {},
-              });
+              try {
+                await requestBackupAction.mutateAsync({
+                  action: 'create_backup',
+                  payload: {},
+                });
+                toast.success('Backup programado exitosamente', { icon: '📦' });
+              } catch (error) {
+                toast.error('Garantiza permisos de backup primero');
+                throw error;
+              }
             }}
             onRestoreBackup={async (backupId) => {
-              await requestBackupAction.mutateAsync({
-                action: 'restore_backup',
-                payload: { backupId },
-              });
-            }}
-            onTicketAction={async (action, payload) => {
-              await requestTicketAction.mutateAsync({ action, payload });
+              try {
+                await requestBackupAction.mutateAsync({
+                  action: 'restore_backup',
+                  payload: { backupId },
+                });
+                toast.success('Restauración iniciada', { icon: '✨' });
+              } catch (error) {
+                toast.error('Error restaurando backup');
+                throw error;
+              }
             }}
           />
         </ErrorBoundary>

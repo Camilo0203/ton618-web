@@ -138,11 +138,11 @@ export default function VerificationModule({
           >
             <div className="grid gap-5 md:grid-cols-2">
               <ToggleCard title={t('dashboard.verification.flow.enabled.label')} description={t('dashboard.verification.flow.enabled.desc')}>
-                <input type="checkbox" {...register('enabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                <input type="checkbox" {...register('enabled')} className="dashboard-module-checkbox mt-1" />
               </ToggleCard>
 
               <FieldShell label={t('dashboard.verification.flow.channel')} error={errors.channelId?.message}>
-                <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.verification.notConfigured')}</option>
                   {channelOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -151,7 +151,7 @@ export default function VerificationModule({
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.logs')}>
-                <select {...register('logChannelId')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('logChannelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.verification.notConfigured')}</option>
                   {channelOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -160,7 +160,7 @@ export default function VerificationModule({
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.verifiedRole')} error={errors.verifiedRoleId?.message}>
-                <select {...register('verifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('verifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.verification.notConfigured')}</option>
                   {roleOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -169,7 +169,7 @@ export default function VerificationModule({
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.unverifiedRole')}>
-                <select {...register('unverifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('unverifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="">{t('dashboard.verification.notConfigured')}</option>
                   {roleOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -178,7 +178,7 @@ export default function VerificationModule({
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.mode.label')}>
-                <select {...register('mode')} disabled={!enabled} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-600 dark:bg-surface-700">
+                <select {...register('mode')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
                   <option value="button">{t('dashboard.verification.flow.mode.button')}</option>
                   <option value="code">{t('dashboard.verification.flow.mode.code')}</option>
                   <option value="question">{t('dashboard.verification.flow.mode.question')}</option>
@@ -222,25 +222,25 @@ export default function VerificationModule({
 
           <div className="grid gap-4 md:grid-cols-2">
             <ToggleCard title={t('dashboard.verification.visual.antiraid.label')} description={t('dashboard.verification.visual.antiraid.desc')}>
-              <input type="checkbox" {...register('antiraidEnabled')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <input type="checkbox" {...register('antiraidEnabled')} className="dashboard-module-checkbox mt-1" />
             </ToggleCard>
             <ToggleCard title={t('dashboard.verification.visual.dm.label')} description={t('dashboard.verification.visual.dm.desc')}>
-              <input type="checkbox" {...register('dmOnVerify')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+              <input type="checkbox" {...register('dmOnVerify')} className="dashboard-module-checkbox mt-1" />
             </ToggleCard>
           </div>
 
           <div className="grid gap-5 md:grid-cols-3">
             <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dashboard.verification.visual.thresholds.joins')}</span>
-              <input type="number" min={3} max={50} {...register('antiraidJoins', { valueAsNumber: true })} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 dark:border-surface-600 dark:bg-surface-700" />
+              <span className="mb-2 block text-sm font-semibold text-slate-200">{t('dashboard.verification.visual.thresholds.joins')}</span>
+              <input type="number" min={3} max={50} {...register('antiraidJoins', { valueAsNumber: true })} className="w-full rounded-2xl border dashboard-module-select" />
             </label>
             <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dashboard.verification.visual.thresholds.window')}</span>
-              <input type="number" min={5} max={60} {...register('antiraidSeconds', { valueAsNumber: true })} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 dark:border-surface-600 dark:bg-surface-700" />
+              <span className="mb-2 block text-sm font-semibold text-slate-200">{t('dashboard.verification.visual.thresholds.window')}</span>
+              <input type="number" min={5} max={60} {...register('antiraidSeconds', { valueAsNumber: true })} className="w-full rounded-2xl border dashboard-module-select" />
             </label>
             <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dashboard.verification.visual.thresholds.action')}</span>
-              <select {...register('antiraidAction')} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none focus:border-brand-400 dark:border-surface-600 dark:bg-surface-700">
+              <span className="mb-2 block text-sm font-semibold text-slate-200">{t('dashboard.verification.visual.thresholds.action')}</span>
+              <select {...register('antiraidAction')} className="w-full rounded-2xl border dashboard-module-select">
                 <option value="pause">Pause</option>
                 <option value="kick">Kick</option>
               </select>

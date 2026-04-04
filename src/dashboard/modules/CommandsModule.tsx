@@ -197,7 +197,7 @@ export default function CommandsModule({
                 ['simpleHelpMode', t('dashboard.commands.policy.simpleHelpMode.label'), t('dashboard.commands.policy.simpleHelpMode.desc')],
               ].map(([field, label, description]) => (
                 <ToggleCard key={field} title={label} description={description}>
-                  <input type="checkbox" {...register(field as keyof CommandModuleValues)} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                  <input type="checkbox" {...register(field as keyof CommandModuleValues)} className="dashboard-module-checkbox mt-1" />
                 </ToggleCard>
               ))}
             </div>
@@ -233,7 +233,7 @@ export default function CommandsModule({
                 return (
                   <label
                     key={command.value}
-                    className="flex items-start gap-3 rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70"
+                    className="dashboard-module-card flex items-start gap-3"
                   >
                     <input
                       type="checkbox"
@@ -244,14 +244,14 @@ export default function CommandsModule({
                         else next.delete(command.value);
                         setValue('disabledCommands', Array.from(next).sort(), { shouldDirty: true });
                       }}
-                      className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                      className="dashboard-module-checkbox mt-1"
                     />
                     <span>
-                      <span className="block font-semibold text-slate-950 dark:text-white">
+                      <span className="block font-semibold text-white">
                         /{command.value}
                       </span>
                       {command.category ? (
-                        <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                        <span className="mt-1 block text-sm text-slate-300">
                           {command.category}
                         </span>
                       ) : null}
@@ -260,7 +260,7 @@ export default function CommandsModule({
                 );
               })
             ) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-5 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+              <div className="dashboard-module-empty">
                 {t('dashboard.commands.disabled.empty')}
               </div>
             )}
@@ -274,7 +274,7 @@ export default function CommandsModule({
             <button
               type="button"
               onClick={() => append({ commandName: commandOptions[0]?.value ?? 'ping', maxActions: 4, windowSeconds: 20, enabled: true })}
-              className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-700 dark:border-surface-600 dark:bg-surface-700 dark:text-white"
+              className="dashboard-module-button"
             >
               <Plus className="h-4 w-4" />
               {t('dashboard.commands.overrides.add')}
@@ -284,34 +284,34 @@ export default function CommandsModule({
           <div className="space-y-4">
             {fields.length ? (
               fields.map((field, index) => (
-                <div key={field.id} className="grid gap-4 rounded-3xl border border-slate-200 bg-slate-50/90 p-4 dark:border-surface-600 dark:bg-surface-700/70 md:grid-cols-[1.1fr_0.7fr_0.7fr_auto_auto]">
+                <div key={field.id} className="dashboard-module-card grid gap-4 md:grid-cols-[1.1fr_0.7fr_0.7fr_auto_auto]">
                   <label className="block">
-                    <span className="mb-2 block text-sm text-slate-600 dark:text-slate-300">{t('dashboard.commands.overrides.command')}</span>
-                    <select {...register(`overrides.${index}.commandName`)} className="dashboard-form-field dark:bg-surface-800">
+                    <span className="mb-2 block text-sm text-slate-300">{t('dashboard.commands.overrides.command')}</span>
+                    <select {...register(`overrides.${index}.commandName`)} className="dashboard-form-field">
                       {commandOptions.map((option) => (
                         <option key={option.value} value={option.value}>/{option.value}</option>
                       ))}
                     </select>
                   </label>
                   <label className="block">
-                    <span className="mb-2 block text-sm text-slate-600 dark:text-slate-300">{t('dashboard.commands.overrides.max')}</span>
-                    <input type="number" min={1} max={50} {...register(`overrides.${index}.maxActions`, { valueAsNumber: true })} className="dashboard-form-field dark:bg-surface-800" />
+                    <span className="mb-2 block text-sm text-slate-300">{t('dashboard.commands.overrides.max')}</span>
+                    <input type="number" min={1} max={50} {...register(`overrides.${index}.maxActions`, { valueAsNumber: true })} className="dashboard-form-field" />
                   </label>
                   <label className="block">
-                    <span className="mb-2 block text-sm text-slate-600 dark:text-slate-300">{t('dashboard.commands.overrides.window')}</span>
-                    <input type="number" min={1} max={300} {...register(`overrides.${index}.windowSeconds`, { valueAsNumber: true })} className="dashboard-form-field dark:bg-surface-800" />
+                    <span className="mb-2 block text-sm text-slate-300">{t('dashboard.commands.overrides.window')}</span>
+                    <input type="number" min={1} max={300} {...register(`overrides.${index}.windowSeconds`, { valueAsNumber: true })} className="dashboard-form-field" />
                   </label>
-                  <label className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 dark:border-surface-600 dark:bg-surface-800 dark:text-white">
-                    <input type="checkbox" {...register(`overrides.${index}.enabled`)} className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                  <label className="dashboard-module-card flex items-center justify-center gap-2 text-sm font-semibold text-white">
+                    <input type="checkbox" {...register(`overrides.${index}.enabled`)} className="dashboard-module-checkbox" />
                     {t('dashboard.commands.overrides.active')}
                   </label>
-                  <button type="button" onClick={() => remove(index)} className="inline-flex items-center justify-center rounded-2xl border border-rose-200 bg-white px-4 py-3 text-rose-600 transition hover:bg-rose-50 dark:border-rose-900/50 dark:bg-surface-800 dark:text-rose-300">
+                  <button type="button" onClick={() => remove(index)} className="dashboard-module-button dashboard-module-button-danger inline-flex items-center justify-center rounded-2xl px-4 py-3">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               ))
             ) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-5 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+              <div className="dashboard-module-empty">
                 {t('dashboard.commands.overrides.empty')}
               </div>
             )}

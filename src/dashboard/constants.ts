@@ -1,12 +1,9 @@
 import {
   Activity,
   BarChart3,
-  BrainCircuit,
-  CreditCard,
   Bot,
   Command,
   Compass,
-  Inbox,
   LayoutGrid,
   MessageSquareQuote,
   Settings2,
@@ -57,24 +54,6 @@ export const dashboardSections: DashboardSectionMeta[] = [
     label: 'dashboard.sections.overview.label',
     description: 'dashboard.sections.overview.description',
     icon: LayoutGrid,
-  },
-  {
-    id: 'inbox',
-    label: 'dashboard.sections.inbox.label',
-    description: 'dashboard.sections.inbox.description',
-    icon: Inbox,
-  },
-  {
-    id: 'playbooks',
-    label: 'dashboard.sections.playbooks.label',
-    description: 'dashboard.sections.playbooks.description',
-    icon: BrainCircuit,
-  },
-  {
-    id: 'billing',
-    label: 'Billing',
-    description: 'Plans, subscriptions and paid beta controls',
-    icon: CreditCard,
   },
   {
     id: 'general',
@@ -237,31 +216,13 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
     label: 'dashboard.taskGroups.support.label',
     description: 'dashboard.taskGroups.support.description',
     icon: Ticket,
-    sections: ['tickets', 'inbox', 'playbooks'],
+    sections: ['tickets'],
     shortcuts: [
       {
         id: 'support-tickets',
         label: 'dashboard.shortcuts.support-tickets.label',
         description: 'dashboard.shortcuts.support-tickets.description',
         sectionId: 'tickets',
-      },
-      {
-        id: 'support-inbox',
-        label: 'dashboard.shortcuts.support-inbox.label',
-        description: 'dashboard.shortcuts.support-inbox.description',
-        sectionId: 'inbox',
-      },
-      {
-        id: 'support-macros',
-        label: 'dashboard.shortcuts.support-macros.label',
-        description: 'dashboard.shortcuts.support-macros.description',
-        sectionId: 'inbox',
-      },
-      {
-        id: 'support-playbooks',
-        label: 'dashboard.shortcuts.support-playbooks.label',
-        description: 'dashboard.shortcuts.support-playbooks.description',
-        sectionId: 'playbooks',
       },
       {
         id: 'support-sla',
@@ -303,14 +264,8 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
     label: 'dashboard.taskGroups.system.label',
     description: 'dashboard.taskGroups.system.description',
     icon: Settings2,
-    sections: ['billing', 'system', 'analytics'],
+    sections: ['system', 'analytics'],
     shortcuts: [
-      {
-        id: 'system-billing',
-        label: 'Billing',
-        description: 'Plans, subscriptions and Pro activation',
-        sectionId: 'billing',
-      },
       {
         id: 'system-sync',
         label: 'dashboard.shortcuts.system-sync.label',
@@ -344,9 +299,6 @@ export const dashboardSectionToMutationSection: Record<
   ConfigMutationSectionId | null
 > = {
   overview: null,
-  inbox: null,
-  playbooks: null,
-  billing: null,
   general: 'general',
   server_roles: 'server_roles_channels',
   tickets: 'tickets',

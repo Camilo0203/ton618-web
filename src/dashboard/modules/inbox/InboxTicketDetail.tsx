@@ -80,15 +80,15 @@ function getFeedbackIcon(tone: ActionFeedback['tone']) {
 function getRecommendationToneClass(tone: TicketRecommendation['tone']) {
   switch (tone) {
     case 'danger':
-      return 'border-rose-200/70 bg-rose-50/90 text-rose-900 dark:border-rose-900/40 dark:bg-rose-950/20 dark:text-rose-100';
+      return 'border-rose-900/40 bg-rose-950/20 text-rose-100';
     case 'warning':
-      return 'border-amber-200/70 bg-amber-50/90 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/20 dark:text-amber-100';
+      return 'border-amber-900/40 bg-amber-950/20 text-amber-100';
     case 'info':
-      return 'border-sky-200/70 bg-sky-50/90 text-sky-900 dark:border-sky-900/40 dark:bg-sky-950/20 dark:text-sky-100';
+      return 'border-sky-900/40 bg-sky-950/20 text-sky-100';
     case 'success':
-      return 'border-emerald-200/70 bg-emerald-50/90 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/20 dark:text-emerald-100';
+      return 'border-emerald-900/40 bg-emerald-950/20 text-emerald-100';
     default:
-      return 'border-slate-200/70 bg-slate-50/90 text-slate-900 dark:border-surface-600 dark:bg-surface-700/70 dark:text-slate-100';
+      return 'border-white/[0.07] bg-white/[0.04] text-slate-100';
   }
 }
 
@@ -136,11 +136,11 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
       ) : null}
 
       {props.recommendations.length ? (
-        <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-white/70 p-5 dark:bg-surface-800/75">
+        <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="dashboard-panel-label">{isEnglish ? 'Live playbooks' : 'Playbooks vivos'}</p>
-              <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-slate-950 dark:text-white">
+              <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">
                 {isEnglish ? 'Guided actions for this ticket' : 'Acciones guiadas para este ticket'}
               </h3>
             </div>
@@ -262,7 +262,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                 <div className="mt-3 flex flex-wrap gap-2">
                   <span className={`dashboard-status-pill ${tone}`}>{value}</span>
                 </div>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">{note}</p>
+                <p className="mt-3 text-sm text-slate-400">{note}</p>
               </article>
             ))}
           </div>
@@ -272,7 +272,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
               <CircleUserRound className="h-4 w-4 text-brand-500" />
               <div>
                 <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.customer.eyebrow')}</p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.customer.title')}</h3>
+                <h3 className="mt-1 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.customer.title')}</h3>
               </div>
             </div>
             <div className="dashboard-grid-fit-standard mt-5">
@@ -299,7 +299,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.timeline.eyebrow')}</p>
-                <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.timeline.title')}</h3>
+                <h3 className="mt-2 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.timeline.title')}</h3>
               </div>
               <span className="dashboard-status-pill-compact dashboard-neutral-pill">{props.t('dashboard.inbox.detail.timeline.eventsCount', { count: props.timeline.length })}</span>
             </div>
@@ -308,8 +308,8 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                 <article key={event.id} className="dashboard-data-card">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="break-words font-semibold text-slate-950 dark:text-white">{event.title}</p>
-                      <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-slate-300">{event.description}</p>
+                      <p className="break-words font-semibold text-white">{event.title}</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">{event.description}</p>
                     </div>
                     <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getVisibilityLabel(event.visibility, props.t)}</span>
                   </div>
@@ -327,10 +327,10 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
         <div className="space-y-6">
           <div className="dashboard-surface-soft rounded-[1.6rem] p-5">
             <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.ops.eyebrow')}</p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.ops.statusTitle')}</h3>
+            <h3 className="mt-2 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.ops.statusTitle')}</h3>
             <div className="mt-5 space-y-4">
               <div className="grid gap-3">
-                <label htmlFor="ticket-status-draft" className="text-sm font-medium text-slate-700 dark:text-slate-300">{props.t('dashboard.inbox.detail.ops.statusLabel')}</label>
+                <label htmlFor="ticket-status-draft" className="text-sm font-medium text-slate-300">{props.t('dashboard.inbox.detail.ops.statusLabel')}</label>
                 <select id="ticket-status-draft" value={props.statusDraft} onChange={(event) => props.onStatusDraftChange(event.target.value as TicketWorkflowStatus)} className="dashboard-form-field">
                   {props.workflowOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
@@ -341,7 +341,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
               </div>
 
               <div className="grid gap-3">
-                <label htmlFor="ticket-priority-draft" className="text-sm font-medium text-slate-700 dark:text-slate-300">{props.t('dashboard.inbox.detail.ops.priorityLabel')}</label>
+                <label htmlFor="ticket-priority-draft" className="text-sm font-medium text-slate-300">{props.t('dashboard.inbox.detail.ops.priorityLabel')}</label>
                 <select id="ticket-priority-draft" value={props.priorityDraft} onChange={(event) => props.onPriorityDraftChange(event.target.value as TicketInboxItem['priority'])} className="dashboard-form-field">
                   {props.priorityOptions.filter((option) => option.value !== 'all').map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </select>
@@ -360,13 +360,13 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
               <Tags className="h-4 w-4 text-brand-500" />
               <div>
                 <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.ops.tagsEyebrow')}</p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.ops.tagsTitle')}</h3>
+                <h3 className="mt-1 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.ops.tagsTitle')}</h3>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {ticket.tags.length ? ticket.tags.map((tag) => (
                 <button key={tag} type="button" onClick={() => props.onAction('remove_tag', { tag })} disabled={props.isMutating} className="dashboard-status-pill-compact dashboard-neutral-pill hover:border-rose-300 hover:text-rose-600" title={props.t('dashboard.inbox.detail.ops.removeTag', { tag })}>{tag}</button>
-              )) : <span className="text-sm text-slate-600 dark:text-slate-400">{props.t('dashboard.inbox.detail.ops.noTags')}</span>}
+              )) : <span className="text-sm text-slate-400">{props.t('dashboard.inbox.detail.ops.noTags')}</span>}
             </div>
             <div className="mt-4 flex flex-col gap-3">
               <input value={props.tagDraft} onChange={(event) => props.onTagDraftChange(event.target.value)} placeholder={props.t('dashboard.inbox.detail.ops.tagPlaceholder')} className="dashboard-form-field" />
@@ -379,11 +379,11 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
               <ShieldAlert className="h-4 w-4 text-brand-500" />
               <div>
                 <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.ops.noteEyebrow')}</p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.ops.noteTitle')}</h3>
+                <h3 className="mt-1 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.ops.noteTitle')}</h3>
               </div>
             </div>
             <textarea value={props.noteDraft} onChange={(event) => props.onNoteDraftChange(event.target.value)} rows={5} placeholder={props.t('dashboard.inbox.detail.ops.notePlaceholder')} className="dashboard-form-field mt-4" />
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">{props.t('dashboard.inbox.detail.ops.shortcutHint')}</p>
+            <p className="mt-3 text-xs text-slate-400">{props.t('dashboard.inbox.detail.ops.shortcutHint')}</p>
             <button type="button" onClick={() => props.onAction('add_note', { note: props.noteDraft.trim() })} disabled={props.isMutating || !props.noteDraft.trim()} className="dashboard-primary-button mt-4">{props.t('dashboard.inbox.detail.ops.saveNote')}</button>
           </div>
 
@@ -404,11 +404,11 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
               <MessageSquareText className="h-4 w-4 text-brand-500" />
               <div>
                 <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.ops.replyEyebrow')}</p>
-                <h3 className="mt-1 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.ops.replyTitle')}</h3>
+                <h3 className="mt-1 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.ops.replyTitle')}</h3>
               </div>
             </div>
             <textarea value={props.replyDraft} onChange={(event) => props.onReplyDraftChange(event.target.value)} rows={5} placeholder={props.t('dashboard.inbox.detail.ops.replyPlaceholder')} className="dashboard-form-field mt-4" />
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">{props.t('dashboard.inbox.detail.ops.shortcutHint')}</p>
+            <p className="mt-3 text-xs text-slate-400">{props.t('dashboard.inbox.detail.ops.shortcutHint')}</p>
             <button type="button" onClick={() => props.onAction('reply_customer', { message: props.replyDraft.trim() })} disabled={props.isMutating || !props.replyDraft.trim()} className="dashboard-primary-button mt-4">
               <Send className="h-4 w-4" />
               {props.t('dashboard.inbox.detail.ops.sendReply')}
@@ -417,7 +417,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
 
           <div className="dashboard-surface-soft rounded-[1.6rem] p-5">
             <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.history.eyebrow')}</p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">{props.t('dashboard.inbox.detail.history.title')}</h3>
+            <h3 className="mt-2 text-xl font-semibold text-white">{props.t('dashboard.inbox.detail.history.title')}</h3>
             {props.customerProfile ? (
               <>
                 <div className="dashboard-grid-fit-standard mt-4">
@@ -441,8 +441,8 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                       <button key={recentTicket.ticketId} type="button" onClick={() => props.onSelectTicket(recentTicket.ticketId)} disabled={isCurrent} className="dashboard-data-card w-full text-left disabled:cursor-default disabled:opacity-100">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="font-semibold text-slate-950 dark:text-white">#{recentTicket.ticketId}</p>
-                            <p className="mt-2 break-words text-sm text-slate-700 dark:text-slate-300">{recentTicket.subject || recentTicket.categoryLabel}</p>
+                            <p className="font-semibold text-white">#{recentTicket.ticketId}</p>
+                            <p className="mt-2 break-words text-sm text-slate-300">{recentTicket.subject || recentTicket.categoryLabel}</p>
                           </div>
                           <span className={`dashboard-status-pill-compact ${getStatusTone(recentTicket.workflowStatus)}`}>{getTicketStatusLabel(recentTicket.workflowStatus)}</span>
                         </div>

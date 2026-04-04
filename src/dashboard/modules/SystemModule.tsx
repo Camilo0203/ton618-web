@@ -131,7 +131,7 @@ export default function SystemModule({
                 title={t('dashboard.system.maintenance.label')}
                 description={t('dashboard.system.maintenance.desc')}
               >
-                <input type="checkbox" {...register('maintenanceMode')} className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" />
+                <input type="checkbox" {...register('maintenanceMode')} className="dashboard-module-checkbox mt-1" />
               </ToggleCard>
 
               <FieldShell
@@ -157,9 +157,9 @@ export default function SystemModule({
                 [t('dashboard.system.sync.pendingMutations'), String(syncStatus?.pendingMutations ?? 0)],
                 [t('dashboard.system.sync.failedMutations'), String(syncStatus?.failedMutations ?? 0)],
               ].map(([label, value]) => (
-                <article key={label} className="rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-surface-600 dark:bg-surface-700/70">
-                  <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
-                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">{value}</p>
+                <article key={label} className="dashboard-module-card p-5">
+                  <p className="text-sm text-slate-400">{label}</p>
+                  <p className="mt-2 text-lg font-semibold text-white">{value}</p>
                 </article>
               ))}
             </div>
@@ -190,16 +190,16 @@ export default function SystemModule({
               backups.map((backup) => (
                 <article
                   key={backup.backupId}
-                  className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-slate-50/90 p-5 dark:border-surface-600 dark:bg-surface-700/70 lg:flex-row lg:items-center lg:justify-between"
+                  className="dashboard-module-card flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between"
                 >
                   <div>
-                    <p className="text-lg font-semibold text-slate-950 dark:text-white">
+                    <p className="text-lg font-semibold text-white">
                       {backup.source}
                     </p>
-                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    <p className="mt-1 text-sm text-slate-400">
                       {t('dashboard.system.backups.item.exported', { time: formatRelativeTime(backup.exportedAt) })}. {t('dashboard.system.backups.item.created', { time: formatDateTime(backup.createdAt) })}.
                     </p>
-                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    <p className="mt-1 text-sm text-slate-400">
                       {t('dashboard.system.backups.item.schema', { version: backup.schemaVersion })}.
                     </p>
                     <p className="mt-2 text-xs uppercase tracking-[0.14em] text-slate-400">
@@ -210,7 +210,7 @@ export default function SystemModule({
                     type="button"
                     onClick={() => setRestoreDraft(backup.backupId)}
                     disabled={isRequestingBackup}
-                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-700 disabled:cursor-not-allowed disabled:opacity-60 dark:border-surface-600 dark:bg-surface-800 dark:text-white"
+                    className="dashboard-module-button disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <ArchiveRestore className="h-4 w-4" />
                     {t('dashboard.system.backups.item.restore')}
@@ -218,7 +218,7 @@ export default function SystemModule({
                 </article>
               ))
             ) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-6 text-sm text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+              <div className="dashboard-module-empty p-6">
                 {t('dashboard.system.backups.empty')}
               </div>
             )}
@@ -233,7 +233,7 @@ export default function SystemModule({
             >
               {restoreTarget ? (
                 <div className="space-y-5">
-                  <div className="rounded-[1.4rem] border border-rose-200 bg-rose-50/80 p-4 text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/20 dark:text-rose-100">
+                  <div className="dashboard-module-notice-danger">
                     <div className="flex items-start gap-3">
                       <ShieldAlert className="mt-0.5 h-4 w-4 flex-shrink-0" />
                       <div>
@@ -286,7 +286,7 @@ export default function SystemModule({
                   </div>
                 </div>
               ) : (
-                <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50/80 p-6 text-sm leading-6 text-slate-500 dark:border-surface-600 dark:bg-surface-700/40 dark:text-slate-400">
+                <div className="dashboard-module-empty p-6 leading-6">
                   {t('dashboard.system.restore.empty')}
                 </div>
               )}

@@ -1096,6 +1096,7 @@ export const es = {
                 system: { label: 'Sistema del bot', description: 'Backups, sincronización y salud técnica.' },
                 activity: { label: 'Actividad reciente', description: 'Cambios, cola y eventos recientes.' },
                 analytics: { label: 'Analítica', description: 'Uso real, tickets y rendimiento.' },
+                billing: { label: 'Facturación', description: 'Planes, suscripciones y controles pro pagos.' },
             },
             taskGroups: {
                 home: { label: 'Inicio', description: 'Portada operativa del servidor y siguientes pasos.' },
@@ -1128,6 +1129,7 @@ export const es = {
                 'system-backups': { label: 'Backups', description: 'Copias y restauración.' },
                 'system-diagnostics': { label: 'Diagnóstico', description: 'Estado técnico general.' },
                 'system-analytics': { label: 'Analítica', description: 'Uso del bot y rendimiento.' },
+                'system-billing': { label: 'Facturación', description: 'Suscripciones y activación Pro.' },
             },
         },
         notFound: {

@@ -53,13 +53,13 @@ export default function AuthCard({
         </div>
 
         <div className="mt-6 space-y-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-slate-500 dark:text-slate-400">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-slate-400">
             {dashboardBrandLabel}
           </p>
-          <h1 className="text-balance text-[2rem] font-bold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-[2.35rem]">
+          <h1 className="text-balance text-[2rem] font-bold tracking-[-0.05em] text-white sm:text-[2.35rem]">
             {t('dashboardAuth.authCard.cardTitle')}
           </h1>
-          <p className="mx-auto max-w-xl text-sm leading-7 text-slate-700 dark:text-slate-300 sm:text-[0.95rem]">
+          <p className="mx-auto max-w-xl text-sm leading-7 text-slate-300 sm:text-[0.95rem]">
             {errorMessage || t('dashboardAuth.authCard.cardDescription')}
           </p>
         </div>
@@ -77,12 +77,12 @@ export default function AuthCard({
           </button>
         </div>
 
-        <p className="mt-5 text-xs leading-6 text-slate-500 dark:text-slate-400">
+        <p className="mt-5 text-xs leading-6 text-slate-400">
           {t('dashboardAuth.authCard.trustLine')}
         </p>
       </div>
-      <div className="relative z-[1] mt-7 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
-        <ShieldCheck className="h-3.5 w-3.5 text-brand-500 dark:text-brand-300" />
+      <div className="relative z-[1] mt-7 flex items-center justify-center gap-2 text-[11px] uppercase tracking-[0.22em] text-slate-400">
+        <ShieldCheck className="h-3.5 w-3.5 text-brand-300" />
         {t('dashboardAuth.authCard.trustFooter')}
       </div>
     </section>
