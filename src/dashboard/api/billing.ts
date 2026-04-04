@@ -143,6 +143,7 @@ export async function createGuildCheckoutSession(
 ): Promise<CheckoutSessionResult> {
   const client = getSupabaseClient();
   const resolvedGuildId = ensureGuildId(guildId, 'crear el checkout');
+  const nowInSeconds = Math.floor(Date.now() / 1000);
 
   debugAuthLog('createGuildCheckoutSession:session:start', {
     guildId: resolvedGuildId,
@@ -150,38 +151,69 @@ export async function createGuildCheckoutSession(
   });
 
   const { data: sessionData, error: sessionError } = await client.auth.getSession();
+  const currentSession = sessionData.session;
+  const expiresAt = currentSession?.expires_at ?? null;
+  const isExpired = typeof expiresAt === 'number' ? expiresAt <= nowInSeconds : false;
+  const willExpireSoon = typeof expiresAt === 'number' ? expiresAt - nowInSeconds < 60 : false;
+  const shouldRefreshSession = !currentSession || !currentSession.access_token || isExpired || willExpireSoon;
+
   debugAuthLog('createGuildCheckoutSession:session:getSession', {
-    hasSession: Boolean(sessionData.session),
-    hasAccessToken: Boolean(sessionData.session?.access_token),
+    hasSession: Boolean(currentSession),
+    hasAccessToken: Boolean(currentSession?.access_token),
+    expiresAt,
+    isExpired,
+    willExpireSoon,
+    refreshSessionExecuted: shouldRefreshSession,
     sessionError: sessionError?.message ?? null,
   }, sessionError ? 'error' : 'info');
 
-  if (!sessionData.session?.access_token) {
+  if (shouldRefreshSession) {
     const { data: refreshData, error: refreshError } = await client.auth.refreshSession();
     debugAuthLog('createGuildCheckoutSession:session:refreshSession', {
       hasSession: Boolean(refreshData.session),
       hasAccessToken: Boolean(refreshData.session?.access_token),
+      expiresAt: refreshData.session?.expires_at ?? null,
+      isExpired: typeof refreshData.session?.expires_at === 'number'
+        ? refreshData.session.expires_at <= nowInSeconds
+        : false,
+      willExpireSoon: typeof refreshData.session?.expires_at === 'number'
+        ? refreshData.session.expires_at - nowInSeconds < 60
+        : false,
+      refreshSessionExecuted: true,
       refreshError: refreshError?.message ?? null,
     }, refreshError ? 'error' : 'info');
   }
 
   const { data: verifiedSessionData, error: verifiedSessionError } = await client.auth.getSession();
+  const verifiedSession = verifiedSessionData.session;
+  const verifiedExpiresAt = verifiedSession?.expires_at ?? null;
+  const verifiedIsExpired = typeof verifiedExpiresAt === 'number' ? verifiedExpiresAt <= nowInSeconds : false;
+  const verifiedWillExpireSoon = typeof verifiedExpiresAt === 'number'
+    ? verifiedExpiresAt - nowInSeconds < 60
+    : false;
   debugAuthLog('createGuildCheckoutSession:session:verified', {
-    hasSession: Boolean(verifiedSessionData.session),
-    hasAccessToken: Boolean(verifiedSessionData.session?.access_token),
+    hasSession: Boolean(verifiedSession),
+    hasAccessToken: Boolean(verifiedSession?.access_token),
+    expiresAt: verifiedExpiresAt,
+    isExpired: verifiedIsExpired,
+    willExpireSoon: verifiedWillExpireSoon,
+    refreshSessionExecuted: shouldRefreshSession,
     sessionError: verifiedSessionError?.message ?? null,
   }, verifiedSessionError ? 'error' : 'info');
 
-  if (!verifiedSessionData.session?.access_token) {
+  if (!verifiedSession?.access_token) {
     throw new Error('No hay una sesión válida de Supabase para abrir checkout.');
   }
 
   debugAuthLog('createGuildCheckoutSession:invoke:start', {
     guildId: resolvedGuildId,
     billingInterval,
-    hasSession: Boolean(verifiedSessionData.session),
-    hasAccessToken: Boolean(verifiedSessionData.session?.access_token),
-    expiresAt: verifiedSessionData.session?.expires_at ?? null,
+    hasSession: Boolean(verifiedSession),
+    hasAccessToken: Boolean(verifiedSession?.access_token),
+    expiresAt: verifiedExpiresAt,
+    isExpired: verifiedIsExpired,
+    willExpireSoon: verifiedWillExpireSoon,
+    refreshSessionExecuted: shouldRefreshSession,
   });
 
   const { data, error } = await client.functions.invoke('create-checkout-session', {
