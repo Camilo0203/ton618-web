@@ -144,6 +144,7 @@ export async function createGuildCheckoutSession(
 ): Promise<CheckoutSessionResult> {
   const client = getSupabaseClient();
   const resolvedGuildId = ensureGuildId(guildId, 'crear el checkout');
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 
   debugAuthLog('createGuildCheckoutSession:session:start', {
     guildId: resolvedGuildId,
@@ -206,6 +207,10 @@ export async function createGuildCheckoutSession(
     throw new Error('No hay una sesión válida de Supabase para abrir checkout.');
   }
 
+  if (!anonKey) {
+    throw new Error('Falta VITE_SUPABASE_ANON_KEY para invocar checkout.');
+  }
+
   debugAuthLog('createGuildCheckoutSession:invoke:start', {
     guildId: resolvedGuildId,
     billingInterval,
@@ -217,9 +222,15 @@ export async function createGuildCheckoutSession(
     isExpired: verifiedIsExpired,
     willExpireSoon: verifiedWillExpireSoon,
     refreshExecuted,
+    hasExplicitAuthorizationHeader: true,
+    hasAnonKey: Boolean(anonKey),
   });
 
   const { data, error } = await client.functions.invoke('create-checkout-session', {
+    headers: {
+      Authorization: `Bearer ${verifiedSession.access_token}`,
+      apikey: anonKey,
+    },
     body: {
       guildId: resolvedGuildId,
       billingInterval,
@@ -250,8 +261,34 @@ export async function createCustomerPortalSession(
 ): Promise<CustomerPortalSessionResult> {
   const client = getSupabaseClient();
   const resolvedGuildId = ensureGuildId(guildId, 'abrir el portal de billing');
+  const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
+  const freshSessionState = await getFreshDashboardSession();
+  const verifiedSession = freshSessionState.session;
+
+  if (!verifiedSession?.access_token) {
+    throw new Error('No hay una sesión válida de Supabase para abrir el portal de billing.');
+  }
+
+  if (!anonKey) {
+    throw new Error('Falta VITE_SUPABASE_ANON_KEY para invocar checkout.');
+  }
+
+  debugAuthLog('createCustomerPortalSession:invoke:start', {
+    guildId: resolvedGuildId,
+    sessionExists: Boolean(freshSessionState.session),
+    userExists: Boolean(freshSessionState.user),
+    hasAccessToken: Boolean(verifiedSession.access_token),
+    expiresAt: verifiedSession.expires_at ?? null,
+    userId: freshSessionState.user?.id ?? verifiedSession.user?.id ?? null,
+    hasExplicitAuthorizationHeader: true,
+    hasAnonKey: Boolean(anonKey),
+  });
 
   const { data, error } = await client.functions.invoke('create-customer-portal-session', {
+    headers: {
+      Authorization: `Bearer ${verifiedSession.access_token}`,
+      apikey: anonKey,
+    },
     body: {
       guildId: resolvedGuildId,
     },
