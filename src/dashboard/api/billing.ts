@@ -143,7 +143,6 @@ export async function createGuildCheckoutSession(
 ): Promise<CheckoutSessionResult> {
   const client = getSupabaseClient();
   const resolvedGuildId = ensureGuildId(guildId, 'crear el checkout');
-  const nowInSeconds = Math.floor(Date.now() / 1000);
 
   debugAuthLog('createGuildCheckoutSession:session:start', {
     guildId: resolvedGuildId,
@@ -151,35 +150,36 @@ export async function createGuildCheckoutSession(
   });
 
   const { data: sessionData, error: sessionError } = await client.auth.getSession();
-  const currentSession = sessionData.session;
-  const expiresAt = currentSession?.expires_at ?? null;
-  const isExpired = typeof expiresAt === 'number' ? expiresAt <= nowInSeconds : false;
-  const willExpireSoon = typeof expiresAt === 'number' ? expiresAt - nowInSeconds < 60 : false;
-  const shouldRefreshSession = !currentSession || !currentSession.access_token || isExpired || willExpireSoon;
+  const session = sessionData.session;
+  const expiresAt = session?.expires_at ?? null;
+  const nowInSeconds = Math.floor(Date.now() / 1000);
+  const isExpired = expiresAt !== null && expiresAt <= nowInSeconds;
+  const willExpireSoon = expiresAt !== null && expiresAt - nowInSeconds < 60;
+  const refreshExecuted = !session || !session.access_token || isExpired || willExpireSoon;
 
   debugAuthLog('createGuildCheckoutSession:session:getSession', {
-    hasSession: Boolean(currentSession),
-    hasAccessToken: Boolean(currentSession?.access_token),
+    hasSession: Boolean(session),
+    hasAccessToken: Boolean(session?.access_token),
     expiresAt,
     isExpired,
     willExpireSoon,
-    refreshSessionExecuted: shouldRefreshSession,
+    refreshExecuted,
     sessionError: sessionError?.message ?? null,
   }, sessionError ? 'error' : 'info');
 
-  if (shouldRefreshSession) {
+  if (refreshExecuted) {
     const { data: refreshData, error: refreshError } = await client.auth.refreshSession();
     debugAuthLog('createGuildCheckoutSession:session:refreshSession', {
       hasSession: Boolean(refreshData.session),
       hasAccessToken: Boolean(refreshData.session?.access_token),
       expiresAt: refreshData.session?.expires_at ?? null,
-      isExpired: typeof refreshData.session?.expires_at === 'number'
+      isExpired: refreshData.session?.expires_at !== undefined && refreshData.session?.expires_at !== null
         ? refreshData.session.expires_at <= nowInSeconds
         : false,
-      willExpireSoon: typeof refreshData.session?.expires_at === 'number'
+      willExpireSoon: refreshData.session?.expires_at !== undefined && refreshData.session?.expires_at !== null
         ? refreshData.session.expires_at - nowInSeconds < 60
         : false,
-      refreshSessionExecuted: true,
+      refreshExecuted: true,
       refreshError: refreshError?.message ?? null,
     }, refreshError ? 'error' : 'info');
   }
@@ -187,17 +187,15 @@ export async function createGuildCheckoutSession(
   const { data: verifiedSessionData, error: verifiedSessionError } = await client.auth.getSession();
   const verifiedSession = verifiedSessionData.session;
   const verifiedExpiresAt = verifiedSession?.expires_at ?? null;
-  const verifiedIsExpired = typeof verifiedExpiresAt === 'number' ? verifiedExpiresAt <= nowInSeconds : false;
-  const verifiedWillExpireSoon = typeof verifiedExpiresAt === 'number'
-    ? verifiedExpiresAt - nowInSeconds < 60
-    : false;
+  const verifiedIsExpired = verifiedExpiresAt !== null && verifiedExpiresAt <= nowInSeconds;
+  const verifiedWillExpireSoon = verifiedExpiresAt !== null && verifiedExpiresAt - nowInSeconds < 60;
   debugAuthLog('createGuildCheckoutSession:session:verified', {
     hasSession: Boolean(verifiedSession),
     hasAccessToken: Boolean(verifiedSession?.access_token),
     expiresAt: verifiedExpiresAt,
     isExpired: verifiedIsExpired,
     willExpireSoon: verifiedWillExpireSoon,
-    refreshSessionExecuted: shouldRefreshSession,
+    refreshExecuted,
     sessionError: verifiedSessionError?.message ?? null,
   }, verifiedSessionError ? 'error' : 'info');
 
@@ -213,7 +211,7 @@ export async function createGuildCheckoutSession(
     expiresAt: verifiedExpiresAt,
     isExpired: verifiedIsExpired,
     willExpireSoon: verifiedWillExpireSoon,
-    refreshSessionExecuted: shouldRefreshSession,
+    refreshExecuted,
   });
 
   const { data, error } = await client.functions.invoke('create-checkout-session', {
