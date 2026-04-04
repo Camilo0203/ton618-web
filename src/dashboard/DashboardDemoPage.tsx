@@ -280,6 +280,8 @@ export default function DashboardDemoPage() {
           requestConfigChangeErrorMessage=""
           requestConfigChangeErrorSection={null}
           requestBackupActionPending={false}
+          isGuildAccessFresh={true}
+          onTicketAction={async () => undefined}
           onSectionChange={setActiveSection}
           onConfigSave={async (section, payload) => {
             setSnapshot((current) => applyDemoConfigChange(current, section, payload));

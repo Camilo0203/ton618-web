@@ -50,6 +50,7 @@ function ModuleFallback({ activeSection }: { activeSection: DashboardSectionId }
 interface DashboardModuleViewportProps {
   activeSection: DashboardSectionId;
   selectedGuild: DashboardGuild | null;
+  isGuildAccessFresh: boolean;
   invalidRequestedGuildId: string | null;
   fallbackGuildId: string | null;
   setSelectedGuildId: (guildId: string) => void;
@@ -66,6 +67,7 @@ interface DashboardModuleViewportProps {
   requestBackupActionPending: boolean;
   onSectionChange: (section: DashboardSectionId) => void;
   onConfigSave: (section: ConfigMutationSectionId, payload: unknown) => Promise<void>;
+  onTicketAction: (action: any, payload: any) => Promise<void>;
   onCreateBackup: () => Promise<void>;
   onRestoreBackup: (backupId: string) => Promise<void>;
 }
@@ -108,6 +110,7 @@ function buildDerivedViewModel(
 export default function DashboardModuleViewport({
   activeSection,
   selectedGuild,
+  isGuildAccessFresh,
   invalidRequestedGuildId,
   fallbackGuildId,
   setSelectedGuildId,
@@ -124,6 +127,7 @@ export default function DashboardModuleViewport({
   requestBackupActionPending,
   onSectionChange,
   onConfigSave,
+  onTicketAction,
   onCreateBackup,
   onRestoreBackup,
 }: DashboardModuleViewportProps) {
@@ -293,6 +297,8 @@ export default function DashboardModuleViewport({
               checklist={checklist}
               quickActions={quickActions}
               partialFailures={partialFailures}
+              isGuildAccessFresh={isGuildAccessFresh}
+              onTicketAction={onTicketAction}
             />
           </ErrorBoundary>
         ) : null}

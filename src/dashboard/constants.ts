@@ -121,6 +121,18 @@ export const dashboardSections: DashboardSectionMeta[] = [
     description: 'dashboard.sections.analytics.description',
     icon: BarChart3,
   },
+  {
+    id: 'playbooks',
+    label: 'dashboard.sections.playbooks.label',
+    description: 'dashboard.sections.playbooks.description',
+    icon: Sparkles,
+  },
+  {
+    id: 'inbox',
+    label: 'dashboard.sections.inbox.label',
+    description: 'dashboard.sections.inbox.description',
+    icon: Ticket,
+  },
 ];
 
 export const dashboardTaskGroups: DashboardTaskGroup[] = [
@@ -310,4 +322,6 @@ export const dashboardSectionToMutationSection: Record<
   system: 'system',
   activity: null,
   analytics: null,
+  playbooks: null,
+  inbox: null,
 };

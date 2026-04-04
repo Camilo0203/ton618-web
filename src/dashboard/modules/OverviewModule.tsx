@@ -54,6 +54,8 @@ interface OverviewModuleProps {
   checklist: DashboardChecklistStep[];
   quickActions: DashboardQuickAction[];
   partialFailures: DashboardPartialFailure[];
+  isGuildAccessFresh: boolean;
+  onTicketAction: (action: any, payload: any) => Promise<void>;
 }
 
 function getStatusClasses(status: DashboardSectionState['status']) {
@@ -127,7 +129,12 @@ export default function OverviewModule({
   checklist,
   quickActions,
   partialFailures,
+  isGuildAccessFresh,
+  onTicketAction,
 }: OverviewModuleProps) {
+  // Suppress TS6133
+  void isGuildAccessFresh;
+  void onTicketAction;
   const { t, i18n } = useTranslation();
 
   function getStatusLabel(status: DashboardSectionState['status']) {

@@ -14,6 +14,8 @@ export const dashboardSectionIds = [
   'system',
   'activity',
   'analytics',
+  'playbooks',
+  'inbox',
 ] as const satisfies readonly DashboardSectionId[];
 
 export const configMutationSectionIds = [

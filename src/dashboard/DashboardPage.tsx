@@ -29,7 +29,7 @@ import { usePersistentDashboardSection } from './hooks/usePersistentDashboardSec
 import { useGuildSelection } from './hooks/useGuildSelection';
 import { useDashboardDarkMode } from './hooks/useDashboardDarkMode';
 import { useMinimumDisplayState } from './hooks/useMinimumDisplayState';
-import { getDashboardSectionStates, isGuildAccessFresh } from './utils';
+import { getDashboardSectionStates, isGuildAccessFresh as checkIsAccessFresh } from './utils';
 import type { ConfigMutationSectionId } from './types';
 import {
   addSentryModuleNavigation,
@@ -96,7 +96,7 @@ function DashboardLivePage({
     setSelectedGuildId,
   } = useGuildSelection(guilds);
 
-  const isSelectedGuildAccessFresh = isGuildAccessFresh(selectedGuild?.lastSyncedAt ?? null);
+  const isSelectedGuildAccessFresh = checkIsAccessFresh(selectedGuild?.lastSyncedAt ?? null);
   const snapshotQuery = useGuildDashboardSnapshot(
     selectedGuildId,
     Boolean(selectedGuildId && isSelectedGuildAccessFresh),
@@ -241,6 +241,11 @@ function DashboardLivePage({
       />
     </Helmet>
   );
+
+  const isAccessFresh = checkIsAccessFresh(syncStatus?.updatedAt ?? null);
+  const handleTicketAction = async (action: string, payload: any) => {
+    console.log('Ticket action:', action, payload);
+  };
 
   function renderEntryStage(stage: ReactNode, maxWidthClass = 'max-w-[76rem]') {
     return (
@@ -501,6 +506,8 @@ function DashboardLivePage({
             requestConfigChangeErrorMessage={configSaveError?.message ?? ''}
             requestConfigChangeErrorSection={configSaveError?.section ?? null}
             requestBackupActionPending={requestBackupAction.isPending}
+            isGuildAccessFresh={isAccessFresh}
+            onTicketAction={handleTicketAction}
             onSectionChange={setActiveSection}
             onConfigSave={async (section, payload) => {
               try {

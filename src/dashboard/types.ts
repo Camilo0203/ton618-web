@@ -12,7 +12,9 @@ export type DashboardSectionId =
   | 'commands'
   | 'system'
   | 'activity'
-  | 'analytics';
+  | 'analytics'
+  | 'playbooks'
+  | 'inbox';
 
 export type DashboardTaskGroupId =
   | 'home'
