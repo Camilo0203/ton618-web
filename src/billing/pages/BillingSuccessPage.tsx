@@ -1,16 +1,26 @@
 // Success page after completing checkout
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
 import { useEffect } from 'react';
 
+const PLAN_LABELS: Record<string, string> = {
+  pro_monthly: 'Pro Monthly',
+  pro_yearly: 'Pro Yearly',
+  lifetime: 'Lifetime',
+  donate: 'Donation',
+};
+
 export function BillingSuccessPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const planKey = searchParams.get('plan_key') || '';
+  const planLabel = PLAN_LABELS[planKey] || 'Premium';
+  const isDonation = planKey === 'donate';
 
   useEffect(() => {
-    // Track successful purchase
-    console.log('Billing checkout successful');
-  }, []);
+    console.log('Billing checkout successful', { plan_key: planKey });
+  }, [planKey]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center px-4">
@@ -35,7 +45,7 @@ export function BillingSuccessPage() {
           transition={{ delay: 0.3 }}
           className="text-4xl md:text-5xl font-bold text-white mb-4"
         >
-          Payment Successful!
+          {isDonation ? 'Thank you for your donation!' : 'Payment Successful!'}
         </motion.h1>
 
         <motion.p
@@ -44,7 +54,9 @@ export function BillingSuccessPage() {
           transition={{ delay: 0.4 }}
           className="text-xl text-slate-300 mb-8"
         >
-          Thank you for upgrading to TON618 Pro! Your premium features are being activated.
+          {isDonation
+            ? 'Your generous donation helps keep TON618 running. Thank you!'
+            : `Thank you for upgrading to TON618 ${planLabel}! Your server's premium features are being activated.`}
         </motion.p>
 
         <motion.div
@@ -57,7 +69,11 @@ export function BillingSuccessPage() {
           <ul className="text-left space-y-3 text-slate-300">
             <li className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-              <span>Your premium features will be active within a few minutes</span>
+              <span>
+                {isDonation
+                  ? 'Your donation has been recorded — thank you!'
+                  : 'Your premium features will be active within a few minutes (up to 5 min for webhook processing)'}
+              </span>
             </li>
             <li className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
@@ -104,7 +120,12 @@ export function BillingSuccessPage() {
           className="text-sm text-slate-400 mt-8"
         >
           Need help? Join our{' '}
-          <a href="#" className="text-indigo-400 hover:text-indigo-300 underline">
+          <a
+            href={import.meta.env.VITE_SUPPORT_SERVER_URL || 'https://discord.gg/ton618'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400 hover:text-indigo-300 underline"
+          >
             support server
           </a>
         </motion.p>

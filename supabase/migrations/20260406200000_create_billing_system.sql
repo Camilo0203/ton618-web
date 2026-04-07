@@ -1,6 +1,7 @@
 -- Migration: Complete Billing System for Lemon Squeezy Integration
 -- Author: TON618 Bot Team
 -- Date: 2026-04-06
+-- Fixed: all statements made idempotent (IF NOT EXISTS / CREATE OR REPLACE).
 
 -- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -10,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- TABLE: users
 -- Stores Discord user information
 -- ============================================
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   discord_user_id TEXT PRIMARY KEY,
   username TEXT NOT NULL,
   discriminator TEXT,
@@ -20,13 +21,13 @@ CREATE TABLE users (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_users_email ON users(email) WHERE email IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email) WHERE email IS NOT NULL;
 
 -- ============================================
 -- TABLE: guild_subscriptions
 -- Source of truth for guild premium status
 -- ============================================
-CREATE TABLE guild_subscriptions (
+CREATE TABLE IF NOT EXISTS guild_subscriptions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   guild_id TEXT NOT NULL,
   discord_user_id TEXT NOT NULL REFERENCES users(discord_user_id) ON DELETE CASCADE,
@@ -66,17 +67,17 @@ CREATE TABLE guild_subscriptions (
   )
 );
 
-CREATE INDEX idx_guild_subscriptions_guild ON guild_subscriptions(guild_id);
-CREATE INDEX idx_guild_subscriptions_user ON guild_subscriptions(discord_user_id);
-CREATE INDEX idx_guild_subscriptions_provider_sub ON guild_subscriptions(provider_subscription_id) WHERE provider_subscription_id IS NOT NULL;
-CREATE INDEX idx_guild_subscriptions_status ON guild_subscriptions(status);
-CREATE INDEX idx_guild_subscriptions_premium ON guild_subscriptions(premium_enabled, ends_at) WHERE premium_enabled = true;
+CREATE INDEX IF NOT EXISTS idx_guild_subscriptions_guild ON guild_subscriptions(guild_id);
+CREATE INDEX IF NOT EXISTS idx_guild_subscriptions_user ON guild_subscriptions(discord_user_id);
+CREATE INDEX IF NOT EXISTS idx_guild_subscriptions_provider_sub ON guild_subscriptions(provider_subscription_id) WHERE provider_subscription_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_guild_subscriptions_status ON guild_subscriptions(status);
+CREATE INDEX IF NOT EXISTS idx_guild_subscriptions_premium ON guild_subscriptions(premium_enabled, ends_at) WHERE premium_enabled = true;
 
 -- ============================================
 -- TABLE: purchases
 -- All purchase records (subscriptions, lifetime, donations)
 -- ============================================
-CREATE TABLE purchases (
+CREATE TABLE IF NOT EXISTS purchases (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Provider information
@@ -114,17 +115,17 @@ CREATE TABLE purchases (
   )
 );
 
-CREATE INDEX idx_purchases_user ON purchases(discord_user_id);
-CREATE INDEX idx_purchases_guild ON purchases(guild_id) WHERE guild_id IS NOT NULL;
-CREATE INDEX idx_purchases_provider_order ON purchases(provider, provider_order_id);
-CREATE INDEX idx_purchases_kind ON purchases(kind);
-CREATE INDEX idx_purchases_created ON purchases(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_purchases_user ON purchases(discord_user_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_guild ON purchases(guild_id) WHERE guild_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_purchases_provider_order ON purchases(provider, provider_order_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_kind ON purchases(kind);
+CREATE INDEX IF NOT EXISTS idx_purchases_created ON purchases(created_at DESC);
 
 -- ============================================
 -- TABLE: donations
 -- Dedicated table for donations (denormalized for analytics)
 -- ============================================
-CREATE TABLE donations (
+CREATE TABLE IF NOT EXISTS donations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Provider information
@@ -151,14 +152,14 @@ CREATE TABLE donations (
   CONSTRAINT unique_donation_order UNIQUE (provider, provider_order_id)
 );
 
-CREATE INDEX idx_donations_user ON donations(discord_user_id) WHERE discord_user_id IS NOT NULL;
-CREATE INDEX idx_donations_created ON donations(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_donations_user ON donations(discord_user_id) WHERE discord_user_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_donations_created ON donations(created_at DESC);
 
 -- ============================================
 -- TABLE: webhook_events
 -- Idempotency and audit trail for webhooks
 -- ============================================
-CREATE TABLE webhook_events (
+CREATE TABLE IF NOT EXISTS webhook_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Provider information
@@ -182,9 +183,9 @@ CREATE TABLE webhook_events (
   CONSTRAINT unique_provider_event UNIQUE (provider, event_id)
 );
 
-CREATE INDEX idx_webhook_events_processed ON webhook_events(processed, created_at);
-CREATE INDEX idx_webhook_events_event_name ON webhook_events(event_name);
-CREATE INDEX idx_webhook_events_hash ON webhook_events(event_hash);
+CREATE INDEX IF NOT EXISTS idx_webhook_events_processed ON webhook_events(processed, created_at);
+CREATE INDEX IF NOT EXISTS idx_webhook_events_event_name ON webhook_events(event_name);
+CREATE INDEX IF NOT EXISTS idx_webhook_events_hash ON webhook_events(event_hash);
 
 -- ============================================
 -- FUNCTIONS
@@ -252,11 +253,13 @@ $$ LANGUAGE plpgsql;
 -- TRIGGERS
 -- ============================================
 
+DROP TRIGGER IF EXISTS update_users_updated_at ON users;
 CREATE TRIGGER update_users_updated_at
   BEFORE UPDATE ON users
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_guild_subscriptions_updated_at ON guild_subscriptions;
 CREATE TRIGGER update_guild_subscriptions_updated_at
   BEFORE UPDATE ON guild_subscriptions
   FOR EACH ROW
@@ -267,7 +270,7 @@ CREATE TRIGGER update_guild_subscriptions_updated_at
 -- ============================================
 
 -- View: Active guild subscriptions with user info
-CREATE VIEW active_guild_subscriptions AS
+CREATE OR REPLACE VIEW active_guild_subscriptions AS
 SELECT 
   gs.*,
   u.username,
@@ -280,7 +283,7 @@ WHERE gs.premium_enabled = true
   AND (gs.ends_at IS NULL OR gs.ends_at > NOW());
 
 -- View: Revenue analytics
-CREATE VIEW revenue_summary AS
+CREATE OR REPLACE VIEW revenue_summary AS
 SELECT 
   DATE_TRUNC('day', created_at) as date,
   kind,
@@ -304,49 +307,58 @@ ALTER TABLE donations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE webhook_events ENABLE ROW LEVEL SECURITY;
 
 -- Users: Can read their own data
+DROP POLICY IF EXISTS "Users can read own data" ON users;
 CREATE POLICY "Users can read own data"
   ON users FOR SELECT
   USING (discord_user_id = (auth.jwt() -> 'user_metadata' ->> 'provider_id'));
 
 -- Users: Service role can manage all
+DROP POLICY IF EXISTS "Service role can manage users" ON users;
 CREATE POLICY "Service role can manage users"
   ON users FOR ALL
-  USING (auth.jwt() ->> 'role' = 'service_role');
+  USING (auth.role() = 'service_role');
 
 -- Guild subscriptions: Users can read their own
+DROP POLICY IF EXISTS "Users can read own subscriptions" ON guild_subscriptions;
 CREATE POLICY "Users can read own subscriptions"
   ON guild_subscriptions FOR SELECT
   USING (discord_user_id = (auth.jwt() -> 'user_metadata' ->> 'provider_id'));
 
 -- Guild subscriptions: Service role can manage all
+DROP POLICY IF EXISTS "Service role can manage subscriptions" ON guild_subscriptions;
 CREATE POLICY "Service role can manage subscriptions"
   ON guild_subscriptions FOR ALL
-  USING (auth.jwt() ->> 'role' = 'service_role');
+  USING (auth.role() = 'service_role');
 
 -- Purchases: Users can read their own
+DROP POLICY IF EXISTS "Users can read own purchases" ON purchases;
 CREATE POLICY "Users can read own purchases"
   ON purchases FOR SELECT
   USING (discord_user_id = (auth.jwt() -> 'user_metadata' ->> 'provider_id'));
 
 -- Purchases: Service role can manage all
+DROP POLICY IF EXISTS "Service role can manage purchases" ON purchases;
 CREATE POLICY "Service role can manage purchases"
   ON purchases FOR ALL
-  USING (auth.jwt() ->> 'role' = 'service_role');
+  USING (auth.role() = 'service_role');
 
 -- Donations: Users can read their own
+DROP POLICY IF EXISTS "Users can read own donations" ON donations;
 CREATE POLICY "Users can read own donations"
   ON donations FOR SELECT
   USING (discord_user_id = (auth.jwt() -> 'user_metadata' ->> 'provider_id') OR discord_user_id IS NULL);
 
 -- Donations: Service role can manage all
+DROP POLICY IF EXISTS "Service role can manage donations" ON donations;
 CREATE POLICY "Service role can manage donations"
   ON donations FOR ALL
-  USING (auth.jwt() ->> 'role' = 'service_role');
+  USING (auth.role() = 'service_role');
 
 -- Webhook events: Only service role
+DROP POLICY IF EXISTS "Service role can manage webhooks" ON webhook_events;
 CREATE POLICY "Service role can manage webhooks"
   ON webhook_events FOR ALL
-  USING (auth.jwt() ->> 'role' = 'service_role');
+  USING (auth.role() = 'service_role');
 
 -- ============================================
 -- COMMENTS
@@ -363,17 +375,4 @@ COMMENT ON COLUMN guild_subscriptions.cancel_at_period_end IS 'If true, subscrip
 COMMENT ON COLUMN guild_subscriptions.lifetime IS 'If true, this is a lifetime purchase with no expiration';
 COMMENT ON COLUMN webhook_events.event_hash IS 'SHA-256 hash of payload for duplicate detection';
 
--- ============================================
--- INITIAL DATA
--- ============================================
-
--- Insert a test webhook event to verify schema
-INSERT INTO webhook_events (provider, event_name, event_id, event_hash, raw_payload, processed)
-VALUES (
-  'lemon_squeezy',
-  'system.schema_created',
-  'schema-init-' || gen_random_uuid()::text,
-  generate_event_hash('{"event": "schema_created"}'::jsonb),
-  '{"event": "schema_created", "timestamp": "' || NOW()::text || '"}'::jsonb,
-  true
-);
+-- INITIAL DATA removed: test INSERT was non-idempotent and created duplicate rows on re-runs.

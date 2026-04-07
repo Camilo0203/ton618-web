@@ -51,7 +51,6 @@ export const config = {
   contactEmail: import.meta.env.VITE_CONTACT_EMAIL || '',
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL || '',
   supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-  stripePublishableKey: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '',
   billingBetaMode: parseBooleanEnv(import.meta.env.VITE_BILLING_BETA_MODE, false),
   siteUrl,
   dashboardInternalPath: '/dashboard',

@@ -4,6 +4,10 @@
 -- Created: 2026-04-06
 -- Purpose: Model 4 distinct monetization types with clear rules
 
+-- Ensure required extensions are available even if run standalone
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 -- ============================================
 -- 1. USERS TABLE
 -- ============================================

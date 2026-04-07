@@ -98,7 +98,12 @@ export function BillingCancelPage() {
           className="text-sm text-slate-400 mt-8"
         >
           Have questions?{' '}
-          <a href="#" className="text-indigo-400 hover:text-indigo-300 underline">
+          <a
+            href={import.meta.env.VITE_SUPPORT_SERVER_URL || 'https://discord.gg/ton618'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400 hover:text-indigo-300 underline"
+          >
             Contact support
           </a>
         </motion.p>

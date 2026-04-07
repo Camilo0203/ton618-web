@@ -2,7 +2,7 @@
 // Validates user permissions and creates checkout with custom data
 
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { corsHeaders, jsonResponse, errorResponse, handleError, requireEnv, getRequestBody, validateRequiredFields, isValidDiscordId } from '../_shared/utils.ts';
+import { corsHeaders, jsonResponse, errorResponse, handleError, requireEnv, getEnv, getRequestBody, validateRequiredFields, isValidDiscordId } from '../_shared/utils.ts';
 import { LemonSqueezyClient } from '../_shared/lemon.ts';
 import { createSupabaseClient, BillingDatabase } from '../_shared/database.ts';
 import { DiscordClient } from '../_shared/discord.ts';
@@ -175,12 +175,19 @@ Deno.serve(async (req: Request) => {
     }
 
     // Create checkout session
-    const testMode = requireEnv('LEMON_SQUEEZY_TEST_MODE') === 'true';
+    const testMode = getEnv('LEMON_SQUEEZY_TEST_MODE', 'false') === 'true';
     
     if (testMode) {
       console.warn('⚠️  Creating checkout in TEST MODE');
     }
     
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
+
+    // Build branded success/cancel URLs so users return to ton618.app after checkout
+    const siteUrl = getEnv('SITE_URL', 'https://ton618.app');
+    const successUrl = `${siteUrl}/billing/success?plan_key=${plan_key}${guild_id ? `&guild_id=${encodeURIComponent(guild_id)}` : ''}`;
+    const cancelUrl = `${siteUrl}/pricing`;
+
     const checkout = await lemonClient.createCheckout({
       storeId,
       variantId,
@@ -196,7 +203,10 @@ Deno.serve(async (req: Request) => {
       checkoutData: {
         email: user.email || undefined,
       },
+      expiresAt,
       testMode,
+      successUrl,
+      cancelUrl,
     });
 
     console.log('✅ Checkout created:', {

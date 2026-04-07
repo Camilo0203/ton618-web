@@ -1,8 +1,10 @@
-MAIN=scripts/validate-env.mjs
+MAIN=package.json
 MEMORY=512
 VERSION=recommended
-DISPLAY_NAME=TON618 Legal Site
-DESCRIPTION=Public legal website and landing page for TON618.
-SUBDOMAIN=ton618
+DISPLAY_NAME=TON618 Web Dashboard
+DESCRIPTION=Landing page, dashboard, and billing portal for TON618 Discord bot
+SUBDOMAIN=ton618-web
 START=npm run start:squarecloud
 AUTORESTART=true
+PORT=80
+HEALTHCHECK_PATH=/

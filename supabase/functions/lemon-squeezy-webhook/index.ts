@@ -1,3 +1,9 @@
+// DEPRECATED: This handler targets the legacy schema (tables: subscriptions, guild_premium).
+// The canonical webhook handler is billing-webhook/index.ts which uses the current schema.
+// This file is kept for reference only. If this function is still deployed in Supabase,
+// REMOVE it from the Supabase Functions dashboard to avoid double-processing events.
+// See: supabase/functions/billing-webhook/index.ts
+
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { verifyWebhookSignature, getSupabaseClient, WebhookEvent, getPlanTier, calculateExpiresAt } from '../_shared/lemon-squeezy.ts';
 
@@ -6,18 +12,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-signature',
 };
 
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
-  }
+serve(async (_req: Request) => {
+  console.error('[lemon-squeezy-webhook] DEPRECATED handler invoked. Deploy billing-webhook instead and remove this function from Supabase.');
+  return new Response(
+    JSON.stringify({ error: 'This endpoint is deprecated. Use billing-webhook.' }),
+    { status: 410, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
 
+  // Dead code below — preserved for schema reference only.
   try {
     const webhookSecret = Deno.env.get('LEMON_SQUEEZY_WEBHOOK_SECRET');
     if (!webhookSecret) {
       throw new Error('LEMON_SQUEEZY_WEBHOOK_SECRET not configured');
     }
 
-    const signature = req.headers.get('x-signature');
+    const signature = _req.headers.get('x-signature');
     if (!signature) {
       return new Response(JSON.stringify({ error: 'Missing signature' }), {
         status: 401,

@@ -5,6 +5,22 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { corsHeaders, jsonResponse, errorResponse, handleError, requireEnv, isValidDiscordId } from '../_shared/utils.ts';
 import { createSupabaseClient, BillingDatabase } from '../_shared/database.ts';
 
+async function timingSafeEquals(a: string, b: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const aBytes = encoder.encode(a);
+  const bBytes = encoder.encode(b);
+  if (aBytes.length !== bBytes.length) {
+    let dummy = 0;
+    for (let i = 0; i < aBytes.length; i++) dummy |= aBytes[i];
+    return false;
+  }
+  let result = 0;
+  for (let i = 0; i < aBytes.length; i++) {
+    result |= aBytes[i] ^ bBytes[i];
+  }
+  return result === 0;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -19,7 +35,7 @@ Deno.serve(async (req: Request) => {
     const apiKey = req.headers.get('X-Bot-Api-Key');
     const expectedApiKey = requireEnv('BOT_API_KEY');
     
-    if (!apiKey || apiKey !== expectedApiKey) {
+    if (!apiKey || !(await timingSafeEquals(apiKey, expectedApiKey))) {
       return errorResponse('Unauthorized: Invalid or missing API key', 401);
     }
 

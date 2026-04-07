@@ -59,12 +59,34 @@ for (const key of requiredKeys) {
   }
 }
 
+// Validate VITE_DISCORD_CLIENT_ID format (Discord snowflake: 17-19 digits)
+if (env.VITE_DISCORD_CLIENT_ID) {
+  const clientId = String(env.VITE_DISCORD_CLIENT_ID).trim();
+  if (!/^\d{17,19}$/.test(clientId)) {
+    errors.push('VITE_DISCORD_CLIENT_ID must be a 17-19 digit Discord application ID (snowflake).');
+  }
+}
+
+// Validate VITE_SUPABASE_ANON_KEY format (JWT starting with eyJ)
+if (env.VITE_SUPABASE_ANON_KEY) {
+  const anonKey = String(env.VITE_SUPABASE_ANON_KEY).trim();
+  if (!anonKey.startsWith('eyJ') || anonKey.length < 100) {
+    errors.push('VITE_SUPABASE_ANON_KEY must be a valid Supabase JWT (starts with eyJ, ≥100 chars).');
+  }
+}
+
 if (env.VITE_SUPABASE_URL && !/^https:\/\/.+/i.test(env.VITE_SUPABASE_URL)) {
   errors.push('VITE_SUPABASE_URL must be an https URL.');
+}
+if (env.VITE_SUPABASE_URL && !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(env.VITE_SUPABASE_URL)) {
+  warnings.push('VITE_SUPABASE_URL does not match standard Supabase project URL pattern (https://<project>.supabase.co).');
 }
 
 if (env.VITE_SITE_URL && !/^https?:\/\/.+/i.test(env.VITE_SITE_URL)) {
   errors.push('VITE_SITE_URL must be an absolute URL.');
+}
+if (mode === 'production' && env.VITE_SITE_URL && !/^https:\/\//i.test(env.VITE_SITE_URL)) {
+  errors.push('VITE_SITE_URL must use https in production mode (not http).');
 }
 
 if (String(env.VITE_DASHBOARD_URL || '').trim() && !/^https?:\/\/.+/i.test(env.VITE_DASHBOARD_URL)) {
@@ -103,6 +125,8 @@ if (!String(env.VITE_CONTACT_EMAIL || '').trim()) {
 } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(env.VITE_CONTACT_EMAIL).trim())) {
   errors.push('VITE_CONTACT_EMAIL must be a valid email address.');
 }
+
+const billingBetaMode = parseBooleanEnv(env.VITE_BILLING_BETA_MODE);
 
 if (billingBetaMode === false) {
   warnings.push('VITE_BILLING_BETA_MODE is false. Self-serve billing will stay broadly available only if allowlist enforcement is disabled server-side.');

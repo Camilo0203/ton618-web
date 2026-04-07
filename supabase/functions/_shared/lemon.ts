@@ -22,6 +22,8 @@ export interface LemonSqueezyCheckoutData {
   };
   expiresAt?: string;
   testMode?: boolean;
+  successUrl?: string;
+  cancelUrl?: string;
 }
 
 export interface LemonSqueezyCheckoutResponse {
@@ -112,6 +114,9 @@ export class LemonSqueezyClient {
             checkout_data: data.checkoutData,
             expires_at: data.expiresAt,
             test_mode: data.testMode,
+            product_options: {
+              ...(data.successUrl ? { redirect_url: data.successUrl } : {}),
+            },
           },
           relationships: {
             store: {

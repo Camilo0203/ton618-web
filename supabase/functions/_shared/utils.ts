@@ -132,12 +132,19 @@ export function handleError(error: unknown): Response {
 }
 
 export function logRequest(request: Request, extra?: Record<string, unknown>): void {
-  console.log({
+  const REDACTED = '[REDACTED]';
+  const SENSITIVE_HEADERS = new Set(['authorization', 'x-bot-api-key', 'cookie', 'x-api-key']);
+  const headers = Object.fromEntries(
+    [...request.headers.entries()].map(([k, v]) =>
+      [k, SENSITIVE_HEADERS.has(k.toLowerCase()) ? REDACTED : v]
+    )
+  );
+  console.log(JSON.stringify({
     method: request.method,
     url: request.url,
-    headers: Object.fromEntries(request.headers.entries()),
+    headers,
     ...extra,
-  });
+  }));
 }
 
 export function generateRandomState(length = 32): string {

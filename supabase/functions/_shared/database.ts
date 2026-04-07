@@ -138,6 +138,29 @@ export class BillingDatabase {
   // ============================================
 
   async createGuildSubscription(subscription: Partial<GuildSubscription>): Promise<GuildSubscription> {
+    // Subscriptions: upsert by provider_subscription_id (requires the partial unique index
+    // idx_guild_subscriptions_unique_provider_sub_dedup added in 20260407000000).
+    if (subscription.billing_type === 'subscription' && subscription.provider_subscription_id) {
+      const { data, error } = await this.supabase
+        .from('guild_subscriptions')
+        .upsert(subscription, { onConflict: 'provider_subscription_id' })
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    }
+
+    // Lifetime: skip if an active lifetime already exists for this guild
+    if (subscription.billing_type === 'one_time' && subscription.guild_id) {
+      const existing = await this.getActiveGuildSubscription(subscription.guild_id);
+      if (existing?.lifetime) {
+        console.warn(
+          `[billing] Duplicate lifetime subscription for guild ${subscription.guild_id} — skipping insert`
+        );
+        return existing;
+      }
+    }
+
     const { data, error } = await this.supabase
       .from('guild_subscriptions')
       .insert(subscription)
@@ -183,7 +206,7 @@ export class BillingDatabase {
       .select('*')
       .eq('guild_id', guildId)
       .eq('premium_enabled', true)
-      .in('status', ['active', 'cancelled'])
+      .in('status', ['active', 'cancelled', 'past_due'])
       .order('created_at', { ascending: false });
 
     if (error) throw error;
