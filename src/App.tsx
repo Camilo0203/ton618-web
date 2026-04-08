@@ -8,8 +8,7 @@ import RouteScrollManager from './components/RouteScrollManager';
 import LandingPage from './pages/LandingPage';
 import { LEGAL_DOCUMENT_TYPES } from './lib/legalDocuments';
 
-const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
-const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
+const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const PricingPage = lazy(() => import('./billing/pages/PricingPage'));
@@ -73,8 +72,10 @@ export default function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          {/* Dashboard routes disabled publicly - Coming Soon page */}
+          <Route path="/dashboard" element={<ComingSoonPage />} />
+          {/* Dashboard auth callback disabled - Pricing uses Supabase Auth with direct redirect to /pricing */}
+          <Route path="/auth/callback" element={<ComingSoonPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>

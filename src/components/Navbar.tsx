@@ -3,7 +3,7 @@ import { Menu, X, ChevronRight, ExternalLink, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { config, getDiscordInviteUrl, getPublicDashboardUrl } from '../config';
+import { config, getDiscordInviteUrl } from '../config';
 import LanguageSelector from './LanguageSelector';
 import Logo from './Logo';
 import { instantTransition, motionDurations, motionEase } from '../lib/motion';
@@ -15,8 +15,6 @@ function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const inviteUrl = getDiscordInviteUrl();
   const canInvite = Boolean(inviteUrl);
-  const dashboardHref = getPublicDashboardUrl();
-  const dashboardIsInternal = dashboardHref?.startsWith('/') ?? false;
 
   const navbarClassName = useMemo(
     () =>
@@ -88,59 +86,6 @@ function Navbar() {
     );
   }
 
-  function renderDesktopDashboardButton() {
-    if (!dashboardHref) {
-      return null;
-    }
-
-    const className = 'btn-premium-outline !px-5 !py-3 !text-[10px] !rounded-xl';
-
-    if (dashboardIsInternal) {
-      return (
-        <Link to={dashboardHref} className={className}>
-          <span>Dashboard</span>
-        </Link>
-      );
-    }
-
-    return (
-      <a href={dashboardHref} target="_blank" rel="noopener noreferrer" className={className}>
-        <span>Dashboard</span>
-      </a>
-    );
-  }
-
-  function renderMobileDashboardLink() {
-    if (!dashboardHref) {
-      return null;
-    }
-
-    const className =
-      'inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition-[background-color,border-color,color] duration-200 hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80';
-
-    if (dashboardIsInternal) {
-      return (
-        <Link to={dashboardHref} onClick={() => setMobileMenuOpen(false)} className={className}>
-          <span>Dashboard</span>
-          <ChevronRight className="h-4 w-4" />
-        </Link>
-      );
-    }
-
-    return (
-      <a
-        href={dashboardHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => setMobileMenuOpen(false)}
-        className={className}
-      >
-        <span>Dashboard</span>
-        <ExternalLink className="h-4 w-4" />
-      </a>
-    );
-  }
-
   return (
     <nav className={`fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -179,8 +124,6 @@ function Navbar() {
             ) : null}
 
             <LanguageSelector mode="desktop" />
-
-            {renderDesktopDashboardButton()}
 
             {canInvite ? (
               <a href={inviteUrl} className="btn-premium-primary !px-5 !py-3 !text-[10px] !rounded-xl">
@@ -259,8 +202,6 @@ function Navbar() {
                     ))}
                   </div>
                 ) : null}
-
-                {renderMobileDashboardLink()}
 
                 <div className="grid gap-3 border-t border-white/8 pt-4">
                   {canInvite ? (

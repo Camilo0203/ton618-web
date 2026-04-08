@@ -9,6 +9,7 @@ import ScrollProgress from '../components/ScrollProgress';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import LazyViewportSection from '../components/LazyViewportSection';
 import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../config';
+import { getLowestPrice, getHighestPrice } from '../config/pricing';
 
 const Features = lazy(() => import('../components/Features'));
 const VisualExperience = lazy(() => import('../components/VisualExperience'));
@@ -56,8 +57,8 @@ export default function LandingPage() {
         offers: {
           '@type': 'AggregateOffer',
           priceCurrency: 'USD',
-          lowPrice: '9',
-          highPrice: '84',
+          lowPrice: String(getLowestPrice()),
+          highPrice: String(getHighestPrice()),
           offerCount: '2',
         },
       },
