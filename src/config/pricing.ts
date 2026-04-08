@@ -10,7 +10,10 @@ export const PRICING_CONFIG = {
       monthly: { amount: 0, display: '$0' },
       yearly: { amount: 0, display: '$0' },
     },
-    period: { en: '/mo', es: '/mes' },
+    period: {
+      monthly: { en: '/mo', es: '/mes' },
+      yearly: { en: '/mo', es: '/mes' },
+    },
     features: {
       en: [
         'Basic setup essentials',
@@ -40,7 +43,17 @@ export const PRICING_CONFIG = {
       monthly: { amount: 9, display: '$9' },
       yearly: { amount: 84, display: '$84' },
     },
-    period: { en: '/mo', es: '/mes' },
+    period: {
+      monthly: { en: '/mo', es: '/mes' },
+      yearly: { en: '/year', es: '/año' },
+    },
+    billingCycle: {
+      monthly: { en: 'billed monthly', es: 'facturado mensual' },
+      yearly: { en: 'billed annually', es: 'facturado anual' },
+    },
+    effectiveMonthly: {
+      yearly: { amount: 7, display: '$7' },
+    },
     yearlyDiscount: { en: 'Save 20%', es: 'Ahorra 20%' },
     features: {
       en: [
@@ -74,7 +87,10 @@ export const PRICING_CONFIG = {
       monthly: { amount: null, display: 'Custom' },
       yearly: { amount: null, display: 'Custom' },
     },
-    period: { en: '', es: '' },
+    period: {
+      monthly: { en: '', es: '' },
+      yearly: { en: '', es: '' },
+    },
     features: {
       en: [
         'Everything in Pro',
@@ -109,10 +125,16 @@ export function getPlanPriceDisplay(planKey: PricingPlanKey, cycle: BillingCycle
   return PRICING_CONFIG[planKey].price[cycle].display;
 }
 
+export function getPlanPeriod(planKey: PricingPlanKey, cycle: BillingCycle, lang: 'en' | 'es'): string {
+  const planConfig = PRICING_CONFIG[planKey];
+  if ('period' in planConfig && typeof planConfig.period === 'object' && cycle in planConfig.period) {
+    return (planConfig.period as any)[cycle][lang];
+  }
+  return '';
+}
+
 export function getLowestPrice(): number {
-  const yearlyTotal = PRICING_CONFIG.pro.price.yearly.amount;
-  const yearlyMonthly = yearlyTotal / 12;
-  return Math.floor(yearlyMonthly);
+  return PRICING_CONFIG.pro.price.monthly.amount;
 }
 
 export function getHighestPrice(): number {

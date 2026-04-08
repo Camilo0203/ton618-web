@@ -8,7 +8,7 @@ import { TrustSignals } from '../components/TrustSignals';
 import { FAQSection } from '../components/FAQSection';
 import { useBillingGuilds } from '../hooks/useBillingGuilds';
 import { createBillingCheckout, signInWithDiscord, getCurrentSession } from '../api';
-import { PRICING_CONFIG, type BillingCycle, type PricingPlanKey } from '../../config/pricing';
+import { PRICING_CONFIG, getPlanPeriod, type BillingCycle, type PricingPlanKey } from '../../config/pricing';
 import { config, getDiscordInviteUrl } from '../../config';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -318,7 +318,15 @@ export default function PricingPage() {
                   const cta = planConfig.cta[lang];
                   const popular = planConfig.popular ? planConfig.popularLabel?.[lang] : null;
                   const priceDisplay = planConfig.price[cycle].display;
-                  const period = planConfig.period[lang];
+                  const period = getPlanPeriod(planKey, cycle, lang);
+                  
+                  const isYearly = cycle === 'yearly' && isPro;
+                  const billingCycleText = isYearly && 'billingCycle' in planConfig 
+                    ? (planConfig.billingCycle as any)[cycle][lang] 
+                    : null;
+                  const effectiveMonthlyDisplay = isYearly && 'effectiveMonthly' in planConfig
+                    ? (planConfig.effectiveMonthly as any).yearly.display
+                    : null;
 
                   return (
                     <motion.div
@@ -353,8 +361,16 @@ export default function PricingPage() {
                         <div className="mb-6">
                           <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-bold text-white">{priceDisplay}</span>
-                            {period && <span className="text-slate-400">/{period}</span>}
+                            {period && <span className="text-slate-400">{period}</span>}
                           </div>
+                          {billingCycleText && (
+                            <p className="mt-2 text-xs text-slate-400">{billingCycleText}</p>
+                          )}
+                          {effectiveMonthlyDisplay && (
+                            <p className="mt-1 text-xs font-medium text-emerald-400">
+                              {effectiveMonthlyDisplay}/mo {isEnglish ? 'effective' : 'efectivo'}
+                            </p>
+                          )}
                         </div>
 
                         <ul className="mt-6 space-y-3 mb-8">

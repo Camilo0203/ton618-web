@@ -4,7 +4,7 @@ import { CreditCard, Check, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { config, getDiscordInviteUrl } from '../config';
-import { PRICING_CONFIG, type BillingCycle, type PricingPlanKey } from '../config/pricing';
+import { PRICING_CONFIG, getPlanPeriod, type BillingCycle, type PricingPlanKey } from '../config/pricing';
 import { cardStagger, instantReveal, motionStagger, motionViewport, revealUp, sectionIntro, withDelay, withDuration } from '../lib/motion';
 
 const planKeys: PricingPlanKey[] = ['free', 'pro', 'enterprise'];
@@ -113,7 +113,15 @@ export default function Pricing() {
             const cta = planConfig.cta[lang];
             const popular = planConfig.popular ? planConfig.popularLabel?.[lang] : null;
             const priceDisplay = planConfig.price[cycle].display;
-            const period = planConfig.period[lang];
+            const period = getPlanPeriod(planKey, cycle, lang);
+            
+            const isYearly = cycle === 'yearly' && isPro;
+            const billingCycleText = isYearly && 'billingCycle' in planConfig 
+              ? (planConfig.billingCycle as any)[cycle][lang] 
+              : null;
+            const effectiveMonthlyDisplay = isYearly && 'effectiveMonthly' in planConfig
+              ? (planConfig.effectiveMonthly as any).yearly.display
+              : null;
 
             const ctaElement = (() => {
               if (planConfig.ctaType === 'invite') {
@@ -171,8 +179,18 @@ export default function Pricing() {
                 </div>
 
                 <div className="mb-8">
-                  <span className="text-5xl font-black tabular-nums text-white">{priceDisplay}</span>
-                  {period && <span className="ml-1 text-sm font-semibold text-slate-500">{period}</span>}
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-black tabular-nums text-white">{priceDisplay}</span>
+                    {period && <span className="text-sm font-semibold text-slate-500">{period}</span>}
+                  </div>
+                  {billingCycleText && (
+                    <p className="mt-2 text-xs text-slate-400">{billingCycleText}</p>
+                  )}
+                  {effectiveMonthlyDisplay && (
+                    <p className="mt-1 text-xs font-medium text-emerald-400">
+                      {effectiveMonthlyDisplay}/mo {isEnglish ? 'effective' : 'efectivo'}
+                    </p>
+                  )}
                 </div>
 
                 <ul className="mb-8 flex-1 space-y-3">
