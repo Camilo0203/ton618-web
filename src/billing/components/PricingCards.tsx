@@ -45,13 +45,13 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
       iconColor: 'text-purple-400',
       name: t('pricing.plans.yearly.name'),
       description: t('pricing.plans.yearly.description'),
-      price: '$99.99',
+      price: '$89.99',
       interval: t('pricing.plans.yearly.interval'),
       planType: 'Subscription',
       billingCycle: 'Yearly',
       cancelable: true,
       requiresGuild: true,
-      savings: t('pricing.plans.yearly.savings'),
+      savings: 'Save 25% · BEST VALUE',
       features: [
         'Everything in Monthly',
         'Save $20 per year',
@@ -64,7 +64,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
       ],
       cta: t('pricing.plans.yearly.cta'),
       highlighted: true,
-      badge: t('pricing.plans.yearly.badge'),
+      badge: 'Save 25% · BEST VALUE',
     },
     {
       key: 'lifetime' as PlanKey,
@@ -91,7 +91,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
       ],
       cta: t('pricing.plans.lifetime.cta'),
       highlighted: false,
-      badge: t('pricing.plans.lifetime.badge'),
+      badge: 'Launch Offer',
     },
   ];
 
@@ -192,6 +192,9 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
                   </div>
                   {plan.savings && (
                     <p className="mt-1 text-sm font-medium text-green-400">{plan.savings}</p>
+                  )}
+                  {plan.key === 'lifetime' && (
+                    <p className="mt-2 text-xs text-amber-400">⏳ Launch price — may increase as we grow</p>
                   )}
                 </div>
 

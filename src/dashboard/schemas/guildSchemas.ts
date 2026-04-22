@@ -29,7 +29,7 @@ export const dashboardGuildSchema = z.object({
 export const guildBillingEntitlementSchema = z.object({
   guildId: z.string().min(1),
   effectivePlan: z.enum(['free', 'pro', 'enterprise']),
-  planSource: z.enum(['free', 'lemon_squeezy', 'override']),
+  planSource: z.enum(['free', 'stripe', 'override']),
   subscriptionStatus: z.string().nullable(),
   billingInterval: z.enum(['month', 'year']).nullable(),
   currentPeriodEnd: z.string().nullable(),

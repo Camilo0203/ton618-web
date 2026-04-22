@@ -16,7 +16,7 @@ Detener nuevas compras sin borrar historial, conservar auditoria y volver a un e
 ## Pasos inmediatos
 
 1. Desactivar el CTA comercial publico o redirigirlo temporalmente al soporte.
-2. Pausar temporalmente el webhook en Lemon Squeezy si es necesario.
+2. Pausar temporalmente el webhook en Stripe si es necesario.
 3. Verificar que no existan campañas, anuncios o enlaces externos apuntando directo al checkout.
 4. Confirmar si el problema es solo UI, solo webhook o proyeccion bot/dashboard.
 
@@ -43,7 +43,7 @@ Detener nuevas compras sin borrar historial, conservar auditoria y volver a un e
 
 Antes de volver a abrir checkout:
 
-1. Reprocesar el flujo completo en Lemon Squeezy test mode.
+1. Reprocesar el flujo completo en Stripe test mode.
 2. Validar `guild_subscriptions` y proyeccion al bot via `billing-guild-status`.
 3. Revisar el runbook `runbook-payment-activated-but-pro-missing.md`.
 4. Rehabilitar CTA publico de forma gradual.

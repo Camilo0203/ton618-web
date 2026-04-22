@@ -16,6 +16,7 @@ export interface GuildSubscription {
   guild_id: string;
   discord_user_id: string;
   provider: string;
+  provider_order_id: string | null;
   provider_customer_id: string | null;
   provider_subscription_id: string | null;
   plan_key: string;
@@ -26,6 +27,7 @@ export interface GuildSubscription {
   renews_at: string | null;
   ends_at: string | null;
   lifetime: boolean;
+  is_founding_member: boolean;
   created_at: string;
   updated_at: string;
 }

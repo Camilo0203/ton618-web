@@ -1,12 +1,50 @@
-// Create Lemon Squeezy Checkout Session
-// Validates user permissions and creates checkout with custom data
-
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { corsHeaders, jsonResponse, errorResponse, handleError, requireEnv, getEnv, getRequestBody, validateRequiredFields, isValidDiscordId } from '../_shared/utils.ts';
-import { LemonSqueezyClient } from '../_shared/lemon.ts';
 import { createSupabaseClient, BillingDatabase } from '../_shared/database.ts';
 import { DiscordClient } from '../_shared/discord.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+
+interface StripeCheckoutSessionResponse {
+  id: string;
+  url: string;
+}
+
+async function createStripeCheckoutSession(
+  secretKey: string,
+  params: URLSearchParams
+): Promise<StripeCheckoutSessionResponse> {
+  const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${secretKey}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params,
+  });
+
+  const payload = await response.json();
+  if (!response.ok) {
+    const errorMessage = payload?.error?.message || 'Failed to create Stripe Checkout Session';
+    throw new Error(errorMessage);
+  }
+
+  return payload as StripeCheckoutSessionResponse;
+}
+
+async function getFoundingSpotsRemaining(db: BillingDatabase): Promise<number> {
+  const supabase = createSupabaseClient();
+  const { count, error } = await supabase
+    .from('guild_subscriptions')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_founding_member', true);
+
+  if (error) {
+    throw error;
+  }
+
+  const used = count ?? 0;
+  return Math.max(0, 50 - used);
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
@@ -51,10 +89,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Parse request body
-    const body = await getRequestBody<{
-      guild_id?: string;
-      plan_key: string;
-    }>(req);
+    const body = await getRequestBody<{ guild_id?: string; plan_key: string; user_id?: string }>(req);
 
     validateRequiredFields(body, ['plan_key']);
 
@@ -144,86 +179,53 @@ Deno.serve(async (req: Request) => {
       return errorResponse('guild_id should not be provided for donations', 400);
     }
 
-    // Get Lemon Squeezy configuration
-    const lemonApiKey = requireEnv('LEMON_SQUEEZY_API_KEY');
-    const storeId = requireEnv('LEMON_SQUEEZY_STORE_ID');
-    
-    // Get variant ID for plan
-    const variantMap: Record<string, string> = {
-      pro_monthly: requireEnv('LEMON_SQUEEZY_VARIANT_PRO_MONTHLY'),
-      pro_yearly: requireEnv('LEMON_SQUEEZY_VARIANT_PRO_YEARLY'),
-      lifetime: requireEnv('LEMON_SQUEEZY_VARIANT_LIFETIME'),
-      donate: requireEnv('LEMON_SQUEEZY_VARIANT_DONATE'),
+    const stripeSecretKey = requireEnv('STRIPE_SECRET_KEY');
+    const priceMap: Record<string, string> = {
+      pro_monthly: requireEnv('STRIPE_PRICE_PRO_MONTHLY'),
+      pro_yearly: requireEnv('STRIPE_PRICE_PRO_YEARLY'),
+      lifetime: requireEnv('STRIPE_PRICE_LIFETIME'),
+      donate: requireEnv('STRIPE_PRICE_DONATE'),
     };
 
-    const variantId = variantMap[plan_key];
-    if (!variantId) {
-      return errorResponse('Variant ID not configured for this plan', 500);
+    const priceId = priceMap[plan_key];
+    if (!priceId) {
+      return errorResponse('Stripe price not configured for this plan', 500);
     }
 
-    // Create Lemon Squeezy client
-    const lemonClient = new LemonSqueezyClient(lemonApiKey);
-
-    // Prepare custom data
-    const customData: Record<string, string> = {
-      discord_user_id: discordUserId,
-      plan_key: plan_key,
-    };
-
-    if (guild_id) {
-      customData.guild_id = guild_id;
-    }
-
-    // Create checkout session
-    const testMode = getEnv('LEMON_SQUEEZY_TEST_MODE', 'false') === 'true';
-    
-    if (testMode) {
-      console.warn('⚠️  Creating checkout in TEST MODE');
-    }
-    
-    const expiresAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
-
-    // Build branded success/cancel URLs so users return to ton618.app after checkout
     const siteUrl = getEnv('SITE_URL', 'https://ton618.app');
-    const successUrl = `${siteUrl}/billing/success?plan_key=${plan_key}${guild_id ? `&guild_id=${encodeURIComponent(guild_id)}` : ''}`;
-    const cancelUrl = `${siteUrl}/pricing`;
+    const successUrl = `${siteUrl}/billing/success?plan_key=${encodeURIComponent(plan_key)}${guild_id ? `&guild_id=${encodeURIComponent(guild_id)}` : ''}`;
+    const cancelUrl = `${siteUrl}/billing/cancel`;
 
-    const checkout = await lemonClient.createCheckout({
-      storeId,
-      variantId,
-      customData,
-      checkoutOptions: {
-        embed: false,
-        media: true,
-        logo: true,
-        desc: true,
-        discount: true,
-        dark: false,
-      },
-      checkoutData: {
-        email: user.email || undefined,
-      },
-      expiresAt,
-      testMode,
-      successUrl,
-      cancelUrl,
-    });
+    const mode = plan_key === 'pro_monthly' || plan_key === 'pro_yearly' ? 'subscription' : 'payment';
+    const params = new URLSearchParams();
+    params.set('mode', mode);
+    params.set('success_url', successUrl);
+    params.set('cancel_url', cancelUrl);
+    params.set('line_items[0][price]', priceId);
+    params.set('line_items[0][quantity]', '1');
+    params.set('metadata[guild_id]', guild_id || '');
+    params.set('metadata[user_id]', body.user_id || discordUserId);
+    params.set('metadata[discord_user_id]', discordUserId);
+    params.set('metadata[plan_key]', plan_key);
+    if (user.email) {
+      params.set('customer_email', user.email);
+    }
 
-    console.log('✅ Checkout created:', {
-      checkout_id: checkout.data.id,
-      plan_key,
-      guild_id: guild_id || null,
-      discord_user_id: discordUserId,
-      variant_id: variantId,
-      test_mode: testMode,
-      user_email: user.email || 'none',
-    });
+    if (plan_key !== 'donate') {
+      const adminSupabase = createSupabaseClient();
+      const db = new BillingDatabase(adminSupabase);
+      const foundingSpotsRemaining = await getFoundingSpotsRemaining(db);
+      const foundingCoupon = getEnv('STRIPE_FOUNDING_COUPON_ID', '').trim();
+      if (foundingSpotsRemaining > 0 && foundingCoupon) {
+        params.set('discounts[0][coupon]', foundingCoupon);
+        params.set('metadata[founding_member_eligible]', 'true');
+      }
+    }
+
+    const checkout = await createStripeCheckoutSession(stripeSecretKey, params);
 
     return jsonResponse({
-      checkout_url: checkout.data.attributes.url,
-      checkout_id: checkout.data.id,
-      plan_key,
-      guild_id: guild_id || null,
+      checkout_url: checkout.url,
     });
 
   } catch (error) {

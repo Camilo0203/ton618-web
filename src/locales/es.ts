@@ -192,7 +192,7 @@ export const es = {
         integrations: { tag: 'Ecosistema Técnico', title: 'Construido Con', titleAccent: 'Tecnología Premium', description: 'TON618 se integra con las mejores herramientas del ecosistema para ofrecer rendimiento, seguridad y escalabilidad.', items: { discord: { name: 'Discord API', desc: 'Integración nativa con la API oficial' }, supabase: { name: 'Supabase', desc: 'Base de datos y autenticación en tiempo real' }, nodejs: { name: 'Node.js', desc: 'Runtime de alto rendimiento' }, typescript: { name: 'TypeScript', desc: 'Tipado estricto para estabilidad' }, react: { name: 'React', desc: 'Sitio público y superficies de soporte' }, tailwind: { name: 'Tailwind CSS', desc: 'UI premium y consistente' } } },
         faq: { tag: 'Preguntas Frecuentes', title: 'Respuestas Utiles', titleAccent: 'Antes Del Launch', items: { q1: { question: '¿Cómo empiezo con TON618?', answer: 'Invita el bot, elige el idioma del servidor, ejecuta /setup y activa /ticket y /verify cuando la base ya esté lista.' }, q2: { question: '¿TON618 soporta English y Español?', answer: 'Sí. TON618 soporta English y Español hoy, el idioma se define por servidor durante el onboarding y los admins pueden cambiarlo después con /setup language.' }, q3: { question: '¿Necesito dashboard para usar TON618?', answer: 'No. El flujo actual es command-first dentro de Discord. Docs y soporte ayudan durante el rollout, pero no son superficies obligatorias para operar el bot.' }, q4: { question: '¿Qué usa el staff después del setup?', answer: 'El trabajo diario se mueve con /staff. Para visibilidad y control profundo el equipo usa /stats, /config center, /audit y /debug.' }, q5: { question: '¿Puedo migrar desde otro bot de forma gradual?', answer: 'Sí. Puedes preparar setup, tickets o verificación por fases y retirar otras herramientas solo cuando tu servidor ya esté listo.' }, q6: { question: '¿Dónde encuentro ayuda o información de confianza?', answer: 'El sitio mantiene docs, soporte, status y páginas legales públicas para que el equipo sepa a dónde ir durante el rollout o ante un incidente.' } } },
         notifications: { dismiss: 'Cerrar notificaciones', events: { e1: '🛡️ AutoMod bloqueó spam en #general', e2: '✅ Nuevo miembro verificado exitosamente', e3: '📊 Reporte diario generado', e4: '🎫 Ticket #847 resuelto por staff', e5: '⚡ Flujo de bienvenida ejecutado', e6: '🔒 Permisos actualizados en #admin', e7: '📈 Pico de actividad detectado', e8: '🤖 Comando /config ejecutado' } },
-        pricing: { tag: 'Planes Y Precios', eyebrow: 'Precios simples', headline: 'Tres formas de operar', title: 'Elige Tu', titleAccent: 'Plan Ideal', description: 'Desde comunidades que empiezan hasta servidores enterprise con miles de miembros.', toggle: { monthly: 'Mensual', yearly: 'Anual' }, yearlyDiscount: 'Ahorra 20%', free: { name: 'Gratis', description: 'Instala la base' }, pro: { name: 'Pro', badge: 'Popular', description: 'Para operar en serio', cta: 'Ver planes' }, enterprise: { name: 'Enterprise', description: 'Rollout guiado' }, plans: { free: { name: 'Free', price: { monthly: '$0', yearly: '$0' }, period: '/mes', desc: 'Para servidores que empiezan.', cta: 'Empezar gratis', features: ['Moderación básica', 'Hasta 3 flujos', 'Verificación simple', 'Soporte comunidad'] }, pro: { name: 'Pro', price: { monthly: '$9', yearly: '$7' }, period: '/mes', desc: 'Para equipos que necesitan más.', cta: 'Actualizar a Pro', popular: 'Más popular', features: ['Todo en Free', 'Flujos ilimitados', 'Analítica en vivo', 'Sistema de tickets', 'Herramientas extra de setup', 'Soporte prioritario'] }, enterprise: { name: 'Enterprise', price: { monthly: '$29', yearly: '$23' }, period: '/mes', desc: 'Para servidores a gran escala.', cta: 'Contactar ventas', features: ['Todo en Pro', 'API dedicada', 'SLA garantizado', 'Onboarding guiado', 'Multi-servidor', 'Soporte 24/7'] } } },
+        pricing: { tag: 'Planes Y Precios', eyebrow: 'Precios simples', headline: 'Tres formas de operar', title: 'Elige Tu', titleAccent: 'Plan Ideal', description: 'Desde comunidades que empiezan hasta servidores enterprise con miles de miembros.', toggle: { monthly: 'Mensual', yearly: 'Anual' }, yearlyDiscount: 'Ahorra 25% · MEJOR VALOR', free: { name: 'Gratis', description: 'Instala la base' }, pro: { name: 'Pro', badge: 'Popular', description: 'Para operar en serio', cta: 'Ver planes' }, enterprise: { name: 'Enterprise', description: 'Rollout guiado' }, plans: { free: { name: 'Free', price: { monthly: '$0', yearly: '$0' }, period: '/mes', desc: 'Para servidores que empiezan.', cta: 'Empezar gratis', features: ['Comandos personalizados: 5', 'Auto-roles: 3', 'Plantillas de bienvenida: 1', 'Moderacion avanzada: ❌', 'Analitica: ❌', 'Embeds personalizados: ❌', 'Soporte prioritario: ❌'] }, pro: { name: 'Pro', price: { monthly: '$9.99', yearly: '$89.99' }, period: '/mes', desc: 'Para equipos que necesitan más.', cta: 'Actualizar a Pro', popular: 'Más popular', features: ['Todo en Free', 'Flujos ilimitados', 'Analítica en vivo', 'Sistema de tickets', 'Herramientas extra de setup', 'Soporte prioritario'] }, enterprise: { name: 'Enterprise', price: { monthly: '$29', yearly: '$23' }, period: '/mes', desc: 'Para servidores a gran escala.', cta: 'Contactar ventas', features: ['Todo en Pro', 'API dedicada', 'SLA garantizado', 'Onboarding guiado', 'Multi-servidor', 'Soporte 24/7'] } } },
         changelog: { tag: 'Últimas Actualizaciones', title: 'Qué Hay', titleAccent: 'De Nuevo', entries: { e1: { version: 'v2.4.0', date: 'Mar 2026', title: 'Sistema de tickets rediseñado', desc: 'Nuevo panel de tickets con SLA, escalado automático y transcripciones.' }, e2: { version: 'v2.3.0', date: 'Feb 2026', title: 'Analítica en tiempo real', desc: 'Métricas de actividad, gráficas de uso y reportes automáticos.' }, e3: { version: 'v2.2.0', date: 'Ene 2026', title: 'Flujos de automatización v2', desc: 'Editor visual de flujos con triggers condicionales y acciones en cadena.' }, e4: { version: 'v2.1.0', date: 'Dic 2025', title: 'Refresh de verificación', desc: 'Se actualizó la publicación del panel de verificación con una guía de rollout más clara.' } } },
         roadmap: { tag: 'Próximamente', title: 'Hacia', titleAccent: 'Dónde Vamos', description: 'Funcionalidades confirmadas en desarrollo activo.', items: { r1: { quarter: 'Q2 2026', title: 'AI Moderation', desc: 'Detección inteligente de spam, toxicidad y raids con modelos de lenguaje.', status: 'En desarrollo' }, r2: { quarter: 'Q2 2026', title: 'Webhooks personalizados', desc: 'Conecta TON618 con servicios externos vía webhooks configurables.', status: 'En desarrollo' }, r3: { quarter: 'Q3 2026', title: 'Guías de setup ampliadas', desc: 'Más guía pública para rollout de moderación, verificación y tickets.', status: 'Planeado' }, r4: { quarter: 'Q4 2026', title: 'Marketplace de plugins', desc: 'Instala módulos creados por la comunidad desde un marketplace.', status: 'Próximamente' } } },
         commandPreview: {
@@ -1199,7 +1199,7 @@ export const es = {
             toggle: {
                 monthly: 'Mensual',
                 yearly: 'Anual',
-                discount: '-20%',
+                discount: 'Ahorra 25% · MEJOR VALOR',
             },
             plans: {
                 free: {
@@ -1217,6 +1217,14 @@ export const es = {
             billingInfo: {
                 monthly: '/mes facturado anual',
             },
+            socialProof: {
+                label: 'Prueba social',
+                description: 'Unete a 100+ servidores que ya usan TON618',
+            },
+            foundingOffer: {
+                text: '🚀 Oferta Founding Member — Los primeros 50 suscriptores obtienen 50% de descuento para siempre. Quedan {{spots}} lugares.',
+            },
+            lifetimeUrgency: '⏳ Precio de lanzamiento — puede aumentar con el crecimiento',
             steps: {
                 plan: 'Plan',
                 server: 'Servidor',
@@ -1246,7 +1254,7 @@ export const es = {
             },
             trustSignals: {
                 eyebrow: 'Proteccion',
-                poweredBy: 'V1 Manual',
+                poweredBy: 'Powered by Stripe',
                 manual: {
                     title: 'Manual',
                     description: 'Owner activa',
@@ -1301,11 +1309,11 @@ export const es = {
                 titleDonation: '¡Gracias por tu donacion!',
                 titlePayment: '¡Pago Exitoso!',
                 descriptionDonation: 'Tu generosa donacion ayuda a mantener TON618 funcionando. ¡Gracias!',
-                descriptionPayment: '¡Gracias por mejorar a TON618 {{plan}}! Las caracteristicas premium de tu servidor se estan activando.',
+                descriptionPayment: '¡Gracias por mejorar a TON618 {{plan}}! El premium de tu servidor ya fue activado.',
                 whatsNext: '¿Que sigue?',
                 steps: {
-                    s1: 'Tus caracteristicas premium se activaran manualmente despues de la verificacion del pago (usualmente dentro de 24 horas)',
-                    s2: 'Recibiras un mensaje de confirmacion en el servidor de soporte',
+                    s1: 'Tu pago se completo correctamente en Stripe.',
+                    s2: 'Recibiras un correo de confirmacion enviado por Stripe.',
                     s3: 'Accede al panel de tu servidor para configurar caracteristicas premium',
                     s4: 'Administra tu suscripcion contactando soporte',
                     s1Donation: 'Tu donacion ha sido registrada — ¡gracias!',

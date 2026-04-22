@@ -60,7 +60,7 @@
 ## Billing
 
 - [ ] Navegar a `/pricing` y confirmar que los tres planes muestran precio correcto (Pro Monthly $9.99, Pro Yearly $99.99, Lifetime $299.99).
-- [ ] Con `LEMON_SQUEEZY_TEST_MODE=true`, completar checkout de `Pro Monthly` y verificar que redirige a `?checkout=success`.
+- [ ] Con `STRIPE_SECRET_KEY` apuntando a una clave de test (`sk_test_...`), completar checkout de `Pro Monthly` y verificar que redirige a `?checkout=success`.
 - [ ] Confirmar que `guild_subscriptions` queda con `status=active` y `premium_enabled=true`.
 - [ ] Confirmar que el dashboard muestra el plan correcto sin recargar manualmente.
 - [ ] El bot refleja `Pro` al consultar `billing-guild-status` (esperar hasta 5 minutos o invalidar cache manualmente).

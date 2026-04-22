@@ -1,20 +1,20 @@
 # Billing Beta Launch Checklist
 
-## Lemon Squeezy
+## Stripe
 
-- [ ] Crear producto `TON618 Bot Pro` en Lemon Squeezy.
-- [ ] Crear variante `Pro Monthly` por `USD 9.99`.
-- [ ] Crear variante `Pro Yearly` por `USD 99.99`.
-- [ ] Crear variante `Lifetime` por `USD 299.99`.
-- [ ] Crear variante `Donation` (pay what you want).
-- [ ] Guardar los `variant_id` reales para monthly, yearly, lifetime y donate.
-- [ ] Configurar webhook con eventos de subscription y order.
+- [ ] Crear producto `TON618 Bot Pro` en Stripe.
+- [ ] Crear precio `Pro Monthly` por `USD 9.99` (recurring).
+- [ ] Crear precio `Pro Yearly` por `USD 99.99` (recurring).
+- [ ] Crear precio `Lifetime` por `USD 299.99` (one-time).
+- [ ] Crear precio `Donation` (one-time, variable).
+- [ ] Guardar los `price_id` reales para monthly, yearly, lifetime y donate.
+- [ ] Configurar webhook con eventos de subscription y checkout.
 
 ## Supabase
 
 - [ ] Aplicar `supabase/migrations/20260406000000_create_billing_tables.sql`.
 - [ ] Aplicar `supabase/migrations/20260406000001_create_rls_policies.sql`.
-- [ ] Cargar secretos: `LEMON_SQUEEZY_API_KEY`, `LEMON_SQUEEZY_WEBHOOK_SECRET`, `LEMON_SQUEEZY_STORE_ID`, `LEMON_SQUEEZY_VARIANT_PRO_MONTHLY`, `LEMON_SQUEEZY_VARIANT_PRO_YEARLY`, `LEMON_SQUEEZY_VARIANT_LIFETIME`, `LEMON_SQUEEZY_VARIANT_DONATE`, `BOT_API_KEY`.
+- [ ] Cargar secretos: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_DONATE`, `BOT_API_KEY`.
 - [ ] Desplegar `sync-discord-guilds`.
 - [ ] Desplegar `billing-create-checkout`.
 - [ ] Desplegar `billing-webhook`.
@@ -43,7 +43,7 @@
 - [ ] Login con Discord.
 - [ ] Sync de guilds exitoso.
 - [ ] Guild stale bloquea checkout hasta re-sync.
-- [ ] Guild fresco con bot instalado abre Lemon Squeezy Checkout.
+- [ ] Guild fresco con bot instalado abre Stripe Checkout.
 - [ ] Pago en test mode completa `subscription_created` o `order_created`.
 - [ ] `guild_subscriptions` queda `active` con `premium_enabled=true`.
 - [ ] Dashboard muestra `Pro` en menos de `60s`.

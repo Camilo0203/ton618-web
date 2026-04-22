@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
-import { useEffect } from 'react';
 
 const PLAN_LABELS: Record<string, string> = {
   pro_monthly: 'Pro Monthly',
@@ -19,13 +18,6 @@ export default function BillingSuccessPage() {
   const planKey = searchParams.get('plan_key') || '';
   const planLabel = PLAN_LABELS[planKey] || 'Premium';
   const isDonation = planKey === 'donate';
-
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.log('Billing checkout successful', { plan_key: planKey });
-    }
-  }, [planKey]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center px-4">

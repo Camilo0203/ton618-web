@@ -32,10 +32,6 @@ export function useBillingGuilds(): UseBillingGuildsResult {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load guilds';
       setError(errorMessage);
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.error('Error fetching billing guilds:', err);
-      }
     } finally {
       setLoading(false);
     }

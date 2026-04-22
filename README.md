@@ -8,7 +8,7 @@ Frontend de landing publica y dashboard operativo para TON618, construido con Vi
 - Dashboard operativo en `/dashboard` con auth via Supabase + Discord.
 - Callback OAuth endurecido en `/auth/callback`.
 - Snapshot del dashboard con degradacion parcial para `activity`, `metrics`, `ticket events` y `ticket macros`.
-- Sistema de billing con Lemon Squeezy (checkout + webhook), planes monthly/yearly/lifetime/donate, y control plane en Supabase.
+- Sistema de billing con Stripe (checkout + webhook), planes monthly/yearly/lifetime/donate, y control plane en Supabase.
 
 ## Scripts
 
@@ -82,8 +82,8 @@ El login del dashboard esta delegado a Supabase, el cual se conecta con Discord.
 3. **Edge Functions:** 
    - Despliega `sync-discord-guilds` configurando previamente `DISCORD_BOT_TOKEN` en los secretos de Supabase.
    - Despliega las funciones de billing: `billing-create-checkout`, `billing-webhook`, `billing-guild-status` y `billing-get-guilds`.
-   - Configura los secretos de Lemon Squeezy: `LEMON_SQUEEZY_API_KEY`, `LEMON_SQUEEZY_WEBHOOK_SECRET`, `LEMON_SQUEEZY_STORE_ID`, `LEMON_SQUEEZY_TEST_MODE`.
-   - Configura los variant IDs: `LEMON_SQUEEZY_VARIANT_PRO_MONTHLY`, `LEMON_SQUEEZY_VARIANT_PRO_YEARLY`, `LEMON_SQUEEZY_VARIANT_LIFETIME`, `LEMON_SQUEEZY_VARIANT_DONATE`.
+   - Configura los secretos de Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY`.
+   - Configura los Price IDs: `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_DONATE`.
    - Configura `BOT_API_KEY` (debe coincidir con el bot para autenticacion de `billing-guild-status`).
 
 Finalmente, manten al bot publicando latidos constantes hacia `bot_stats`, `bot_guilds`, `guild_metrics_daily` y las tablas operativas del dashboard para que el panel luzca actualizado.
@@ -98,5 +98,5 @@ Finalmente, manten al bot publicando latidos constantes hacia `bot_stats`, `bot_
 - Deuda tecnica resuelta: `docs/technical-debt-resolved.md`
 - Revision tecnica Codex: `docs/technical-review-codex.md`
 - Verificacion final: `docs/final-verification-report.md`
-- Setup de Lemon Squeezy: `docs/LEMON_SQUEEZY_SETUP.md`
+- Setup de Stripe: `docs/STRIPE_SETUP.md`
 - Backend de billing completo: `docs/BILLING_BACKEND_COMPLETE.md`

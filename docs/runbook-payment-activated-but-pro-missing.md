@@ -2,7 +2,7 @@
 
 ## Sintoma
 
-El usuario completa Lemon Squeezy Checkout, pero el dashboard o el bot siguen mostrando `Free`.
+El usuario completa Stripe Checkout, pero el dashboard o el bot siguen mostrando `Free`.
 
 ## Triage rapido
 
@@ -12,7 +12,7 @@ El usuario completa Lemon Squeezy Checkout, pero el dashboard o el bot siguen mo
 
 ## Cadena de verificacion
 
-### 1. Lemon Squeezy
+### 1. Stripe
 
 - Confirmar existencia de `subscription_created` o `order_created`.
 - Verificar que el `custom_data.guild_id` del checkout es correcto.
@@ -42,8 +42,8 @@ El usuario completa Lemon Squeezy Checkout, pero el dashboard o el bot siguen mo
 
 ### Webhook no procesado
 
-1. Verificar firma HMAC con `LEMON_SQUEEZY_WEBHOOK_SECRET`.
-2. Reenviar el evento desde Lemon Squeezy Dashboard.
+1. Verificar firma HMAC con `STRIPE_WEBHOOK_SECRET`.
+2. Reenviar el evento desde el Stripe Dashboard.
 3. Confirmar que `webhook_events` cambia a `processed=true`.
 
 ### Suscripcion persistida pero premium no activo

@@ -1,10 +1,10 @@
 [functions.sync-discord-guilds]
 verify_jwt = false
 
-[functions.stripe-webhook]
+[functions.billing-webhook]
 verify_jwt = false
 
-[functions.create-checkout-session]
+[functions.billing-create-checkout]
 verify_jwt = false
 
 [functions.create-customer-portal-session]

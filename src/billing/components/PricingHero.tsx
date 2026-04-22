@@ -13,7 +13,7 @@ export function PricingHero() {
   const trustBadges = [
     { icon: Shield, text: t('pricing.trust.secure.title') },
     { icon: Zap, text: t('pricing.trust.instant.title') },
-    { icon: CreditCard, text: 'Powered by Lemon Squeezy' },
+    { icon: CreditCard, text: 'Powered by Stripe' },
     { icon: CheckCircle, text: '7-Day Money-Back Guarantee' },
   ];
 

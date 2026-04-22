@@ -3,7 +3,7 @@
 
 **Fecha:** 2026-04-06  
 **Framework:** React + Vite + TypeScript  
-**Estado:** ✅ Completamente Implementado
+**Estado:** ✅ Migrado a Stripe
 
 ---
 
@@ -120,7 +120,7 @@ interface GuildSelectorProps {
 - ✅ Selección de servidor después de elegir plan
 - ✅ Validación de sesión activa
 - ✅ Manejo de estados de loading y error
-- ✅ Redirección a Lemon Squeezy checkout
+- ✅ Redirección a Stripe Checkout
 
 **Flujo de Usuario:**
 
@@ -133,7 +133,7 @@ interface GuildSelectorProps {
    - Ve los planes disponibles
    - Al seleccionar plan → muestra selector de servidores
    - Selecciona servidor → botón "Proceed to Checkout"
-   - Click en checkout → crea sesión y redirige a Lemon Squeezy
+- Click en checkout → crea sesión y redirige a Stripe
 
 3. **Donación:**
    - No requiere selección de servidor
@@ -200,7 +200,7 @@ Obtiene los servidores administrables del usuario con estado premium.
 ---
 
 #### `createBillingCheckout(request: CheckoutRequest)`
-Crea una sesión de checkout en Lemon Squeezy.
+Crea una sesión de checkout en Stripe.
 
 **Request:**
 ```typescript
@@ -330,9 +330,9 @@ interface PlanDetails {
 ### Navegación
 
 - **Landing Page** → `/pricing` (botón "Upgrade to Pro")
-- **Pricing Page** → Lemon Squeezy Checkout
-- **Lemon Squeezy** → `/billing/success` (pago exitoso)
-- **Lemon Squeezy** → `/billing/cancel` (cancelado)
+- **Pricing Page** → Stripe Checkout
+- **Stripe** → `/billing/success` (pago exitoso)
+- **Stripe** → `/billing/cancel` (cancelado)
 - **Success/Cancel** → `/dashboard` o `/`
 
 ---
@@ -391,10 +391,10 @@ interface PlanDetails {
 └─────────────────────────────────────┘
 ```
 
-### 6. **Usuario completa pago en Lemon Squeezy**
+### 6. **Usuario completa pago en Stripe**
 ```
 ┌─────────────────────────────────────┐
-│  Lemon Squeezy Checkout             │
+│  Stripe Checkout             │
 │  - Usuario ingresa tarjeta          │
 │  - Completa pago                    │
 │  - Redirige a /billing/success      │
@@ -509,7 +509,7 @@ VITE_DISCORD_CLIENT_ID=your_client_id
 VITE_SITE_URL=https://ton618.app
 ```
 
-**Nota:** No se requieren variables adicionales. El frontend solo llama a Edge Functions que ya tienen las credenciales de Lemon Squeezy.
+**Nota:** No se requieren variables adicionales. El frontend solo llama a Edge Functions que ya tienen las credenciales de Stripe.
 
 ---
 
@@ -556,7 +556,7 @@ VITE_SITE_URL=https://ton618.app
 
 ### Para Producción
 
-1. **Configurar URLs de redirect en Lemon Squeezy:**
+1. **Configurar URLs de redirect en Stripe:**
    ```
    Success URL: https://ton618.app/billing/success
    Cancel URL: https://ton618.app/billing/cancel

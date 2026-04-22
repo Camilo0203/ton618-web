@@ -6,7 +6,6 @@ import {
   Terminal, 
   Settings2, 
   ShieldCheck, 
-  Users, 
   BarChart3, 
   LifeBuoy,
   ArrowLeft,
@@ -19,7 +18,7 @@ import {
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { config, getDiscordInviteUrl, getCanonicalUrl } from '../config';
+import { config, getCanonicalUrl } from '../config';
 
 const commandCategories = [
   {
@@ -77,10 +76,8 @@ const commandCategories = [
 ];
 
 export default function DocsPage() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const isEnglish = i18n.language.startsWith('en');
-  const inviteUrl = getDiscordInviteUrl();
-  const supportHref = config.supportServerUrl || (config.contactEmail ? `mailto:${config.contactEmail}` : '');
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-black text-white selection:bg-indigo-500/30">

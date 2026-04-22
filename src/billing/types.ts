@@ -1,4 +1,4 @@
-// Billing types for Lemon Squeezy integration
+// Billing types for Stripe integration
 
 export type PlanKey = 'pro_monthly' | 'pro_yearly' | 'lifetime' | 'donate';
 
@@ -31,13 +31,11 @@ export interface GuildsResponse {
 export interface CheckoutRequest {
   guild_id?: string;
   plan_key: PlanKey;
+  user_id?: string;
 }
 
 export interface CheckoutResponse {
   checkout_url: string;
-  checkout_id: string;
-  plan_key: PlanKey;
-  guild_id: string | null;
 }
 
 export interface GuildPremiumStatus {

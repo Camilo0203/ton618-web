@@ -1,5 +1,5 @@
 # Plan de Testing y QA - Sistema de Monetización (Parte 1)
-## TON618 Bot + Discord + Lemon Squeezy
+## TON618 Bot + Discord + Stripe
 
 **Fecha:** 2026-04-06  
 **Versión:** 1.0  
@@ -177,7 +177,7 @@ Pasos:
 
 Resultado Esperado:
   - Checkout creado en backend
-  - Redirect a Lemon Squeezy
+  - Redirect a Stripe
   - Custom data incluye guild_id y plan_key
   - Variant ID correcto
 
@@ -279,7 +279,7 @@ Resultado Esperado:
 
 Criterios de Aceptación:
   - ✅ Lifetime reemplaza monthly
-  - ✅ Monthly cancelado en Lemon Squeezy
+  - ✅ Monthly cancelado en Stripe
   - ✅ Solo 1 suscripción activa
 ```
 
@@ -299,7 +299,7 @@ Pasos:
 Resultado Esperado:
   - Checkout creado sin guild_id
   - Custom data incluye discord_user_id
-  - Redirect a Lemon Squeezy
+  - Redirect a Stripe
 
 Criterios de Aceptación:
   - ✅ guild_id = null
@@ -341,7 +341,7 @@ Precondiciones:
   - Plan: pro_monthly
 
 Pasos:
-  1. Enviar webhook de Lemon Squeezy
+  1. Enviar webhook de Stripe
   2. Verificar procesamiento
 
 Resultado Esperado:
@@ -431,11 +431,11 @@ Criterios de Aceptación:
   - ✅ Log indica "already processed"
 ```
 
-#### **TC-WEBHOOK-IDEMPOTENCY-002: Retry de Lemon Squeezy**
+#### **TC-WEBHOOK-IDEMPOTENCY-002: Retry de Stripe**
 ```yaml
 Precondiciones:
   - Webhook procesado exitosamente
-  - Lemon Squeezy reintenta por timeout
+  - Stripe reintenta por timeout
 
 Pasos:
   1. Procesar webhook

@@ -1,9 +1,9 @@
 # Backend de Billing - Documentación Completa
-## Sistema de Monetización con Lemon Squeezy y Discord OAuth
+## Sistema de Monetización con Stripe y Discord OAuth
 
 **Fecha:** 2026-04-06  
 **Arquitectura:** Supabase Edge Functions (Deno)  
-**Proveedor de Pagos:** Lemon Squeezy  
+**Proveedor de Pagos:** Stripe  
 **Autenticación:** Discord OAuth2 via Supabase Auth
 
 ---
@@ -56,7 +56,7 @@
 │  ┌─────────────────────────────────────┐   │
 │  │ billing-get-guilds                  │   │
 │  │ billing-create-checkout             │   │
-│  │ billing-webhook (Lemon Squeezy)     │   │
+│  │ billing-webhook (Stripe)            │   │
 │  │ billing-guild-status (Bot API)      │   │
 │  └─────────────────────────────────────┘   │
 └──────────────┬──────────────────────────────┘
@@ -73,7 +73,7 @@
                │
                ▼
 ┌─────────────────────────────────────────────┐
-│            Lemon Squeezy                    │
+│               Stripe                        │
 │  - Checkout sessions                        │
 │  - Subscription management                  │
 │  - Webhooks firmados                        │

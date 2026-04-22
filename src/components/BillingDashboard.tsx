@@ -40,11 +40,6 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
       setGuilds(data.guilds || []);
     } catch (error) {
-      // Log error but don't expose details to UI
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.error('Error fetching guilds:', error);
-      }
       setError(error instanceof Error ? error.message : 'Failed to load guilds');
       setGuilds([]);
     } finally {
@@ -72,13 +67,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
         window.location.href = data.checkout_url;
       }
     } catch (error) {
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.error('Error creating checkout:', error);
-      }
       setError(error instanceof Error ? error.message : 'Failed to start checkout');
-      // Show error to user
-      alert('Failed to start checkout. Please try again.');
     } finally {
       setCheckoutLoading(false);
     }
@@ -214,7 +203,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
                 <div className="grid md:grid-cols-3 gap-4">
                   <button
-                    onClick={() => handleUpgrade(selectedGuild.id, 'monthly')}
+                    onClick={() => handleUpgrade(selectedGuild.id, 'pro_monthly')}
                     disabled={checkoutLoading}
                     className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg transition-all disabled:opacity-50"
                   >
@@ -224,15 +213,15 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                   </button>
 
                   <button
-                    onClick={() => handleUpgrade(selectedGuild.id, 'yearly')}
+                    onClick={() => handleUpgrade(selectedGuild.id, 'pro_yearly')}
                     disabled={checkoutLoading}
                     className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg transition-all disabled:opacity-50 relative"
                   >
                     <div className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full font-bold">
-                      SAVE 17%
+                      SAVE 25%
                     </div>
                     <div className="text-lg font-bold mb-1">Pro Yearly</div>
-                    <div className="text-2xl font-bold mb-2">$99.99/yr</div>
+                    <div className="text-2xl font-bold mb-2">$89.99/yr</div>
                     <div className="text-sm opacity-90">Best value</div>
                   </button>
 

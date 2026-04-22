@@ -15,8 +15,8 @@
 - [ ] Migraciones de Supabase aplicadas.
 - [ ] Edge Function `sync-discord-guilds` desplegada.
 - [ ] Edge Functions `billing-create-checkout`, `billing-webhook`, `billing-guild-status` y `billing-get-guilds` desplegadas.
-- [ ] Secretos Supabase de billing cargados: `LEMON_SQUEEZY_API_KEY`, `LEMON_SQUEEZY_WEBHOOK_SECRET`, `LEMON_SQUEEZY_STORE_ID`, `LEMON_SQUEEZY_VARIANT_PRO_MONTHLY`, `LEMON_SQUEEZY_VARIANT_PRO_YEARLY`, `LEMON_SQUEEZY_VARIANT_LIFETIME`, `LEMON_SQUEEZY_VARIANT_DONATE`, `BOT_API_KEY`.
-- [ ] Lemon Squeezy webhook apunta al endpoint publicado y firma HMAC verificada.
+- [ ] Secretos Supabase de billing cargados: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_DONATE`, `BOT_API_KEY`.
+- [ ] Stripe webhook apunta al endpoint publicado y firma HMAC verificada.
 - [ ] RLS validado para lectura del dashboard.
 - [ ] El bot publica `bot_stats`.
 - [ ] `bot_stats` publica datos `source='live'`; no se exponen seeds como metricas publicas.

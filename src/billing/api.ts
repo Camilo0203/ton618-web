@@ -1,4 +1,4 @@
-// Billing API service for Lemon Squeezy integration
+// Billing API service for Stripe integration
 import { supabase } from '../lib/supabaseClient';
 import type { 
   GuildsResponse, 
@@ -56,6 +56,10 @@ export async function createBillingCheckout(
 
   if (error) {
     throw new Error(error.message || 'Failed to create checkout session');
+  }
+
+  if (!data?.checkout_url) {
+    throw new Error('Invalid checkout response from server');
   }
 
   return data as CheckoutResponse;

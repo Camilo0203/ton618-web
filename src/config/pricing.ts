@@ -40,8 +40,8 @@ export const PRICING_CONFIG = {
       es: 'Para staffs que necesitan inbox, SLA y decisiones guiadas.',
     },
     price: {
-      monthly: { amount: 9, display: '$9' },
-      yearly: { amount: 84, display: '$84' },
+      monthly: { amount: 9.99, display: '$9.99' },
+      yearly: { amount: 89.99, display: '$89.99' },
     },
     period: {
       monthly: { en: '/mo', es: '/mes' },
@@ -52,9 +52,9 @@ export const PRICING_CONFIG = {
       yearly: { en: 'billed annually', es: 'facturado anual' },
     },
     effectiveMonthly: {
-      yearly: { amount: 7, display: '$7' },
+      yearly: { amount: 7.5, display: '$7.50' },
     },
-    yearlyDiscount: { en: 'Save 20%', es: 'Ahorra 20%' },
+    yearlyDiscount: { en: 'Save 25% · BEST VALUE', es: 'Ahorra 25% · MEJOR VALOR' },
     features: {
       en: [
         'Everything in Free',

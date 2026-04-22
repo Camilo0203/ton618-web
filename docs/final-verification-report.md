@@ -1,7 +1,7 @@
 # Final Verification Report
 
 Fecha: 2026-04-07
-Estado: Sistema de billing en Lemon Squeezy. Tests de billing y premium expandidos.
+Estado: Sistema de billing en Stripe. Tests de billing y premium expandidos.
 
 ## Comandos ejecutados
 
@@ -41,11 +41,11 @@ Estado: Sistema de billing en Lemon Squeezy. Tests de billing y premium expandid
 
 ## Correcciones realizadas durante esta pasada
 
-- Sistema de billing implementado con Lemon Squeezy como proveedor de pagos.
+- Sistema de billing implementado con Stripe como proveedor de pagos.
 - Suite de tests de billing expandida: 97 tests en supabase/functions (web) + 76 tests en bot.
 - README.md actualizado en ambos repositorios para reflejar estado real.
-- .env.example y .env.lemon-squeezy.example corregidos con nombres de variables canónicos.
-- Checklists de release/beta actualizados con flujo Lemon Squeezy.
+- .env.example corregido con nombres de variables canónicos de Stripe.
+- Checklists de release/beta actualizados con flujo Stripe.
 - Integración premium del bot completa con cache 5min, stale fallback 1hr, retry en 5xx y graceful degradation.
 - Documentación técnica alineada con estado real del sistema.
 
@@ -63,7 +63,7 @@ Estado: Sistema de billing en Lemon Squeezy. Tests de billing y premium expandid
 - No se ejecuto QA manual de navegador real en esta pasada.
 - La validacion automatizada no cubre auth real con Discord ni mutaciones reales contra Supabase.
 - El snapshot sigue dependiendo de datasets criticos para `config`, `inventory` e `inbox`.
-- Tests de billing son unitarios con mocks - no cubren integracion real con Lemon Squeezy API.
-- Webhook signature verification testeada pero no validada contra eventos reales de Lemon Squeezy.
+- Tests de billing son unitarios con mocks - no cubren integracion real con Stripe API.
+- Webhook signature verification testeada pero no validada contra eventos reales de Stripe.
 - Cache de premium en bot testeado pero no validado en carga real con multiples guilds.
 - Graceful degradation de premium testeada pero no validada en escenarios de downtime prolongado.

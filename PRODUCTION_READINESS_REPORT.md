@@ -223,7 +223,7 @@ All jobs pass on `main` branch:
 
 ## Billing Integration Validation
 
-### Lemon Squeezy Webhook
+### Stripe Webhook
 
 1. ✅ `billing-webhook` Edge Function deployed
 2. ✅ Signature verification implemented (HMAC-SHA256)
@@ -289,7 +289,7 @@ Run these immediately after deployment to Square Cloud:
 
 - [ ] Go to `/pricing`
 - [ ] Select plan → Click "Proceed to Checkout"
-- [ ] Redirect to Lemon Squeezy checkout
+- [ ] Redirect to Stripe checkout
 - [ ] Complete test payment
 - [ ] Redirect to `/billing/success?plan_key=...`
 - [ ] Success page shows correct plan name

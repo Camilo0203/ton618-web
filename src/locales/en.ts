@@ -304,7 +304,7 @@ export const en = {
             titleAccent: 'Ideal Plan',
             description: 'From communities just starting out to enterprise servers with thousands of members.',
             toggle: { monthly: 'Monthly', yearly: 'Yearly' },
-            yearlyDiscount: 'Save 20%',
+            yearlyDiscount: 'Save 25% · BEST VALUE',
             free: { name: 'Free', description: 'Install the base' },
             pro: { name: 'Pro', badge: 'Popular', description: 'For serious operations', cta: 'View plans' },
             plans: {
@@ -314,11 +314,11 @@ export const en = {
                     period: '/mo',
                     desc: 'For servers just starting out.',
                     cta: 'Start free',
-                    features: ['Basic moderation', 'Up to 3 flows', 'Simple verification', 'Community support'],
+                    features: ['Custom Commands: 5', 'Auto-Roles: 3', 'Welcome Templates: 1', 'Advanced Moderation: ❌', 'Analytics: ❌', 'Custom Embeds: ❌', 'Priority Support: ❌'],
                 },
                 pro: {
                     name: 'Pro',
-                    price: { monthly: '$9', yearly: '$7' },
+                    price: { monthly: '$9.99', yearly: '$89.99' },
                     period: '/mo',
                     desc: 'For teams that need more.',
                     cta: 'Contact for Pro',
@@ -1491,7 +1491,7 @@ export const en = {
             toggle: {
                 monthly: 'Monthly',
                 yearly: 'Yearly',
-                discount: '-20%',
+                discount: 'Save 25% · BEST VALUE',
             },
             plans: {
                 free: {
@@ -1509,6 +1509,14 @@ export const en = {
             billingInfo: {
                 monthly: '/mo billed yearly',
             },
+            socialProof: {
+                label: 'Social Proof',
+                description: 'Join 100+ servers already using TON618',
+            },
+            foundingOffer: {
+                text: '🚀 Founding Member Offer — First 50 subscribers get 50% off forever. {{spots}} spots left.',
+            },
+            lifetimeUrgency: '⏳ Launch price — may increase as we grow',
             steps: {
                 plan: 'Plan',
                 server: 'Server',
@@ -1538,7 +1546,7 @@ export const en = {
             },
             trustSignals: {
                 eyebrow: 'Purchase Protection',
-                poweredBy: 'V1 Manual Activation',
+                poweredBy: 'Powered by Stripe',
                 manual: {
                     title: 'Manual',
                     description: 'Owner-activated',
@@ -1593,11 +1601,11 @@ export const en = {
                 titleDonation: 'Thank you for your donation!',
                 titlePayment: 'Payment Successful!',
                 descriptionDonation: 'Your generous donation helps keep TON618 running. Thank you!',
-                descriptionPayment: 'Thank you for upgrading to TON618 {{plan}}! Your server\'s premium features are being activated.',
+                descriptionPayment: 'Thank you for upgrading to TON618 {{plan}}! Your server premium has been activated.',
                 whatsNext: "What's Next?",
                 steps: {
-                    s1: 'Your premium features will be activated manually after payment verification (usually within 24 hours)',
-                    s2: 'You will receive a confirmation message in the support server',
+                    s1: 'Your payment was completed successfully in Stripe.',
+                    s2: 'You will receive a confirmation email from Stripe shortly.',
                     s3: "Access your server's dashboard to configure premium features",
                     s4: 'Manage your subscription by contacting support',
                     s1Donation: 'Your donation has been recorded — thank you!',

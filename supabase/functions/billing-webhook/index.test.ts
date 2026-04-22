@@ -25,13 +25,13 @@ const mockDb = {
 describe('billing-webhook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.LEMON_SQUEEZY_WEBHOOK_SECRET = 'test-webhook-secret';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test-webhook-secret';
   });
 
   describe('Signature Verification', () => {
     it('should verify valid HMAC-SHA256 signature', async () => {
       const payload = JSON.stringify({ test: 'data' });
-      const secret = 'test-webhook-secret';
+      const secret = 'whsec_test-webhook-secret';
       
       const hmac = crypto.createHmac('sha256', secret);
       hmac.update(payload);
@@ -47,7 +47,7 @@ describe('billing-webhook', () => {
 
     it('should reject invalid signature', async () => {
       const payload = JSON.stringify({ test: 'data' });
-      const secret = 'test-webhook-secret';
+      const secret = 'whsec_test-webhook-secret';
       const invalidSignature = 'invalid-signature-123';
       
       const hmac = crypto.createHmac('sha256', secret);
@@ -59,7 +59,7 @@ describe('billing-webhook', () => {
 
     it('should reject signature with wrong secret', async () => {
       const payload = JSON.stringify({ test: 'data' });
-      const correctSecret = 'test-webhook-secret';
+      const correctSecret = 'whsec_test-webhook-secret';
       const wrongSecret = 'wrong-secret';
       
       const hmac1 = crypto.createHmac('sha256', correctSecret);
@@ -150,7 +150,7 @@ describe('billing-webhook', () => {
       });
 
       const purchase = await mockDb.createPurchase({
-        provider: 'lemon_squeezy',
+        provider: 'stripe',
         provider_order_id: event.data.id,
         plan_key: event.meta.custom_data.plan_key,
         kind: 'lifetime',
@@ -207,7 +207,7 @@ describe('billing-webhook', () => {
       });
 
       const donation = await mockDb.createDonation({
-        provider: 'lemon_squeezy',
+        provider: 'stripe',
         provider_order_id: event.data.id,
         discord_user_id: event.meta.custom_data.discord_user_id,
         amount: 500,
@@ -218,7 +218,7 @@ describe('billing-webhook', () => {
     });
 
     it('should not activate premium for donation', async () => {
-      const event = {
+      const event: { meta: { custom_data: Record<string, string | undefined> } } = {
         meta: {
           custom_data: {
             discord_user_id: '123456789012345678',
@@ -342,7 +342,7 @@ describe('billing-webhook', () => {
 
   describe('Custom Data Validation', () => {
     it('should identify missing discord_user_id', () => {
-      const customData = {
+      const customData: Record<string, string | undefined> = {
         guild_id: '123456789012345678',
         plan_key: 'pro_monthly',
       };
@@ -356,7 +356,7 @@ describe('billing-webhook', () => {
     });
 
     it('should identify missing guild_id', () => {
-      const customData = {
+      const customData: Record<string, string | undefined> = {
         discord_user_id: '123456789012345678',
         plan_key: 'pro_monthly',
       };

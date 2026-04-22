@@ -8,8 +8,12 @@ const mockSupabaseClient = {
   from: vi.fn(),
 };
 
-const mockLemonClient = {
-  createCheckout: vi.fn(),
+const mockStripe = {
+  checkout: {
+    sessions: {
+      create: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/test' }),
+    },
+  },
 };
 
 const mockDb = {
@@ -25,13 +29,11 @@ describe('billing-create-checkout', () => {
     vi.clearAllMocks();
     
     // Setup default env vars
-    process.env.LEMON_SQUEEZY_API_KEY = 'test-api-key';
-    process.env.LEMON_SQUEEZY_STORE_ID = '12345';
-    process.env.LEMON_SQUEEZY_TEST_MODE = 'true';
-    process.env.LEMON_SQUEEZY_VARIANT_PRO_MONTHLY = 'variant-monthly';
-    process.env.LEMON_SQUEEZY_VARIANT_PRO_YEARLY = 'variant-yearly';
-    process.env.LEMON_SQUEEZY_VARIANT_LIFETIME = 'variant-lifetime';
-    process.env.LEMON_SQUEEZY_VARIANT_DONATE = 'variant-donate';
+    process.env.STRIPE_SECRET_KEY = 'sk_test_testkey';
+    process.env.STRIPE_PRICE_PRO_MONTHLY = 'price_monthly';
+    process.env.STRIPE_PRICE_PRO_YEARLY = 'price_yearly';
+    process.env.STRIPE_PRICE_LIFETIME = 'price_lifetime';
+    process.env.STRIPE_PRICE_DONATE = 'price_donate';
   });
 
   describe('Plan Validation', () => {
@@ -133,19 +135,19 @@ describe('billing-create-checkout', () => {
     });
   });
 
-  describe('Variant Mapping', () => {
-    it('should map plan_key to correct variant_id', () => {
-      const variantMap = {
-        pro_monthly: process.env.LEMON_SQUEEZY_VARIANT_PRO_MONTHLY,
-        pro_yearly: process.env.LEMON_SQUEEZY_VARIANT_PRO_YEARLY,
-        lifetime: process.env.LEMON_SQUEEZY_VARIANT_LIFETIME,
-        donate: process.env.LEMON_SQUEEZY_VARIANT_DONATE,
+  describe('Price ID Mapping', () => {
+    it('should map plan_key to correct Stripe price_id', () => {
+      const priceMap = {
+        pro_monthly: process.env.STRIPE_PRICE_PRO_MONTHLY,
+        pro_yearly: process.env.STRIPE_PRICE_PRO_YEARLY,
+        lifetime: process.env.STRIPE_PRICE_LIFETIME,
+        donate: process.env.STRIPE_PRICE_DONATE,
       };
 
-      expect(variantMap.pro_monthly).toBe('variant-monthly');
-      expect(variantMap.pro_yearly).toBe('variant-yearly');
-      expect(variantMap.lifetime).toBe('variant-lifetime');
-      expect(variantMap.donate).toBe('variant-donate');
+      expect(priceMap.pro_monthly).toBe('price_monthly');
+      expect(priceMap.pro_yearly).toBe('price_yearly');
+      expect(priceMap.lifetime).toBe('price_lifetime');
+      expect(priceMap.donate).toBe('price_donate');
     });
   });
 
@@ -181,10 +183,15 @@ describe('billing-create-checkout', () => {
     });
   });
 
-  describe('Test Mode Warning', () => {
-    it('should log warning when test_mode is enabled', () => {
-      const testMode = process.env.LEMON_SQUEEZY_TEST_MODE === 'true';
-      expect(testMode).toBe(true);
+  describe('Stripe Checkout Session', () => {
+    it('should create a Stripe checkout session and return a URL', async () => {
+      const session = await mockStripe.checkout.sessions.create({
+        mode: 'subscription',
+        line_items: [{ price: process.env.STRIPE_PRICE_PRO_MONTHLY, quantity: 1 }],
+        success_url: 'https://example.com/billing/success',
+        cancel_url: 'https://example.com/billing/cancel',
+      });
+      expect(session.url).toBe('https://checkout.stripe.com/test');
     });
   });
 

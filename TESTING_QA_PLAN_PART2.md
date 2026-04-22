@@ -282,7 +282,7 @@ Pasos:
   2. Observar redirect
 
 Resultado Esperado:
-  - Redirect automático a Lemon Squeezy
+  - Redirect automático a Stripe
   - No delay perceptible
   - URL correcta
 
@@ -630,9 +630,9 @@ Criterios de Aceptación:
   - [ ] SUPABASE_ANON_KEY
   - [ ] SUPABASE_SERVICE_ROLE_KEY
   - [ ] BOT_API_KEY (mismo en bot y backend)
-  - [ ] LEMON_SQUEEZY_API_KEY
-  - [ ] LEMON_SQUEEZY_WEBHOOK_SECRET
-  - [ ] LEMON_SQUEEZY_STORE_ID
+  - [ ] STRIPE_SECRET_KEY
+  - [ ] STRIPE_WEBHOOK_SECRET
+  - [ ] STRIPE_PUBLISHABLE_KEY
   - [ ] Variant IDs (monthly, yearly, lifetime, donate)
 
 - [ ] Discord OAuth configurado
@@ -640,7 +640,7 @@ Criterios de Aceptación:
   - [ ] Redirect URIs correctas
   - [ ] Scopes: identify, email, guilds
 
-- [ ] Lemon Squeezy configurado
+- [ ] Stripe configurado
   - [ ] Webhook URL configurada
   - [ ] Success URL: /billing/success
   - [ ] Cancel URL: /billing/cancel
@@ -661,7 +661,7 @@ Criterios de Aceptación:
 - [ ] Crear checkout yearly funciona
 - [ ] Crear checkout lifetime funciona
 - [ ] Crear checkout donation funciona
-- [ ] Redirect a Lemon Squeezy funciona
+- [ ] Redirect a Stripe funciona
 - [ ] Success page se muestra correctamente
 - [ ] Cancel page se muestra correctamente
 
@@ -756,7 +756,7 @@ Criterios de Aceptación:
 - [ ] Seleccionar guild funciona
 - [ ] Botón "Proceed" habilitado solo si guild seleccionado
 - [ ] Checkout creado exitosamente
-- [ ] Redirect a Lemon Squeezy funciona
+- [ ] Redirect a Stripe funciona
 - [ ] Custom data correcto
 
 ## Checkout - Yearly

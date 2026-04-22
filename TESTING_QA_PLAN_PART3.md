@@ -81,7 +81,7 @@ describe('PricingPage', () => {
   it('should create checkout when proceeding', async () => {
     const createCheckoutMock = vi.spyOn(billingApi, 'createBillingCheckout')
       .mockResolvedValue({
-        checkout_url: 'https://lemon.squeezy/checkout',
+        checkout_url: 'https://checkout.stripe.com/test',
         plan_key: 'pro_monthly'
       });
 
@@ -324,7 +324,7 @@ Deno.test('webhook: should process subscription_created', async () => {
     }
   };
 
-  const signature = createSignature(payload, Deno.env.get('LEMON_SQUEEZY_WEBHOOK_SECRET')!);
+  const signature = createSignature(payload, Deno.env.get('STRIPE_WEBHOOK_SECRET')!);
 
   const request = new Request('http://localhost/billing-webhook', {
     method: 'POST',
@@ -377,7 +377,7 @@ Deno.test('webhook: should be idempotent', async () => {
     }
   };
 
-  const signature = createSignature(payload, Deno.env.get('LEMON_SQUEEZY_WEBHOOK_SECRET')!);
+  const signature = createSignature(payload, Deno.env.get('STRIPE_WEBHOOK_SECRET')!);
 
   const createRequest = () => new Request('http://localhost/billing-webhook', {
     method: 'POST',
@@ -418,7 +418,7 @@ Deno.test('webhook: should not activate premium for donation', async () => {
     }
   };
 
-  const signature = createSignature(payload, Deno.env.get('LEMON_SQUEEZY_WEBHOOK_SECRET')!);
+  const signature = createSignature(payload, Deno.env.get('STRIPE_WEBHOOK_SECRET')!);
 
   const request = new Request('http://localhost/billing-webhook', {
     method: 'POST',
@@ -641,12 +641,12 @@ describe('checkLimit', () => {
 
 ## 8. Mocks Sugeridos
 
-### **8.1 Lemon Squeezy Mocks**
+### **8.1 Stripe Mocks**
 
 ```typescript
-// mocks/lemonSqueezy.ts
-export const mockLemonSqueezyCheckout = {
-  checkout_url: 'https://test.lemonsqueezy.com/checkout/test-123',
+// mocks/stripe.ts
+export const mockStripeCheckout = {
+  checkout_url: 'https://checkout.stripe.com/test-123',
   checkout_id: 'checkout_123'
 };
 
@@ -872,7 +872,7 @@ export const mockSupabaseClient = {
       if (functionName === 'billing-create-checkout') {
         return Promise.resolve({
           data: {
-            checkout_url: 'https://test.lemonsqueezy.com/checkout/123',
+            checkout_url: 'https://checkout.stripe.com/123',
             plan_key: options?.body?.plan_key || 'pro_monthly'
           },
           error: null
