@@ -8,11 +8,17 @@ import { FAQSection } from '../components/FAQSection';
 import { GuildSelector } from '../components/GuildSelector';
 import { SocialProof } from '../components/SocialProof';
 import { PRICING_CONFIG, getPlanPeriod, type BillingCycle, type PricingPlanKey } from '../../config/pricing';
-import { createBillingCheckout, fetchBillingGuilds, getCurrentSession, signInWithDiscord } from '../api';
+import { fetchBillingGuilds } from '../api';
 import { supabase } from '../../lib/supabaseClient';
 import type { GuildSummary } from '../types';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+
+const WHOP_LINKS: Record<'pro_monthly' | 'pro_yearly' | 'lifetime', string> = {
+  pro_monthly: 'https://whop.com/checkout/plan_yI6fFUFSaIMf5',
+  pro_yearly: 'https://whop.com/checkout/plan_8SKj3v4lL6XEF',
+  lifetime: 'https://whop.com/checkout/plan_nuXvSWVBzZHWf',
+};
 
 const planKeys: PricingPlanKey[] = ['free', 'pro', 'donation'];
 
@@ -50,43 +56,22 @@ export default function PricingPage() {
       return;
     }
 
-    if (planKey === 'donation') {
-      try {
-        const session = await getCurrentSession();
-        const result = await createBillingCheckout({ plan_key: 'donate', user_id: session?.user.id });
-        window.location.href = result.checkout_url;
-      } catch (error) {
-        toast.error(error instanceof Error ? error.message : t('billing.toasts.checkoutFailed'));
-      }
-      return;
-    }
+    const whopKey: 'pro_monthly' | 'pro_yearly' | 'lifetime' =
+      planKey === 'donation' ? 'lifetime' : cycle === 'yearly' ? 'pro_yearly' : 'pro_monthly';
 
     try {
       const result = await fetchBillingGuilds();
       setGuilds(result.guilds);
-      setPendingPlan(cycle === 'yearly' ? 'pro_yearly' : 'pro_monthly');
+      setPendingPlan(whopKey);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : t('billing.serverSelection.error'));
     }
   };
 
-  const proceedCheckout = async () => {
+  const proceedCheckout = () => {
     if (!pendingPlan || !selectedGuildId) return;
-    try {
-      const session = await getCurrentSession();
-      if (!session) {
-        await signInWithDiscord(`${window.location.origin}/pricing`);
-        return;
-      }
-      const result = await createBillingCheckout({
-        plan_key: pendingPlan,
-        guild_id: selectedGuildId,
-        user_id: session.user.id,
-      });
-      window.location.href = result.checkout_url;
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : t('billing.toasts.checkoutFailed'));
-    }
+    const base = WHOP_LINKS[pendingPlan];
+    window.location.href = `${base}?pass_guild_id=${selectedGuildId}`;
   };
 
   return (
@@ -172,7 +157,7 @@ export default function PricingPage() {
             <GuildSelector guilds={guilds} selectedGuildId={selectedGuildId} onSelectGuild={setSelectedGuildId} />
             <div className="mt-4 flex gap-3">
               <button onClick={() => setPendingPlan(null)} className="rounded-lg border border-white/10 px-4 py-2 text-sm">{t('billing.cancel.backToHome')}</button>
-              <button onClick={() => void proceedCheckout()} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold">{t('billing.checkout.proceed')}</button>
+              <button onClick={proceedCheckout} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold">{t('billing.checkout.proceed')}</button>
             </div>
           </section>
         )}
