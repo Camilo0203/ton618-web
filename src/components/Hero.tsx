@@ -210,7 +210,7 @@ export default function Hero() {
             }`}
         />
         <div className="absolute inset-x-[12%] top-[28%] h-[28rem] rounded-full bg-[radial-gradient(circle,rgba(109,40,217,0.22)_0%,rgba(67,56,202,0.16)_38%,rgba(15,23,42,0.04)_72%,transparent_100%)] blur-3xl" />
-        <div className="absolute inset-x-[24%] top-[18%] h-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06)_0%,rgba(99,102,241,0.08)_24%,transparent_68%)] blur-[120px]" />
+        <div className="absolute inset-x-[24%] top-[36%] h-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06)_0%,rgba(99,102,241,0.08)_24%,transparent_68%)] blur-[120px]" />
         <div className={`absolute inset-0 z-10 ${shouldReduceMotion ? 'bg-black/62' : 'bg-black/54'}`}></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(3,4,12,0.04)_0%,rgba(3,4,12,0.18)_34%,transparent_54%),radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.36)_74%,rgba(0,0,0,0.78)_100%)] z-[15]" />
         <div className="absolute inset-0 z-20 shadow-[inset_0_0_180px_rgba(0,0,0,0.9)]" />
