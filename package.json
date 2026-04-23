@@ -19,7 +19,8 @@
     "test:functions": "vitest run supabase/functions",
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --grep @smoke",
-    "verify": "npm run typecheck && npm run lint && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run build",
+    "deploy": "npm run build && git add dist/ && git commit -m \"deploy: build dist for Square Cloud\" && git push origin main"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
