@@ -18,7 +18,7 @@ export function PricingHero() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 pt-28 pb-20 px-4 sm:pt-36 sm:pb-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-black via-slate-950 to-indigo-950 mt-16 pt-20 pb-20 px-4 sm:pt-28 sm:pb-32">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       
