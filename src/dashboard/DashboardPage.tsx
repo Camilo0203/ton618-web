@@ -515,7 +515,7 @@ function DashboardLivePage({
               try {
                 await requestConfigChange.mutateAsync({ section, payload });
                 setConfigSaveError(null);
-                toast.success(t(`dashboard.sections.${section}.label`) + ' guardado', { icon: '✅' });
+                toast.success(t('dashboard.toast.configSaved', { label: t(`dashboard.sections.${section}.label`) }), { icon: '✅' });
               } catch (error) {
                 setConfigSaveError({
                   section,
@@ -533,9 +533,9 @@ function DashboardLivePage({
                   action: 'create_backup',
                   payload: {},
                 });
-                toast.success('Backup programado exitosamente', { icon: '📦' });
+                toast.success(t('dashboard.toast.backupScheduled'), { icon: '📦' });
               } catch (error) {
-                toast.error('Garantiza permisos de backup primero');
+                toast.error(t('dashboard.toast.backupPermissionError'));
                 throw error;
               }
             }}
@@ -545,9 +545,9 @@ function DashboardLivePage({
                   action: 'restore_backup',
                   payload: { backupId },
                 });
-                toast.success('Restauración iniciada', { icon: '✨' });
+                toast.success(t('dashboard.toast.restoreStarted'), { icon: '✨' });
               } catch (error) {
-                toast.error('Error restaurando backup');
+                toast.error(t('dashboard.toast.restoreError'));
                 throw error;
               }
             }}

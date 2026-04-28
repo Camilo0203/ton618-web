@@ -1,12 +1,15 @@
 import { Component, ReactNode } from 'react';
 import * as Sentry from '@sentry/react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import Logo from './Logo';
 
-interface ErrorBoundaryProps {
+interface ErrorBoundaryOwnProps {
   children: ReactNode;
   fallback?: ReactNode;
 }
+
+type ErrorBoundaryProps = ErrorBoundaryOwnProps & WithTranslation;
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -83,16 +86,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
               <div className="text-center">
                 <h1 className="mb-4 text-3xl font-black uppercase tracking-tight text-white">
-                  Something went wrong
+                  {this.props.t('errorBoundary.title')}
                 </h1>
                 <p className="mb-6 text-base leading-relaxed text-slate-300">
-                  We encountered an unexpected error. Our team has been notified and we're working on a fix.
+                  {this.props.t('errorBoundary.description')}
                 </p>
 
                 {import.meta.env.DEV && this.state.error && (
                   <details className="mb-6 rounded-xl border border-white/10 bg-black/40 p-4 text-left">
                     <summary className="cursor-pointer text-sm font-semibold text-slate-400 hover:text-white">
-                      Error Details (Dev Only)
+                      {this.props.t('errorBoundary.errorDetails')}
                     </summary>
                     <div className="mt-4 space-y-2">
                       <p className="font-mono text-xs text-red-400">
@@ -114,7 +117,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                 >
                   <RefreshCw className="h-4 w-4" />
-                  <span>Try Again</span>
+                  <span>{this.props.t('errorBoundary.tryAgain')}</span>
                 </button>
 
                 <button
@@ -122,7 +125,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                 >
                   <RefreshCw className="h-4 w-4" />
-                  <span>Reload Page</span>
+                  <span>{this.props.t('errorBoundary.reloadPage')}</span>
                 </button>
 
                 <button
@@ -130,7 +133,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
                 >
                   <Home className="h-4 w-4" />
-                  <span>Go Home</span>
+                  <span>{this.props.t('errorBoundary.goHome')}</span>
                 </button>
               </div>
 
@@ -147,4 +150,4 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 }
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);

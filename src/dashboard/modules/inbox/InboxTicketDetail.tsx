@@ -94,7 +94,6 @@ function getRecommendationToneClass(tone: TicketRecommendation['tone']) {
 
 export default function InboxTicketDetail(props: InboxTicketDetailProps) {
   const ticket = props.ticket;
-  const isEnglish = props.t('nav.docs') === 'Docs';
   const runsByPlaybook = new Map(props.playbookRuns.map((run) => [run.playbookId, run]));
   const macrosById = new Map(props.macros.map((macro) => [macro.macroId, macro]));
 
@@ -141,9 +140,9 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
         <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="dashboard-panel-label">{isEnglish ? 'Live playbooks' : 'Playbooks vivos'}</p>
+              <p className="dashboard-panel-label">{props.t('dashboard.inbox.detail.recommendations.eyebrow')}</p>
               <h3 className="mt-2 text-lg font-semibold tracking-[-0.04em] text-white">
-                {isEnglish ? 'Guided actions for this ticket' : 'Acciones guiadas para este ticket'}
+                {props.t('dashboard.inbox.detail.recommendations.title')}
               </h3>
             </div>
             <span className="dashboard-status-pill-compact dashboard-neutral-pill">{props.recommendations.length}</span>
@@ -179,19 +178,15 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
 
               const primaryLabel = (() => {
                 if (recommendation.suggestedAction === 'post_macro' && macro) {
-                  return isEnglish ? `Post macro: ${macro.label}` : `Publicar macro: ${macro.label}`;
+                  return props.t('dashboard.inbox.detail.recommendations.postMacro', { label: macro.label });
                 }
                 if (recommendation.suggestedAction === 'set_status' && recommendation.suggestedStatus) {
-                  return isEnglish
-                    ? `Set status to ${getTicketStatusLabel(recommendation.suggestedStatus)}`
-                    : `Cambiar estado a ${getTicketStatusLabel(recommendation.suggestedStatus)}`;
+                  return props.t('dashboard.inbox.detail.recommendations.setStatus', { status: getTicketStatusLabel(recommendation.suggestedStatus) });
                 }
                 if (recommendation.suggestedAction === 'set_priority' && recommendation.suggestedPriority) {
-                  return isEnglish
-                    ? `Set priority to ${getPriorityLabel(recommendation.suggestedPriority, props.t)}`
-                    : `Subir prioridad a ${getPriorityLabel(recommendation.suggestedPriority, props.t)}`;
+                  return props.t('dashboard.inbox.detail.recommendations.setPriority', { priority: getPriorityLabel(recommendation.suggestedPriority, props.t) });
                 }
-                return isEnglish ? 'Confirm recommendation' : 'Confirmar recomendacion';
+                return props.t('dashboard.inbox.detail.recommendations.confirm');
               })();
 
               return (
@@ -221,7 +216,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                       disabled={props.isMutating}
                       className="dashboard-secondary-button"
                     >
-                      {isEnglish ? 'Confirm' : 'Confirmar'}
+                      {props.t('dashboard.inbox.detail.recommendations.confirmButton')}
                     </button>
                     <button
                       type="button"
@@ -229,12 +224,12 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                       disabled={props.isMutating}
                       className="dashboard-secondary-button"
                     >
-                      {isEnglish ? 'Dismiss' : 'Descartar'}
+                      {props.t('dashboard.inbox.detail.recommendations.dismissButton')}
                     </button>
                   </div>
                   {assistantReplyDraft ? (
                     <div className="mt-4 rounded-[1rem] border border-white/30 bg-white/20 p-3 text-sm">
-                      <p className="font-semibold">{isEnglish ? 'Assistive draft reply' : 'Borrador asistido'}</p>
+                      <p className="font-semibold">{props.t('dashboard.inbox.detail.recommendations.assistiveDraft')}</p>
                       <p className="mt-2 leading-6 text-current/85">{assistantReplyDraft}</p>
                       {assistantNextAction ? (
                         <p className="mt-2 text-xs uppercase tracking-[0.16em] text-current/65">
@@ -282,7 +277,7 @@ export default function InboxTicketDetail(props: InboxTicketDetailProps) {
                 [props.t('dashboard.inbox.detail.customer.user'), ticket.userLabel ?? ticket.userId],
                 [props.t('dashboard.inbox.detail.customer.claimOwner'), ticket.claimedByLabel ?? props.t('dashboard.inbox.list.unclaimed')],
                 [props.t('dashboard.inbox.detail.customer.assignee'), ticket.assigneeLabel ?? props.t('dashboard.inbox.list.unassigned')],
-                [isEnglish ? 'Operational memory' : 'Memoria operativa', props.customerMemory?.summary ?? (isEnglish ? 'No customer memory yet.' : 'Aun no existe memoria operativa.')],
+                [props.t('dashboard.inbox.detail.customer.memoryLabel'), props.customerMemory?.summary ?? props.t('dashboard.inbox.detail.customer.memoryEmpty')],
                 [props.t('dashboard.inbox.detail.customer.firstResponse'), formatDateTime(ticket.firstResponseAt)],
                 [props.t('dashboard.inbox.detail.customer.lastCustomer'), formatDateTime(ticket.lastCustomerMessageAt)],
                 [props.t('dashboard.inbox.detail.customer.lastStaff'), formatDateTime(ticket.lastStaffMessageAt)],

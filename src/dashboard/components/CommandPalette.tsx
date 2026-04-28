@@ -39,16 +39,16 @@ export default function CommandPalette({ onSelect }: CommandPaletteProps) {
           <Search className="h-5 w-5 text-white/40" />
           <Command.Input 
             autoFocus 
-            placeholder={t('dashboard.sections.overview.label') + "..."} 
+            placeholder={t('dashboard.commandPalette.placeholder')}
             className="flex h-14 w-full bg-transparent px-4 py-3 outline-none placeholder:text-white/30 text-white" 
           />
         </div>
         <Command.List className="max-h-[300px] overflow-y-auto p-2">
           <Command.Empty className="py-6 text-center text-sm text-white/50">
-            No se encontraron resultados.
+            {t('dashboard.commandPalette.empty')}
           </Command.Empty>
 
-          <Command.Group heading="Módulos" className="text-xs font-medium text-white/40 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-white/30">
+          <Command.Group heading={t('dashboard.commandPalette.groupLabel')} className="text-xs font-medium text-white/40 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-white/30">
             {dashboardSections.map((section) => (
               <Command.Item
                 key={section.id}

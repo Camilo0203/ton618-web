@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
 import { Loader2, Crown, Calendar, AlertCircle, ExternalLink } from 'lucide-react';
 
@@ -20,6 +21,7 @@ interface BillingDashboardProps {
 }
 
 export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDashboardProps) {
+  const { t } = useTranslation();
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -85,9 +87,9 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
   const getTierBadge = (planKey: string | null) => {
     const badges = {
-      pro_monthly: { label: 'Pro Monthly', color: 'bg-blue-500' },
-      pro_yearly: { label: 'Pro Yearly', color: 'bg-purple-500' },
-      lifetime: { label: 'Lifetime', color: 'bg-gradient-to-r from-yellow-400 to-orange-500' },
+      pro_monthly: { label: t('billing.success.planLabels.pro_monthly'), color: 'bg-blue-500' },
+      pro_yearly: { label: t('billing.success.planLabels.pro_yearly'), color: 'bg-purple-500' },
+      lifetime: { label: t('billing.success.planLabels.lifetime'), color: 'bg-gradient-to-r from-yellow-400 to-orange-500' },
     };
 
     const badge = badges[planKey as keyof typeof badges];
@@ -114,7 +116,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
         <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 flex items-center gap-4">
           <AlertCircle className="w-8 h-8 text-red-400" />
           <div>
-            <h3 className="text-lg font-semibold text-red-400">Error loading billing data</h3>
+            <h3 className="text-lg font-semibold text-red-400">{t('dashboard.billing.errorTitle')}</h3>
             <p className="text-gray-400">{error}</p>
           </div>
         </div>
@@ -127,8 +129,8 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Billing & Subscriptions</h1>
-        <p className="text-gray-400">Manage premium subscriptions for your servers</p>
+        <h1 className="text-3xl font-bold text-white mb-2">{t('dashboard.billing.title')}</h1>
+        <p className="text-gray-400">{t('dashboard.billing.subtitle')}</p>
       </div>
 
       {selectedGuild ? (
@@ -137,7 +139,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
             onClick={() => onSelectGuild?.('')}
             className="text-purple-400 hover:text-purple-300 flex items-center gap-2"
           >
-            ← Back to all servers
+            ← {t('dashboard.billing.backToAll')}
           </button>
 
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
@@ -160,15 +162,15 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                 <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-green-400 mb-2">
                     <Crown className="w-5 h-5" />
-                    <span className="font-semibold">Premium Active</span>
+                    <span className="font-semibold">{t('dashboard.billing.premiumActive')}</span>
                   </div>
                   <div className="text-gray-300 space-y-2">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       <span>
                         {selectedGuild.lifetime 
-                          ? 'Lifetime Access' 
-                          : `Expires: ${formatExpiryDate(selectedGuild.ends_at)}`
+                          ? t('dashboard.billing.lifetimeAccess')
+                          : `${t('dashboard.billing.expires')}: ${formatExpiryDate(selectedGuild.ends_at)}`
                         }
                       </span>
                     </div>
@@ -176,15 +178,15 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                 </div>
 
                 <div className="bg-white/5 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold text-white mb-3">Active Features</h3>
+                  <h3 className="text-lg font-semibold text-white mb-3">{t('dashboard.billing.activeFeatures')}</h3>
                   <ul className="space-y-2 text-gray-300">
-                    <li>✅ Up to {selectedGuild.lifetime ? '100' : '50'} custom commands</li>
-                    <li>✅ Advanced moderation tools</li>
-                    <li>✅ Custom embed builder</li>
-                    <li>✅ Priority support</li>
-                    <li>✅ Server analytics</li>
+                    <li>✅ {t('dashboard.billing.features.customCommands', { count: selectedGuild.lifetime ? 100 : 50 })}</li>
+                    <li>✅ {t('dashboard.billing.features.moderation')}</li>
+                    <li>✅ {t('dashboard.billing.features.embedBuilder')}</li>
+                    <li>✅ {t('dashboard.billing.features.prioritySupport')}</li>
+                    <li>✅ {t('dashboard.billing.features.analytics')}</li>
                     {selectedGuild.lifetime && (
-                      <li>✅ Exclusive lifetime features</li>
+                      <li>✅ {t('dashboard.billing.features.lifetimeExclusive')}</li>
                     )}
                   </ul>
                 </div>
@@ -194,10 +196,10 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                 <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
                   <div className="flex items-center gap-2 text-yellow-400 mb-2">
                     <AlertCircle className="w-5 h-5" />
-                    <span className="font-semibold">Free Plan</span>
+                    <span className="font-semibold">{t('dashboard.billing.freePlan')}</span>
                   </div>
                   <p className="text-gray-300">
-                    This server is on the free plan. Upgrade to unlock premium features!
+                    {t('dashboard.billing.upgradePrompt')}
                   </p>
                 </div>
 
@@ -207,9 +209,9 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                     disabled={checkoutLoading}
                     className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg transition-all disabled:opacity-50"
                   >
-                    <div className="text-lg font-bold mb-1">Pro Monthly</div>
+                    <div className="text-lg font-bold mb-1">{t('billing.success.planLabels.pro_monthly')}</div>
                     <div className="text-2xl font-bold mb-2">$9.99/mo</div>
-                    <div className="text-sm opacity-90">Cancel anytime</div>
+                    <div className="text-sm opacity-90">{t('dashboard.billing.cancelAnytime')}</div>
                   </button>
 
                   <button
@@ -218,11 +220,11 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                     className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg transition-all disabled:opacity-50 relative"
                   >
                     <div className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full font-bold">
-                      SAVE 25%
+                      {t('dashboard.billing.save25')}
                     </div>
-                    <div className="text-lg font-bold mb-1">Pro Yearly</div>
+                    <div className="text-lg font-bold mb-1">{t('billing.success.planLabels.pro_yearly')}</div>
                     <div className="text-2xl font-bold mb-2">$89.99/yr</div>
-                    <div className="text-sm opacity-90">Best value</div>
+                    <div className="text-sm opacity-90">{t('dashboard.billing.bestValue')}</div>
                   </button>
 
                   <button
@@ -230,9 +232,9 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                     disabled={checkoutLoading}
                     className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white p-4 rounded-lg transition-all disabled:opacity-50"
                   >
-                    <div className="text-lg font-bold mb-1">Lifetime</div>
+                    <div className="text-lg font-bold mb-1">{t('billing.success.planLabels.lifetime')}</div>
                     <div className="text-2xl font-bold mb-2">$299.99</div>
-                    <div className="text-sm opacity-90">One-time payment</div>
+                    <div className="text-sm opacity-90">{t('dashboard.billing.oneTimePayment')}</div>
                   </button>
                 </div>
               </div>
@@ -265,15 +267,15 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                 {guild.has_premium ? (
                   <div className="flex items-center gap-2 text-green-400">
                     <Crown className="w-4 h-4" />
-                    <span>Premium Active</span>
+                    <span>{t('dashboard.billing.premiumActive')}</span>
                   </div>
                 ) : (
-                  <span>Free Plan</span>
+                  <span>{t('dashboard.billing.freePlan')}</span>
                 )}
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-purple-400 text-sm">
-                <span>Manage Billing</span>
+                <span>{t('dashboard.billing.manageBilling')}</span>
                 <ExternalLink className="w-4 h-4" />
               </div>
             </div>
@@ -281,7 +283,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
           {guilds.length === 0 && (
             <div className="col-span-full text-center py-12 text-gray-400">
-              <p>No servers found. Make sure you have admin permissions in at least one server.</p>
+              <p>{t('dashboard.billing.noServers')}</p>
             </div>
           )}
         </div>

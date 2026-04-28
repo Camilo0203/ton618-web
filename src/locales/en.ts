@@ -575,6 +575,10 @@ export const en = {
                 privacy: 'Privacy Policy',
                 cookies: 'Cookies Policy',
             },
+            ariaLabel: 'Footer',
+            social: {
+                email: 'Email',
+            },
             copyright: '© {{year}} TON618',
             stabilized: 'Bilingual staff bot',
             commanded: 'Built by milo0dev',
@@ -945,6 +949,72 @@ export const en = {
         dashboard: {
             pageTitle: 'Dashboard',
             metaDescription: 'Professional dashboard to manage your Discord bot configuration, activity and analytics.',
+            saveRequestButton: {
+                idle: 'No changes',
+                saving: 'Sending...',
+                dirty: 'Request change',
+            },
+            degradationNotice: {
+                title: 'Some dashboard data is degraded',
+                description: 'The rest of the panel remains available while we recover these sources.',
+            },
+            billing: {
+                title: 'Billing & Subscriptions',
+                subtitle: 'Manage premium subscriptions for your servers',
+                errorTitle: 'Error loading billing data',
+                backToAll: 'Back to all servers',
+                premiumActive: 'Premium Active',
+                lifetimeAccess: 'Lifetime Access',
+                expires: 'Expires',
+                activeFeatures: 'Active Features',
+                freePlan: 'Free Plan',
+                upgradePrompt: 'This server is on the free plan. Upgrade to unlock premium features!',
+                cancelAnytime: 'Cancel anytime',
+                save25: 'SAVE 25%',
+                bestValue: 'Best value',
+                oneTimePayment: 'One-time payment',
+                manageBilling: 'Manage Billing',
+                noServers: 'No servers found. Make sure you have admin permissions in at least one server.',
+                features: {
+                    customCommands: 'Up to {{count}} custom commands',
+                    moderation: 'Advanced moderation tools',
+                    embedBuilder: 'Custom embed builder',
+                    prioritySupport: 'Priority support',
+                    analytics: 'Server analytics',
+                    lifetimeExclusive: 'Exclusive lifetime features',
+                },
+            },
+            config: {
+                validationSummary: 'There are items to review before saving',
+                resetButton: 'Reset',
+            },
+            mutationBanner: {
+                noChanges: 'No pending changes for this section. The bot is still showing the last applied state.',
+                pendingBadge: 'Pending',
+                pendingTitle: 'Pending application',
+                requestCreated: '{{summary}}. Request created on {{requestedAt}}.',
+                pendingDesc: 'The bot bridge will process it in the next cycle. Bridge status: {{status}}.',
+                failedBadge: 'Failed',
+                failedTitle: 'The last request failed',
+                failedDesc: 'The bot reported an error while trying to apply the mutation.',
+                supersededBadge: 'Superseded',
+                supersededTitle: 'The last request was superseded',
+                appliedBadge: 'Applied',
+                appliedTitle: 'Applied by the bot',
+                appliedDescSummary: '{{summary}}. Request created on {{requestedAt}}.',
+                appliedDesc: 'Confirmed on {{date}}.',
+            },
+            demo: {
+                unknown: 'unknown',
+                metaDescription: 'Interactive demo of the TON618 dashboard. Explore the operations console without connecting a real server.',
+                bridgeMessage: 'Demo mode — simulated heartbeat and local mutations.',
+                event: {
+                    configTitle: 'Demo configuration changed',
+                    configDesc: 'The {{section}} section was updated in the simulated environment.',
+                    restoreTitle: 'Demo restore started',
+                    restoreDesc: 'Restoring backup {{backupId}} in the simulated environment.',
+                },
+            },
             inbox: {
                 workflow: {
                     new: 'New',
@@ -995,6 +1065,96 @@ export const en = {
                     postMacro: 'post the macro',
                     setPriority: 'update the priority',
                     fallback: 'execute the action'
+                },
+                detail: {
+                    eyebrow: 'Ticket detail',
+                    desc: 'Ticket {{id}} — {{user}}',
+                    bridgeWarning: 'Bridge status: {{status}}. Changes may be delayed.',
+                    attrs: {
+                        status: 'Status',
+                        statusActive: 'Active',
+                        statusInactive: 'Inactive',
+                        priority: 'Priority',
+                        priorityNote: 'Priority affects SLA and escalation.',
+                        sla: 'SLA',
+                        slaNote: 'SLA target: {{time}}',
+                        category: 'Category'
+                    },
+                    customer: {
+                        eyebrow: 'Customer',
+                        title: 'Customer profile',
+                        user: 'User',
+                        claimOwner: 'Claimed by',
+                        assignee: 'Assigned to',
+                        memoryLabel: 'Operational memory',
+                        memoryEmpty: 'No customer memory yet.',
+                        firstResponse: 'First response',
+                        lastCustomer: 'Last customer message',
+                        lastStaff: 'Last staff message',
+                        created: 'Created',
+                        lastSync: 'Last sync'
+                    },
+                    timeline: {
+                        eyebrow: 'Timeline',
+                        title: 'Conversation timeline',
+                        eventsCount: '{{count}} events',
+                        systemActor: 'System',
+                        empty: 'No timeline events yet.'
+                    },
+                    ops: {
+                        eyebrow: 'Operations',
+                        statusTitle: 'Status management',
+                        statusLabel: 'Status',
+                        applyStatus: 'Apply status',
+                        priorityLabel: 'Priority',
+                        updatePriority: 'Update priority',
+                        reopen: 'Reopen ticket',
+                        close: 'Close ticket',
+                        closeReason: 'Closed from dashboard',
+                        tagsEyebrow: 'Tags',
+                        tagsTitle: 'Ticket tags',
+                        removeTag: 'Remove tag {{tag}}',
+                        noTags: 'No tags',
+                        tagPlaceholder: 'Enter tag...',
+                        addTag: 'Add tag',
+                        noteEyebrow: 'Internal note',
+                        noteTitle: 'Add note',
+                        notePlaceholder: 'Write an internal note...',
+                        shortcutHint: 'Ctrl+Enter to save',
+                        saveNote: 'Save note',
+                        replyEyebrow: 'Reply',
+                        replyTitle: 'Reply to customer',
+                        replyPlaceholder: 'Write your reply...',
+                        sendReply: 'Send reply'
+                    },
+                    history: {
+                        eyebrow: 'History',
+                        title: 'Customer history',
+                        client: 'Client',
+                        lastTicket: 'Last ticket',
+                        openCount: '{{count}} open',
+                        closedCount: '{{count}} closed',
+                        currentTicket: 'Current',
+                        openDetail: 'Open',
+                        empty: 'No history available.'
+                    },
+                    recommendations: {
+                        eyebrow: 'Live playbooks',
+                        title: 'Guided actions for this ticket',
+                        postMacro: 'Post macro: {{label}}',
+                        setStatus: 'Set status to {{status}}',
+                        setPriority: 'Set priority to {{priority}}',
+                        confirm: 'Confirm recommendation',
+                        confirmButton: 'Confirm',
+                        dismissButton: 'Dismiss',
+                        assistiveDraft: 'Assistive draft reply'
+                    },
+                    actions: {
+                        claim: 'Claim',
+                        unclaim: 'Unclaim',
+                        assignSelf: 'Assign to me',
+                        unassign: 'Unassign'
+                    }
                 }
             },
             overview: {
@@ -1026,200 +1186,202 @@ export const en = {
             general: {
                 onboarding: { eyebrow: 'Installation required', title: 'Invite the bot before editing configurations', desc: 'When the bot is installed in this server, we can maintain persistent language, invocation, and dashboard preferences.' },
                 main: { eyebrow: 'General', title: 'Essential server configuration', desc: 'Define language, commands, and base rules so the dashboard and the bot understand each other from the first minute.', save: 'Save operational base' },
-                locale: { title: 'Language and operation', desc: 'These settings define the bot\'s base tone, the timezone for reports, and how members invoke commands.', language: { label: 'Base language', hint: 'This language is used in messages, panels, and main bot replies.', es: 'Spanish', en: 'English' }, timezone: { label: 'Timezone', hint: 'Affects visible times, reports, and scheduled automations.' }, commandMode: { label: 'Command mode', hint: 'Choose if the user invokes the bot by mention or with a short prefix.', mention: 'Bot mention', prefix: 'Prefix' }, opsPlan: { label: 'Operational plan', hint: 'Defines which product layer is active for this server.', free: 'Free', pro: 'Pro ops', enterprise: 'Enterprise' }, prefix: { label: 'Prefix', hint: 'Only used if you enable prefix mode.' } },
+                locale: { title: 'Language and operation', desc: 'These settings define the bot\'s base tone, the timezone for reports, and how members invoke commands.', language: { label: 'Base language', hint: 'This language is used in messages, panels, and main bot replies.', es: 'Spanish', en: 'English' }, timezone: { label: 'Timezone', hint: 'Affects visible times, reports, and scheduled automations.', placeholder: 'America/Bogota' }, commandMode: { label: 'Command mode', hint: 'Choose if the user invokes the bot by mention or with a short prefix.', mention: 'Bot mention', prefix: 'Prefix' }, opsPlan: { label: 'Operational plan', hint: 'Defines which product layer is active for this server.', free: 'Free', pro: 'Pro ops', enterprise: 'Enterprise' }, prefix: { label: 'Prefix', hint: 'Only used if you enable prefix mode.', placeholder: '!' } },
                 moderation: { title: 'General moderation preset', desc: 'Acts as an operational intent for the backend and makes clear what level of intervention the staff expects.', relaxed: { label: 'Relaxed', desc: 'More flexible and less automatic intervention.' }, balanced: { label: 'Balanced', desc: 'Balance between protection and comfort.' }, strict: { label: 'Strict', desc: 'More discipline and less tolerance to noise.' } },
                 prefs: { eyebrow: 'Dashboard', title: 'Team preferences', desc: 'Presentation settings so the team goes straight back to their most used task.', defaultSection: 'Initial screen', compactMode: { label: 'Compact mode', desc: 'Reduces visual density for long moderation sessions.' }, advancedCards: { label: 'Advanced cards', desc: 'Shows extra context, recommendations, and extended operational health.' }, notice: 'Changes are sent to an audited queue. The bot applies and confirms them later in the Overview view.' },
-                launchpad: { eyebrow: 'Launchpad', title: 'Production launch in 10 minutes', desc: 'This block summarizes the minimum setup to open the beta with real staff.', ready: 'Ready', pending: 'Pending', done: 'Done', cta: 'Open module' },
+                launchpad: { eyebrow: 'Launchpad', title: 'Production launch in 10 minutes', desc: 'This block summarizes the minimum setup to open the beta with real staff.', ready: 'Ready', pending: 'Pending', done: 'Done', cta: 'Open module', rolesLabel: 'Assign support role and ticket panel channel', slaLabel: 'Configure ticket SLA' },
                 sections: { overview: 'Overview', inbox: 'Support inbox', playbooks: 'Live playbooks', general: 'Initial configuration', server_roles: 'Roles and channels', tickets: 'Tickets', verification: 'Access verification', welcome: 'Welcome', suggestions: 'Community suggestions', modlogs: 'Moderation logs', commands: 'Commands', system: 'Bot system', activity: 'Recent activity', analytics: 'Analytics' }
             },
             serverRoles: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para publicar canales y roles en la dashboard', desc: 'Este modulo usa inventario real del servidor. Cuando el bot este dentro, cargaremos canales, roles y paneles disponibles.' },
-                main: { eyebrow: 'Roles y canales', title: 'Base operativa del servidor', desc: 'Estos canales y roles destraban tickets, logs y automatizaciones. Si esto queda bien, el resto del panel avanza mucho mas rapido.', save: 'Guardar asignaciones' },
-                notices: { emptyTitle: 'Inventario no disponible', emptyMessage: 'Todavia no llegaron roles o canales desde el bot. Puedes revisar la configuracion actual, pero conviene re-sincronizar antes de guardar.', staleTitle: 'Inventario desactualizado', staleMessage: 'El snapshot del servidor no parece reciente. Si acabas de crear canales o roles, re-sincroniza antes de asignarlos aqui.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to publish channels and roles on the dashboard', desc: 'This module uses real server inventory. When the bot is inside, we will load channels, roles, and available panels.' },
+                main: { eyebrow: 'Roles and channels', title: 'Server operational base', desc: 'These channels and roles unlock tickets, logs, and automations. If this is set up well, the rest of the panel moves much faster.', save: 'Save assignments' },
+                notices: { emptyTitle: 'Inventory unavailable', emptyMessage: 'No roles or channels have arrived from the bot yet. You can review the current configuration, but it is best to re-sync before saving.', staleTitle: 'Inventory outdated', staleMessage: 'The server snapshot does not seem recent. If you just created channels or roles, re-sync before assigning them here.' },
                 channels: {
-                    title: 'Canales de operacion', desc: 'Conecta los espacios donde el bot publicara paneles, guardara trazas y mantendra contadores visibles para el staff.',
-                    dashboard: { label: 'Canal principal del panel', hint: 'Punto de entrada del dashboard operativo dentro de Discord.' },
-                    ticketPanel: { label: 'Canal del panel de tickets', hint: 'Aqui se publica el punto de arranque del flujo de soporte.' },
-                    logs: { label: 'Canal de registros generales', hint: 'Logs transversales del bot y del bridge.' },
-                    transcript: { label: 'Canal de transcripciones', hint: 'Donde se guardan cierres y transcripts de tickets.' },
-                    weeklyReport: { label: 'Canal de reporte semanal', hint: 'Recepcion de resumenes operativos programados.' },
-                    liveMembers: { label: 'Canal contador de miembros', hint: 'Canal de voz usado como contador visible.' },
-                    liveRoleCount: { label: 'Canal contador por rol', hint: 'Canal de voz usado para mostrar el total de un rol concreto.' },
-                    liveRole: { label: 'Rol mostrado en contador', hint: 'Rol que alimenta el contador por rol.' }
+                    title: 'Operation channels', desc: 'Connect the spaces where the bot will publish panels, store traces, and keep visible counters for the staff.',
+                    dashboard: { label: 'Main dashboard channel', hint: 'Entry point of the operational dashboard inside Discord.' },
+                    ticketPanel: { label: 'Ticket panel channel', hint: 'The starting point of the support flow is published here.' },
+                    logs: { label: 'General logs channel', hint: 'Cross-cutting logs from the bot and the bridge.' },
+                    transcript: { label: 'Transcripts channel', hint: 'Where ticket closures and transcripts are saved.' },
+                    weeklyReport: { label: 'Weekly report channel', hint: 'Reception of scheduled operational summaries.' },
+                    liveMembers: { label: 'Members counter channel', hint: 'Voice channel used as a visible counter.' },
+                    liveRoleCount: { label: 'Role counter channel', hint: 'Voice channel used to display the total of a specific role.' },
+                    liveRole: { label: 'Role displayed in counter', hint: 'Role that feeds the per-role counter.' }
                 },
                 access: {
-                    eyebrow: 'Accesos', title: 'Roles esenciales', desc: 'El bot usa estos roles para dar acceso al staff, separar permisos y operar flujos sensibles sin confusion.',
-                    sectionTitle: 'Accesos del staff', sectionDesc: 'Estas asignaciones resuelven permisos transversales para soporte, acciones sensibles y filtros por nivel de acceso.',
-                    support: { label: 'Rol del equipo de soporte', hint: 'Base para auto-asignacion, escalados y visibilidad operativa.' },
-                    admin: { label: 'Rol administrador del bot', hint: 'Bypass y acciones delicadas del bot.' },
-                    verify: { label: 'Rol minimo para crear tickets', hint: 'Usado como piso de acceso si el backend lo aplica.' }
+                    eyebrow: 'Access', title: 'Essential roles', desc: 'The bot uses these roles to give staff access, separate permissions, and operate sensitive flows without confusion.',
+                    sectionTitle: 'Staff access', sectionDesc: 'These assignments resolve cross-cutting permissions for support, sensitive actions, and access-level filters.',
+                    support: { label: 'Support team role', hint: 'Base for self-assignment, escalations, and operational visibility.' },
+                    admin: { label: 'Bot administrator role', hint: 'Bypass and delicate bot actions.' },
+                    verify: { label: 'Minimum role to create tickets', hint: 'Used as an access floor if the backend applies it.' }
                 },
-                footerNote: 'Todos los selectores salen del inventario sincronizado por el bot. Si aqui falta un rol o canal, primero re-sincroniza el servidor y luego vuelve a esta pantalla.',
-                notConfigured: 'No configurado',
+                footerNote: 'All selectors come from inventory synced by the bot. If a role or channel is missing here, re-sync the server first and then return to this screen.',
+                notConfigured: 'Not configured',
                 validation: {
-                    dashboard: 'Canal principal del panel', ticketPanel: 'Canal del panel de tickets', logs: 'Canal de registros', transcript: 'Canal de transcripciones', weeklyReport: 'Canal de reporte semanal', liveMembers: 'Canal contador de miembros', liveRoleCount: 'Canal contador por rol', liveRole: 'Rol del contador', support: 'Rol del equipo de soporte', admin: 'Rol administrador', verify: 'Rol minimo para tickets'
+                    dashboard: 'Main dashboard channel', ticketPanel: 'Ticket panel channel', logs: 'Logs channel', transcript: 'Transcripts channel', weeklyReport: 'Weekly report channel', liveMembers: 'Members counter channel', liveRoleCount: 'Role counter channel', liveRole: 'Counter role', support: 'Support team role', admin: 'Administrator role', verify: 'Minimum ticket role'
                 }
             },
             welcome: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para editar bienvenida y despedida', desc: 'Estos mensajes se aplican en eventos reales de miembros. El bot necesita estar dentro del servidor para ejecutarlos.' },
-                main: { eyebrow: 'Bienvenida', title: 'Experiencia de bienvenida', desc: 'Prepara el primer mensaje que vera un miembro nuevo, si recibira DM y si saldra con un autorrol base.', save: 'Guardar experiencia' },
-                notices: { emptyTitle: 'Inventario sin publicar', emptyMessage: 'Los canales y roles del servidor todavia no estan disponibles para validar bienvenida, despedida o autoroles.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to edit welcome and goodbye', desc: 'These messages apply on real member events. The bot needs to be inside the server to execute them.' },
+                main: { eyebrow: 'Welcome', title: 'Welcome experience', desc: 'Prepare the first message a new member will see, whether they will receive a DM, and whether they will get a base autorole.', save: 'Save experience' },
+                notices: { emptyTitle: 'Inventory not published', emptyMessage: 'Server channels and roles are not yet available to validate welcome, goodbye, or autoroles.' },
                 welcome: {
-                    enableLabel: 'Activar bienvenida',
-                    enableDesc: 'Publica embeds de bienvenida y opcionalmente DM al usuario.',
-                    sectionTitle: 'Bienvenida publica',
-                    sectionDesc: 'Deja lista la pieza publica que ve el servidor y la automatizacion opcional por DM o autorrol.',
-                    channelLabel: 'Canal bienvenida',
+                    enableLabel: 'Enable welcome',
+                    enableDesc: 'Publish welcome embeds and optionally DM the user.',
+                    sectionTitle: 'Public welcome',
+                    sectionDesc: 'Set up the public piece the server sees and the optional automation by DM or autorole.',
+                    channelLabel: 'Welcome channel',
                     autoroleLabel: 'Autorole',
-                    titleLabel: 'Titulo',
-                    messageLabel: 'Mensaje',
-                    colorLabel: 'Color HEX',
+                    titleLabel: 'Title',
+                    messageLabel: 'Message',
+                    colorLabel: 'HEX Color',
                     bannerLabel: 'Banner',
+                    bannerPlaceholder: 'https://...',
                     footerLabel: 'Footer',
-                    thumbnailLabel: 'Mostrar thumbnail',
-                    dmLabel: 'Enviar DM',
-                    dmMessageLabel: 'Mensaje DM'
+                    thumbnailLabel: 'Show thumbnail',
+                    dmLabel: 'Send DM',
+                    dmMessageLabel: 'DM Message'
                 },
                 goodbye: {
-                    title: 'Despedida',
-                    desc: 'Configura el mensaje que deja trazabilidad cuando alguien abandona el servidor.',
-                    enableLabel: 'Activar despedida',
-                    enableDesc: 'Publica embed cuando un miembro sale del servidor.',
-                    channelLabel: 'Canal despedida',
-                    titleLabel: 'Titulo',
-                    messageLabel: 'Mensaje',
-                    colorLabel: 'Color HEX',
-                    thumbnailLabel: 'Mostrar thumbnail',
+                    title: 'Goodbye',
+                    desc: 'Configure the message that leaves traceability when someone leaves the server.',
+                    enableLabel: 'Enable goodbye',
+                    enableDesc: 'Publish embed when a member leaves the server.',
+                    channelLabel: 'Goodbye channel',
+                    titleLabel: 'Title',
+                    messageLabel: 'Message',
+                    colorLabel: 'HEX Color',
+                    thumbnailLabel: 'Show thumbnail',
                     footerLabel: 'Footer'
                 },
-                notConfigured: 'No configurado'
+                notConfigured: 'Not configured'
             },
             verification: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para administrar la verificacion', desc: 'El panel de verificacion depende del inventario y de los handlers activos del bot dentro del servidor.' },
-                main: { eyebrow: 'Verificacion', title: 'Flujo de acceso al servidor', desc: 'Configura como entra la gente al servidor, que rol recibe al completar el proceso y que pasa si llega una oleada sospechosa.', save: 'Guardar acceso' },
-                notices: { emptyTitle: 'Inventario incompleto', emptyMessage: 'No llegaron roles o canales suficientes para validar el flujo completo de verificacion.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to manage verification', desc: 'The verification panel depends on inventory and the active bot handlers inside the server.' },
+                main: { eyebrow: 'Verification', title: 'Server access flow', desc: 'Configure how people enter the server, what role they receive upon completion, and what happens if a suspicious wave arrives.', save: 'Save access' },
+                notices: { emptyTitle: 'Incomplete inventory', emptyMessage: 'Not enough roles or channels arrived to validate the full verification flow.' },
                 flow: {
-                    title: 'Flujo principal', desc: 'Primero define donde vive el panel y que roles participan. Luego decide el modo exacto de verificacion.',
-                    enabled: { label: 'Sistema activo', desc: 'Activa el panel y las reglas de acceso verificable.' },
-                    channel: 'Canal del panel', logs: 'Canal de logs', verifiedRole: 'Rol verificado', unverifiedRole: 'Rol no verificado',
-                    mode: { label: 'Modo', button: 'Boton', code: 'Codigo', question: 'Pregunta' },
-                    autokick: { label: 'Autokick (horas)', hint: '0 desactiva el retiro automatico.' }
+                    title: 'Main flow', desc: 'First define where the panel lives and which roles participate. Then decide the exact verification mode.',
+                    enabled: { label: 'System active', desc: 'Activates the panel and verifiable access rules.' },
+                    channel: 'Panel channel', logs: 'Logs channel', verifiedRole: 'Verified role', unverifiedRole: 'Unverified role',
+                    mode: { label: 'Mode', button: 'Button', code: 'Code', question: 'Question' },
+                    autokick: { label: 'Autokick (hours)', hint: '0 disables automatic removal.' }
                 },
                 visual: {
-                    title: 'Panel visual y antiraid', desc: 'Textos, apariencia y reglas defensivas para que el acceso sea claro para miembros y seguro para el staff.',
-                    titleLabel: 'Titulo', descLabel: 'Descripcion', colorLabel: 'Color HEX', imageLabel: 'Imagen',
-                    questionLabel: 'Pregunta', answerLabel: 'Respuesta esperada',
-                    antiraid: { label: 'Antiraid', desc: 'Controla joins anormales antes de verificar.' },
-                    dm: { label: 'DM al verificar', desc: 'Confirma por mensaje directo cuando alguien completa el proceso.' },
-                    thresholds: { joins: 'Joins umbral', window: 'Ventana (seg)', action: 'Accion' }
+                    title: 'Visual panel and antiraid', desc: 'Texts, appearance, and defensive rules so access is clear for members and safe for staff.',
+                    titleLabel: 'Title', descLabel: 'Description', colorLabel: 'HEX Color', imageLabel: 'Image',
+                    imagePlaceholder: 'https://...',
+                    questionLabel: 'Question', answerLabel: 'Expected answer',
+                    antiraid: { label: 'Antiraid', desc: 'Controls abnormal joins before verification.' },
+                    dm: { label: 'DM on verify', desc: 'Confirms via direct message when someone completes the process.' },
+                    thresholds: { joins: 'Joins threshold', window: 'Window (sec)', action: 'Action', pause: 'Pause', kick: 'Kick' }
                 },
-                notConfigured: 'No configurado'
+                notConfigured: 'Not configured'
             },
             suggestions: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para gestionar sugerencias', desc: 'Este modulo refleja el sistema real de sugerencias del bot y sus canales asociados.' },
-                main: { eyebrow: 'Sugerencias', title: 'Canales y experiencia del usuario', desc: 'Define donde nacen las ideas de la comunidad, donde las revisa el staff y donde se publica el resultado.', save: 'Guardar flujo de sugerencias' },
-                notices: { emptyTitle: 'Sin canales sincronizados', emptyMessage: 'Todavia no recibimos canales desde el inventario del servidor. Re-sincroniza para poder elegir destinos reales.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to manage suggestions', desc: 'This module reflects the bot\'s real suggestion system and its associated channels.' },
+                main: { eyebrow: 'Suggestions', title: 'Channels and user experience', desc: 'Define where community ideas are born, where staff reviews them, and where the result is published.', save: 'Save suggestion flow' },
+                notices: { emptyTitle: 'No synced channels', emptyMessage: 'We have not received channels from the server inventory yet. Re-sync to be able to choose real destinations.' },
                 destinations: {
-                    title: 'Destinos del flujo', desc: 'Separa el canal donde escriben los miembros del circuito de revision y de los canales donde publicas decisiones.',
-                    enableLabel: 'Activar sugerencias', enableDesc: 'Permite usar el flujo `/suggest` del bot.',
-                    base: { label: 'Canal base', hint: 'Donde la comunidad deja sugerencias nuevas.' },
-                    logs: { label: 'Canal logs', hint: 'Revision interna del staff y trazabilidad.' },
-                    approved: { label: 'Canal aprobadas', hint: 'Publicacion de sugerencias aceptadas.' },
-                    rejected: { label: 'Canal rechazadas', hint: 'Publicacion de sugerencias rechazadas.' }
+                    title: 'Flow destinations', desc: 'Separate the channel where members write from the review circuit and the channels where you publish decisions.',
+                    enableLabel: 'Enable suggestions', enableDesc: 'Allows using the bot\'s `/suggest` flow.',
+                    base: { label: 'Base channel', hint: 'Where the community leaves new suggestions.' },
+                    logs: { label: 'Logs channel', hint: 'Internal staff review and traceability.' },
+                    approved: { label: 'Approved channel', hint: 'Publication of accepted suggestions.' },
+                    rejected: { label: 'Rejected channel', hint: 'Publication of rejected suggestions.' }
                 },
                 moderation: {
-                    title: 'Reglas de moderacion', desc: 'Condiciones que cambian la experiencia del usuario y la forma en que el staff cierra cada sugerencia.',
-                    cooldown: { label: 'Cooldown (min)', hint: 'Tiempo minimo entre sugerencias consecutivas por usuario.' },
-                    dm: { label: 'Enviar DM al resolver', desc: 'El usuario recibe el resultado por mensaje directo.' },
-                    reason: { label: 'Exigir razon para moderar', desc: 'Pide justificar aprobaciones o rechazos.' },
-                    anonymous: { label: 'Modo anonimo', desc: 'Oculta al autor en la publicacion inicial si el backend lo soporta.' }
+                    title: 'Moderation rules', desc: 'Conditions that change the user experience and how staff closes each suggestion.',
+                    cooldown: { label: 'Cooldown (min)', hint: 'Minimum time between consecutive suggestions per user.' },
+                    dm: { label: 'Send DM on resolve', desc: 'The user receives the result via direct message.' },
+                    reason: { label: 'Require reason to moderate', desc: 'Ask to justify approvals or rejections.' },
+                    anonymous: { label: 'Anonymous mode', desc: 'Hides the author in the initial publication if the backend supports it.' }
                 },
-                notConfigured: 'No configurado'
+                notConfigured: 'Not configured'
             },
             modlogs: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para configurar modlogs', desc: 'Los eventos de moderacion dependen de que el bot pueda escuchar acciones reales dentro del servidor.' },
-                main: { eyebrow: 'Modlogs', title: 'Canal de auditoria', desc: 'Deja una bitacora clara de moderacion para que el equipo pueda revisar que paso y cuando paso.', save: 'Guardar modlogs' },
-                notices: { emptyTitle: 'Inventario vacio', emptyMessage: 'No llegaron canales del servidor, asi que no podemos validar el destino real de los modlogs.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to configure modlogs', desc: 'Moderation events depend on the bot being able to listen to real actions inside the server.' },
+                main: { eyebrow: 'Modlogs', title: 'Audit channel', desc: 'Keep a clear moderation log so the team can review what happened and when.', save: 'Save modlogs' },
+                notices: { emptyTitle: 'Empty inventory', emptyMessage: 'No server channels arrived, so we cannot validate the real destination for modlogs.' },
                 setup: {
-                    enableLabel: 'Modlogs activos', enableDesc: 'El bot escribira eventos de moderacion y cambios de miembros.',
-                    channelLabel: 'Canal', channelHint: 'Canal central donde quedara la auditoria.'
+                    enableLabel: 'Modlogs active', enableDesc: 'The bot will write moderation events and member changes.',
+                    channelLabel: 'Channel', channelHint: 'Central channel where the audit will remain.'
                 },
                 events: {
-                    title: 'Eventos registrados', desc: 'Elige exactamente que acciones del servidor deben quedar guardadas en la bitacora.',
-                    logBans: 'Baneos', logUnbans: 'Desbaneos', logKicks: 'Expulsiones', logMessageDelete: 'Mensajes eliminados',
-                    logMessageEdit: 'Mensajes editados', logRoleAdd: 'Roles agregados', logRoleRemove: 'Roles retirados',
-                    logNickname: 'Cambios de nickname', logJoins: 'Entradas', logLeaves: 'Salidas', logVoice: 'Eventos de voz'
+                    title: 'Logged events', desc: 'Choose exactly which server actions should be saved in the log.',
+                    logBans: 'Bans', logUnbans: 'Unbans', logKicks: 'Kicks', logMessageDelete: 'Deleted messages',
+                    logMessageEdit: 'Edited messages', logRoleAdd: 'Added roles', logRoleRemove: 'Removed roles',
+                    logNickname: 'Nickname changes', logJoins: 'Joins', logLeaves: 'Leaves', logVoice: 'Voice events'
                 },
-                notConfigured: 'No configurado',
-                validation: { channel: 'Canal de modlogs' }
+                notConfigured: 'Not configured',
+                validation: { channel: 'Modlogs channel' }
             },
             commands: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para gestionar comandos', desc: 'La configuracion de comandos depende del inventario real y de los limites en runtime del bot.' },
-                main: { eyebrow: 'Comandos', title: 'Disponibilidad y limites', desc: 'Controla que comandos estan activos y como se rate-limitan en este servidor.', save: 'Guardar politicas de comandos' },
-                notices: { emptyTitle: 'Inventario de comandos vacio', emptyMessage: 'Todavia no llegaron slash commands del bot. Puedes revisar la configuracion cargada, pero conviene re-sincronizar antes de cambiar listas u overrides.' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to manage commands', desc: 'Command configuration depends on real inventory and the bot\'s runtime limits.' },
+                main: { eyebrow: 'Commands', title: 'Availability and limits', desc: 'Control which commands are active and how they are rate-limited on this server.', save: 'Save command policies' },
+                notices: { emptyTitle: 'Command inventory empty', emptyMessage: 'No slash commands have arrived from the bot yet. You can review the loaded configuration, but it is best to re-sync before changing lists or overrides.' },
                 policy: {
-                    title: 'Politica general', desc: 'Define si el servidor usa ayuda simplificada y que capas de limitacion estan activas por defecto.',
-                    rateLimitEnabled: { label: 'Rate limit global', desc: 'Aplica una cuota comun a todos los comandos.' },
-                    rateLimitBypassAdmin: { label: 'Admins sin limite', desc: 'Deja a los administradores fuera del rate limit general.' },
-                    commandRateLimitEnabled: { label: 'Rate limit por comando', desc: 'Permite una cuota base para comandos individuales.' },
-                    simpleHelpMode: { label: 'Help simple', desc: 'Usa una ayuda mas directa para admins y miembros.' }
+                    title: 'General policy', desc: 'Define whether the server uses simplified help and which limitation layers are active by default.',
+                    rateLimitEnabled: { label: 'Global rate limit', desc: 'Applies a common quota to all commands.' },
+                    rateLimitBypassAdmin: { label: 'Admins without limit', desc: 'Leaves administrators outside the general rate limit.' },
+                    commandRateLimitEnabled: { label: 'Per-command rate limit', desc: 'Allows a base quota for individual commands.' },
+                    simpleHelpMode: { label: 'Simple help', desc: 'Uses more direct help for admins and members.' }
                 },
                 limits: {
-                    title: 'Limites base', desc: 'Los admins entienden mejor el comportamiento cuando la cuota general y la cuota por comando estan claramente separadas.',
-                    rateLimitWindowSeconds: 'Ventana global (seg)', rateLimitMaxActions: 'Max acciones global',
-                    commandRateLimitWindowSeconds: 'Ventana comando (seg)', commandRateLimitMaxActions: 'Max acciones comando'
+                    title: 'Base limits', desc: 'Admins understand behavior better when the general quota and the per-command quota are clearly separated.',
+                    rateLimitWindowSeconds: 'Global window (sec)', rateLimitMaxActions: 'Max global actions',
+                    commandRateLimitWindowSeconds: 'Command window (sec)', commandRateLimitMaxActions: 'Max command actions'
                 },
-                disabled: { title: 'Comandos deshabilitados', desc: 'Checklist directo desde el inventario de comandos disponible.', empty: 'El bot todavia no ha publicado inventario de comandos para este guild.' },
+                disabled: { title: 'Disabled commands', desc: 'Direct checklist from the available command inventory.', empty: 'The bot has not yet published a command inventory for this guild.' },
                 overrides: {
-                    title: 'Overrides por comando', desc: 'Ajustes finos sobre comandos concretos sin tocar el limite global.', add: 'Agregar override',
-                    command: 'Comando', max: 'Max', window: 'Ventana', active: 'Activo',
-                    empty: 'Todavia no hay overrides. Puedes agregar uno y asignarlo a cualquier comando publicado por el bot.'
+                    title: 'Per-command overrides', desc: 'Fine adjustments on specific commands without touching the global limit.', add: 'Add override',
+                    command: 'Command', max: 'Max', window: 'Window', active: 'Active',
+                    empty: 'There are no overrides yet. You can add one and assign it to any command published by the bot.'
                 },
-                validation: { duplicateOverride: 'Ya existe un override para: {{commands}}.', missingDisabled: '/{{command}} aparece deshabilitado, pero ya no existe en el inventario actual.', missingOverride: '/{{command}} tiene override guardado, pero el comando no existe en el inventario actual.' }
+                validation: { duplicateOverride: 'An override already exists for: {{commands}}.', missingDisabled: '/{{command}} appears disabled, but no longer exists in the current inventory.', missingOverride: '/{{command}} has a saved override, but the command does not exist in the current inventory.' }
             },
             system: {
-                onboarding: { eyebrow: 'Onboarding', title: 'Instala el bot para administrar el sistema', desc: 'El modo mantenimiento y los backups dependen del bridge real del bot sobre Mongo y Supabase.' },
-                main: { eyebrow: 'Sistema', title: 'Mantenimiento y compatibilidad', desc: 'Ajustes globales del bot y lectura del estado tecnico para saber si puedes seguir configurando con seguridad.', save: 'Guardar estado del sistema' },
-                maintenance: { label: 'Modo mantenimiento', desc: 'Detiene aperturas nuevas y deja visible el motivo configurado.', reasonLabel: 'Motivo', reasonHint: 'Explica el impacto esperado. Este texto es el que entendera el equipo cuando vea el bot en mantenimiento.' },
-                sync: { bridge: 'Bridge', heartbeat: 'Ultimo heartbeat', inventory: 'Ultimo inventario', config: 'Ultima config aplicada', pendingMutations: 'Mutaciones pendientes', failedMutations: 'Mutaciones fallidas' },
+                onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to manage system', desc: 'Maintenance mode and backups depend on the bot\'s real bridge over Mongo and Supabase.' },
+                main: { eyebrow: 'System', title: 'Maintenance and compatibility', desc: 'Global bot settings and technical status reading to know if you can continue configuring safely.', save: 'Save system state' },
+                maintenance: { label: 'Maintenance mode', desc: 'Stops new openings and leaves the configured reason visible.', reasonLabel: 'Reason', reasonHint: 'Explain the expected impact. This is the text the team will understand when they see the bot in maintenance.' },
+                sync: { bridge: 'Bridge', heartbeat: 'Last heartbeat', inventory: 'Last inventory', config: 'Last applied config', pendingMutations: 'Pending mutations', failedMutations: 'Failed mutations' },
                 backups: {
-                    title: 'Backups y restore', desc: 'Crea una base segura antes de cambios grandes y restaura una version anterior si algo no queda como esperabas.',
-                    create: 'Crear backup', requesting: 'Solicitando...',
-                    item: { exported: 'Exportado {{time}}', created: 'Creado {{time}}', schema: 'Version de esquema {{version}}', id: 'Backup ID: {{id}}', restore: 'Restaurar' },
-                    empty: 'Aun no existe un backup inicial. Crear uno ahora te deja un punto seguro antes de tocar tickets, verificacion o automatizaciones delicadas.'
+                    title: 'Backups and restore', desc: 'Create a safe base before big changes and restore a previous version if something does not turn out as expected.',
+                    create: 'Create backup', requesting: 'Requesting...',
+                    item: { exported: 'Exported {{time}}', created: 'Created {{time}}', schema: 'Schema version {{version}}', id: 'Backup ID: {{id}}', restore: 'Restore' },
+                    empty: 'There is no initial backup yet. Creating one now leaves you a safe point before touching tickets, verification, or delicate automations.'
                 },
                 restore: {
-                    title: 'Restore seguro', desc: 'La restauracion crea una mutacion auditada. Pide confirmacion explicita para evitar restauraciones accidentales.',
-                    alertTitle: 'Vas a restaurar un snapshot anterior', alertDesc: 'Seleccion actual: {{source}}. Exportado {{time}}.',
-                    confirmTitle: 'Confirmacion', confirmDesc: 'Escribe {{keyword}} para solicitar la restauracion del backup {{id}}.', confirmLabel: 'Texto de confirmacion', keyword: 'RESTORE',
-                    cancel: 'Cancelar', submit: 'Solicitar restore',
-                    empty: 'Elige primero un backup del historial para abrir el flujo seguro de restauracion.'
+                    title: 'Safe restore', desc: 'Restoration creates an audited mutation. It asks for explicit confirmation to avoid accidental restores.',
+                    alertTitle: 'You are about to restore a previous snapshot', alertDesc: 'Current selection: {{source}}. Exported {{time}}.',
+                    confirmTitle: 'Confirmation', confirmDesc: 'Type {{keyword}} to request the restoration of backup {{id}}.', confirmLabel: 'Confirmation text', keyword: 'RESTORE',
+                    cancel: 'Cancel', submit: 'Request restore',
+                    empty: 'First choose a backup from the history to open the safe restoration flow.'
                 }
             },
             activity: {
-                degraded: 'La linea de tiempo esta operando con cobertura parcial',
+                degraded: 'The timeline is operating with partial coverage',
                 states: {
-                    degraded: { eyebrow: 'Actividad degradada', title: 'La auditoria reciente no esta disponible por ahora' },
-                    empty: { title: 'La bitacora esta limpia', descInstalled: 'Cuando solicites cambios, se procesen tickets o el bot publique eventos, aqui aparecera la linea de tiempo operativa.', descPending: 'Invita el bot a este servidor y realiza la primera configuracion para empezar a construir la auditoria.' }
+                    degraded: { eyebrow: 'Degraded activity', title: 'Recent audit is unavailable for now' },
+                    empty: { title: 'The log is clean', descInstalled: 'When you request changes, process tickets, or the bot publishes events, the operational timeline will appear here.', descPending: 'Invite the bot to this server and perform the first configuration to start building the audit.' }
                 },
                 timeline: {
-                    eyebrow: 'Timeline', title: 'Actividad reciente del panel y del bot', desc: 'La linea de tiempo combina mutaciones de configuracion con eventos del sistema para que puedas seguir el estado del servidor de una sola pasada.', clearFilters: 'Limpiar filtros',
-                    empty: 'No hay elementos para la combinacion actual de filtros. Prueba con todas las fuentes o todas las severidades.',
+                    eyebrow: 'Timeline', title: 'Recent panel and bot activity', desc: 'The timeline combines configuration mutations with system events so you can follow the server status in one pass.', clearFilters: 'Clear filters',
+                    empty: 'There are no items for the current filter combination. Try all sources or all severities.',
                     payload: 'Payload'
                 },
                 summary: {
-                    eyebrow: 'Resumen', title: 'Estado de la cola', desc: 'Lectura rapida para saber si la operacion esta tranquila o si hay que entrar a revisar.',
-                    pending: 'Mutaciones pendientes', failed: 'Mutaciones fallidas', events: 'Eventos recientes', visible: 'Timeline visible'
+                    eyebrow: 'Summary', title: 'Queue status', desc: 'Quick read to know if operations are calm or if you need to go in and review.',
+                    pending: 'Pending mutations', failed: 'Failed mutations', events: 'Recent events', visible: 'Timeline visible'
                 },
                 reading: {
-                    eyebrow: 'Lectura', title: 'Como interpretar esta actividad', desc: 'Pequenas guias para leer la timeline con menos friccion.',
-                    guide1: 'La timeline mezcla solicitudes de la dashboard con eventos confirmados por el sistema y los ordena por la fecha mas relevante.',
-                    guide2: 'Usa severidad critica o de atencion para encontrar rapido errores, atascos o cambios que aun esperan aplicacion.',
-                    guide3: 'Si quieres ver solo lo que salio del admin panel, filtra por mutaciones. Si buscas confirmaciones del bridge, filtra por eventos.'
+                    eyebrow: 'Reading', title: 'How to interpret this activity', desc: 'Small guides to read the timeline with less friction.',
+                    guide1: 'The timeline mixes dashboard requests with events confirmed by the system and orders them by the most relevant date.',
+                    guide2: 'Use critical or attention severity to quickly find errors, bottlenecks, or changes that still await application.',
+                    guide3: 'If you want to see only what came out of the admin panel, filter by mutations. If you are looking for bridge confirmations, filter by events.'
                 },
                 filters: {
-                    source: { events: 'Solo eventos', mutations: 'Solo mutaciones', all: 'Todo' },
-                    severity: { success: 'Ok', warning: 'Atencion', danger: 'Critico', info: 'Info', neutral: 'Neutral', all: 'Todas' }
+                    source: { events: 'Events only', mutations: 'Mutations only', all: 'All' },
+                    severity: { success: 'Ok', warning: 'Attention', danger: 'Critical', info: 'Info', neutral: 'Neutral', all: 'All' }
                 }
             },
             analytics: {
@@ -1257,6 +1419,7 @@ export const en = {
             },
             shell: {
                 brandDescription: 'Task navigation to configure, review, and operate the server.',
+                guildIconAlt: 'Guild',
                 activeServer: 'Active server',
                 selectServer: 'Select a server',
                 serverReady: 'Inventory synced and ready to finish configuration.',
@@ -1300,7 +1463,9 @@ export const en = {
                 readySuffix: ' - ready',
                 errorBoundary: {
                     eyebrow: 'Module error',
-                    title: 'This module failed to render'
+                    title: 'This module failed to render',
+                    moduleMessage: 'The {{module}} module could not be rendered.',
+                    retry: 'Retry'
                 },
                 configSaveError: 'Could not register the change request.',
                 sectionStatus: {
@@ -1310,7 +1475,19 @@ export const en = {
                     notConfigured: 'Not configured'
                 },
                 defaultServerAlt: 'Server',
-                defaultUserAlt: 'User'
+                defaultUserAlt: 'User',
+                commandPalette: {
+                    placeholder: 'Search modules...',
+                    empty: 'No results found.',
+                    groupLabel: 'Modules'
+                }
+            },
+            toast: {
+                configSaved: '{{label}} saved',
+                backupScheduled: 'Backup scheduled successfully',
+                backupPermissionError: 'Ensure backup permissions first',
+                restoreStarted: 'Restore started',
+                restoreError: 'Error restoring backup',
             },
             actions: {
                 retryValidation: 'Retry validation',
@@ -1474,6 +1651,13 @@ export const en = {
                 title: 'Choose Your',
                 titleAccent: 'Operational Plan',
                 description: 'Free gets you started. Pro unlocks the full toolkit. Enterprise includes white-glove onboarding.',
+                cta: 'View plans',
+            },
+            trust: {
+                secure: { title: 'Secure payment' },
+                instant: { title: 'Instant activation' },
+                stripe: { title: 'Powered by Stripe' },
+                guarantee: { title: '7-Day Money-Back Guarantee' },
             },
             manual: {
                 title: 'Manual Activation in Discord',
@@ -1512,9 +1696,11 @@ export const en = {
             socialProof: {
                 label: 'Social Proof',
                 description: 'Join 100+ servers already using TON618',
+                emptyState: 'Trusted by growing Discord communities worldwide',
             },
             foundingOffer: {
                 text: '🚀 Founding Member Offer — First 50 subscribers get 50% off forever. {{spots}} spots left.',
+                dismissAriaLabel: 'Dismiss founding member offer',
             },
             lifetimeUrgency: '⏳ Launch price — may increase as we grow',
             steps: {
@@ -1602,6 +1788,13 @@ export const en = {
                 titlePayment: 'Payment Successful!',
                 descriptionDonation: 'Your generous donation helps keep TON618 running. Thank you!',
                 descriptionPayment: 'Thank you for upgrading to TON618 {{plan}}! Your server premium has been activated.',
+                planLabels: {
+                    pro_monthly: 'Pro Monthly',
+                    pro_yearly: 'Pro Yearly',
+                    lifetime: 'Lifetime',
+                    donate: 'Donation',
+                    default: 'Premium',
+                },
                 whatsNext: "What's Next?",
                 steps: {
                     s1: 'Your payment was completed successfully in Stripe.',
@@ -1649,6 +1842,144 @@ export const en = {
                 permissionDenied: 'Permission denied',
                 needManageServer: 'You need Manage Server permission to upgrade this server',
             },
+            pricingCards: {
+                planType: {
+                    subscription: 'Subscription',
+                    oneTime: 'One-Time Purchase',
+                },
+                billingCycle: {
+                    monthly: 'month',
+                    yearly: 'year',
+                    forever: 'lifetime',
+                },
+                badges: {
+                    bestValue: 'Save 25% · BEST VALUE',
+                    launchOffer: 'Launch Offer',
+                },
+                cancelAnytime: 'Cancel anytime',
+                serverRequired: 'Requires server selection after purchase',
+                loading: 'Loading...',
+                launchPriceNote: '⏳ Launch price — may increase as we grow',
+                monthly: {
+                    name: 'Pro Monthly',
+                    description: 'Perfect for growing communities',
+                    cta: 'Get Started',
+                    features: [
+                        'Up to 50 custom commands',
+                        '20 auto-role configurations',
+                        '10 welcome message templates',
+                        'Advanced moderation tools',
+                        'Custom embed builder',
+                        'Priority support',
+                        'Server analytics dashboard',
+                        'Cancel anytime',
+                    ],
+                },
+                yearly: {
+                    name: 'Pro Yearly',
+                    description: 'Best value for established servers',
+                    cta: 'Get Started',
+                    features: [
+                        'Everything in Monthly',
+                        'Save $20 per year',
+                        'Priority feature requests',
+                        'Early access to new features',
+                        'Dedicated support channel',
+                        'Custom bot status (coming soon)',
+                        'Advanced analytics',
+                        'Yearly billing',
+                    ],
+                },
+                lifetime: {
+                    name: 'Lifetime',
+                    description: 'One-time payment, premium forever',
+                    cta: 'Get Started',
+                    features: [
+                        'Everything in Pro',
+                        '100 custom commands',
+                        '50 auto-role configurations',
+                        '20 welcome message templates',
+                        'Lifetime updates',
+                        'VIP support',
+                        'Exclusive features',
+                        'No recurring payments',
+                        'Priority bug fixes',
+                    ],
+                },
+            },
+        },
+        docs: {
+            pageTitle: 'Documentation | TON618',
+            metaDescription: 'TON618 command reference and documentation. Setup, tickets, verification, stats and staff operations.',
+            hero: {
+                badge: 'Command Reference',
+                titlePrefix: 'TON618',
+                titleSuffix: 'Documentation',
+                subtitle: 'Quick reference for all TON618 slash commands. All operations happen inside Discord—no external dashboard needed.',
+            },
+            proActivation: {
+                title: 'Pro Activation Flow',
+                steps: {
+                    openTicket: { title: 'Open Ticket', description: 'Join support server and open a billing ticket with your payment receipt' },
+                    receiveCode: { title: 'Receive Code', description: 'After verification, you\'ll receive an activation code via DM with instructions' },
+                    redeem: { title: 'Redeem', description: 'Run /pro redeem <code> in your server as the server owner' },
+                    enjoyPro: { title: 'Enjoy Pro', description: 'Premium features are instantly activated on your server' },
+                },
+            },
+            commands: {
+                setup: {
+                    title: 'Setup & Configuration',
+                    description: 'Initial server setup and configuration commands',
+                    cmds: { setup: 'Interactive setup wizard for channels, roles and permissions', language: 'Change server language (English/Español)', configCenter: 'Open configuration panel' },
+                },
+                tickets: {
+                    title: 'Tickets & Support',
+                    description: 'Support ticket management commands',
+                    cmds: { ticket: 'Create or manage support tickets', panel: 'Publish ticket panel to a channel', staff: 'Staff queue and ticket assignment' },
+                },
+                verification: {
+                    title: 'Verification',
+                    description: 'Member verification and access control',
+                    cmds: { verify: 'Verification panel and member screening', panel: 'Publish verification panel' },
+                },
+                analytics: {
+                    title: 'Stats & Analytics',
+                    description: 'Server metrics and operational data',
+                    cmds: { stats: 'View server statistics and metrics', audit: 'Audit log and moderation history', debug: 'Technical diagnostics' },
+                },
+                premium: {
+                    title: 'Premium',
+                    description: 'Activate and manage Pro subscription',
+                    cmds: { redeem: 'Activate Pro using your activation code (server owner only)' },
+                },
+            },
+            quickLinks: {
+                title: 'Need more help?',
+                description: 'Join our support server for personalized assistance or check the live metrics page.',
+                backToHome: 'Back to home',
+                supportServer: 'Support server',
+            },
+        },
+        comingSoon: {
+            title: 'Coming Soon | TON618',
+            badge: 'Private Beta',
+            headlinePrefix: 'Dashboard',
+            headlineSuffix: 'Coming Soon',
+            description: 'The web dashboard is currently in private beta. For now, all operations stay inside Discord with slash commands.',
+            backToHome: 'Back to home',
+            joinSupport: 'Join support server',
+            footer: {
+                discordFirst: 'Discord-first operations',
+                slashReady: 'Slash commands ready',
+            },
+        },
+        errorBoundary: {
+            title: 'Something went wrong',
+            description: 'We encountered an unexpected error. Our team has been notified and we are working on a fix.',
+            errorDetails: 'Error Details (Dev Only)',
+            tryAgain: 'Try Again',
+            reloadPage: 'Reload Page',
+            goHome: 'Go Home',
         },
     },
 };

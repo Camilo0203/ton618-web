@@ -43,7 +43,7 @@ export function SocialProof() {
             {t('billing.socialProof.label')}
           </div>
           <p className="text-xl font-semibold text-slate-300">
-            Trusted by growing Discord communities worldwide
+            {t('billing.socialProof.emptyState')}
           </p>
         </div>
       </section>

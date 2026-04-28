@@ -87,7 +87,7 @@ export default function PricingPage() {
                 setShowFounding(false);
                 try { localStorage.setItem('ton618_founding_dismissed', 'true'); } catch { /* storage unavailable */ }
               }}
-              aria-label="dismiss"
+              aria-label={t('billing.foundingOffer.dismissAriaLabel')}
               className="ml-4 shrink-0 text-white/80 hover:text-white"
             >
               <X className="h-4 w-4" />
@@ -128,7 +128,7 @@ export default function PricingPage() {
                 <h3 className="text-xl font-bold">{plan.name[lang]}</h3>
                 <p className="mt-1 text-sm text-slate-300">{plan.description[lang]}</p>
                 <p className="mt-5 text-4xl font-black">{plan.price[cycle].display}<span className="ml-1 text-sm text-slate-400">{getPlanPeriod(planKey, cycle, lang)}</span></p>
-                {isYearlyPro && <p className="mt-2 text-xs font-semibold text-emerald-300">Save 25% · BEST VALUE</p>}
+                {isYearlyPro && <p className="mt-2 text-xs font-semibold text-emerald-300">{t('billing.toggle.discount')}</p>}
                 {isYearlyPro && <p className="mt-2 text-xs text-amber-400">{t('billing.lifetimeUrgency')}</p>}
                 <ul className="mt-5 space-y-2">
                   {plan.features[lang].slice(0, 5).map((feature) => (

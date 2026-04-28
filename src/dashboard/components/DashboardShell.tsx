@@ -308,7 +308,7 @@ export default function DashboardShell({
 
                 <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[1.15rem] border border-white/[0.08] bg-white/[0.04] p-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                   {guildIconUrl ? (
-                    <img src={guildIconUrl} alt="Guild" className="h-full w-full rounded-xl object-cover" />
+                    <img src={guildIconUrl} alt={t('dashboard.shell.guildIconAlt')} className="h-full w-full rounded-xl object-cover" />
                   ) : (
                     <Logo size="sm" withText={false} frameClassName="h-full w-full rounded-xl border-0 bg-transparent shadow-none" />
                   )}

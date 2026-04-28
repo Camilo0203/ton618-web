@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { AlertTriangle, RotateCcw } from 'lucide-react';
 import SaveRequestButton from './SaveRequestButton';
+import { useTranslation } from 'react-i18next';
 
 export function FormSection({
   title,
@@ -122,6 +123,7 @@ export function InventoryNotice({
 }
 
 export function ValidationSummary({ errors }: { errors: string[] }) {
+  const { t } = useTranslation();
   if (!errors.length) {
     return null;
   }
@@ -135,7 +137,7 @@ export function ValidationSummary({ errors }: { errors: string[] }) {
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
         <div>
-          <p className="text-sm font-semibold">Hay datos que revisar antes de guardar</p>
+          <p className="text-sm font-semibold">{t('dashboard.config.validationSummary')}</p>
           <ul className="mt-2 space-y-1 text-sm leading-6">
             {errors.map((error) => (
               <li key={error}>- {error}</li>
@@ -158,6 +160,7 @@ export function ConfigFormActions({
   onReset: () => void;
   saveLabel?: string;
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <button
@@ -167,7 +170,7 @@ export function ConfigFormActions({
         className="dashboard-secondary-button min-w-[10rem]"
       >
         <RotateCcw className="h-4 w-4" />
-        Restablecer
+        {t('dashboard.config.resetButton')}
       </button>
       <SaveRequestButton isDirty={isDirty} isSaving={isSaving} dirtyLabel={saveLabel} />
     </>

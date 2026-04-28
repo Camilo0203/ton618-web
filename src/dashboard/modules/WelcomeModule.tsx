@@ -170,7 +170,7 @@ export default function WelcomeModule({
                 <input {...register('welcomeColor')} className="dashboard-form-field" />
               </FieldShell>
               <FieldShell label={t('dashboard.welcome.welcome.bannerLabel')}>
-                <input {...register('welcomeBanner')} placeholder="https://..." className="dashboard-form-field" />
+                <input {...register('welcomeBanner')} placeholder={t('dashboard.welcome.welcome.bannerPlaceholder')} className="dashboard-form-field" />
               </FieldShell>
             </div>
             <FieldShell label={t('dashboard.welcome.welcome.footerLabel')}>

@@ -1,5 +1,6 @@
 // Plan card component for displaying pricing plans
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { Check, Zap, Crown, Sparkles, Heart } from 'lucide-react';
 import type { PlanDetails } from '../types';
 
@@ -18,6 +19,7 @@ const iconMap = {
 };
 
 export function PlanCard({ plan, onSelect, loading = false, disabled = false }: PlanCardProps) {
+  const { t } = useTranslation();
   const Icon = iconMap[plan.icon];
   const isHighlighted = plan.highlighted;
 
@@ -81,7 +83,7 @@ export function PlanCard({ plan, onSelect, loading = false, disabled = false }: 
           disabled:hover:scale-100
         `}
       >
-        {loading ? 'Processing...' : 'Get Started'}
+        {loading ? t('billing.pricingCards.loading') : t('billing.pricingCards.monthly.cta')}
       </button>
 
       <div className="mt-6 space-y-3">

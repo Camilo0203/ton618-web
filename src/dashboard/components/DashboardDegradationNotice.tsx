@@ -1,4 +1,5 @@
 import { AlertTriangle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { DashboardPartialFailure } from '../types';
 
 interface DashboardDegradationNoticeProps {
@@ -9,9 +10,10 @@ interface DashboardDegradationNoticeProps {
 
 export default function DashboardDegradationNotice({
   failures,
-  title = 'Algunos datos del dashboard estan degradados',
+  title,
   className = '',
 }: DashboardDegradationNoticeProps) {
+  const { t } = useTranslation();
   if (!failures.length) {
     return null;
   }
@@ -25,9 +27,9 @@ export default function DashboardDegradationNotice({
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0" />
         <div className="min-w-0">
-          <p className="text-sm font-semibold">{title}</p>
+          <p className="text-sm font-semibold">{title || t('dashboard.degradationNotice.title')}</p>
           <p className="mt-1 text-sm leading-6 text-current/80">
-            El resto del panel sigue disponible mientras recuperamos estas fuentes.
+            {t('dashboard.degradationNotice.description')}
           </p>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-current/80">
             {failures.map((failure) => (

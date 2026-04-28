@@ -85,13 +85,13 @@ export default function GeneralModule({
   const launchpadSteps = [
     {
       id: 'roles',
-      label: 'Roles y canales base',
+      label: t('dashboard.general.launchpad.rolesLabel'),
       done: Boolean(config.serverRolesChannelsSettings.supportRoleId && config.serverRolesChannelsSettings.ticketPanelChannelId),
       section: 'server_roles' as const,
     },
     {
       id: 'sla',
-      label: 'SLA operativo',
+      label: t('dashboard.general.launchpad.slaLabel'),
       done: config.ticketsSettings.slaMinutes > 0,
       section: 'tickets' as const,
     },
@@ -167,7 +167,7 @@ export default function GeneralModule({
               >
                 <input
                   {...register('generalSettings.timezone')}
-                  placeholder="America/Bogota"
+                  placeholder={t('dashboard.general.locale.timezonePlaceholder')}
                   className="dashboard-form-field"
                 />
               </FieldShell>
@@ -207,7 +207,7 @@ export default function GeneralModule({
                 <input
                   {...register('generalSettings.prefix')}
                   disabled={commandMode !== 'prefix'}
-                  placeholder="!"
+                  placeholder={t('dashboard.general.locale.prefixPlaceholder')}
                   className="dashboard-form-field"
                 />
               </FieldShell>

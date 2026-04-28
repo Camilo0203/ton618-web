@@ -265,7 +265,7 @@ export default function OverviewModule({
                 />
               </div>
 
-              <div className="mt-5 dashboard-overview-quick-list" role="list" aria-label="Resumen rapido">
+              <div className="mt-5 dashboard-overview-quick-list" role="list" aria-label={t('dashboard.overview.quickList.ariaLabel')}>
                 {[
                   {
                     icon: RadioTower,

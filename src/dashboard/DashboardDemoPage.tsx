@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import DashboardModuleViewport from './components/DashboardModuleViewport';
 import DashboardShell from './components/DashboardShell';
 import { usePersistentDashboardSection } from './hooks/usePersistentDashboardSection';
@@ -84,6 +85,7 @@ function withAppliedMutation(
 }
 
 function applyDemoConfigChange(
+  t: TFunction,
   snapshot: GuildDashboardSnapshot,
   section: ConfigMutationSectionId,
   payload: unknown,
@@ -131,8 +133,8 @@ function applyDemoConfigChange(
           id: `demo-event-config-${Date.now()}`,
           guildId: snapshot.config.guildId,
           eventType: 'config',
-          title: 'Cambio demo aplicado',
-          description: `La seccion ${section} se actualizo dentro del demo operativo.`,
+          title: t('dashboard.demo.event.configTitle'),
+          description: t('dashboard.demo.event.configDesc', { section }),
           metadata: { section },
           createdAt: now,
         },
@@ -143,6 +145,7 @@ function applyDemoConfigChange(
 }
 
 function applyDemoBackupAction(
+  t: TFunction,
   snapshot: GuildDashboardSnapshot,
   action: 'create_backup' | 'restore_backup',
   backupId?: string,
@@ -187,8 +190,8 @@ function applyDemoBackupAction(
           id: `demo-event-backup-${Date.now()}`,
           guildId: snapshot.config.guildId,
           eventType: 'backup',
-          title: 'Restore demo ejecutado',
-          description: `Se simulo la restauracion del backup ${backupId ?? 'desconocido'}.`,
+          title: t('dashboard.demo.event.restoreTitle'),
+          description: t('dashboard.demo.event.restoreDesc', { backupId: backupId ?? t('dashboard.demo.unknown') }),
           metadata: { backupId: backupId ?? null },
           createdAt: now,
         },
@@ -228,7 +231,7 @@ export default function DashboardDemoPage() {
         <title>{`${t('dashboard.pageTitle')} | Demo Ops Console | ${demoDashboardGuild.guildName}`}</title>
         <meta
           name="description"
-          content="Demo operativo del dashboard de TON618 con inbox, playbooks vivos, SLA e incident mode."
+          content={t('dashboard.demo.metaDescription')}
         />
       </Helmet>
       <DashboardShell
@@ -247,7 +250,7 @@ export default function DashboardDemoPage() {
                 ? {
                   ...current.syncStatus,
                   bridgeStatus: 'healthy',
-                  bridgeMessage: 'Demo sync completed successfully.',
+                  bridgeMessage: t('dashboard.demo.bridgeMessage'),
                   lastHeartbeatAt: new Date().toISOString(),
                   updatedAt: new Date().toISOString(),
                 }
@@ -284,13 +287,13 @@ export default function DashboardDemoPage() {
           onTicketAction={async () => undefined}
           onSectionChange={setActiveSection}
           onConfigSave={async (section, payload) => {
-            setSnapshot((current) => applyDemoConfigChange(current, section, payload));
+            setSnapshot((current) => applyDemoConfigChange(t, current, section, payload));
           }}
           onCreateBackup={async () => {
-            setSnapshot((current) => applyDemoBackupAction(current, 'create_backup'));
+            setSnapshot((current) => applyDemoBackupAction(t, current, 'create_backup'));
           }}
           onRestoreBackup={async (backupId) => {
-            setSnapshot((current) => applyDemoBackupAction(current, 'restore_backup', backupId));
+            setSnapshot((current) => applyDemoBackupAction(t, current, 'restore_backup', backupId));
           }}
         />
       </DashboardShell>

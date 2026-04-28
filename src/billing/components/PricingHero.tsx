@@ -11,10 +11,10 @@ export function PricingHero() {
   };
 
   const trustBadges = [
-    { icon: Shield, text: t('pricing.trust.secure.title') },
-    { icon: Zap, text: t('pricing.trust.instant.title') },
-    { icon: CreditCard, text: 'Powered by Stripe' },
-    { icon: CheckCircle, text: '7-Day Money-Back Guarantee' },
+    { icon: Shield, text: t('billing.trust.secure.title') },
+    { icon: Zap, text: t('billing.trust.instant.title') },
+    { icon: CreditCard, text: t('billing.trust.stripe.title') },
+    { icon: CheckCircle, text: t('billing.trust.guarantee.title') },
   ];
 
   return (
@@ -32,13 +32,13 @@ export function PricingHero() {
           {/* Headline */}
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
             <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {t('pricing.hero.title')}
+              {t('billing.hero.title')} {t('billing.hero.titleAccent')}
             </span>
           </h1>
 
           {/* Subheadline */}
           <p className="mt-6 text-lg leading-8 text-slate-300 sm:text-xl max-w-3xl mx-auto">
-            {t('pricing.hero.subtitle')}
+            {t('billing.hero.description')}
           </p>
 
           {/* Trust Badges */}
@@ -72,7 +72,7 @@ export function PricingHero() {
               onClick={scrollToPricing}
               className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-indigo-500/50 transition-all duration-200 hover:bg-indigo-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-950"
             >
-              {t('pricing.hero.cta')}
+              {t('billing.hero.cta')}
               <svg
                 className="h-5 w-5"
                 fill="none"

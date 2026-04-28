@@ -17,25 +17,16 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
       key: 'pro_monthly' as PlanKey,
       icon: Zap,
       iconColor: 'text-blue-400',
-      name: t('pricing.plans.monthly.name'),
-      description: t('pricing.plans.monthly.description'),
+      name: t('billing.pricingCards.monthly.name'),
+      description: t('billing.pricingCards.monthly.description'),
       price: '$9.99',
-      interval: t('pricing.plans.monthly.interval'),
-      planType: 'Subscription',
-      billingCycle: 'Monthly',
+      interval: t('billing.pricingCards.billingCycle.monthly'),
+      planType: t('billing.pricingCards.planType.subscription'),
+      billingCycle: t('billing.pricingCards.billingCycle.monthly'),
       cancelable: true,
       requiresGuild: true,
-      features: [
-        'Up to 50 custom commands',
-        '20 auto-role configurations',
-        '10 welcome message templates',
-        'Advanced moderation tools',
-        'Custom embed builder',
-        'Priority support',
-        'Server analytics dashboard',
-        'Cancel anytime',
-      ],
-      cta: t('pricing.plans.monthly.cta'),
+      features: t('billing.pricingCards.monthly.features', { returnObjects: true }) as string[],
+      cta: t('billing.pricingCards.monthly.cta'),
       highlighted: false,
       badge: null,
     },
@@ -43,55 +34,36 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
       key: 'pro_yearly' as PlanKey,
       icon: Crown,
       iconColor: 'text-purple-400',
-      name: t('pricing.plans.yearly.name'),
-      description: t('pricing.plans.yearly.description'),
+      name: t('billing.pricingCards.yearly.name'),
+      description: t('billing.pricingCards.yearly.description'),
       price: '$89.99',
-      interval: t('pricing.plans.yearly.interval'),
-      planType: 'Subscription',
-      billingCycle: 'Yearly',
+      interval: t('billing.pricingCards.billingCycle.yearly'),
+      planType: t('billing.pricingCards.planType.subscription'),
+      billingCycle: t('billing.pricingCards.billingCycle.yearly'),
       cancelable: true,
       requiresGuild: true,
-      savings: 'Save 25% · BEST VALUE',
-      features: [
-        'Everything in Monthly',
-        'Save $20 per year',
-        'Priority feature requests',
-        'Early access to new features',
-        'Dedicated support channel',
-        'Custom bot status (coming soon)',
-        'Advanced analytics',
-        'Yearly billing',
-      ],
-      cta: t('pricing.plans.yearly.cta'),
+      savings: t('billing.pricingCards.badges.bestValue'),
+      features: t('billing.pricingCards.yearly.features', { returnObjects: true }) as string[],
+      cta: t('billing.pricingCards.yearly.cta'),
       highlighted: true,
-      badge: 'Save 25% · BEST VALUE',
+      badge: t('billing.pricingCards.badges.bestValue'),
     },
     {
       key: 'lifetime' as PlanKey,
       icon: Sparkles,
       iconColor: 'text-yellow-400',
-      name: t('pricing.plans.lifetime.name'),
-      description: t('pricing.plans.lifetime.description'),
+      name: t('billing.pricingCards.lifetime.name'),
+      description: t('billing.pricingCards.lifetime.description'),
       price: '$299.99',
-      interval: t('pricing.plans.lifetime.interval'),
-      planType: 'One-Time Purchase',
-      billingCycle: 'Forever',
+      interval: t('billing.pricingCards.billingCycle.forever'),
+      planType: t('billing.pricingCards.planType.oneTime'),
+      billingCycle: t('billing.pricingCards.billingCycle.forever'),
       cancelable: false,
       requiresGuild: true,
-      features: [
-        'Everything in Pro',
-        '100 custom commands',
-        '50 auto-role configurations',
-        '20 welcome message templates',
-        'Lifetime updates',
-        'VIP support',
-        'Exclusive features',
-        'No recurring payments',
-        'Priority bug fixes',
-      ],
-      cta: t('pricing.plans.lifetime.cta'),
+      features: t('billing.pricingCards.lifetime.features', { returnObjects: true }) as string[],
+      cta: t('billing.pricingCards.lifetime.cta'),
       highlighted: false,
-      badge: 'Launch Offer',
+      badge: t('billing.pricingCards.badges.launchOffer'),
     },
   ];
 
@@ -137,7 +109,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
               {/* Plan Type Badge */}
               <div className="absolute top-4 right-4 z-10">
                 <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                  plan.planType === 'One-Time Purchase'
+                  plan.key === 'lifetime'
                     ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
                     : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
                 }`}>
@@ -179,7 +151,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      Cancel anytime
+                      {t('billing.pricingCards.cancelAnytime')}
                     </span>
                   )}
                 </div>
@@ -194,7 +166,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
                     <p className="mt-1 text-sm font-medium text-green-400">{plan.savings}</p>
                   )}
                   {plan.key === 'lifetime' && (
-                    <p className="mt-2 text-xs text-amber-400">⏳ Launch price — may increase as we grow</p>
+                    <p className="mt-2 text-xs text-amber-400">{t('billing.pricingCards.launchPriceNote')}</p>
                   )}
                 </div>
 
@@ -205,7 +177,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
                       <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span>Requires server selection after purchase</span>
+                      <span>{t('billing.pricingCards.serverRequired')}</span>
                     </p>
                   </div>
                 )}
@@ -255,7 +227,7 @@ export function PricingCards({ onSelectPlan, loading, selectedPlan }: PricingCar
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         />
                       </svg>
-                      Loading...
+                      {t('billing.pricingCards.loading')}
                     </span>
                   ) : (
                     plan.cta

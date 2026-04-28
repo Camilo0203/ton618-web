@@ -281,7 +281,7 @@ export default function DashboardModuleViewport({
         ) : null}
 
         {activeSection === 'overview' ? (
-          <ErrorBoundary moduleLabel="Overview" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.overview')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <OverviewModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -304,7 +304,7 @@ export default function DashboardModuleViewport({
         ) : null}
 
         {activeSection === 'general' ? (
-          <ErrorBoundary moduleLabel="General" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.general')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <GeneralModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -322,7 +322,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'server_roles' ? (
-          <ErrorBoundary moduleLabel="Server Roles" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.server_roles')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <ServerRolesModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -335,7 +335,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'tickets' ? (
-          <ErrorBoundary moduleLabel="Tickets" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.tickets')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <TicketsModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -348,7 +348,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'verification' ? (
-          <ErrorBoundary moduleLabel="Verification" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.verification')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <VerificationModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -361,7 +361,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'welcome' ? (
-          <ErrorBoundary moduleLabel="Welcome" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.welcome')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <WelcomeModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -374,7 +374,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'suggestions' ? (
-          <ErrorBoundary moduleLabel="Suggestions" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.suggestions')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <SuggestionsModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -387,7 +387,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'modlogs' ? (
-          <ErrorBoundary moduleLabel="Modlogs" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.modlogs')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <ModlogsModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -400,7 +400,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'commands' ? (
-          <ErrorBoundary moduleLabel="Commands" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.commands')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <CommandsModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -413,7 +413,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'system' ? (
-          <ErrorBoundary moduleLabel="System" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.system')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <SystemModule
               guild={selectedGuild}
               config={snapshot.config}
@@ -430,7 +430,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'activity' ? (
-          <ErrorBoundary moduleLabel="Activity" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.activity')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <ActivityModule
               guild={selectedGuild}
               events={snapshot.events}
@@ -440,7 +440,7 @@ export default function DashboardModuleViewport({
           </ErrorBoundary>
         ) : null}
         {activeSection === 'analytics' ? (
-          <ErrorBoundary moduleLabel="Analytics" guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+          <ErrorBoundary moduleLabel={t('dashboard.sections.analytics')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
             <AnalyticsModule
               guild={selectedGuild}
               metrics={snapshot.metrics}

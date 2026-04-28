@@ -4,19 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, ArrowRight, Home } from 'lucide-react';
 
-const PLAN_LABELS: Record<string, string> = {
-  pro_monthly: 'Pro Monthly',
-  pro_yearly: 'Pro Yearly',
-  lifetime: 'Lifetime',
-  donate: 'Donation',
-};
-
 export default function BillingSuccessPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const planKey = searchParams.get('plan_key') || '';
-  const planLabel = PLAN_LABELS[planKey] || 'Premium';
+  const planLabel = t(`billing.success.planLabels.${planKey}`) || t('billing.success.planLabels.default');
   const isDonation = planKey === 'donate';
 
   return (

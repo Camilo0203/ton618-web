@@ -68,18 +68,18 @@ export default function Footer() {
     Boolean(url) && url !== '#' && !url?.startsWith('#');
 
   const socialLinks = [
-    { url: config.twitterUrl, Icon: Twitter, label: 'Twitter' },
-    { url: config.githubUrl, Icon: Github, label: 'GitHub' },
-    { url: config.supportServerUrl, Icon: MessageCircle, label: 'Discord' },
-    { url: config.contactEmail ? `mailto:${config.contactEmail}` : null, Icon: Mail, label: 'Email' },
+    { url: config.twitterUrl, Icon: Twitter, label: 'Twitter', type: 'external' },
+    { url: config.githubUrl, Icon: Github, label: 'GitHub', type: 'external' },
+    { url: config.supportServerUrl, Icon: MessageCircle, label: 'Discord', type: 'external' },
+    { url: config.contactEmail ? `mailto:${config.contactEmail}` : null, Icon: Mail, label: t('footer.social.email'), type: 'email' },
   ].filter((item) => isValidUrl(item.url));
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/5 bg-black pb-16 pt-24" aria-label="Footer">
+    <footer className="relative overflow-hidden border-t border-white/5 bg-black pb-16 pt-24" aria-label={t('footer.ariaLabel')}>
       <div className="absolute left-1/2 top-0 h-px w-full -translate-x-1/2 bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <h2 className="sr-only">Footer</h2>
+        <h2 className="sr-only">{t('footer.ariaLabel')}</h2>
         <div className="mb-16 grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_repeat(3,minmax(0,1fr))]">
           <div>
             <div className="mb-8 flex items-center gap-4">
@@ -97,12 +97,12 @@ export default function Footer() {
             ) : null}
 
             <div className="flex flex-wrap gap-4">
-              {socialLinks.map(({ url, Icon, label }) => (
+              {socialLinks.map(({ url, Icon, label, type }) => (
                 <a
                   key={label}
                   href={url!}
-                  target={label !== 'Email' ? '_blank' : undefined}
-                  rel={label !== 'Email' ? 'noopener noreferrer' : undefined}
+                  target={type !== 'email' ? '_blank' : undefined}
+                  rel={type !== 'email' ? 'noopener noreferrer' : undefined}
                   className="cinematic-glass flex h-12 w-12 items-center justify-center rounded-xl text-slate-400 transition-[color,transform,border-color,background-color] duration-200 hover:scale-[1.02] hover:text-white motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   aria-label={label}
                 >

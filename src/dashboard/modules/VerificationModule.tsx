@@ -206,7 +206,7 @@ export default function VerificationModule({
               <input {...register('panelColor')} className="dashboard-form-field" />
             </FieldShell>
             <FieldShell label={t('dashboard.verification.visual.imageLabel')}>
-              <input {...register('panelImage')} placeholder="https://..." className="dashboard-form-field" />
+              <input {...register('panelImage')} placeholder={t('dashboard.verification.visual.imagePlaceholder')} className="dashboard-form-field" />
             </FieldShell>
           </div>
           {mode === 'question' ? (
@@ -241,8 +241,8 @@ export default function VerificationModule({
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-200">{t('dashboard.verification.visual.thresholds.action')}</span>
               <select {...register('antiraidAction')} className="w-full rounded-2xl border dashboard-module-select">
-                <option value="pause">Pause</option>
-                <option value="kick">Kick</option>
+                <option value="pause">{t('dashboard.verification.visual.thresholds.pause')}</option>
+                <option value="kick">{t('dashboard.verification.visual.thresholds.kick')}</option>
               </select>
             </label>
           </div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { AlertTriangle, CheckCircle2, Clock3, XCircle } from 'lucide-react';
 import { fadeInVariants } from '../motion';
@@ -56,6 +57,7 @@ export default function SectionMutationBanner({
   mutation,
   syncStatus,
 }: SectionMutationBannerProps) {
+  const { t } = useTranslation();
   if (!mutation) {
     return (
       <motion.div
@@ -66,7 +68,7 @@ export default function SectionMutationBanner({
         role="status"
         aria-live="polite"
       >
-        Sin cambios pendientes para esta seccion. El bot sigue mostrando el ultimo estado aplicado.
+        {t('dashboard.mutationBanner.noChanges')}
       </motion.div>
     );
   }
@@ -79,12 +81,12 @@ export default function SectionMutationBanner({
       <BannerShell
         className="dashboard-skeleton border-amber-900/40 bg-[linear-gradient(135deg,rgba(69,39,14,0.74),rgba(43,26,14,0.66))] text-amber-100"
         icon={<Clock3 className="h-5 w-5" />}
-        badge="Pendiente"
-        title="Pendiente de aplicar"
+        badge={t('dashboard.mutationBanner.pendingBadge')}
+        title={t('dashboard.mutationBanner.pendingTitle')}
       >
-        <p>{summary}. Solicitud creada el {requestedAt}.</p>
+        <p>{t('dashboard.mutationBanner.requestCreated', { summary, requestedAt })}</p>
         <p className="mt-2">
-          El bridge del bot la procesara en el siguiente ciclo. Estado del bridge: {syncStatus?.bridgeStatus ?? 'unknown'}.
+          {t('dashboard.mutationBanner.pendingDesc', { status: syncStatus?.bridgeStatus ?? 'unknown' })}
         </p>
       </BannerShell>
     );
@@ -95,12 +97,12 @@ export default function SectionMutationBanner({
       <BannerShell
         className="border-rose-900/40 bg-[linear-gradient(135deg,rgba(72,22,38,0.76),rgba(46,18,28,0.68))] text-rose-100"
         icon={<XCircle className="h-5 w-5" />}
-        badge="Fallo"
-        title="La ultima solicitud fallo"
+        badge={t('dashboard.mutationBanner.failedBadge')}
+        title={t('dashboard.mutationBanner.failedTitle')}
       >
-        <p>{summary}. Solicitud creada el {requestedAt}.</p>
+        <p>{t('dashboard.mutationBanner.requestCreated', { summary, requestedAt })}</p>
         <p className="mt-2">
-          {mutation.errorMessage || 'El bot reporto un error al intentar aplicar la mutacion.'}
+          {mutation.errorMessage || t('dashboard.mutationBanner.failedDesc')}
         </p>
       </BannerShell>
     );
@@ -111,10 +113,10 @@ export default function SectionMutationBanner({
       <BannerShell
         className="dashboard-surface-soft text-slate-200"
         icon={<AlertTriangle className="h-5 w-5" />}
-        badge="Reemplazada"
-        title="La ultima solicitud fue reemplazada"
+        badge={t('dashboard.mutationBanner.supersededBadge')}
+        title={t('dashboard.mutationBanner.supersededTitle')}
       >
-        <p>{summary}. Solicitud creada el {requestedAt}.</p>
+        <p>{t('dashboard.mutationBanner.requestCreated', { summary, requestedAt })}</p>
       </BannerShell>
     );
   }
@@ -123,12 +125,12 @@ export default function SectionMutationBanner({
     <BannerShell
       className="border-emerald-900/40 bg-[linear-gradient(135deg,rgba(10,61,46,0.72),rgba(12,43,37,0.66))] text-emerald-100"
       icon={<CheckCircle2 className="h-5 w-5" />}
-      badge="Aplicado"
-      title="Aplicado por el bot"
+      badge={t('dashboard.mutationBanner.appliedBadge')}
+      title={t('dashboard.mutationBanner.appliedTitle')}
     >
-      <p>{summary}. Solicitud creada el {requestedAt}.</p>
+      <p>{t('dashboard.mutationBanner.appliedDescSummary', { summary, requestedAt })}</p>
       <p className="mt-2">
-        Confirmado el {formatDateTime(mutation.appliedAt ?? mutation.updatedAt)}.
+        {t('dashboard.mutationBanner.appliedDesc', { date: formatDateTime(mutation.appliedAt ?? mutation.updatedAt) })}
       </p>
     </BannerShell>
   );
