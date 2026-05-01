@@ -1656,7 +1656,7 @@ export const en = {
             trust: {
                 secure: { title: 'Secure payment' },
                 instant: { title: 'Instant activation' },
-                stripe: { title: 'Powered by Stripe' },
+                whop: { title: 'Powered by Whop' },
                 guarantee: { title: '7-Day Money-Back Guarantee' },
             },
             manual: {
@@ -1732,7 +1732,7 @@ export const en = {
             },
             trustSignals: {
                 eyebrow: 'Purchase Protection',
-                poweredBy: 'Powered by Stripe',
+                poweredBy: 'Powered by Whop',
                 manual: {
                     title: 'Manual',
                     description: 'Owner-activated',
@@ -1797,8 +1797,8 @@ export const en = {
                 },
                 whatsNext: "What's Next?",
                 steps: {
-                    s1: 'Your payment was completed successfully in Stripe.',
-                    s2: 'You will receive a confirmation email from Stripe shortly.',
+                    s1: 'Your payment was completed successfully in Whop.',
+                    s2: 'You will receive a confirmation email from Whop shortly.',
                     s3: "Access your server's dashboard to configure premium features",
                     s4: 'Manage your subscription by contacting support',
                     s1Donation: 'Your donation has been recorded — thank you!',

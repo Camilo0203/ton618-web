@@ -13,7 +13,7 @@ export function PricingHero() {
   const trustBadges = [
     { icon: Shield, text: t('billing.trust.secure.title') },
     { icon: Zap, text: t('billing.trust.instant.title') },
-    { icon: CreditCard, text: t('billing.trust.stripe.title') },
+    { icon: CreditCard, text: t('billing.trust.whop.title') },
     { icon: CheckCircle, text: t('billing.trust.guarantee.title') },
   ];
 

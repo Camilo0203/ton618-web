@@ -8,7 +8,13 @@ export const appleTouchIconPath = '/apple-touch-icon.png';
 export const manifestPath = '/site.webmanifest';
 
 export function normalizeSiteUrl(value?: string): string {
-  return (value || '').trim().replace(/\/+$/, '');
+  const trimmed = (value || '').trim().replace(/\/+$/, '');
+  if (!trimmed) return '';
+  if (!/^https?:\/\//i.test(trimmed)) {
+    console.warn(`[siteMetadata] Invalid site URL (missing protocol): ${trimmed}`);
+    return '';
+  }
+  return trimmed;
 }
 
 export function buildAbsoluteUrl(origin: string, path: string): string {

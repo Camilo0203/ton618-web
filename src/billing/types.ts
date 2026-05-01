@@ -1,4 +1,4 @@
-// Billing types for Stripe integration
+// Billing types for Whop integration
 
 export type PlanKey = 'pro_monthly' | 'pro_yearly' | 'lifetime' | 'donate';
 
@@ -26,16 +26,6 @@ export interface GuildsResponse {
   guilds: GuildSummary[];
   total: number;
   premium_count: number;
-}
-
-export interface CheckoutRequest {
-  guild_id?: string;
-  plan_key: PlanKey;
-  user_id?: string;
-}
-
-export interface CheckoutResponse {
-  checkout_url: string;
 }
 
 export interface GuildPremiumStatus {

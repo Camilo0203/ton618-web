@@ -24,8 +24,13 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
   const { t } = useTranslation();
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const WHOP_LINKS: Record<string, string> = {
+    pro_monthly: 'https://whop.com/checkout/plan_yI6fFUFSaIMf5',
+    pro_yearly: 'https://whop.com/checkout/plan_8SKj3v4lL6XEF',
+    lifetime: 'https://whop.com/checkout/plan_nuXvSWVBzZHWf',
+  };
 
   useEffect(() => {
     fetchGuilds();
@@ -49,30 +54,10 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
     }
   };
 
-  const handleUpgrade = async (guildId: string, planKey: string) => {
-    setCheckoutLoading(true);
-
-    try {
-      if (!supabase) {
-        throw new Error('Supabase client not initialized');
-      }
-      const { data, error } = await supabase.functions.invoke('billing-create-checkout', {
-        body: {
-          guild_id: guildId,
-          plan_key: planKey,
-        },
-      });
-
-      if (error) throw error;
-
-      if (data?.checkout_url) {
-        window.location.href = data.checkout_url;
-      }
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to start checkout');
-    } finally {
-      setCheckoutLoading(false);
-    }
+  const handleUpgrade = (guildId: string, planKey: string) => {
+    const base = WHOP_LINKS[planKey];
+    if (!base) return;
+    window.location.href = `${base}?pass_guild_id=${guildId}`;
   };
 
   const formatExpiryDate = (dateString: string | null) => {
@@ -190,6 +175,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                     )}
                   </ul>
                 </div>
+
               </div>
             ) : (
               <div className="space-y-4">
@@ -206,8 +192,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
                 <div className="grid md:grid-cols-3 gap-4">
                   <button
                     onClick={() => handleUpgrade(selectedGuild.id, 'pro_monthly')}
-                    disabled={checkoutLoading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg transition-all disabled:opacity-50"
+                    className="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg transition-all"
                   >
                     <div className="text-lg font-bold mb-1">{t('billing.success.planLabels.pro_monthly')}</div>
                     <div className="text-2xl font-bold mb-2">$9.99/mo</div>
@@ -216,8 +201,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
                   <button
                     onClick={() => handleUpgrade(selectedGuild.id, 'pro_yearly')}
-                    disabled={checkoutLoading}
-                    className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg transition-all disabled:opacity-50 relative"
+                    className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-lg transition-all relative"
                   >
                     <div className="absolute -top-2 -right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full font-bold">
                       {t('dashboard.billing.save25')}
@@ -229,8 +213,7 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
 
                   <button
                     onClick={() => handleUpgrade(selectedGuild.id, 'lifetime')}
-                    disabled={checkoutLoading}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white p-4 rounded-lg transition-all disabled:opacity-50"
+                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white p-4 rounded-lg transition-all"
                   >
                     <div className="text-lg font-bold mb-1">{t('billing.success.planLabels.lifetime')}</div>
                     <div className="text-2xl font-bold mb-2">$299.99</div>

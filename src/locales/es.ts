@@ -1474,7 +1474,7 @@ export const es = {
             },
             trustSignals: {
                 eyebrow: 'Proteccion',
-                poweredBy: 'Powered by Stripe',
+                poweredBy: 'Powered by Whop',
                 manual: {
                     title: 'Manual',
                     description: 'Owner activa',
@@ -1532,8 +1532,8 @@ export const es = {
                 descriptionPayment: '¡Gracias por mejorar a TON618 {{plan}}! El premium de tu servidor ya fue activado.',
                 whatsNext: '¿Que sigue?',
                 steps: {
-                    s1: 'Tu pago se completo correctamente en Stripe.',
-                    s2: 'Recibiras un correo de confirmacion enviado por Stripe.',
+                    s1: 'Tu pago se completo correctamente en Whop.',
+                    s2: 'Recibiras un correo de confirmacion enviado por Whop.',
                     s3: 'Accede al panel de tu servidor para configurar caracteristicas premium',
                     s4: 'Administra tu suscripcion contactando soporte',
                     s1Donation: 'Tu donacion ha sido registrada — ¡gracias!',

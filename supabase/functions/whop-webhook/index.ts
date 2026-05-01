@@ -1,5 +1,5 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { getCorsHeaders, jsonResponse, errorResponse, handleError, requireEnv, isValidDiscordId } from '../_shared/utils.ts';
+import { getCorsHeaders, jsonResponse, errorResponse, handleError, requireEnv, isValidDiscordId, getClientIp, checkRateLimit, rateLimitResponse } from '../_shared/utils.ts';
 import { createSupabaseClient, BillingDatabase } from '../_shared/database.ts';
 
 async function verifyWhopSignature(rawBody: string, signatureHeader: string, secret: string): Promise<boolean> {
@@ -13,6 +13,14 @@ async function verifyWhopSignature(rawBody: string, signatureHeader: string, sec
   const timestamp = parts['ts'];
   const providedSignature = parts['v1'];
   if (!timestamp || !providedSignature) return false;
+
+  // Anti-replay: reject signatures older than 5 minutes
+  const tsNum = Number(timestamp);
+  const now = Math.floor(Date.now() / 1000);
+  if (isNaN(tsNum) || Math.abs(now - tsNum) > 300) {
+    console.warn('[whop-webhook] Signature timestamp out of tolerance', { tsNum, now, diff: Math.abs(now - tsNum) });
+    return false;
+  }
 
   const payloadToSign = `${timestamp}.${rawBody}`;
 
@@ -51,11 +59,24 @@ Deno.serve(async (req: Request) => {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) });
   }
 
+  // Rate limit: 60 requests per minute per IP for webhook endpoint
+  const clientIp = getClientIp(req);
+  const { allowed: rateAllowed, retryAfterMs } = checkRateLimit(`whop-webhook:${clientIp}`, 60, 60000);
+  if (!rateAllowed) {
+    return rateLimitResponse(retryAfterMs, req.headers.get('origin'));
+  }
+
   if (req.method !== 'POST') {
     return errorResponse('Method not allowed', 405);
   }
 
   try {
+    // Reject oversized payloads to prevent memory exhaustion
+    const contentLength = req.headers.get('content-length');
+    if (contentLength && Number(contentLength) > 1024 * 1024) {
+      return errorResponse('Payload too large', 413);
+    }
+
     const webhookSecret = requireEnv('WHOP_WEBHOOK_SECRET');
 
     const signatureHeader = req.headers.get('whop-signature');

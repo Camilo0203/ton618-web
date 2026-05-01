@@ -1,0 +1,5 @@
+Contact: mailto:security@ton618.app
+Expires: 2027-04-30T00:00:00.000Z
+Preferred-Languages: en, es
+Canonical: https://ton618.app/.well-known/security.txt
+Policy: https://ton618.app/security-policy

@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { XCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 
 export default function BillingCancelPage() {
@@ -10,6 +11,10 @@ export default function BillingCancelPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center px-4">
+      <Helmet>
+        <title>{t('billing.cancel.pageTitle', 'Payment Cancelled')}</title>
+        <meta name="robots" content="noindex,nofollow" />
+      </Helmet>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

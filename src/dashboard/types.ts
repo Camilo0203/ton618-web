@@ -63,7 +63,7 @@ export interface DashboardGuild {
 
 export type DashboardBillingInterval = 'month' | 'year';
 export type DashboardEffectivePlan = 'free' | 'pro' | 'enterprise';
-export type DashboardPlanSource = 'free' | 'stripe' | 'override';
+export type DashboardPlanSource = 'free' | 'whop' | 'override';
 
 export interface GuildBillingEntitlement {
   guildId: string;

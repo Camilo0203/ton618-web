@@ -90,9 +90,18 @@ export default function AuthCallbackPage() {
     searchParams.get('error_description') || searchParams.get('error'),
   );
   const code = searchParams.get('code');
+  const returnedState = searchParams.get('state');
+
+  const stateMismatch = (() => {
+    if (!code) return false;
+    const storedState = window.sessionStorage.getItem('discord_oauth_state');
+    if (!storedState) return false;
+    return returnedState !== storedState;
+  })();
+
   const attemptKey = useMemo(
-    () => (authError ? `error:${authError}` : code ? `code:${code}` : 'missing-code'),
-    [authError, code],
+    () => (authError ? `error:${authError}` : stateMismatch ? 'state-mismatch' : code ? `code:${code}` : 'missing-code'),
+    [authError, stateMismatch, code],
   );
   const [viewState, setViewState] = useState<CallbackViewState>(() => getOrCreateExecution(attemptKey).state);
   const dashboardBrandLabel = `${config.botName} Dashboard`;

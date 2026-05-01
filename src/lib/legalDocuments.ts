@@ -49,7 +49,7 @@ function getFallbackLegalDocumentContent(
           metaDescription: 'TON618 refund policy for Pro subscriptions and paid beta billing.',
           lastUpdated: '2026-04-03',
           highlights: [
-            'Subscription renewals are managed through the Stripe customer portal.',
+            'Subscription renewals are managed through the Whop customer portal.',
             'Duplicate charges and failed activations are prioritized for remediation or refund.',
             'Supporter status is recognition only and does not purchase premium features.',
           ],
@@ -57,11 +57,11 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'How refunds are evaluated',
               body: [
-                'TON618 Pro is sold as a subscription attached to a Discord server. We review refund requests manually because activation depends on Stripe, Supabase and the Discord control plane staying aligned.',
+                'TON618 Pro is sold as a subscription attached to a Discord server. We review refund requests manually because activation depends on Whop, Supabase and the Discord control plane staying aligned.',
                 'Refunds are generally approved when we confirm an operational billing error, such as duplicate charges, checkout succeeding without Pro activation, or a technical issue that blocks the paid features during the first days of service.',
               ],
               points: [
-                'Please include the Stripe receipt email and the affected guild ID when contacting support.',
+                'Please include the Whop receipt email and the affected guild ID when contacting support.',
                 'Cancelling a subscription stops future renewals but does not automatically refund the current billing period.',
               ],
             },
@@ -84,7 +84,7 @@ function getFallbackLegalDocumentContent(
           metaDescription: 'Politica de reembolsos de TON618 para suscripciones Pro y billing de beta pagada.',
           lastUpdated: '2026-04-03',
           highlights: [
-            'Las renovaciones y cancelaciones se gestionan desde el portal de Stripe.',
+            'Las renovaciones y cancelaciones se gestionan desde el portal de Whop.',
             'Los cargos duplicados y las activaciones fallidas se atienden con prioridad.',
             'Supporter es reconocimiento y no compra funciones premium.',
           ],
@@ -92,11 +92,11 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'Como evaluamos los reembolsos',
               body: [
-                'TON618 Pro se vende como una suscripcion ligada a un servidor de Discord. Revisamos cada solicitud manualmente porque la activacion depende de Stripe, Supabase y el control plane del bot funcionando de forma consistente.',
+                'TON618 Pro se vende como una suscripcion ligada a un servidor de Discord. Revisamos cada solicitud manualmente porque la activacion depende de Whop, Supabase y el control plane del bot funcionando de forma consistente.',
                 'Normalmente aprobamos reembolsos cuando confirmamos un error operativo de billing, por ejemplo cargos duplicados, checkout exitoso sin activacion de Pro o una falla tecnica que impide usar las funciones pagadas durante los primeros dias del servicio.',
               ],
               points: [
-                'Incluye el correo del recibo de Stripe y el ID del servidor afectado al escribirnos.',
+                'Incluye el correo del recibo de Whop y el ID del servidor afectado al escribirnos.',
                 'Cancelar la suscripcion evita renovaciones futuras, pero no reembolsa automaticamente el periodo actual.',
               ],
             },
@@ -123,7 +123,7 @@ function getFallbackLegalDocumentContent(
           metaDescription: 'TON618 billing support contact details for paid beta customers.',
           lastUpdated: '2026-04-03',
           highlights: [
-            'Billing incidents should include the guild ID and the Stripe receipt email when possible.',
+            'Billing incidents should include the guild ID and the Whop receipt email when possible.',
             'Manual entitlement overrides are used only for support remediation, beta grants or enterprise onboarding.',
           ],
           sections: [
@@ -140,7 +140,7 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'What to include',
               body: [
-                'To speed up support, send the guild ID, the Discord account that manages the server, the billing interval purchased, and the Stripe receipt or payment intent ID when available.',
+                'To speed up support, send the guild ID, the Discord account that manages the server, the billing interval purchased, and the Whop receipt or payment intent ID when available.',
               ],
               points: [
                 'We may request extra verification before changing commercial entitlements.',
@@ -156,7 +156,7 @@ function getFallbackLegalDocumentContent(
           metaDescription: 'Canales de contacto de billing de TON618 para clientes de la beta pagada.',
           lastUpdated: '2026-04-03',
           highlights: [
-            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el correo del recibo de Stripe.',
+            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el correo del recibo de Whop.',
             'Los overrides manuales solo se usan para soporte, grants de beta o onboarding enterprise.',
           ],
           sections: [
@@ -173,7 +173,7 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'Que informacion incluir',
               body: [
-                'Para acelerar la atencion, manda el ID del servidor, la cuenta de Discord que lo administra, el intervalo de billing comprado y el recibo o payment intent ID de Stripe si lo tienes.',
+                'Para acelerar la atencion, manda el ID del servidor, la cuenta de Discord que lo administra, el intervalo de billing comprado y el recibo o payment intent ID de Whop si lo tienes.',
               ],
               points: [
                 'Podemos pedir verificacion adicional antes de cambiar entitlements comerciales.',

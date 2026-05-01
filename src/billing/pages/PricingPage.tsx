@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Check, Zap, Crown, Heart, ArrowRight, X } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { TrustSignals } from '../components/TrustSignals';
 import { FAQSection } from '../components/FAQSection';
 import { GuildSelector } from '../components/GuildSelector';
@@ -11,6 +12,7 @@ import { PricingHero } from '../components/PricingHero';
 import { PRICING_CONFIG, getPlanPeriod, type BillingCycle, type PricingPlanKey } from '../../config/pricing';
 import { fetchBillingGuilds } from '../api';
 import { supabase } from '../../lib/supabaseClient';
+import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../../config';
 import type { GuildSummary } from '../types';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -75,8 +77,31 @@ export default function PricingPage() {
     window.location.href = `${base}?pass_guild_id=${selectedGuildId}`;
   };
 
+  const canonicalUrl = getCanonicalUrl('/pricing');
+  const socialImageUrl = getAbsoluteAssetUrl(config.socialImagePath);
+
   return (
     <div className="min-h-screen bg-black text-white">
+      <Helmet>
+        <html lang={i18n.language.startsWith('es') ? 'es' : 'en'} />
+        <title>{t('billing.pricing.pageTitle', `${config.botName} — Pricing`)}</title>
+        <meta name="description" content={t('billing.pricing.metaDescription', 'Upgrade your Discord server with TON618 Pro. Monthly, yearly and lifetime plans.')} />
+        <meta name="robots" content="index,follow" />
+        <meta name="theme-color" content="#05060f" />
+        <meta name="color-scheme" content="dark" />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={config.botName} />
+        <meta property="og:title" content={t('billing.pricing.ogTitle', `${config.botName} — Pricing`)} />
+        <meta property="og:description" content={t('billing.pricing.ogDescription', 'Upgrade your Discord server with TON618 Pro.')} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={socialImageUrl} />
+        <meta property="og:locale" content={i18n.language.startsWith('es') ? 'es_ES' : 'en_US'} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={t('billing.pricing.ogTitle', `${config.botName} — Pricing`)} />
+        <meta name="twitter:description" content={t('billing.pricing.ogDescription', 'Upgrade your Discord server with TON618 Pro.')} />
+        <meta name="twitter:image" content={socialImageUrl} />
+      </Helmet>
       <Navbar />
       {showFounding && foundingSpotsLeft > 0 && (
         <div className="sticky top-16 z-30 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 px-4 py-3 text-sm">

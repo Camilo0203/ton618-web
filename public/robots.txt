@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /auth/callback
+Disallow: /billing/success
+Disallow: /billing/cancel
+
+Sitemap: https://ton618.app/sitemap.xml

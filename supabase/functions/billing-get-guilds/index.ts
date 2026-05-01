@@ -2,7 +2,7 @@
 // Fetches guilds from Discord API and enriches with premium info
 
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { getCorsHeaders, jsonResponse, errorResponse, handleError, requireEnv } from '../_shared/utils.ts';
+import { getCorsHeaders, jsonResponse, errorResponse, handleError, requireEnv, getClientIp, checkRateLimit, rateLimitResponse } from '../_shared/utils.ts';
 import { DiscordClient } from '../_shared/discord.ts';
 import { createSupabaseClient, BillingDatabase } from '../_shared/database.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -10,6 +10,13 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) });
+  }
+
+  // Rate limit: 60 requests per minute per IP
+  const clientIp = getClientIp(req);
+  const { allowed: rateAllowed, retryAfterMs } = checkRateLimit(`billing-get-guilds:${clientIp}`, 60, 60000);
+  if (!rateAllowed) {
+    return rateLimitResponse(retryAfterMs, req.headers.get('origin'));
   }
 
   if (req.method !== 'GET') {

@@ -16,6 +16,7 @@ const DocsPage = lazy(() => import('./pages/DocsPage'));
 const PricingPage = lazy(() => import('./billing/pages/PricingPage'));
 const BillingSuccessPage = lazy(() => import('./billing/pages/BillingSuccessPage'));
 const BillingCancelPage = lazy(() => import('./billing/pages/BillingCancelPage'));
+const StatusPage = lazy(() => import('./pages/StatusPage'));
 
 function AppLoadingFallback() {
   const { t } = useTranslation();
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />
+          <Route path="/status" element={<StatusPage />} />
           {/* Dashboard routes disabled publicly - Coming Soon page */}
           <Route path="/dashboard" element={<ComingSoonPage />} />
           {/* Dashboard auth callback disabled - Pricing uses Supabase Auth with direct redirect to /pricing */}

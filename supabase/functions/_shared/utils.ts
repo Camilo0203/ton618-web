@@ -222,6 +222,61 @@ export function getClientIp(request: Request): string {
   );
 }
 
+// Simple in-memory sliding-window rate limiter for Edge Functions.
+// Tracks requests per key (ip + function name). Cleans old entries on each check.
+const rateLimitMap = new Map<string, number[]>();
+
+export function checkRateLimit(
+  key: string,
+  maxRequests: number,
+  windowMs: number
+): { allowed: boolean; retryAfterMs: number } {
+  const now = Date.now();
+  const windowStart = now - windowMs;
+
+  const timestamps = rateLimitMap.get(key) || [];
+  const validTimestamps = timestamps.filter(ts => ts > windowStart);
+
+  if (validTimestamps.length >= maxRequests) {
+    const oldestInWindow = validTimestamps[0];
+    const retryAfterMs = windowStart + windowMs - oldestInWindow;
+    return { allowed: false, retryAfterMs };
+  }
+
+  validTimestamps.push(now);
+  rateLimitMap.set(key, validTimestamps);
+
+  // Simple cleanup: if map grows too large, evict oldest 20% of keys
+  if (rateLimitMap.size > 5000) {
+    const entries = [...rateLimitMap.entries()];
+    entries.sort((a, b) => (a[1][0] ?? 0) - (b[1][0] ?? 0));
+    const evictCount = Math.floor(entries.length * 0.2);
+    for (let i = 0; i < evictCount; i++) {
+      rateLimitMap.delete(entries[i][0]);
+    }
+  }
+
+  return { allowed: true, retryAfterMs: 0 };
+}
+
+export function rateLimitResponse(
+  retryAfterMs: number,
+  requestOrigin?: string | null
+): Response {
+  const retryAfterSeconds = Math.ceil(retryAfterMs / 1000);
+  return new Response(
+    JSON.stringify({ error: 'Rate limit exceeded. Please slow down.', retryAfter: retryAfterSeconds }),
+    {
+      status: 429,
+      headers: {
+        ...getCorsHeaders(requestOrigin),
+        'Content-Type': 'application/json',
+        'Retry-After': String(retryAfterSeconds),
+      },
+    }
+  );
+}
+
 export function formatCurrency(amount: number, currency = 'USD'): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

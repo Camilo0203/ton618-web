@@ -323,6 +323,10 @@ export function runAuthCallbackFlow(
       hasCachedSession: Boolean(execution.session),
     });
 
+    if (attemptKey.startsWith('state-mismatch')) {
+      throw new Error('CSRF state mismatch: invalid OAuth state parameter');
+    }
+
     if (authError) {
       throw new Error(authError);
     }
