@@ -3,7 +3,7 @@
 
 **Fecha:** 2026-04-06  
 **Framework:** React + Vite + TypeScript  
-**Estado:** ✅ Migrado a Stripe
+**Estado:** ✅ Migrado a Whop (Stripe fue deprecado)
 
 ---
 

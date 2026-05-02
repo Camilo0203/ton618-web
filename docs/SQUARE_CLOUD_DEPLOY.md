@@ -101,8 +101,8 @@ HEALTHCHECK_PATH=/
 □ 4. Supabase Auth → Discord provider enabled with correct CLIENT_ID/SECRET
 □ 5. Supabase Auth → Site URL set to production domain
 □ 6. Supabase Auth → Redirect URLs includes /auth/callback
-□ 7. Supabase Edge Functions deployed (billing-webhook, billing-create-checkout, etc.)
-□ 8. Stripe webhook configured to point to billing-webhook Edge Function
+□ 7. Supabase Edge Functions deployed (whop-webhook, billing-guild-status, etc.)
+□ 8. Whop webhook configured to point to whop-webhook Edge Function (events: membership.went_active, membership.went_inactive)
 □ 9. Deploy to Square Cloud (push to main or use SQ CLI)
 ```
 
@@ -151,7 +151,7 @@ Run these within 5 minutes of deployment:
 □ Billing checkout flow (if enabled)
   1. Go to /pricing
   2. Select a plan → click "Proceed to Checkout"
-  3. Redirect to Stripe checkout page
+  3. Redirect to Whop checkout page
   4. After payment → redirect to /billing/success with plan_key in URL
 
 □ Premium status refresh
@@ -252,8 +252,8 @@ Dashboard loads user guilds via sync-discord-guilds Edge Function
 
 ### Premium status not updating after payment
 
-**Cause:** Webhook not reaching billing-webhook Edge Function  
-**Fix:** Check Stripe webhook logs; verify `STRIPE_WEBHOOK_SECRET` matches
+**Cause:** Webhook not reaching whop-webhook Edge Function  
+**Fix:** Check Whop webhook logs; verify `WHOP_WEBHOOK_SECRET` matches
 
 ---
 
@@ -264,7 +264,7 @@ Dashboard loads user guilds via sync-discord-guilds Edge Function
 | Discord OAuth token expires (1 week) | **Medium** | User must re-login; implement token refresh in future |
 | Vite build fails on low memory | **Low** | 512 MB is sufficient for current bundle size (~2 MB gzipped) |
 | Supabase Auth downtime | **Medium** | No fallback; users cannot login during outage |
-| Stripe webhook replay | **Low** | Idempotency via `webhook_events.event_hash` prevents duplicate charges |
+| Whop webhook replay | **Low** | Idempotency via `webhook_events.event_hash` prevents duplicate charges |
 | SPA routing breaks if `-n` flag removed | **Critical** | CI validates `start:prod` command in `production-gate` job |
 | Stale guild list after leaving server | **Low** | "Sync Servers" button refreshes; auto-sync every 5 min in dashboard |
 | CORS errors on Edge Functions | **Low** | All Edge Functions have `corsHeaders` configured |

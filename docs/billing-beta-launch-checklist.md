@@ -1,23 +1,24 @@
 # Billing Beta Launch Checklist
 
-## Stripe
+## Whop
 
-- [ ] Crear producto `TON618 Bot Pro` en Stripe.
-- [ ] Crear precio `Pro Monthly` por `USD 9.99` (recurring).
-- [ ] Crear precio `Pro Yearly` por `USD 99.99` (recurring).
-- [ ] Crear precio `Lifetime` por `USD 299.99` (one-time).
-- [ ] Crear precio `Donation` (one-time, variable).
-- [ ] Guardar los `price_id` reales para monthly, yearly, lifetime y donate.
-- [ ] Configurar webhook con eventos de subscription y checkout.
+- [ ] Crear producto `TON618 Bot Pro` en Whop.
+- [ ] Crear plan `Pro Monthly` por `USD 9.99` (recurring).
+- [ ] Crear plan `Pro Yearly` por `USD 99.99` (recurring).
+- [ ] Crear plan `Lifetime` por `USD 299.99` (one-time).
+- [ ] Crear plan `Donation` (one-time, variable).
+- [ ] Guardar los `plan_id` reales para monthly, yearly, lifetime y donate.
+- [ ] Configurar webhook con eventos `membership.went_active` y `membership.went_inactive`.
+- [ ] Configurar URL de webhook: `https://<tu-proyecto>.supabase.co/functions/v1/whop-webhook`.
 
 ## Supabase
 
 - [ ] Aplicar `supabase/migrations/20260406000000_create_billing_tables.sql`.
 - [ ] Aplicar `supabase/migrations/20260406000001_create_rls_policies.sql`.
-- [ ] Cargar secretos: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_DONATE`, `BOT_API_KEY`.
+- [ ] Cargar secretos en Edge Functions: `WHOP_WEBHOOK_SECRET`, `BOT_API_KEY`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`.
+- [ ] Cargar IDs de planes en Edge Functions: `WHOP_PLAN_MONTHLY`, `WHOP_PLAN_YEARLY`, `WHOP_PLAN_LIFETIME`.
 - [ ] Desplegar `sync-discord-guilds`.
-- [ ] Desplegar `billing-create-checkout`.
-- [ ] Desplegar `billing-webhook`.
+- [ ] Desplegar `whop-webhook`.
 - [ ] Desplegar `billing-guild-status`.
 - [ ] Desplegar `billing-get-guilds`.
 - [ ] Confirmar que `guild_subscriptions` responde para un guild de prueba.
@@ -28,6 +29,7 @@
 - [ ] Ejecutar `npm run verify`.
 - [ ] Ejecutar `npm run test:unit`.
 - [ ] Ejecutar `npm run test:e2e:smoke`.
+- [ ] Definir en `.env` de producción: `VITE_WHOP_PLAN_MONTHLY`, `VITE_WHOP_PLAN_YEARLY`, `VITE_WHOP_PLAN_LIFETIME`.
 
 ## Bot
 
@@ -43,8 +45,8 @@
 - [ ] Login con Discord.
 - [ ] Sync de guilds exitoso.
 - [ ] Guild stale bloquea checkout hasta re-sync.
-- [ ] Guild fresco con bot instalado abre Stripe Checkout.
-- [ ] Pago en test mode completa `subscription_created` o `order_created`.
+- [ ] Guild fresco con bot instalado abre checkout de Whop.
+- [ ] Pago en test mode completa `membership.went_active`.
 - [ ] `guild_subscriptions` queda `active` con `premium_enabled=true`.
 - [ ] Dashboard muestra `Pro` en menos de `60s`.
 - [ ] El bot refleja `Pro` consultando `billing-guild-status`.

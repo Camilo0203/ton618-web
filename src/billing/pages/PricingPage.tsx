@@ -17,10 +17,11 @@ import type { GuildSummary } from '../types';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
+const WHOP_BASE = 'https://whop.com/checkout';
 const WHOP_LINKS: Record<'pro_monthly' | 'pro_yearly' | 'lifetime', string> = {
-  pro_monthly: 'https://whop.com/checkout/plan_yI6fFUFSaIMf5',
-  pro_yearly: 'https://whop.com/checkout/plan_8SKj3v4lL6XEF',
-  lifetime: 'https://whop.com/checkout/plan_nuXvSWVBzZHWf',
+  pro_monthly: `${WHOP_BASE}/${config.whopPlanMonthly || 'plan_yI6fFUFSaIMf5'}`,
+  pro_yearly: `${WHOP_BASE}/${config.whopPlanYearly || 'plan_8SKj3v4lL6XEF'}`,
+  lifetime: `${WHOP_BASE}/${config.whopPlanLifetime || 'plan_nuXvSWVBzZHWf'}`,
 };
 
 const planKeys: PricingPlanKey[] = ['free', 'pro', 'donation'];

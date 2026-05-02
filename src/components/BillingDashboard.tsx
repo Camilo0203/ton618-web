@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabaseClient';
 import { Loader2, Crown, Calendar, AlertCircle, ExternalLink } from 'lucide-react';
+import { config } from '../config';
 
 interface Guild {
   id: string;
@@ -26,10 +27,11 @@ export function BillingDashboard({ selectedGuildId, onSelectGuild }: BillingDash
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const WHOP_BASE = 'https://whop.com/checkout';
   const WHOP_LINKS: Record<string, string> = {
-    pro_monthly: 'https://whop.com/checkout/plan_yI6fFUFSaIMf5',
-    pro_yearly: 'https://whop.com/checkout/plan_8SKj3v4lL6XEF',
-    lifetime: 'https://whop.com/checkout/plan_nuXvSWVBzZHWf',
+    pro_monthly: `${WHOP_BASE}/${config.whopPlanMonthly || 'plan_yI6fFUFSaIMf5'}`,
+    pro_yearly: `${WHOP_BASE}/${config.whopPlanYearly || 'plan_8SKj3v4lL6XEF'}`,
+    lifetime: `${WHOP_BASE}/${config.whopPlanLifetime || 'plan_nuXvSWVBzZHWf'}`,
   };
 
   useEffect(() => {
