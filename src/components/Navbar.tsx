@@ -19,8 +19,8 @@ function Navbar() {
   const navbarClassName = useMemo(
     () =>
       scrolled
-        ? 'bg-[linear-gradient(180deg,rgba(5,6,15,0.9),rgba(5,6,15,0.76))] backdrop-blur-2xl border border-white/10 shadow-[0_18px_55px_rgba(0,0,0,0.52)]'
-        : 'bg-[linear-gradient(180deg,rgba(5,6,15,0.42),rgba(5,6,15,0.2))] backdrop-blur-md border border-white/5 shadow-none',
+        ? 'bg-[rgba(20,20,40,0.6)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.3)]'
+        : 'bg-[rgba(20,20,40,0.4)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.04)] shadow-none',
     [scrolled]
   );
 
@@ -102,8 +102,8 @@ function Navbar() {
 
   return (
     <nav className={`fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className={`relative flex items-center justify-between overflow-visible rounded-[1.75rem] px-4 py-3 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-6 ${navbarClassName}`}>
+      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6">
+        <div className={`relative flex items-center justify-between overflow-visible rounded-[20px] px-4 py-3 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-6 ${navbarClassName}`}>
           <div className="flex min-w-0 items-center gap-6 lg:gap-10">
             <Link to="/" className="flex min-w-0 items-center gap-3 group" aria-label={t('nav.homeAria')}>
               <Logo

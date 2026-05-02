@@ -115,16 +115,16 @@ export default function PricingPage() {
       <div className="relative z-10">
         <Navbar />
       {showFounding && foundingSpotsLeft > 0 && (
-        <div className="sticky top-16 z-30 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 px-4 py-3 text-sm">
-          <div className="mx-auto flex max-w-6xl items-center justify-between">
-            <p className="text-white">{t('billing.foundingOffer.text', { spots: foundingSpotsLeft })}</p>
+        <div className="sticky top-24 z-30 mx-auto w-full max-w-[1200px] px-4 pointer-events-none flex justify-center">
+          <div className="pointer-events-auto flex items-center justify-between gap-4 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(20,20,40,0.6)] px-6 py-2.5 text-sm shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-[12px] transition-all duration-300">
+            <p className="text-slate-200 font-medium">{t('billing.foundingOffer.text', { spots: foundingSpotsLeft })}</p>
             <button
               onClick={() => {
                 setShowFounding(false);
                 try { localStorage.setItem('ton618_founding_dismissed', 'true'); } catch { /* storage unavailable */ }
               }}
               aria-label={t('billing.foundingOffer.dismissAriaLabel')}
-              className="ml-4 shrink-0 text-white/80 hover:text-white"
+              className="shrink-0 text-slate-400 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
