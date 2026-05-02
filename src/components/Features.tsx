@@ -28,22 +28,22 @@ const FeatureCard = memo(({ feature }: { feature: Feature }) => {
 
   return (
     <motion.article variants={cardReveal} className="feature-tech-card group flex h-full flex-col overflow-hidden">
-      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-60"></div>
+      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-60"></div>
 
-      <div className="feature-icon-tile relative mb-7 h-14 w-14">
-        <Icon className="h-6 w-6 text-slate-300/85 transition-colors duration-300 group-hover:text-white" />
+      <div className="feature-icon-tile relative mb-6 h-12 w-12">
+        <Icon className="h-5 w-5 text-slate-300/85 transition-colors duration-300 group-hover:text-white" />
       </div>
 
-      <h3 className="mb-4 text-xl font-bold tracking-tight text-white">{feature.title}</h3>
-      <p className="mb-8 text-sm font-medium leading-relaxed text-slate-400 transition-colors duration-300 group-hover:text-slate-300">
+      <h3 className="mb-3 text-base font-bold tracking-tight text-white">{feature.title}</h3>
+      <p className="mb-6 text-sm font-normal leading-relaxed text-slate-400 transition-colors duration-300 group-hover:text-slate-300">
         {feature.description}
       </p>
 
-      <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-6">
-        <span className="text-[10px] font-bold uppercase tracking-normal-readable text-slate-500 transition-colors duration-300 group-hover:text-slate-300">
+      <div className="mt-auto flex items-center justify-between border-t border-white/8 pt-5">
+        <span className="text-[10px] font-bold uppercase tracking-normal-readable text-slate-500 transition-colors duration-300 group-hover:text-slate-400">
           {feature.status}
         </span>
-        <div className="h-1.5 w-1.5 rounded-full bg-white/20 transition-colors duration-300 group-hover:bg-cyan-300"></div>
+        <div className="h-1.5 w-1.5 rounded-full bg-white/20 transition-colors duration-300 group-hover:bg-cyan-400 group-hover:shadow-[0_0_8px_rgba(34,211,238,0.5)]"></div>
       </div>
     </motion.article>
   );
@@ -77,16 +77,16 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" aria-labelledby="features-heading" className="relative overflow-hidden bg-black/50 pb-28 pt-12 md:pt-16">
+    <section id="features" aria-labelledby="features-heading" className="relative overflow-hidden bg-black/50 py-20 md:py-28">
       <div className="nebula-blur absolute right-0 top-0 h-[600px] w-[600px] -translate-y-1/2 translate-x-1/2 bg-indigo-500/5"></div>
       <div className="nebula-blur absolute bottom-0 left-0 h-[400px] w-[400px] -translate-x-1/2 translate-y-1/2 bg-white/[0.03]"></div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-16 grid gap-10 lg:mb-20 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-end">
           <div className="max-w-3xl">
-            <motion.div variants={introReveal} initial="hidden" whileInView="show" viewport={motionViewport} className="mb-8 flex items-center gap-4">
-              <div className="h-px w-8 bg-indigo-500/30"></div>
-              <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('features.tag')}</span>
+            <motion.div variants={introReveal} initial="hidden" whileInView="show" viewport={motionViewport} className="mb-6 flex items-center gap-3">
+              <div className="h-px w-8 bg-indigo-500/40"></div>
+              <span className="label-eyebrow text-indigo-400">{t('features.tag')}</span>
             </motion.div>
 
             <motion.h2
@@ -95,7 +95,7 @@ export default function Features() {
               initial="hidden"
               whileInView="show"
               viewport={motionViewport}
-              className="text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
+              className="text-[clamp(2rem,5vw,4.5rem)] font-black uppercase leading-[0.9] tracking-tightest text-white"
             >
               {t('features.title')} <br />
               <span className="headline-accent headline-accent-solid">{t('features.titleAccent')}</span>
@@ -107,7 +107,7 @@ export default function Features() {
             initial="hidden"
             whileInView="show"
             viewport={motionViewport}
-            className="max-w-md border-l border-white/10 pl-6 text-base font-medium leading-relaxed text-slate-400 md:pl-8 md:text-lg"
+            className="max-w-md border-l border-white/8 pl-6 text-base font-normal leading-relaxed text-slate-400 md:pl-7"
           >
             {t('features.description')}
           </motion.p>

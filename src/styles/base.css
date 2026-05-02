@@ -3,27 +3,55 @@
 
 @layer base {
   :root {
-    /* Color palette */
+    /* ── Color palette ── */
     --color-bg-deep:      #010103;
     --color-bg-base:      #05060f;
     --color-bg-surface:   #0a0c1a;
     --color-bg-elevated:  #0f1229;
-    
+
     --color-primary:      #4f46e5;
     --color-secondary:    #8b5cf6;
     --color-accent:       #22d3ee;
-    
+
     --color-text-main:    #f8fafc;
     --color-text-dim:     #64748b;
     --color-text-ghost:   #334155;
-    
-    /* Typography */
+
+    /* ── Typography ── */
     --font-heading:       'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     --font-mono:          'JetBrains Mono', monospace;
+
+    /* ── Spacing scale (8-pt grid) ── */
+    --space-1:  0.25rem;  /* 4px  */
+    --space-2:  0.5rem;   /* 8px  */
+    --space-3:  0.75rem;  /* 12px */
+    --space-4:  1rem;     /* 16px */
+    --space-6:  1.5rem;   /* 24px */
+    --space-8:  2rem;     /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+    --space-32: 8rem;     /* 128px */
+
+    /* ── Radius scale ── */
+    --radius-sm:  0.5rem;
+    --radius-md:  0.75rem;
+    --radius-lg:  1rem;
+    --radius-xl:  1.5rem;
+    --radius-2xl: 2rem;
+    --radius-pill: 9999px;
+
+    /* ── Section vertical padding ── */
+    --section-py-sm:   3.5rem;  /* 56px  */
+    --section-py-md:   5rem;    /* 80px  */
+    --section-py-lg:   7rem;    /* 112px */
+    --section-py-xl:   9rem;    /* 144px */
   }
 
   * {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.08);
   }
 
   html {
@@ -47,6 +75,7 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     font-weight: 800;
+    letter-spacing: -0.01em;
   }
 
   code, pre {
@@ -58,12 +87,19 @@
   .tracking-tight-readable {
     letter-spacing: 0.01em;
   }
-  
+
   .tracking-normal-readable {
     letter-spacing: 0.02em;
   }
-  
+
   .tracking-wide-readable {
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
+  }
+
+  .label-eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 }

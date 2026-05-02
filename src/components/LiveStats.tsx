@@ -92,7 +92,7 @@ const StatCard = memo(function StatCard({ icon: Icon, label, value, sub, loading
           </div>
 
           <div
-            className={`mb-4 text-4xl font-bold tracking-tighter tabular-nums text-white transition-opacity duration-200 md:text-5xl ${loading ? 'opacity-90' : 'opacity-100'}`}
+            className={`mb-3 text-[clamp(2rem,4vw,3.5rem)] font-bold tracking-tighter tabular-nums text-white transition-opacity duration-200 ${loading ? 'opacity-90' : 'opacity-100'}`}
             style={{ willChange: 'contents' }}
           >
             {value}
@@ -311,7 +311,7 @@ export default function LiveStats() {
             <span className="text-[10px] font-bold uppercase tracking-wide-readable text-white">{badgeLabel}</span>
           </div>
 
-          <h2 id="stats-heading" className="mb-6 text-4xl font-black uppercase leading-none tracking-tightest text-white sm:text-6xl lg:text-7xl">
+          <h2 id="stats-heading" className="mb-6 text-[clamp(2rem,5vw,4.5rem)] font-black uppercase leading-[0.9] tracking-tightest text-white">
             {t('stats.title')} <span className="headline-accent headline-accent-solid">{t('stats.titleAccent')}</span>
           </h2>
           <p className="mx-auto max-w-3xl text-base font-medium leading-relaxed text-slate-400 md:text-lg">

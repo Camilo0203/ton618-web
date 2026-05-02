@@ -59,7 +59,7 @@ export default function WhyTon() {
               <span className="text-[10px] font-bold uppercase tracking-wide-readable text-indigo-400">{t('why.tag')}</span>
             </div>
 
-            <h2 id="why-heading" className="mb-8 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl">
+            <h2 id="why-heading" className="mb-8 text-[clamp(2rem,5vw,4.5rem)] font-black uppercase leading-[0.9] tracking-tightest text-white">
               {t('why.title')} <br />
               <span className="headline-accent headline-accent-solid">{t('why.titleAccent')}</span>
             </h2>
@@ -96,7 +96,7 @@ export default function WhyTon() {
                   <div className="premium-icon-tile mb-6 h-12 w-12">
                     <reason.icon className="h-6 w-6 text-indigo-400" />
                   </div>
-                  <h3 className="mb-3 flex items-center justify-between text-lg font-bold tracking-tight text-white">
+                  <h3 className="mb-2.5 flex items-center justify-between text-base font-bold tracking-tight text-white">
                     {reason.title}
                     <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity duration-200 group-hover:opacity-40" />
                   </h3>

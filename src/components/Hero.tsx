@@ -168,7 +168,7 @@ export default function Hero() {
     <section
       id="top"
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[92dvh] items-start justify-center overflow-hidden bg-[#000] pb-12 pt-28 md:pt-32 lg:pt-36"
+      className="relative flex min-h-[95dvh] items-start justify-center overflow-hidden bg-[#000] pb-16 pt-24 md:pt-28 lg:pt-32"
     >
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <StarfieldBackground />
@@ -250,7 +250,7 @@ export default function Hero() {
               variants={heroTitleReveal}
               initial="hidden"
               animate="show"
-              className="mb-6 text-[14vw] font-black leading-[0.84] tracking-tightest uppercase sm:text-[11vw] md:text-[8vw] lg:text-[6.35rem]"
+              className="mb-6 text-[clamp(3rem,11vw,6.5rem)] font-black leading-[0.86] tracking-tightest uppercase"
             >
               {t('hero.titleMain')} <br />
               <span className="headline-accent headline-accent-solid">{t('hero.titleAccent')}</span>
@@ -260,7 +260,7 @@ export default function Hero() {
               variants={heroBodyReveal}
               initial="hidden"
               animate="show"
-              className="mx-auto mb-10 max-w-3xl text-base leading-relaxed text-slate-100/95 sm:text-lg md:text-xl lg:mx-0"
+              className="mx-auto mb-10 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg md:text-xl lg:mx-0"
             >
               {t('hero.description')}
               <span className="mt-3 block text-sm font-normal text-slate-400 sm:text-base">{t('hero.descriptionSub')}</span>
@@ -309,16 +309,16 @@ export default function Hero() {
             variants={heroAsideReveal}
             initial="hidden"
             animate="show"
-            className="cinematic-glass relative overflow-hidden rounded-[2rem] border-white/10 p-6 md:p-7"
+            className="cinematic-glass relative overflow-hidden rounded-[1.75rem] border-white/10 p-6 md:p-8"
             aria-label={t('hero.highlightsAria')}
           >
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-80"></div>
-            <p className="mb-6 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('hero.panelLabel')}</p>
-            <div className="space-y-4">
+            <p className="mb-5 text-[10px] font-black uppercase tracking-wide-readable text-indigo-300">{t('hero.panelLabel')}</p>
+            <div className="space-y-3">
               {proofPoints.map((point) => (
-                <div key={point} className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-4">
+                <div key={point} className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-4 transition-colors duration-200 hover:border-white/14 hover:bg-white/[0.05]">
                   <div className="flex items-start gap-3">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_18px_rgba(34,211,238,0.7)]"></div>
+                    <div className="mt-[0.35rem] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.6)]"></div>
                     <p className="text-sm font-medium leading-relaxed text-slate-200">{point}</p>
                   </div>
                 </div>

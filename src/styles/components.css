@@ -1,18 +1,8 @@
 /* Component styles - Unique reusable component classes */
-/* NOTE: Visual component classes (btn-premium-primary, tech-card, cinematic-glass,
-   premium-pill, premium-icon-tile, headline-accent, headline-accent-solid,
-   bg-cinematic-atmosphere, bg-cinematic-texture, bg-film-grain, scanline-sweep)
-   are defined in landing.css with the cinematic design intent.
-   This file contains ONLY classes not found in landing.css. */
-
-@layer components {
-  /* Outline button — used in dashboard and secondary CTAs */
-  .btn-premium-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-[transform,box-shadow,background-color,border-color,color] duration-200 hover:scale-[1.015] hover:border-white/30 hover:bg-white/15 hover:shadow-[0_8px_28px_rgba(255,255,255,0.08)] active:scale-[0.98] motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950;
-  }
-
-  /* Visual effects */
-  .nebula-blur {
-    @apply pointer-events-none absolute rounded-full opacity-60 blur-[120px];
-  }
-}
+/* NOTE: All visual component classes (btn-premium-primary, btn-premium-outline,
+   btn-indigo, tech-card, cinematic-glass, premium-pill, premium-icon-tile,
+   feature-tech-card, feature-icon-tile, headline-accent, headline-accent-solid,
+   bg-cinematic-atmosphere, bg-cinematic-texture, bg-film-grain, scanline-sweep,
+   eyebrow-tag, section-divider, nebula-blur)
+   are defined in landing.css.
+   This file is intentionally minimal — add ONLY classes not covered by landing.css. */

@@ -23,7 +23,7 @@ export default function FinalCTA() {
     <section
       id="final-cta"
       aria-labelledby="final-cta-heading"
-      className="relative overflow-hidden bg-black py-32 sm:py-40"
+      className="relative overflow-hidden bg-black py-24 sm:py-32"
     >
       {/* Layered ambient glows */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-indigo-950/10 to-black" />
@@ -54,7 +54,7 @@ export default function FinalCTA() {
 
           <h2
             id="final-cta-heading"
-            className="mb-8 text-5xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-8xl"
+            className="mb-8 text-[clamp(2.5rem,7vw,6rem)] font-black uppercase leading-[0.9] tracking-tightest text-white"
           >
             {t('final.title')} <br />
             <span className="headline-accent headline-accent-solid">
@@ -62,7 +62,7 @@ export default function FinalCTA() {
             </span>
           </h2>
 
-          <p className="mx-auto mb-12 max-w-2xl text-lg font-medium leading-relaxed text-slate-300 md:text-xl">
+          <p className="mx-auto mb-12 max-w-2xl text-base font-normal leading-relaxed text-slate-300 md:text-lg">
             {t('final.description')}
           </p>
 

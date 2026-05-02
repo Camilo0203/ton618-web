@@ -126,7 +126,7 @@ export default function FAQ() {
             initial="hidden"
             whileInView="show"
             viewport={motionViewport}
-            className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
+            className="mb-6 text-[clamp(2rem,6vw,5rem)] font-black uppercase leading-[0.9] tracking-tightest text-white"
           >
             {t('faq.title')} <br />
             <span className="headline-accent headline-accent-solid">{t('faq.titleAccent')}</span>
@@ -151,7 +151,7 @@ export default function FAQ() {
             onChange={(e) => { setSearchQuery(e.target.value); setOpenIndex(null); }}
             aria-label={t('faqSearch.label')}
             placeholder={t('faqSearch.placeholder')}
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-11 pr-4 text-sm font-medium text-white placeholder-slate-500 outline-none backdrop-blur-xl transition-colors focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/20"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-3 pl-11 pr-4 text-sm font-medium text-white placeholder-slate-500 outline-none backdrop-blur-xl transition-all duration-200 focus:border-indigo-500/50 focus:bg-white/[0.06] focus:ring-1 focus:ring-indigo-500/30"
           />
         </motion.div>
 

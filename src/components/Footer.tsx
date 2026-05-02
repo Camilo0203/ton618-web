@@ -92,7 +92,7 @@ export default function Footer() {
             </p>
 
             {inviteUrl ? (
-              <a href={inviteUrl} className="btn-premium-primary mb-8 !px-5 !py-3 !text-[10px]">
+              <a href={inviteUrl} className="btn-premium-primary mb-8 !px-5 !py-2.5 !text-xs !gap-2">
                 <span>{t('footer.inviteCta')}</span>
               </a>
             ) : null}
@@ -114,7 +114,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.productTitle')}</h3>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-wide-readable text-white/80">{t('footer.productTitle')}</h3>
             <ul className="space-y-4">
               {productLinks.map((item) => (
                 <li key={item.href}>
@@ -125,7 +125,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.resourcesTitle')}</h3>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-wide-readable text-white/80">{t('footer.resourcesTitle')}</h3>
             <ul className="space-y-4">
               {resourceLinks.map((item) => (
                 <li key={item.href}>
@@ -136,7 +136,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-6 text-[11px] font-bold uppercase tracking-tight-readable text-white">{t('footer.supportTitle')}</h3>
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-wide-readable text-white/80">{t('footer.supportTitle')}</h3>
             <ul className="space-y-4">
               {supportLinks.map((item) => (
                 <li key={item.href}>

@@ -77,7 +77,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" aria-labelledby="testimonials-heading" className="relative overflow-hidden bg-black py-24">
+    <section id="testimonials" aria-labelledby="testimonials-heading" className="relative overflow-hidden bg-black py-20 md:py-28">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div className="absolute right-1/4 top-0 h-80 w-80 rounded-full bg-purple-500/5 blur-[120px]" />
 
@@ -100,7 +100,7 @@ export default function Testimonials() {
             initial="hidden"
             whileInView="show"
             viewport={motionViewport}
-            className="mb-6 text-4xl font-black uppercase leading-[0.92] tracking-tightest text-white sm:text-6xl lg:text-7xl"
+            className="mb-6 text-[clamp(2rem,5vw,4.5rem)] font-black uppercase leading-[0.9] tracking-tightest text-white"
           >
             {t('testimonials.title')} <br />
             <span className="headline-accent headline-accent-solid">{t('testimonials.titleAccent')}</span>

@@ -72,7 +72,7 @@ function Navbar() {
 
   function renderUtilityLink(link: { href: string; label: string; external: boolean }) {
     const isInternal = link.href.startsWith('/');
-    const className = "inline-flex items-center gap-1 text-sm font-bold uppercase tracking-tight-readable text-slate-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
+    const className = "inline-flex items-center gap-1 text-sm font-medium text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950";
     
     if (isInternal) {
       return (
@@ -95,7 +95,7 @@ function Navbar() {
         className={className}
       >
         <span>{link.label}</span>
-        {link.external ? <ExternalLink className="h-3 w-3" /> : null}
+        {link.external ? <ExternalLink className="h-3 w-3 opacity-60" /> : null}
       </a>
     );
   }
@@ -115,15 +115,15 @@ function Navbar() {
               />
             </Link>
 
-            <div className="hidden items-center gap-8 xl:flex">
+            <div className="hidden items-center gap-7 xl:flex">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="group relative text-sm font-bold uppercase tracking-tight-readable text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="group relative text-sm font-semibold text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   {link.name}
-                  <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-[width] duration-300 group-hover:w-full"></span>
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gradient-to-r from-indigo-500 to-indigo-400 transition-[width] duration-300 group-hover:w-full"></span>
                 </a>
               ))}
             </div>
@@ -139,7 +139,7 @@ function Navbar() {
             <LanguageSelector mode="desktop" />
 
             {canInvite ? (
-              <a href={inviteUrl} className="btn-premium-primary !px-5 !py-3 !text-[10px] !rounded-xl">
+              <a href={inviteUrl} className="btn-premium-primary !px-5 !py-2.5 !text-xs !rounded-xl gap-2">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span>{t('nav.primaryCta')}</span>
               </a>
@@ -147,7 +147,7 @@ function Navbar() {
               <button
                 type="button"
                 disabled
-                className="btn-premium-primary !cursor-not-allowed !px-5 !py-3 !text-[10px] !rounded-xl opacity-60"
+                className="btn-premium-primary !cursor-not-allowed !px-5 !py-2.5 !text-xs !rounded-xl gap-2 opacity-60"
                 title={t('hero.inviteUnavailable')}
               >
                 <Sparkles className="h-3.5 w-3.5" />
