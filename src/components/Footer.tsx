@@ -50,6 +50,7 @@ export default function Footer() {
     { href: '#experience', label: t('footer.nav.setup') },
     { href: '#commands', label: t('footer.nav.commands') },
     { href: '#stats', label: t('footer.nav.stats') },
+    { href: '/pricing', label: t('footer.nav.pricing', { defaultValue: 'Pricing' }) },
   ];
 
   const resourceLinks = [

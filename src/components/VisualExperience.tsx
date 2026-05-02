@@ -29,7 +29,7 @@ export default function VisualExperience() {
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
         <motion.div
           style={{ y: shouldReduceMotion ? 0 : y1, willChange: 'transform' }}
-          className="absolute inset-0 opacity-[0.025] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+          className="absolute inset-0 opacity-[0.03]"
         ></motion.div>
 
         <div

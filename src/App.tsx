@@ -84,8 +84,8 @@ export default function App() {
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      <CookieConsent />
       </Suspense>
+      <CookieConsent />
     </>
   );
 }

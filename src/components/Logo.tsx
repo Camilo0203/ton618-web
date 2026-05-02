@@ -61,7 +61,7 @@ export default function Logo({
       {withText ? (
         <div className="min-w-0">
           {subtitle ? (
-            <p className={clsx('truncate font-semibold uppercase tracking-tight-readable text-brand-200/90', styles.subtitle)}>
+            <p className={clsx('truncate font-semibold uppercase tracking-tight-readable text-indigo-200/90', styles.subtitle)}>
               {subtitle}
             </p>
           ) : null}

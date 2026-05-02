@@ -65,6 +65,7 @@ function Navbar() {
 
   const utilityLinks = [
     config.docsUrl ? { href: config.docsUrl, label: t('nav.docs'), external: true } : { href: '/docs', label: t('nav.docs'), external: false },
+    { href: '/pricing', label: t('nav.pricing', { defaultValue: 'Pricing' }), external: false },
     config.statusUrl ? { href: config.statusUrl, label: t('nav.status'), external: true } : null,
     config.supportServerUrl ? { href: config.supportServerUrl, label: t('nav.support'), external: true } : null,
   ].filter(Boolean) as { href: string; label: string; external: boolean }[];
@@ -119,10 +120,10 @@ function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="relative text-sm font-bold uppercase tracking-tight-readable text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  className="group relative text-sm font-bold uppercase tracking-tight-readable text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   {link.name}
-                  <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-[width] duration-300 hover:w-full"></span>
+                  <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-indigo-500 transition-[width] duration-300 group-hover:w-full"></span>
                 </a>
               ))}
             </div>

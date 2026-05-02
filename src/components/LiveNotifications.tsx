@@ -59,7 +59,7 @@ export default function LiveNotifications() {
   if (dismissed || shouldReduceMotion) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 max-w-sm" aria-live="polite">
+    <div className="fixed bottom-24 right-4 z-40 max-w-xs sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-sm" aria-live="polite">
       <AnimatePresence initial={false}>
         {currentEvent && (
           <motion.div
