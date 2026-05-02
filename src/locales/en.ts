@@ -246,14 +246,14 @@ export const en = {
             legend: { full: 'Full support', partial: 'Partial support', none: 'Not available' },
         },
         testimonials: {
-            tag: 'Real Communities',
+            tag: 'Community Examples',
             title: 'What Teams',
             titleAccent: 'Are Saying',
-            description: 'Servers that already trust TON618 for their daily operations.',
+            description: 'Examples of how Discord servers use TON618 for daily operations.',
             items: {
-                t1: { name: 'Alex R.', role: 'Owner', server: 'Horizon Gaming', members: '12K members', quote: 'Since migrating to TON618 it has been much easier for our moderators to keep tickets, warnings and verification in one flow.' },
-                t2: { name: 'María S.', role: 'Admin', server: 'Código Latam', members: '8K members', quote: 'Automation flows saved us. Onboarding, verification and support run on their own now.' },
-                t3: { name: 'Jake T.', role: 'Head Mod', server: 'Creative Hub', members: '25K members', quote: 'Live analytics and moderation logs give us full visibility. Would never go back to another bot.' },
+                t1: { name: 'Horizon Gaming', role: 'Admin Team', server: 'Gaming Server', members: '12K members', quote: 'Since migrating to TON618 it has been much easier for our moderators to keep tickets, warnings and verification in one flow.' },
+                t2: { name: 'Código Latam', role: 'Mod Team', server: 'Community Server', members: '8K members', quote: 'Automation flows saved us. Onboarding, verification and support run on their own now.' },
+                t3: { name: 'Creative Hub', role: 'Staff Team', server: 'Creative Server', members: '25K members', quote: 'Live analytics and moderation logs give us full visibility. Would never go back to another bot.' },
             },
         },
         integrations: {
@@ -1756,7 +1756,7 @@ export const en = {
                 questions: {
                     q1: {
                         question: 'How do I upgrade my server to premium?',
-                        answer: 'Click the Pro or Enterprise plan to join the support server. Pay manually and open a ticket with your server ID and receipt. The owner will send you an activation code via DM. Then run /pro redeem <code> in your server as the owner.',
+                        answer: 'Select your plan on the pricing page, choose the server you want to upgrade, and complete checkout securely through Whop. Premium activates automatically after payment confirmation.'
                     },
                     q2: {
                         question: 'Can I cancel my subscription anytime?',
@@ -1768,7 +1768,7 @@ export const en = {
                     },
                     q4: {
                         question: 'Can I upgrade multiple servers?',
-                        answer: 'Yes. Each server requires its own premium subscription. You can purchase premium for as many servers as you manage through the manual process.',
+                        answer: 'Yes. Each server requires its own premium subscription. You can purchase premium for as many servers as you manage directly from the pricing page.'
                     },
                     q5: {
                         question: 'Is my payment information secure?',

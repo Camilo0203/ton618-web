@@ -4,11 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Toaster } from 'sonner';
 import Logo from './components/Logo';
+import CookieConsent from './components/CookieConsent';
 import RouteScrollManager from './components/RouteScrollManager';
 import SecurityHeaders from './components/SecurityHeaders';
 import LandingPage from './pages/LandingPage';
 import { LEGAL_DOCUMENT_TYPES } from './lib/legalDocuments';
 
+const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
+const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
 const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
@@ -78,12 +81,11 @@ export default function App() {
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />
           <Route path="/status" element={<StatusPage />} />
-          {/* Dashboard routes disabled publicly - Coming Soon page */}
-          <Route path="/dashboard" element={<ComingSoonPage />} />
-          {/* Dashboard auth callback disabled - Pricing uses Supabase Auth with direct redirect to /pricing */}
-          <Route path="/auth/callback" element={<ComingSoonPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+      <CookieConsent />
       </Suspense>
     </>
   );
