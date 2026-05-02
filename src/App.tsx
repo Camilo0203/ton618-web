@@ -12,7 +12,6 @@ import { LEGAL_DOCUMENT_TYPES } from './lib/legalDocuments';
 
 const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
-const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
