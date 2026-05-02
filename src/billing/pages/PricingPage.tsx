@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Check, Zap, Crown, Heart, ArrowRight, X } from 'lucide-react';
+import { Check, Zap, Crown, Users, ArrowRight, X } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { TrustSignals } from '../components/TrustSignals';
 import { FAQSection } from '../components/FAQSection';
@@ -24,7 +24,7 @@ const WHOP_LINKS: Record<'pro_monthly' | 'pro_yearly' | 'lifetime', string> = {
   lifetime: `${WHOP_BASE}/${config.whopPlanLifetime || 'plan_nuXvSWVBzZHWf'}`,
 };
 
-const planKeys: PricingPlanKey[] = ['free', 'pro', 'donation'];
+const planKeys: PricingPlanKey[] = ['free', 'pro', 'enterprise'];
 
 export default function PricingPage() {
   const { t, i18n } = useTranslation();
@@ -61,7 +61,7 @@ export default function PricingPage() {
     }
 
     const whopKey: 'pro_monthly' | 'pro_yearly' | 'lifetime' =
-      planKey === 'donation' ? 'lifetime' : cycle === 'yearly' ? 'pro_yearly' : 'pro_monthly';
+      planKey === 'enterprise' ? 'lifetime' : cycle === 'yearly' ? 'pro_yearly' : 'pro_monthly';
 
     try {
       const result = await fetchBillingGuilds();
@@ -103,7 +103,17 @@ export default function PricingPage() {
         <meta name="twitter:description" content={t('billing.pricing.ogDescription', 'Upgrade your Discord server with TON618 Pro.')} />
         <meta name="twitter:image" content={socialImageUrl} />
       </Helmet>
-      <Navbar />
+
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="bg-cinematic-atmosphere absolute inset-0"></div>
+        <div className="bg-cinematic-texture absolute inset-0 opacity-40"></div>
+        <div className="bg-film-grain absolute inset-0 opacity-20"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
+        <div className="scanline-sweep absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
+      </div>
+
+      <div className="relative z-10">
+        <Navbar />
       {showFounding && foundingSpotsLeft > 0 && (
         <div className="sticky top-16 z-30 w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 px-4 py-3 text-sm">
           <div className="mx-auto flex max-w-6xl items-center justify-between">
@@ -124,48 +134,79 @@ export default function PricingPage() {
       <PricingHero />
       <main className="mx-auto max-w-6xl px-4 py-12">
 
-        <div className="mb-10 flex justify-center">
-          <div className="inline-flex rounded-full border border-white/10 bg-white/5 p-1">
-            <button onClick={() => setCycle('monthly')} className={`rounded-full px-4 py-2 text-sm ${cycle === 'monthly' ? 'bg-indigo-600' : ''}`}>{t('billing.toggle.monthly')}</button>
-            <button onClick={() => setCycle('yearly')} className={`rounded-full px-4 py-2 text-sm ${cycle === 'yearly' ? 'bg-indigo-600' : ''}`}>{t('billing.toggle.yearly')} <span className="ml-1 text-emerald-300">{t('billing.toggle.discount')}</span></button>
+        <div className="mb-16 flex justify-center relative z-10">
+          <div className="inline-flex rounded-full border border-white/10 bg-black/40 p-1.5 backdrop-blur-xl shadow-2xl">
+            <button onClick={() => setCycle('monthly')} className={`rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all ${cycle === 'monthly' ? 'bg-white text-black shadow-lg scale-100' : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95'}`}>{t('billing.toggle.monthly')}</button>
+            <button onClick={() => setCycle('yearly')} className={`rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${cycle === 'yearly' ? 'bg-white text-black shadow-lg scale-100' : 'text-slate-400 hover:text-white hover:bg-white/5 scale-95'}`}>{t('billing.toggle.yearly')} <span className={`rounded-full px-2 py-0.5 text-[10px] tracking-widest ${cycle === 'yearly' ? 'bg-black/10 text-indigo-600' : 'bg-indigo-500/20 text-indigo-300'}`}>-25%</span></button>
           </div>
         </div>
 
-        <section id="pricing-cards" className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <section id="pricing-cards" className="relative z-10 grid grid-cols-1 gap-6 md:grid-cols-3 md:items-center max-w-7xl mx-auto">
           {planKeys.map((planKey) => {
             const plan = PRICING_CONFIG[planKey];
             const isPro = planKey === 'pro';
-            const isDonation = planKey === 'donation';
+            const isEnterprise = planKey === 'enterprise';
             const isYearlyPro = isPro && cycle === 'yearly';
+            let cardClasses = "relative flex flex-col justify-between h-full ";
+            if (isPro) {
+              cardClasses += "tech-card md:scale-105 border-indigo-500/30 bg-gradient-to-br from-indigo-500/10 to-purple-500/5 shadow-[0_0_40px_-10px_rgba(79,70,229,0.3)] z-10 ";
+            } else if (isEnterprise) {
+              cardClasses += "tech-card opacity-90 ";
+            } else {
+              cardClasses += "tech-card opacity-80 ";
+            }
+
+            let ctaClass = "w-full ";
+            if (isPro) {
+              ctaClass += "btn-premium-primary";
+            } else {
+              ctaClass += "btn-premium-outline";
+            }
+
             return (
               <motion.div
                 key={planKey}
-                className={`relative rounded-2xl border p-6 transition-all duration-300 ${
-                  isYearlyPro
-                    ? 'z-10 border-indigo-500/60 bg-indigo-950/50 ring-2 ring-indigo-500 md:scale-105'
-                    : isPro
-                    ? 'border-indigo-500/40 bg-slate-900/50'
-                    : 'border-white/10 bg-slate-900/50'
-                }`}
+                className={cardClasses}
               >
-                <div className="mb-3 inline-flex rounded-lg bg-white/10 p-2">
-                  {isPro ? <Crown className="h-4 w-4" /> : isDonation ? <Heart className="h-4 w-4" /> : <Zap className="h-4 w-4" />}
+                {isPro && (
+                  <div className="absolute -top-4 left-0 right-0 flex justify-center z-20">
+                    <span className="premium-pill px-4 py-1 text-xs font-bold uppercase tracking-wide text-indigo-400">
+                      {t('pricing.pro.badge', 'Most Popular')}
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex-1">
+                  <div className="mb-4 inline-flex items-center gap-2 premium-pill px-3 py-1.5">
+                    {isPro ? <Crown className="h-4 w-4 text-indigo-400" /> : isEnterprise ? <Users className="h-4 w-4 text-slate-400" /> : <Zap className="h-4 w-4 text-slate-400" />}
+                    <span className={`text-[11px] font-bold uppercase tracking-widest ${isPro ? 'text-indigo-400' : 'text-slate-400'}`}>
+                      {plan.name[lang]}
+                    </span>
+                  </div>
+
+                  <p className="mt-2 text-sm font-medium text-slate-300 min-h-[40px]">{plan.description[lang]}</p>
+
+                  <div className="my-8">
+                    <p className="text-5xl font-black tracking-tight text-white flex items-baseline gap-1">
+                      {plan.price[cycle].display}
+                      <span className="text-base font-medium text-slate-400">{getPlanPeriod(planKey, cycle, lang)}</span>
+                    </p>
+                    {isYearlyPro && <p className="mt-2 text-xs font-bold text-emerald-400 tracking-wide">{t('billing.toggle.discount')}</p>}
+                  </div>
+
+                  <ul className="mb-8 space-y-4">
+                    {plan.features[lang].map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm text-slate-200">
+                        <Check className={`mt-0.5 h-4 w-4 shrink-0 ${isPro ? 'text-indigo-400' : 'text-slate-500'}`} />
+                        <span className="leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-xl font-bold">{plan.name[lang]}</h3>
-                <p className="mt-1 text-sm text-slate-300">{plan.description[lang]}</p>
-                <p className="mt-5 text-4xl font-black">{plan.price[cycle].display}<span className="ml-1 text-sm text-slate-400">{getPlanPeriod(planKey, cycle, lang)}</span></p>
-                {isYearlyPro && <p className="mt-2 text-xs font-semibold text-emerald-300">{t('billing.toggle.discount')}</p>}
-                {isYearlyPro && <p className="mt-2 text-xs text-amber-400">{t('billing.lifetimeUrgency')}</p>}
-                <ul className="mt-5 space-y-2">
-                  {plan.features[lang].slice(0, 5).map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm text-slate-300">
-                      <Check className="mt-0.5 h-4 w-4 text-emerald-400" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <button onClick={() => void handlePlanSelect(planKey)} className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold">
-                  {plan.cta[lang]} <ArrowRight className="h-4 w-4" />
+
+                <button onClick={() => void handlePlanSelect(planKey)} className={ctaClass}>
+                  {plan.cta[lang]}
+                  {isPro && <ArrowRight className="h-4 w-4 ml-1.5 transition-transform duration-200 group-hover:translate-x-0.5" />}
                 </button>
               </motion.div>
             );
@@ -194,6 +235,7 @@ export default function PricingPage() {
         </div>
       </main>
       <Footer />
+      </div>
     </div>
   );
 }

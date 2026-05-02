@@ -76,12 +76,12 @@ export const PRICING_CONFIG = {
     popular: true,
     popularLabel: { en: 'Core plan', es: 'Plan core' },
   },
-  donation: {
-    key: 'donation',
-    name: { en: 'Donate', es: 'Donación' },
+  enterprise: {
+    key: 'enterprise',
+    name: { en: 'Enterprise', es: 'Enterprise' },
     description: {
-      en: 'Support TON618 development and operating costs.',
-      es: 'Apoya el desarrollo y los costos operativos de TON618.',
+      en: 'Custom limits, dedicated support, and bespoke integrations.',
+      es: 'Límites personalizados, soporte dedicado e integraciones a medida.',
     },
     price: {
       monthly: { amount: null, display: 'Custom' },
@@ -93,19 +93,21 @@ export const PRICING_CONFIG = {
     },
     features: {
       en: [
-        'Support development',
-        'Help cover server costs',
-        'Supporter recognition',
-        'Priority appreciation',
+        'Everything in Pro',
+        'Custom operational limits',
+        'Dedicated success manager',
+        'White-label options',
+        'SLA guarantees',
       ],
       es: [
-        'Apoya el desarrollo',
-        'Ayuda a cubrir costos del servidor',
-        'Reconocimiento supporter',
-        'Agradecimiento prioritario',
+        'Todo en Pro',
+        'Límites operativos personalizados',
+        'Manager de éxito dedicado',
+        'Opciones marca blanca',
+        'Garantías de SLA',
       ],
     },
-    cta: { en: 'Donate', es: 'Donar' },
+    cta: { en: 'Contact Sales', es: 'Contactar Ventas' },
     ctaType: 'contact' as const,
     popular: false,
   },
