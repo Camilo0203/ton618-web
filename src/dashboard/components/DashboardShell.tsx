@@ -411,11 +411,18 @@ export default function DashboardShell({
                     <LanguageSelector />
                   </div>
                   
-                  {/* Cmd+K visual trigger */}
-                  <div className="hidden md:flex items-center justify-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] text-white/50 text-xs font-mono ml-2">
-                    <kbd className="opacity-70 mr-1">⌘</kbd> 
-                    <kbd className="opacity-70">K</kbd>
-                  </div>
+                  {/* Cmd+K interactive trigger */}
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+                    }}
+                    title={t('dashboard.commandPalette.placeholder') || "Search..."}
+                    className="hidden md:flex items-center justify-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] text-white/50 text-[11px] font-mono ml-2 hover:bg-white/[0.06] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <kbd className="opacity-70 mr-1 font-sans">{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl'}</kbd> 
+                    <kbd className="opacity-70 font-sans">K</kbd>
+                  </button>
                 </div>
               </div>
             </div>
