@@ -20,7 +20,7 @@
     "test:e2e": "playwright test",
     "test:e2e:smoke": "playwright test --grep @smoke",
     "verify": "npm run typecheck && npm run lint && npm run build",
-    "deploy": "npm run build && git add dist/ && git commit -m \"deploy: build dist for Square Cloud\" && git push origin main"
+    "deploy": "npm run build && git add dist/ && (git diff-index --quiet HEAD || git commit -m \"deploy: build dist for Square Cloud\") && git push origin main"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

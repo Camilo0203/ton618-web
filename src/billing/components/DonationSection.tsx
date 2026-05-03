@@ -24,7 +24,7 @@ export function DonationSection() {
           className="relative overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-8 sm:p-12 backdrop-blur-sm"
         >
           {/* Background decoration */}
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-20" />
           
           <div className="relative text-center">
             {/* Icon */}
