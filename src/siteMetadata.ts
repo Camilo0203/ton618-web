@@ -3,8 +3,8 @@ export const defaultMetaDescription =
   'TON618 is a bilingual staff operations bot for Discord communities, with tickets, verification, setup, stats and control commands inside Discord.';
 
 export const socialImagePath = '/social-preview.png';
-export const faviconPath = '/favicon.png';
-export const appleTouchIconPath = '/apple-touch-icon.png';
+export const faviconPath = '/logo-ton618-transparent.png';
+export const appleTouchIconPath = '/logo-ton618.png';
 export const manifestPath = '/site.webmanifest';
 
 export function normalizeSiteUrl(value?: string): string {
