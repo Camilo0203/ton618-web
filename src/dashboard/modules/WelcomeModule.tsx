@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Sparkles } from 'lucide-react';
@@ -13,6 +13,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { welcomeSettingsSchema } from '../schemas';
@@ -52,16 +53,18 @@ export default function WelcomeModule({
   const channelOptions = getChannelOptions(inventory, ['text', 'announcement', 'forum']);
   const roleOptions = getRoleOptions(inventory);
 
+  const methods = useForm<WelcomeModuleValues>({
+    resolver: zodResolver(welcomeSettingsSchema) as never,
+    defaultValues: config.welcomeSettings,
+  });
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     formState: { errors, isDirty },
-  } = useForm<WelcomeModuleValues>({
-    resolver: zodResolver(welcomeSettingsSchema) as never,
-    defaultValues: config.welcomeSettings,
-  });
+  } = methods;
 
   useEffect(() => {
     reset(config.welcomeSettings);
@@ -98,6 +101,7 @@ export default function WelcomeModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -142,20 +146,20 @@ export default function WelcomeModule({
           >
             <div className="grid gap-5 md:grid-cols-2">
               <FieldShell label={t('dashboard.welcome.welcome.channelLabel')} error={errors.welcomeChannelId?.message}>
-                <select {...register('welcomeChannelId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.welcome.notConfigured')}</option>
-                  {channelOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="welcomeChannelId"
+                  disabled={!welcomeEnabled}
+                  options={channelOptions}
+                  placeholder={t('dashboard.welcome.notConfigured')}
+                />
               </FieldShell>
               <FieldShell label={t('dashboard.welcome.welcome.autoroleLabel')}>
-                <select {...register('welcomeAutoroleId')} disabled={!welcomeEnabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.welcome.notConfigured')}</option>
-                  {roleOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="welcomeAutoroleId"
+                  disabled={!welcomeEnabled}
+                  options={roleOptions}
+                  placeholder={t('dashboard.welcome.notConfigured')}
+                />
               </FieldShell>
             </div>
 
@@ -200,12 +204,12 @@ export default function WelcomeModule({
             <input type="checkbox" {...register('goodbyeEnabled')} className="dashboard-module-checkbox mt-1" />
           </ToggleCard>
           <FieldShell label={t('dashboard.welcome.goodbye.channelLabel')} error={errors.goodbyeChannelId?.message}>
-            <select {...register('goodbyeChannelId')} disabled={!goodbyeEnabled} className="w-full rounded-2xl border dashboard-module-select">
-              <option value="">{t('dashboard.welcome.notConfigured')}</option>
-              {channelOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
+            <DashboardSelect
+              name="goodbyeChannelId"
+              disabled={!goodbyeEnabled}
+              options={channelOptions}
+              placeholder={t('dashboard.welcome.notConfigured')}
+            />
           </FieldShell>
           <FieldShell label={t('dashboard.welcome.goodbye.titleLabel')}>
             <input {...register('goodbyeTitle')} className="dashboard-form-field" />
@@ -227,5 +231,6 @@ export default function WelcomeModule({
         </div>
       </PanelCard>
     </form>
+    </FormProvider>
   );
 }

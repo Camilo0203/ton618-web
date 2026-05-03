@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { Command, Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { commandSettingsSchema } from '../schemas';
@@ -88,6 +89,11 @@ export default function CommandsModule({
     }
   }), [t]);
 
+  const methods = useForm<CommandModuleValues>({
+    resolver: zodResolver(schema),
+    defaultValues: toFormValues(config.commandSettings),
+  });
+
   const {
     register,
     handleSubmit,
@@ -96,10 +102,7 @@ export default function CommandsModule({
     control,
     setValue,
     formState: { errors, isDirty },
-  } = useForm<CommandModuleValues>({
-    resolver: zodResolver(schema),
-    defaultValues: toFormValues(config.commandSettings),
-  });
+  } = methods;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -134,6 +137,7 @@ export default function CommandsModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave({
@@ -287,11 +291,13 @@ export default function CommandsModule({
                 <div key={field.id} className="dashboard-module-card grid gap-4 md:grid-cols-[1.1fr_0.7fr_0.7fr_auto_auto]">
                   <label className="block">
                     <span className="mb-2 block text-sm text-slate-300">{t('dashboard.commands.overrides.command')}</span>
-                    <select {...register(`overrides.${index}.commandName`)} className="dashboard-form-field">
-                      {commandOptions.map((option) => (
-                        <option key={option.value} value={option.value}>/{option.value}</option>
-                      ))}
-                    </select>
+                    <DashboardSelect
+                      name={`overrides.${index}.commandName`}
+                      options={commandOptions.map((option) => ({
+                        value: option.value,
+                        label: `/${option.value}`,
+                      }))}
+                    />
                   </label>
                   <label className="block">
                     <span className="mb-2 block text-sm text-slate-300">{t('dashboard.commands.overrides.max')}</span>
@@ -319,5 +325,6 @@ export default function CommandsModule({
         </PanelCard>
       </div>
     </form>
+    </FormProvider>
   );
 }

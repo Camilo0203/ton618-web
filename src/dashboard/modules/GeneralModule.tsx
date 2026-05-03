@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Settings2 } from 'lucide-react';
@@ -11,6 +11,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import {
@@ -59,13 +60,7 @@ export default function GeneralModule({
 }: GeneralModuleProps) {
   const { t } = useTranslation();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<GeneralModuleValues>({
+  const methods = useForm<GeneralModuleValues>({
     resolver: zodResolver(generalModuleSchema),
     defaultValues: {
       generalSettings: config.generalSettings,
@@ -80,6 +75,7 @@ export default function GeneralModule({
     });
   }, [config.dashboardPreferences, config.generalSettings, reset]);
 
+  const { register, watch, reset, formState: { errors, isDirty } } = methods;
   const commandMode = watch('generalSettings.commandMode');
   const validationErrors = flattenFormErrors(errors);
   const launchpadSteps = [
@@ -110,8 +106,9 @@ export default function GeneralModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
-      onSubmit={handleSubmit(async (values) => {
+      onSubmit={methods.handleSubmit(async (values) => {
         await onSave(values);
       })}
       className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]"
@@ -151,13 +148,13 @@ export default function GeneralModule({
                 label={t('dashboard.general.locale.language.label')}
                 hint={t('dashboard.general.locale.language.hint')}
               >
-                <select
-                  {...register('generalSettings.language')}
-                  className="dashboard-form-field"
-                >
-                  <option value="es">{t('dashboard.general.locale.language.es')}</option>
-                  <option value="en">{t('dashboard.general.locale.language.en')}</option>
-                </select>
+                <DashboardSelect
+                  name="generalSettings.language"
+                  options={[
+                    { value: 'es', label: t('dashboard.general.locale.language.es') },
+                    { value: 'en', label: t('dashboard.general.locale.language.en') },
+                  ]}
+                />
               </FieldShell>
 
               <FieldShell
@@ -176,27 +173,27 @@ export default function GeneralModule({
                 label={t('dashboard.general.locale.commandMode.label')}
                 hint={t('dashboard.general.locale.commandMode.hint')}
               >
-                <select
-                  {...register('generalSettings.commandMode')}
-                  className="dashboard-form-field"
-                >
-                  <option value="mention">{t('dashboard.general.locale.commandMode.mention')}</option>
-                  <option value="prefix">{t('dashboard.general.locale.commandMode.prefix')}</option>
-                </select>
+                <DashboardSelect
+                  name="generalSettings.commandMode"
+                  options={[
+                    { value: 'mention', label: t('dashboard.general.locale.commandMode.mention') },
+                    { value: 'prefix', label: t('dashboard.general.locale.commandMode.prefix') },
+                  ]}
+                />
               </FieldShell>
 
               <FieldShell
                 label={t('dashboard.general.locale.opsPlan.label')}
                 hint={t('dashboard.general.locale.opsPlan.hint')}
               >
-                <select
-                  {...register('generalSettings.opsPlan')}
-                  className="dashboard-form-field"
-                >
-                  <option value="free">{t('dashboard.general.locale.opsPlan.free')}</option>
-                  <option value="pro">{t('dashboard.general.locale.opsPlan.pro')}</option>
-                  <option value="enterprise">{t('dashboard.general.locale.opsPlan.enterprise')}</option>
-                </select>
+                <DashboardSelect
+                  name="generalSettings.opsPlan"
+                  options={[
+                    { value: 'free', label: t('dashboard.general.locale.opsPlan.free') },
+                    { value: 'pro', label: t('dashboard.general.locale.opsPlan.pro') },
+                    { value: 'enterprise', label: t('dashboard.general.locale.opsPlan.enterprise') },
+                  ]}
+                />
               </FieldShell>
 
               <FieldShell
@@ -259,25 +256,25 @@ export default function GeneralModule({
               <span className="mb-2 block text-sm font-semibold text-slate-200">
                 {t('dashboard.general.prefs.defaultSection')}
               </span>
-              <select
-                {...register('dashboardPreferences.defaultSection')}
-                className="dashboard-form-field"
-              >
-                <option value="overview">{t('dashboard.general.sections.overview')}</option>
-                <option value="general">{t('dashboard.general.sections.general')}</option>
-                <option value="server_roles">{t('dashboard.general.sections.server_roles')}</option>
-                <option value="tickets">{t('dashboard.general.sections.tickets')}</option>
-                <option value="verification">{t('dashboard.general.sections.verification')}</option>
-                <option value="welcome">{t('dashboard.general.sections.welcome')}</option>
-                <option value="suggestions">{t('dashboard.general.sections.suggestions')}</option>
-                <option value="modlogs">{t('dashboard.general.sections.modlogs')}</option>
-                <option value="commands">{t('dashboard.general.sections.commands')}</option>
-                <option value="system">{t('dashboard.general.sections.system')}</option>
-                <option value="activity">{t('dashboard.general.sections.activity')}</option>
-                <option value="analytics">{t('dashboard.general.sections.analytics')}</option>
-                <option value="playbooks">{t('dashboard.general.sections.playbooks')}</option>
-                <option value="inbox">{t('dashboard.general.sections.inbox')}</option>
-              </select>
+              <DashboardSelect
+                name="dashboardPreferences.defaultSection"
+                options={[
+                  { value: 'overview', label: t('dashboard.general.sections.overview') },
+                  { value: 'general', label: t('dashboard.general.sections.general') },
+                  { value: 'server_roles', label: t('dashboard.general.sections.server_roles') },
+                  { value: 'tickets', label: t('dashboard.general.sections.tickets') },
+                  { value: 'verification', label: t('dashboard.general.sections.verification') },
+                  { value: 'welcome', label: t('dashboard.general.sections.welcome') },
+                  { value: 'suggestions', label: t('dashboard.general.sections.suggestions') },
+                  { value: 'modlogs', label: t('dashboard.general.sections.modlogs') },
+                  { value: 'commands', label: t('dashboard.general.sections.commands') },
+                  { value: 'system', label: t('dashboard.general.sections.system') },
+                  { value: 'activity', label: t('dashboard.general.sections.activity') },
+                  { value: 'analytics', label: t('dashboard.general.sections.analytics') },
+                  { value: 'playbooks', label: t('dashboard.general.sections.playbooks') },
+                  { value: 'inbox', label: t('dashboard.general.sections.inbox') },
+                ]}
+              />
             </label>
 
             <label className="dashboard-toggle-card flex items-start gap-3">
@@ -349,5 +346,6 @@ export default function GeneralModule({
         </PanelCard>
       </div>
     </form>
+    </FormProvider>
   );
 }

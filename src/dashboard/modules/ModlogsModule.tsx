@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { ShieldCheck } from 'lucide-react';
@@ -12,6 +12,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { modlogSettingsSchema } from '../schemas';
@@ -50,16 +51,18 @@ export default function ModlogsModule({
   const { t } = useTranslation();
   const channelOptions = getChannelOptions(inventory, ['text', 'announcement', 'forum']);
 
+  const methods = useForm<ModlogsModuleValues>({
+    resolver: zodResolver(modlogSettingsSchema) as never,
+    defaultValues: config.modlogSettings,
+  });
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     formState: { errors, isDirty },
-  } = useForm<ModlogsModuleValues>({
-    resolver: zodResolver(modlogSettingsSchema) as never,
-    defaultValues: config.modlogSettings,
-  });
+  } = methods;
 
   useEffect(() => {
     reset(config.modlogSettings);
@@ -86,6 +89,7 @@ export default function ModlogsModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -129,12 +133,12 @@ export default function ModlogsModule({
             hint={t('dashboard.modlogs.setup.channelHint')}
             error={errors.channelId?.message}
           >
-            <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-              <option value="">{t('dashboard.modlogs.notConfigured')}</option>
-              {channelOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
+            <DashboardSelect
+              name="channelId"
+              disabled={!enabled}
+              options={channelOptions}
+              placeholder={t('dashboard.modlogs.notConfigured')}
+            />
           </FieldShell>
         </div>
       </PanelCard>
@@ -161,5 +165,6 @@ export default function ModlogsModule({
         </div>
       </PanelCard>
     </form>
+    </FormProvider>
   );
 }

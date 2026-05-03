@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Shield } from 'lucide-react';
@@ -13,6 +13,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { verificationSettingsSchema } from '../schemas';
@@ -52,16 +53,18 @@ export default function VerificationModule({
   const channelOptions = getChannelOptions(inventory, ['text', 'announcement', 'forum']);
   const roleOptions = getRoleOptions(inventory);
 
+  const methods = useForm<VerificationModuleValues>({
+    resolver: zodResolver(verificationSettingsSchema) as never,
+    defaultValues: config.verificationSettings,
+  });
+
   const {
     register,
     handleSubmit,
     watch,
     reset,
     formState: { errors, isDirty },
-  } = useForm<VerificationModuleValues>({
-    resolver: zodResolver(verificationSettingsSchema) as never,
-    defaultValues: config.verificationSettings,
-  });
+  } = methods;
 
   useEffect(() => {
     reset(config.verificationSettings);
@@ -101,6 +104,7 @@ export default function VerificationModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -142,47 +146,51 @@ export default function VerificationModule({
               </ToggleCard>
 
               <FieldShell label={t('dashboard.verification.flow.channel')} error={errors.channelId?.message}>
-                <select {...register('channelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.verification.notConfigured')}</option>
-                  {channelOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="channelId"
+                  disabled={!enabled}
+                  options={channelOptions}
+                  placeholder={t('dashboard.verification.notConfigured')}
+                />
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.logs')}>
-                <select {...register('logChannelId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.verification.notConfigured')}</option>
-                  {channelOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="logChannelId"
+                  disabled={!enabled}
+                  options={channelOptions}
+                  placeholder={t('dashboard.verification.notConfigured')}
+                />
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.verifiedRole')} error={errors.verifiedRoleId?.message}>
-                <select {...register('verifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.verification.notConfigured')}</option>
-                  {roleOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="verifiedRoleId"
+                  disabled={!enabled}
+                  options={roleOptions}
+                  placeholder={t('dashboard.verification.notConfigured')}
+                />
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.unverifiedRole')}>
-                <select {...register('unverifiedRoleId')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="">{t('dashboard.verification.notConfigured')}</option>
-                  {roleOptions.map((option) => (
-                    <option key={option.value} value={option.value}>{option.label}</option>
-                  ))}
-                </select>
+                <DashboardSelect
+                  name="unverifiedRoleId"
+                  disabled={!enabled}
+                  options={roleOptions}
+                  placeholder={t('dashboard.verification.notConfigured')}
+                />
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.mode.label')}>
-                <select {...register('mode')} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                  <option value="button">{t('dashboard.verification.flow.mode.button')}</option>
-                  <option value="code">{t('dashboard.verification.flow.mode.code')}</option>
-                  <option value="question">{t('dashboard.verification.flow.mode.question')}</option>
-                </select>
+                <DashboardSelect
+                  name="mode"
+                  disabled={!enabled}
+                  options={[
+                    { value: 'button', label: t('dashboard.verification.flow.mode.button') },
+                    { value: 'code', label: t('dashboard.verification.flow.mode.code') },
+                    { value: 'question', label: t('dashboard.verification.flow.mode.question') },
+                  ]}
+                />
               </FieldShell>
 
               <FieldShell label={t('dashboard.verification.flow.autokick.label')} hint={t('dashboard.verification.flow.autokick.hint')}>
@@ -240,14 +248,18 @@ export default function VerificationModule({
             </label>
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-200">{t('dashboard.verification.visual.thresholds.action')}</span>
-              <select {...register('antiraidAction')} className="w-full rounded-2xl border dashboard-module-select">
-                <option value="pause">{t('dashboard.verification.visual.thresholds.pause')}</option>
-                <option value="kick">{t('dashboard.verification.visual.thresholds.kick')}</option>
-              </select>
+            <DashboardSelect
+              name="antiraidAction"
+              options={[
+                { value: 'pause', label: t('dashboard.verification.visual.thresholds.pause') },
+                { value: 'kick', label: t('dashboard.verification.visual.thresholds.kick') },
+              ]}
+            />
             </label>
           </div>
         </div>
       </PanelCard>
     </form>
+    </FormProvider>
   );
 }

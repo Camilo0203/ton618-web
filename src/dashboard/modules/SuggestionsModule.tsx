@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { MessageSquareQuote } from 'lucide-react';
@@ -13,6 +13,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { suggestionSettingsSchema } from '../schemas';
@@ -51,16 +52,18 @@ export default function SuggestionsModule({
   const { t } = useTranslation();
   const channelOptions = getChannelOptions(inventory, ['text', 'announcement', 'forum']);
 
+  const methods = useForm<SuggestionsModuleValues>({
+    resolver: zodResolver(suggestionSettingsSchema) as never,
+    defaultValues: config.suggestionSettings,
+  });
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
     formState: { errors, isDirty },
-  } = useForm<SuggestionsModuleValues>({
-    resolver: zodResolver(suggestionSettingsSchema) as never,
-    defaultValues: config.suggestionSettings,
-  });
+  } = methods;
 
   useEffect(() => {
     reset(config.suggestionSettings);
@@ -92,6 +95,7 @@ export default function SuggestionsModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -142,12 +146,12 @@ export default function SuggestionsModule({
                 ['rejectedChannelId', t('dashboard.suggestions.destinations.rejected.label'), t('dashboard.suggestions.destinations.rejected.hint')],
               ].map(([field, label, hint]) => (
                 <FieldShell key={field} label={label} hint={hint} error={errors[field as keyof typeof errors]?.message as string | undefined}>
-                  <select {...register(field as keyof SuggestionSettings)} disabled={!enabled} className="w-full rounded-2xl border dashboard-module-select">
-                    <option value="">{t('dashboard.suggestions.notConfigured')}</option>
-                    {channelOptions.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
+                  <DashboardSelect
+                    name={field}
+                    disabled={!enabled}
+                    options={channelOptions}
+                    placeholder={t('dashboard.suggestions.notConfigured')}
+                  />
                 </FieldShell>
               ))}
             </div>
@@ -177,5 +181,6 @@ export default function SuggestionsModule({
         </div>
       </PanelCard>
     </form>
+    </FormProvider>
   );
 }

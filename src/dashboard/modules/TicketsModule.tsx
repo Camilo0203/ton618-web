@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Ticket } from 'lucide-react';
@@ -13,6 +13,7 @@ import {
   ValidationSummary,
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
+import DashboardSelect from '../components/DashboardSelect';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { ticketsSettingsSchema } from '../schemas';
@@ -62,6 +63,11 @@ export default function TicketsModule({
   const roleOptions = getRoleOptions(inventory);
   const categoryOptions = getCategoryOptions(inventory);
 
+  const methods = useForm<TicketsModuleValues>({
+    resolver: zodResolver(ticketsSettingsSchema) as never,
+    defaultValues: config.ticketsSettings,
+  });
+
   const {
     register,
     handleSubmit,
@@ -69,10 +75,7 @@ export default function TicketsModule({
     watch,
     setValue,
     formState: { errors, isDirty },
-  } = useForm<TicketsModuleValues>({
-    resolver: zodResolver(ticketsSettingsSchema) as never,
-    defaultValues: config.ticketsSettings,
-  });
+  } = methods;
 
   useEffect(() => {
     reset(config.ticketsSettings);
@@ -116,6 +119,7 @@ export default function TicketsModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -210,48 +214,30 @@ export default function TicketsModule({
           <PanelCard title={t('dashboard.tickets.escalation.title')} description={t('dashboard.tickets.escalation.desc')}>
           <div className="grid gap-5 md:grid-cols-2">
             <FieldShell label={t('dashboard.tickets.escalation.roleLabel')} error={errors.slaEscalationRoleId?.message}>
-              <select
-                {...register('slaEscalationRoleId')}
+              <DashboardSelect
+                name="slaEscalationRoleId"
                 disabled={!slaEscalationEnabled}
-                className="w-full rounded-2xl border dashboard-module-select"
-              >
-                <option value="">{t('dashboard.tickets.escalation.notConfigured')}</option>
-                {roleOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                options={roleOptions}
+                placeholder={t('dashboard.tickets.escalation.notConfigured')}
+              />
             </FieldShell>
 
             <FieldShell label={t('dashboard.tickets.escalation.channelLabel')}>
-              <select
-                {...register('slaEscalationChannelId')}
+              <DashboardSelect
+                name="slaEscalationChannelId"
                 disabled={!slaEscalationEnabled}
-                className="w-full rounded-2xl border dashboard-module-select"
-              >
-                <option value="">{t('dashboard.tickets.escalation.notConfigured')}</option>
-                {channelOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                options={channelOptions}
+                placeholder={t('dashboard.tickets.escalation.notConfigured')}
+              />
             </FieldShell>
 
             <FieldShell label={t('dashboard.tickets.escalation.reportLabel')} error={errors.dailySlaReportChannelId?.message}>
-              <select
-                {...register('dailySlaReportChannelId')}
+              <DashboardSelect
+                name="dailySlaReportChannelId"
                 disabled={!dailySlaReportEnabled}
-                className="w-full rounded-2xl border dashboard-module-select"
-              >
-                <option value="">{t('dashboard.tickets.escalation.useFallback')}</option>
-                {channelOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+                options={channelOptions}
+                placeholder={t('dashboard.tickets.escalation.useFallback')}
+              />
             </FieldShell>
 
             <FieldShell label={t('dashboard.tickets.escalation.incidentLabel')} error={errors.incidentMessage?.message}>
@@ -338,5 +324,6 @@ export default function TicketsModule({
         </ProLock>
       </div>
     </form>
+    </FormProvider>
   );
 }

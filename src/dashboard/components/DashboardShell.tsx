@@ -15,6 +15,7 @@ import {
 import { dashboardSections, dashboardTaskGroups } from '../constants';
 import { drawerVariants, fadeInVariants, fadeUpVariants, staggerContainerVariants } from '../motion';
 import type { DashboardGuild, DashboardSectionId, GuildSyncStatus } from '../types';
+import DashboardSelect from './DashboardSelect';
 import {
   type DashboardSectionState,
   resolveGuildIconUrl,
@@ -55,6 +56,7 @@ interface SidebarProps {
   guilds: DashboardGuild[];
   selectedGuild: DashboardGuild | null;
   activeSection: DashboardSectionId;
+  user: User | null;
   isAuthenticated: boolean;
   onSectionChange: (section: DashboardSectionId) => void;
   onGuildChange: (guildId: string) => void;
@@ -67,6 +69,7 @@ function SidebarContent({
   guilds,
   selectedGuild,
   activeSection,
+  user,
   isAuthenticated,
   onSectionChange,
   onGuildChange,
@@ -134,29 +137,20 @@ function SidebarContent({
               </span>
             </div>
 
-            <select
-              id="guild-select"
+            <DashboardSelect
               value={selectedGuild?.guildId ?? ''}
               disabled={!isAuthenticated}
-              onChange={(event) => {
-                onGuildChange(event.target.value);
+              onChange={(value) => {
+                onGuildChange(value);
                 closeOnNavigate?.();
               }}
-              className="mt-4 w-full rounded-xl border border-white/[0.08] bg-[#06081a]/80 px-3 py-2.5 text-sm font-medium text-slate-200 outline-none backdrop-blur-sm transition-all duration-200 focus:border-indigo-400/50 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.12)] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {!selectedGuild ? (
-                <option value="">{t('dashboard.shell.selectServer')}</option>
-              ) : null}
-              {guilds.map((guild) => (
-                <option
-                  key={guild.guildId}
-                  value={guild.guildId}
-                  onMouseEnter={() => prefetchSnapshot(guild.guildId)}
-                >
-                  {guild.guildName}
-                </option>
-              ))}
-            </select>
+              options={guilds.map((guild) => ({
+                value: guild.guildId,
+                label: guild.guildName,
+              }))}
+              className="mt-4"
+              placeholder={t('dashboard.shell.selectServer')}
+            />
           </div>
         </div>
 
@@ -214,6 +208,23 @@ function SidebarContent({
             <div className="sm:hidden flex justify-center pb-2 border-b border-white/[0.05]">
               <LanguageSelector />
             </div>
+
+            {isAuthenticated && user && (
+              <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-xs uppercase overflow-hidden">
+                  {user.user_metadata?.avatar_url ? (
+                    <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
+                  ) : (
+                    (user.user_metadata?.full_name || user.email)?.[0] ?? 'U'
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-semibold text-white">
+                    {user.user_metadata?.full_name || user.email}
+                  </p>
+                </div>
+              </div>
+            )}
             {isAuthenticated ? (
               <button
                 type="button"
@@ -296,6 +307,7 @@ export default function DashboardShell({
               guilds={guilds}
               selectedGuild={selectedGuild}
               activeSection={activeSection}
+              user={user}
               isAuthenticated={isAuthenticated}
               onSectionChange={onSectionChange}
               onGuildChange={onGuildChange}
@@ -351,12 +363,16 @@ export default function DashboardShell({
                   {/* User chip — glassmorphic */}
                   {isAuthenticated && user ? (
                     <div className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] px-4 py-2 backdrop-blur-sm">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm">
-                        {user.email?.[0]?.toUpperCase() ?? 'U'}
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm uppercase overflow-hidden">
+                        {user.user_metadata?.avatar_url ? (
+                          <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
+                        ) : (
+                          (user.user_metadata?.full_name || user.email)?.[0] ?? 'U'
+                        )}
                       </div>
                       <div className="hidden sm:block">
                         <p className="text-sm font-semibold text-white">
-                           {user.email}
+                           {user.user_metadata?.full_name || user.email}
                         </p>
                       </div>
                     </div>
@@ -429,6 +445,7 @@ export default function DashboardShell({
             >
               <SidebarContent
                 guilds={guilds} selectedGuild={selectedGuild} activeSection={activeSection}
+                user={user}
                 isAuthenticated={isAuthenticated}
                 onSectionChange={onSectionChange} onGuildChange={onGuildChange} 
                 onLogin={onLogin} onLogout={onLogout}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
 import { Layers3 } from 'lucide-react';
@@ -13,6 +13,7 @@ import {
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
 import SectionMutationBanner from '../components/SectionMutationBanner';
+import DashboardSelect from '../components/DashboardSelect';
 import StateCard from '../components/StateCard';
 import { serverRolesChannelsSettingsSchema } from '../schemas';
 import type {
@@ -45,7 +46,6 @@ function SelectField({
   placeholder,
   registerName,
   options,
-  register,
 }: {
   label: string;
   hint?: string;
@@ -53,21 +53,14 @@ function SelectField({
   placeholder?: string;
   registerName: keyof ServerRolesChannelsSettings;
   options: Array<{ value: string; label: string }>;
-  register: ReturnType<typeof useForm<ServerRolesModuleValues>>['register'];
 }) {
   return (
     <FieldShell label={label} hint={hint} error={error}>
-      <select
-        {...register(registerName)}
-        className="dashboard-form-field"
-      >
-        <option value="">{placeholder ?? ''}</option>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <DashboardSelect
+        name={registerName}
+        options={options}
+        placeholder={placeholder}
+      />
     </FieldShell>
   );
 }
@@ -86,15 +79,16 @@ export default function ServerRolesModule({
   const channelOptions = getChannelOptions(inventory, ['text', 'announcement', 'forum']);
   const voiceChannelOptions = getChannelOptions(inventory, ['voice']);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<ServerRolesModuleValues>({
+  const methods = useForm<ServerRolesModuleValues>({
     resolver: zodResolver(serverRolesChannelsSettingsSchema) as never,
     defaultValues: config.serverRolesChannelsSettings,
   });
+
+  const {
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = methods;
 
   useEffect(() => {
     reset(config.serverRolesChannelsSettings);
@@ -138,6 +132,7 @@ export default function ServerRolesModule({
   }
 
   return (
+    <FormProvider {...methods}>
     <form
       onSubmit={handleSubmit(async (values) => {
         await onSave(values);
@@ -181,14 +176,14 @@ export default function ServerRolesModule({
             description={t('dashboard.serverRoles.channels.desc')}
           >
             <div className="grid gap-5 md:grid-cols-2">
-              <SelectField label={t('dashboard.serverRoles.channels.dashboard.label')} hint={t('dashboard.serverRoles.channels.dashboard.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="dashboardChannelId" options={channelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.ticketPanel.label')} hint={t('dashboard.serverRoles.channels.ticketPanel.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="ticketPanelChannelId" options={channelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.logs.label')} hint={t('dashboard.serverRoles.channels.logs.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="logsChannelId" options={channelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.transcript.label')} hint={t('dashboard.serverRoles.channels.transcript.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="transcriptChannelId" options={channelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.weeklyReport.label')} hint={t('dashboard.serverRoles.channels.weeklyReport.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="weeklyReportChannelId" options={channelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.liveMembers.label')} hint={t('dashboard.serverRoles.channels.liveMembers.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveMembersChannelId" options={voiceChannelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.liveRoleCount.label')} hint={t('dashboard.serverRoles.channels.liveRoleCount.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveRoleChannelId" options={voiceChannelOptions} register={register} />
-              <SelectField label={t('dashboard.serverRoles.channels.liveRole.label')} hint={t('dashboard.serverRoles.channels.liveRole.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveRoleId" options={roleOptions} register={register} />
+              <SelectField label={t('dashboard.serverRoles.channels.dashboard.label')} hint={t('dashboard.serverRoles.channels.dashboard.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="dashboardChannelId" options={channelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.ticketPanel.label')} hint={t('dashboard.serverRoles.channels.ticketPanel.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="ticketPanelChannelId" options={channelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.logs.label')} hint={t('dashboard.serverRoles.channels.logs.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="logsChannelId" options={channelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.transcript.label')} hint={t('dashboard.serverRoles.channels.transcript.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="transcriptChannelId" options={channelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.weeklyReport.label')} hint={t('dashboard.serverRoles.channels.weeklyReport.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="weeklyReportChannelId" options={channelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.liveMembers.label')} hint={t('dashboard.serverRoles.channels.liveMembers.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveMembersChannelId" options={voiceChannelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.liveRoleCount.label')} hint={t('dashboard.serverRoles.channels.liveRoleCount.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveRoleChannelId" options={voiceChannelOptions} />
+              <SelectField label={t('dashboard.serverRoles.channels.liveRole.label')} hint={t('dashboard.serverRoles.channels.liveRole.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="liveRoleId" options={roleOptions} />
             </div>
           </FormSection>
         </div>
@@ -204,9 +199,9 @@ export default function ServerRolesModule({
           description={t('dashboard.serverRoles.access.sectionDesc')}
         >
           <div className="grid gap-5 md:grid-cols-2">
-            <SelectField label={t('dashboard.serverRoles.access.support.label')} hint={t('dashboard.serverRoles.access.support.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="supportRoleId" options={roleOptions} register={register} />
-            <SelectField label={t('dashboard.serverRoles.access.admin.label')} hint={t('dashboard.serverRoles.access.admin.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="adminRoleId" options={roleOptions} register={register} />
-            <SelectField label={t('dashboard.serverRoles.access.verify.label')} hint={t('dashboard.serverRoles.access.verify.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="verifyRoleId" options={roleOptions} register={register} />
+            <SelectField label={t('dashboard.serverRoles.access.support.label')} hint={t('dashboard.serverRoles.access.support.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="supportRoleId" options={roleOptions} />
+            <SelectField label={t('dashboard.serverRoles.access.admin.label')} hint={t('dashboard.serverRoles.access.admin.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="adminRoleId" options={roleOptions} />
+            <SelectField label={t('dashboard.serverRoles.access.verify.label')} hint={t('dashboard.serverRoles.access.verify.hint')} placeholder={t('dashboard.serverRoles.notConfigured')} registerName="verifyRoleId" options={roleOptions} />
           </div>
         </FormSection>
 
@@ -215,5 +210,6 @@ export default function ServerRolesModule({
         </div>
       </PanelCard>
     </form>
+    </FormProvider>
   );
 }
