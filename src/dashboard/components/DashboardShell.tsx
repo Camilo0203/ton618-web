@@ -241,7 +241,7 @@ function SidebarContent({
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.08] px-4 py-2 text-sm font-semibold text-indigo-300 transition-all duration-200 hover:border-indigo-400/40 hover:bg-indigo-500/[0.14] hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]"
               >
                 <Sparkles className="h-4 w-4" />
-                {t('dashboard.dashboardAuth.authCard.cta')}
+                {t('dashboardAuth.authCard.cta')}
               </button>
             )}
           </div>
@@ -383,7 +383,7 @@ export default function DashboardShell({
                     >
                       <Sparkles className="h-4 w-4 text-indigo-300" />
                       <span className="text-sm font-semibold text-white">
-                        {t('dashboard.dashboardAuth.authCard.cta')}
+                        {t('dashboardAuth.authCard.cta')}
                       </span>
                     </button>
                   )}

@@ -470,17 +470,17 @@ export default function DashboardModuleViewport({
               <RefreshCcw className="h-8 w-8 animate-pulse" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-3">
-              {t('dashboard.dashboardAuth.authCard.cardTitle')}
+              {t('dashboardAuth.authCard.cardTitle')}
             </h2>
             <p className="text-slate-300 mb-8 text-sm leading-relaxed">
-              {t('dashboard.dashboardAuth.authCard.cardDescription')}
+              {t('dashboardAuth.authCard.cardDescription')}
             </p>
             <button
               onClick={syncGuildAccess}
               className="btn-premium-primary w-full py-4 px-6 text-base rounded-[1.2rem] shadow-lg shadow-indigo-500/20"
             >
               <RefreshCcw className="h-5 w-5" />
-              <span>{t('dashboard.dashboardAuth.authCard.cta')}</span>
+              <span>{t('dashboardAuth.authCard.cta')}</span>
             </button>
             <div className="mt-6 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
               <span>Secure Sync</span>
