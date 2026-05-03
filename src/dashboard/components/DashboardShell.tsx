@@ -365,15 +365,15 @@ export default function DashboardShell({
                   onClick={() => {
                     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
                   }}
-                  className="hidden md:flex items-center justify-between w-56 lg:w-64 px-3 py-1.5 rounded-xl bg-[#030408]/50 border border-white/[0.06] text-white/40 text-sm hover:bg-white/[0.04] hover:border-white/[0.12] hover:text-white/60 transition-all duration-200 cursor-pointer group shadow-inner"
+                  className="hidden md:flex items-center justify-between w-48 lg:w-56 px-3 py-1.5 rounded-[0.85rem] bg-[#030408]/50 border border-white/[0.06] text-white/40 text-sm hover:bg-white/[0.04] hover:border-white/[0.12] hover:text-white/60 transition-all duration-200 cursor-pointer group shadow-inner overflow-hidden"
                 >
-                  <div className="flex items-center gap-2">
-                    <Search className="h-4 w-4" />
-                    <span className="truncate">{t('dashboard.commandPalette.placeholder') || "Search..."}</span>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Search className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{t('dashboard.commandPalette.placeholder', 'Buscar...')}</span>
                   </div>
                   <div className="flex items-center gap-1 shrink-0 ml-2">
-                    <kbd className="px-1.5 py-0.5 rounded-md bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm">{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl'}</kbd> 
-                    <kbd className="px-1.5 py-0.5 rounded-md bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm">K</kbd>
+                    <kbd className="px-1.5 py-0.5 rounded-[0.3rem] bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm border border-white/[0.04]">{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl'}</kbd> 
+                    <kbd className="px-1.5 py-0.5 rounded-[0.3rem] bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm border border-white/[0.04]">K</kbd>
                   </div>
                 </button>
 
