@@ -33,7 +33,7 @@ export function PricingHero({ foundingOffer }: PricingHeroProps) {
           className="text-center"
         >
           {foundingOffer ? (
-            <div className="mb-8 flex justify-center">
+            <div className="mt-8 mb-8 flex justify-center sm:mt-10">
               {foundingOffer}
             </div>
           ) : null}
