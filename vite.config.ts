@@ -15,6 +15,12 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
 
   return {
+    server: {
+      allowedHosts: [
+        '.squareweb.app',
+        'ton618-web.squareweb.app'
+      ]
+    },
     test: {
       setupFiles: ['./src/test-setup.ts'],
       include: [
