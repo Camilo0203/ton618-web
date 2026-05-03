@@ -111,9 +111,11 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
       </div>
 
-      {showFounding && foundingSpotsLeft > 0 && (
-        <div className="relative z-[85] mx-auto mt-40 w-full max-w-[1200px] px-4 pointer-events-none flex justify-center">
-          <div className="pointer-events-auto flex items-center justify-between gap-4 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(20,20,40,0.6)] px-6 py-2.5 text-sm shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-[12px] transition-all duration-300">
+      <div className="relative z-10 pt-44">
+        <Navbar />
+      <PricingHero
+        foundingOffer={showFounding && foundingSpotsLeft > 0 ? (
+          <div className="flex max-w-4xl items-center justify-between gap-4 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(20,20,40,0.6)] px-5 py-3 text-sm shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-[12px] transition-all duration-300 sm:rounded-full sm:px-6">
             <p className="text-slate-200 font-medium">{t('billing.foundingOffer.text', { spots: foundingSpotsLeft })}</p>
             <button
               onClick={() => {
@@ -121,17 +123,13 @@ export default function PricingPage() {
                 try { localStorage.setItem('ton618_founding_dismissed', 'true'); } catch { /* storage unavailable */ }
               }}
               aria-label={t('billing.foundingOffer.dismissAriaLabel')}
-              className="shrink-0 text-slate-400 hover:text-white transition-colors"
+              className="shrink-0 text-slate-400 transition-colors hover:text-white"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-        </div>
-      )}
-
-      <div className="relative z-10 pt-44">
-        <Navbar />
-      <PricingHero />
+        ) : null}
+      />
       <main className="mx-auto max-w-6xl px-4 py-12">
 
         <div className="mb-16 flex justify-center relative z-10">
