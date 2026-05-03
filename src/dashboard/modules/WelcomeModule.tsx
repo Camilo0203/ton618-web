@@ -14,6 +14,7 @@ import {
 } from '../components/ConfigForm';
 import PanelCard from '../components/PanelCard';
 import DashboardSelect from '../components/DashboardSelect';
+import DiscordMessagePreview from '../components/DiscordMessagePreview';
 import SectionMutationBanner from '../components/SectionMutationBanner';
 import StateCard from '../components/StateCard';
 import { welcomeSettingsSchema } from '../schemas';
@@ -72,6 +73,20 @@ export default function WelcomeModule({
 
   const welcomeEnabled = watch('welcomeEnabled');
   const goodbyeEnabled = watch('goodbyeEnabled');
+  
+  // Watch fields for live preview
+  const welcomeTitle = watch('welcomeTitle');
+  const welcomeMessage = watch('welcomeMessage');
+  const welcomeColor = watch('welcomeColor');
+  const welcomeBanner = watch('welcomeBanner');
+  const welcomeFooter = watch('welcomeFooter');
+  const welcomeThumbnail = watch('welcomeThumbnail');
+
+  const goodbyeTitle = watch('goodbyeTitle');
+  const goodbyeMessage = watch('goodbyeMessage');
+  const goodbyeColor = watch('goodbyeColor');
+  const goodbyeFooter = watch('goodbyeFooter');
+  const goodbyeThumbnail = watch('goodbyeThumbnail');
   const validationErrors = flattenFormErrors(errors);
   const inventoryState = getInventoryState(inventory);
   const missingSelections = [
@@ -163,6 +178,32 @@ export default function WelcomeModule({
               </FieldShell>
             </div>
 
+            <div className="mb-8 rounded-xl border border-white/5 bg-[#05060f]/40 p-1">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                  Live Preview
+                </p>
+                <div className="flex gap-1.5">
+                  <div className="h-2 w-2 rounded-full bg-rose-500/80" />
+                  <div className="h-2 w-2 rounded-full bg-amber-500/80" />
+                  <div className="h-2 w-2 rounded-full bg-emerald-500/80" />
+                </div>
+              </div>
+              <div className="p-4 flex justify-center bg-[#1e1f22]/30">
+                <DiscordMessagePreview
+                  botName="TON618"
+                  embed={{
+                    title: welcomeTitle || 'Welcome to the server!',
+                    description: welcomeMessage || 'We are glad to have you here. Please read the rules.',
+                    color: welcomeColor || '#5865F2',
+                    footer: welcomeFooter,
+                    thumbnail: welcomeThumbnail,
+                    image: welcomeBanner,
+                  }}
+                />
+              </div>
+            </div>
+
             <FieldShell label={t('dashboard.welcome.welcome.titleLabel')}>
               <input {...register('welcomeTitle')} className="dashboard-form-field" />
             </FieldShell>
@@ -211,6 +252,31 @@ export default function WelcomeModule({
               placeholder={t('dashboard.welcome.notConfigured')}
             />
           </FieldShell>
+          <div className="mb-8 rounded-xl border border-white/5 bg-[#05060f]/40 p-1">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                Live Preview
+              </p>
+              <div className="flex gap-1.5">
+                <div className="h-2 w-2 rounded-full bg-rose-500/80" />
+                <div className="h-2 w-2 rounded-full bg-amber-500/80" />
+                <div className="h-2 w-2 rounded-full bg-emerald-500/80" />
+              </div>
+            </div>
+            <div className="p-4 flex justify-center bg-[#1e1f22]/30">
+              <DiscordMessagePreview
+                botName="TON618"
+                embed={{
+                  title: goodbyeTitle || 'Goodbye!',
+                  description: goodbyeMessage || 'We are sad to see you go.',
+                  color: goodbyeColor || '#ED4245',
+                  footer: goodbyeFooter,
+                  thumbnail: goodbyeThumbnail,
+                }}
+              />
+            </div>
+          </div>
+
           <FieldShell label={t('dashboard.welcome.goodbye.titleLabel')}>
             <input {...register('goodbyeTitle')} className="dashboard-form-field" />
           </FieldShell>

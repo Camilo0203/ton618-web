@@ -12,6 +12,7 @@ import DashboardAccessStage, {
 } from './components/DashboardAccessStage';
 import DashboardDemoPage from './DashboardDemoPage';
 import DashboardModuleViewport from './components/DashboardModuleViewport';
+import DashboardLoginPage from './components/DashboardLoginPage';
 import DashboardShell from './components/DashboardShell';
 import ErrorBoundary from './components/ErrorBoundary';
 import {
@@ -44,6 +45,7 @@ type DashboardEntryStage =
   | 'guilds-loading'
   | 'guilds-error'
   | 'empty-guilds'
+  | 'login'
   | 'shell';
 
 const DASHBOARD_ENTRY_STAGE_MIN_MS = 700;
@@ -178,13 +180,15 @@ function DashboardLivePage({
     ? 'auth-loading'
     : authQuery.isError
       ? 'auth-error'
-      : guildsQuery.isLoading && isAuthenticated
-        ? 'guilds-loading'
-        : guildsQuery.isError && isAuthenticated
-          ? 'guilds-error'
-          : !guilds.length && isAuthenticated
-            ? 'empty-guilds'
-            : 'shell';
+      : !isAuthenticated
+        ? 'login'
+        : guildsQuery.isLoading
+          ? 'guilds-loading'
+          : guildsQuery.isError
+            ? 'guilds-error'
+            : !guilds.length
+              ? 'empty-guilds'
+              : 'shell';
   const displayEntryStage = useMinimumDisplayState({
     value: actualEntryStage,
     getKey: (stage) => stage,
@@ -195,6 +199,7 @@ function DashboardLivePage({
     actualEntryStage === 'auth-error'
     || actualEntryStage === 'guilds-error'
     || actualEntryStage === 'empty-guilds'
+    || actualEntryStage === 'login'
   )
     ? actualEntryStage
     : displayEntryStage;
@@ -260,6 +265,10 @@ function DashboardLivePage({
         </div>
       </>
     );
+  }
+
+  if (resolvedEntryStage === 'login') {
+    return renderEntryStage(<DashboardLoginPage requestedGuildId={requestedGuildId} />);
   }
 
   if (resolvedEntryStage === 'auth-loading') {

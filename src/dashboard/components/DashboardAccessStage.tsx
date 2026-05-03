@@ -221,157 +221,63 @@ export default function DashboardAccessStage({
       animate="show"
       role={variant === 'error' ? 'alert' : 'status'}
       aria-live={variant === 'error' ? 'assertive' : 'polite'}
-      className="relative isolate w-full overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#02030a] shadow-[0_42px_140px_rgba(0,0,0,0.52)]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#02030a]"
     >
-      <div className="bg-cinematic-atmosphere absolute inset-0 opacity-95" />
-      <div className="bg-cinematic-texture absolute inset-0 opacity-50" />
-      <div className="bg-film-grain absolute inset-0 opacity-[0.06]" />
-      <div className={clsx('pointer-events-none absolute inset-0 opacity-90', styles.glow)} />
-      <div className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-[14%] top-[18%] h-[18rem] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06),rgba(255,255,255,0.01)_38%,transparent_74%)] opacity-70" />
-      <div className="scanline-sweep pointer-events-none absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12),rgba(0,0,0,0.38)_64%,rgba(0,0,0,0.58)_100%)]" />
+      {/* Cinematic Background */}
+      <div className="pointer-events-none absolute inset-0 z-0 select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(88,101,242,0.15),transparent_42%),radial-gradient(circle_at_18%_14%,rgba(34,211,238,0.08),transparent_28%),linear-gradient(180deg,rgba(2,3,10,0.8)_0%,rgba(0,0,0,0.95)_100%)]" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(88,101,242,0.05),transparent_60%)] blur-3xl" />
+      </div>
 
-      <div className="relative z-[1] grid gap-8 px-6 py-7 sm:px-8 sm:py-9 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,24rem)] lg:gap-12 lg:px-12 lg:py-12">
-        <motion.div
-          variants={panelVariants}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          animate="show"
-          className="flex min-w-0 flex-col gap-7"
+      <div className="relative z-10 flex flex-col items-center max-w-md px-6 text-center">
+        {/* Animated Logo */}
+        <motion.div 
+          animate={variant === 'loading' && !shouldReduceMotion ? { scale: [0.98, 1.02, 0.98], opacity: [0.8, 1, 0.8] } : {}}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="mb-8"
         >
-          <div className="flex flex-wrap items-center gap-3">
-            <div
-              className={clsx(
-                'inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.24em]',
-                styles.eyebrow,
-              )}
-            >
-              <Icon className={clsx('h-3.5 w-3.5', variant === 'loading' && !shouldReduceMotion ? 'animate-spin motion-reduce:animate-none' : undefined)} />
-              {eyebrow}
-            </div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">
-              {brandLabel}
-            </p>
+          <div className="flex h-20 w-20 items-center justify-center rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl shadow-[0_0_40px_rgba(88,101,242,0.2)]">
+            {variant === 'loading' ? (
+              <Logo size="lg" withText={false} frameClassName="bg-transparent border-0 shadow-none" />
+            ) : (
+              <Icon className={clsx("h-10 w-10", variant === 'error' ? 'text-rose-400' : 'text-amber-400')} />
+            )}
           </div>
-
-          <div className="flex items-center">
-            <Logo
-              size="lg"
-              withText={false}
-              className="justify-start"
-              imageClassName="drop-shadow-[0_26px_56px_rgba(99,102,241,0.24)]"
-            />
-          </div>
-
-          <div className="max-w-3xl">
-            <h1 className="text-balance text-[2.35rem] font-black leading-[0.92] tracking-[-0.05em] text-white sm:text-[3rem] lg:text-[3.5rem]">
-              {title}
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-[1.02rem]">
-              {description}
-            </p>
-          </div>
-
-          {actions ? (
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-              {actions}
-            </div>
-          ) : null}
         </motion.div>
 
-        <motion.aside
-          variants={panelVariants}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          animate="show"
-          className={clsx(
-            'relative overflow-hidden rounded-[1.85rem] border p-5 shadow-[0_22px_64px_rgba(0,0,0,0.3)] sm:p-6',
-            styles.panel,
-          )}
-          aria-label={progressLabel}
-        >
-          <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
+        {/* Dynamic Status Text */}
+        <div className="space-y-3">
+          <motion.h1 
+            key={title}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-2xl font-bold tracking-tight text-white sm:text-3xl"
+          >
+            {title}
+          </motion.h1>
+          
+          <motion.p 
+            key={statusText || description}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-[0.95rem] leading-relaxed text-slate-400"
+          >
+            {statusText || description}
+          </motion.p>
+        </div>
 
-          <div className="relative z-[1]">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                {progressLabel ? (
-                  <p className="text-[10px] font-black uppercase tracking-[0.26em] text-slate-400">
-                    {progressLabel}
-                  </p>
-                ) : null}
-              </div>
-              {statusPill}
-            </div>
-
-            {progressDescription ? (
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                {progressDescription}
-              </p>
-            ) : null}
-
-            {statusText ? (
-              <div
-                className={clsx(
-                  'mt-5 rounded-[1.35rem] border px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]',
-                  styles.statusBox,
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  <span
-                    className={clsx(
-                      'inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[1rem] border shadow-[0_16px_36px_rgba(0,0,0,0.22)]',
-                      styles.iconTile,
-                    )}
-                  >
-                    <Icon className={clsx('h-5 w-5', variant === 'loading' && !shouldReduceMotion ? 'animate-spin motion-reduce:animate-none' : undefined)} />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-sm leading-7 text-slate-200">
-                      {statusText}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-
-            {progressSteps.length ? (
-              <ol className="mt-5 grid gap-3" aria-label={progressLabel}>
-                {progressSteps.map((step, index) => {
-                  const stepStateClass = step.state === 'complete'
-                    ? styles.completeStep
-                    : step.state === 'error'
-                      ? styles.errorStep
-                      : step.state === 'active'
-                        ? styles.activeStep
-                        : 'border-white/10 bg-white/[0.04] text-slate-300';
-
-                  return (
-                    <li
-                      key={`${step.label}-${index}`}
-                      aria-current={step.state === 'active' ? 'step' : undefined}
-                      className={clsx(
-                        'rounded-[1.35rem] border px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-[border-color,background-color,transform] duration-300',
-                        stepStateClass,
-                      )}
-                      >
-                        <div className="flex items-start gap-3">
-                          <DashboardAccessStepIndicator state={step.state} shouldReduceMotion={Boolean(shouldReduceMotion)} />
-                          <div className="min-w-0">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-                              {String(index + 1).padStart(2, '0')}
-                            </p>
-                            <p className="mt-2 text-sm font-semibold leading-6 text-white">
-                              {step.label}
-                            </p>
-                          </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            ) : null}
+        {/* Actions (if error/warning) */}
+        {actions ? (
+          <div className="mt-10 flex flex-col gap-3 w-full sm:w-auto">
+            {actions}
           </div>
-        </motion.aside>
+        ) : variant === 'loading' ? (
+          <div className="mt-12 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-[#5865F2]" />
+            <span>{eyebrow}</span>
+          </div>
+        ) : null}
       </div>
     </motion.section>
   );
