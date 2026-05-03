@@ -111,7 +111,7 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
       </div>
 
-      <div className="relative z-10 pt-24">
+      <div className="relative z-10 pt-36">
         <Navbar />
       {showFounding && foundingSpotsLeft > 0 && (
         <div className="sticky top-24 z-30 mx-auto w-full max-w-[1200px] px-4 pointer-events-none flex justify-center">
