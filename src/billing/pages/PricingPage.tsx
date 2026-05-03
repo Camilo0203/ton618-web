@@ -109,7 +109,6 @@ export default function PricingPage() {
         <div className="bg-cinematic-texture absolute inset-0 opacity-40"></div>
         <div className="bg-film-grain absolute inset-0 opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
-        <div className="scanline-sweep absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent"></div>
       </div>
 
       <div className="relative z-10">
