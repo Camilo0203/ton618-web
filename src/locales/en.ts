@@ -1494,6 +1494,7 @@ export const en = {
                 backupPermissionError: 'Ensure backup permissions first',
                 restoreStarted: 'Restore started',
                 restoreError: 'Error restoring backup',
+                ticketActionNotImplemented: 'Ticket action "{{action}}" is not yet available. Please use Discord for ticket operations.',
             },
             actions: {
                 retryValidation: 'Retry validation',

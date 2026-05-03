@@ -246,7 +246,7 @@ function DashboardLivePage({
   const handleTicketAction = async (action: string, _payload: unknown) => {
     // TODO: Implement actual ticket action handling via dashboard API
     // This requires implementing the dashboard ticket action RPC
-    throw new Error(`Ticket action "${action}" not yet implemented. Please use Discord for ticket operations.`);
+    toast.info(t('dashboard.ticketActionNotImplemented', { action, defaultValue: `Ticket action "${action}" is not yet available. Please use Discord for ticket operations.` }));
   };
 
   function renderEntryStage(stage: ReactNode, maxWidthClass = 'max-w-[76rem]') {

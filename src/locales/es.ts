@@ -1256,6 +1256,7 @@ export const es = {
                 backupPermissionError: 'Verifica los permisos de backup primero',
                 restoreStarted: 'Restauracion iniciada',
                 restoreError: 'Error al restaurar backup',
+                ticketActionNotImplemented: 'La acción de ticket "{{action}}" aún no está disponible. Usa Discord para operaciones de ticket.',
             },
             actions: {
                 retryValidation: 'Reintentar validación',

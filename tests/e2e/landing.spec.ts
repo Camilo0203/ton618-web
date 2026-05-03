@@ -84,6 +84,14 @@ test.describe('Landing Page', () => {
     ).toBeVisible();
   });
 
+  test('pricing page loads without errors', async ({ page }) => {
+    await page.goto('/pricing');
+    await page.waitForLoadState('networkidle');
+    const heading = page.locator('h1').first();
+    await expect(heading).toBeVisible();
+    await expect(page.locator('text=/error|something went wrong/i')).not.toBeVisible();
+  });
+
   test('renders the footer with support links', async ({ page }) => {
     const footer = page.locator('footer');
 
