@@ -2,7 +2,7 @@ export const PRICING_CONFIG = {
   donation_2: {
     key: 'donation_2',
     category: 'donation',
-    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    name: { en: 'Signal Boost', es: 'Impulso de Senal' },
     badge: { en: 'Donation', es: 'Donacion' },
     description: {
       en: 'A small boost to keep TON618 growing.',
@@ -21,7 +21,7 @@ export const PRICING_CONFIG = {
   donation_5: {
     key: 'donation_5',
     category: 'donation',
-    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    name: { en: 'Orbit Fuel', es: 'Combustible Orbital' },
     badge: { en: 'Donation', es: 'Donacion' },
     description: {
       en: 'Support new features and faster improvements.',
@@ -40,7 +40,7 @@ export const PRICING_CONFIG = {
   donation_10: {
     key: 'donation_10',
     category: 'donation',
-    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    name: { en: 'Event Horizon', es: 'Horizonte de Evento' },
     badge: { en: 'Donation', es: 'Donacion' },
     description: {
       en: 'A stronger contribution for the bot roadmap.',
@@ -59,7 +59,7 @@ export const PRICING_CONFIG = {
   donation_25: {
     key: 'donation_25',
     category: 'donation',
-    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    name: { en: 'Quasar Patron', es: 'Mecenas Quasar' },
     badge: { en: 'Donation', es: 'Donacion' },
     description: {
       en: 'Top-tier support for TON618 development.',
@@ -78,7 +78,7 @@ export const PRICING_CONFIG = {
   lifetime: {
     key: 'lifetime',
     category: 'premium',
-    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    name: { en: 'Singularity Pass', es: 'Pase Singularidad' },
     badge: { en: 'Lifetime', es: 'De por vida' },
     description: {
       en: 'Premium access forever with one payment.',
@@ -97,7 +97,7 @@ export const PRICING_CONFIG = {
   yearly: {
     key: 'yearly',
     category: 'premium',
-    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    name: { en: 'Command Core', es: 'Nucleo de Comando' },
     badge: { en: 'Yearly', es: 'Anual' },
     description: {
       en: 'Premium access billed once per year.',
@@ -116,7 +116,7 @@ export const PRICING_CONFIG = {
   monthly: {
     key: 'monthly',
     category: 'premium',
-    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    name: { en: 'Staff Engine', es: 'Motor de Staff' },
     badge: { en: 'Monthly', es: 'Mensual' },
     description: {
       en: 'Premium access with a monthly subscription.',
