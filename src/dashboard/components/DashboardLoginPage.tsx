@@ -38,12 +38,17 @@ export default function DashboardLoginPage({ requestedGuildId }: DashboardLoginP
             </h2>
             
             <p className="text-slate-300/80 mb-10 text-[0.95rem] leading-relaxed max-w-sm mx-auto">
-              {t('dashboardAuth.authCard.cardDescription')}
+              {signIn.error instanceof Error ? (
+                <span className="text-rose-400">{signIn.error.message}</span>
+              ) : (
+                t('dashboardAuth.authCard.cardDescription')
+              )}
             </p>
 
             <div className="relative group">
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#5865F2] to-indigo-500 opacity-40 blur transition duration-300 group-hover:opacity-70" />
               <button
+                type="button"
                 onClick={() => signIn.mutate(requestedGuildId || null)}
                 disabled={signIn.isPending}
                 className="relative flex w-full items-center justify-center gap-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] px-6 py-4 text-[1.05rem] font-semibold text-white transition-all duration-300 shadow-[0_0_40px_rgba(88,101,242,0.4)] disabled:opacity-70"
