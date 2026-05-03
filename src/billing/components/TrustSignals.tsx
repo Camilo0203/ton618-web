@@ -76,25 +76,28 @@ export function TrustSignals() {
               ))}
             </div>
 
-            {/* Center/Right: V1 Manual Activation notice */}
+            {/* Divider */}
+            <div className="hidden sm:block h-10 w-px bg-white/[0.06] flex-shrink-0" />
+
+            {/* Powered by Whop — same style as other signals */}
             <motion.div
               variants={secondaryReveal}
               initial="hidden"
               whileInView="show"
               viewport={motionViewport}
-              className="flex items-center gap-3 rounded-full border border-indigo-500/20 bg-indigo-500/5 px-5 py-2.5 backdrop-blur-sm flex-shrink-0"
+              className="group flex items-center gap-3"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500/20 flex-shrink-0">
+              <div className="premium-icon-tile h-12 w-12 flex-shrink-0">
                 <svg className="h-6 w-6 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
               </div>
               <div className="text-left whitespace-nowrap">
-                <p className="text-sm font-bold uppercase tracking-wide text-slate-400">
-                  {t('billing.trustSignals.eyebrow')}
-                </p>
-                <p className="text-lg font-semibold text-slate-200">
+                <p className="text-xl font-bold text-white transition-colors group-hover:text-indigo-200">
                   {t('billing.trustSignals.poweredBy')}
+                </p>
+                <p className="text-base font-medium text-slate-300">
+                  {t('billing.trustSignals.eyebrow')}
                 </p>
               </div>
             </motion.div>
