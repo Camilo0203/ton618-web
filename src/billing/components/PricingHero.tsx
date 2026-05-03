@@ -18,7 +18,7 @@ export function PricingHero() {
   ];
 
   return (
-    <section className="relative overflow-hidden mt-16 pt-20 pb-20 px-4 sm:pt-28 sm:pb-32">
+    <section className="relative overflow-hidden pt-12 pb-20 px-4 sm:pt-20 sm:pb-32">
       
       <div className="relative mx-auto max-w-7xl">
         <motion.div
