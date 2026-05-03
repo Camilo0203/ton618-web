@@ -66,19 +66,13 @@ function isLocalOrigin(origin: string): boolean {
 }
 
 export function getSiteOrigin(): string {
-  if (typeof window !== 'undefined' && isLocalOrigin(window.location.origin)) {
-    return window.location.origin;
-  }
-
-  if (config.siteUrl) {
-    return config.siteUrl;
-  }
-
   if (typeof window !== 'undefined') {
-    return window.location.origin;
+    // Usamos el origen real del navegador para asegurar que las redirecciones
+    // coincidan siempre con el dominio donde esta alojada la web.
+    return normalizeSiteUrl(window.location.origin);
   }
 
-  return '';
+  return config.siteUrl || '';
 }
 
 export function getDashboardUrl(): string {
