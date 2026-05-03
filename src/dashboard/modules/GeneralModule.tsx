@@ -68,14 +68,14 @@ export default function GeneralModule({
     },
   });
 
+  const { register, watch, reset, formState: { errors, isDirty } } = methods;
+
   useEffect(() => {
     reset({
       generalSettings: config.generalSettings,
       dashboardPreferences: config.dashboardPreferences,
     });
   }, [config.dashboardPreferences, config.generalSettings, reset]);
-
-  const { register, watch, reset, formState: { errors, isDirty } } = methods;
   const commandMode = watch('generalSettings.commandMode');
   const validationErrors = flattenFormErrors(errors);
   const launchpadSteps = [
