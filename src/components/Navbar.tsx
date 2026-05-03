@@ -101,12 +101,11 @@ function Navbar() {
   }
 
   return (
-    <nav className={`fixed left-0 right-0 top-0 z-[90] border-4 border-red-500 transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
+    <nav className={`fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
       <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6">
         <div className={`relative flex items-center justify-between overflow-visible rounded-[20px] px-4 py-3 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-6 ${navbarClassName}`}>
           <div className="flex min-w-0 items-center gap-6 lg:gap-10">
             <Link to="/" className="flex min-w-0 items-center gap-3 group" aria-label={t('nav.homeAria')}>
-              <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">VERSION_DEBUG_1</span>
               <Logo
                 size="lg"
                 withText={false}
