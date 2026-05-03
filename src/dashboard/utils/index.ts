@@ -65,3 +65,4 @@ export {
   getTicketEventsForTicket,
   getCustomerProfileForTicket,
 } from './tickets';
+export { cn } from './cn';
