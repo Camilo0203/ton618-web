@@ -141,12 +141,12 @@ export default function PricingPage() {
           </h2>
         </div>
 
-        <section id="pricing-cards" className="relative z-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <section id="pricing-cards" className="relative z-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
           {donationPlanKeys.map((planKey) => {
             const plan = PRICING_CONFIG[planKey];
 
             return (
-              <motion.div key={planKey} className="tech-card flex h-full flex-col justify-between opacity-90">
+              <motion.div key={planKey} className="tech-card flex h-full flex-col justify-between p-7 opacity-90">
                 <div className="flex-1">
                   <div className="mb-4 inline-flex items-center gap-2 premium-pill px-3 py-1.5">
                     <Heart className="h-4 w-4 text-pink-300" />
@@ -156,15 +156,15 @@ export default function PricingPage() {
                   </div>
 
                   <h3 className="text-lg font-bold text-white">{plan.name[lang]}</h3>
-                  <p className="mt-3 min-h-[48px] text-sm font-medium text-slate-300">{plan.description[lang]}</p>
+                  <p className="mt-4 min-h-[52px] text-sm font-medium leading-6 text-slate-300">{plan.description[lang]}</p>
 
-                  <div className="my-7">
+                  <div className="my-9">
                     <p className="flex items-baseline gap-1 text-4xl font-black tracking-tight text-white">
                       {plan.price.display}
                     </p>
                   </div>
 
-                  <ul className="mb-8 space-y-3">
+                  <ul className="mb-10 space-y-4">
                     {plan.features[lang].map((feature) => (
                       <li key={feature} className="flex items-start gap-3 text-sm text-slate-200">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-pink-300" />
@@ -182,7 +182,7 @@ export default function PricingPage() {
           })}
         </section>
 
-        <div className="mb-8 mt-20 text-center">
+        <div className="mb-10 mt-28 text-center">
           <p className="text-xs font-bold uppercase tracking-wide-readable text-indigo-400">
             Premium
           </p>
@@ -191,7 +191,7 @@ export default function PricingPage() {
           </h2>
         </div>
 
-        <section id="premium-pricing-cards" className="relative z-10 grid grid-cols-1 gap-6 md:grid-cols-3 md:items-center max-w-7xl mx-auto">
+        <section id="premium-pricing-cards" className="relative z-10 grid grid-cols-1 gap-8 md:grid-cols-3 md:items-center max-w-7xl mx-auto">
           {premiumPlanKeys.map((planKey) => {
             const plan = PRICING_CONFIG[planKey];
             const isPopular = plan.popular;
@@ -205,7 +205,7 @@ export default function PricingPage() {
             return (
               <motion.div
                 key={planKey}
-                className={cardClasses}
+                className={`${cardClasses} p-7`}
               >
                 {isPopular && (
                   <div className="absolute -top-4 left-0 right-0 flex justify-center z-20">
@@ -224,16 +224,16 @@ export default function PricingPage() {
                   </div>
 
                   <h3 className="text-xl font-bold text-white">{plan.name[lang]}</h3>
-                  <p className="mt-3 min-h-[48px] text-sm font-medium text-slate-300">{plan.description[lang]}</p>
+                  <p className="mt-4 min-h-[52px] text-sm font-medium leading-6 text-slate-300">{plan.description[lang]}</p>
 
-                  <div className="my-8">
+                  <div className="my-10">
                     <p className="flex items-baseline gap-1 text-5xl font-black tracking-tight text-white">
                       {plan.price.display}
                       <span className="text-base font-medium text-slate-400">{plan.period[lang]}</span>
                     </p>
                   </div>
 
-                  <ul className="mb-8 space-y-4">
+                  <ul className="mb-10 space-y-5">
                     {plan.features[lang].map((feature) => (
                       <li key={feature} className="flex items-start gap-3 text-sm text-slate-200">
                         <Check className={`mt-0.5 h-4 w-4 shrink-0 ${isPopular ? 'text-indigo-400' : 'text-slate-500'}`} />
