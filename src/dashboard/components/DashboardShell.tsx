@@ -9,6 +9,7 @@ import {
   LogOut,
   Menu,
   RefreshCcw,
+  Search,
   Sparkles,
   X,
 } from 'lucide-react';
@@ -330,100 +331,99 @@ export default function DashboardShell({
             {/* Top edge light line — matching cinematic-glass inset */}
             <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
-            <div className="relative z-[1] flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between 2xl:items-center">
-              <div className="flex min-w-0 items-start gap-4">
+            <div className="relative z-[1] flex items-center justify-between gap-4">
+              {/* Left Side: Server Name & Menu */}
+              <div className="flex min-w-0 items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setMobileOpen(true)}
-                  className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-2.5 text-slate-300 transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:text-white lg:hidden"
+                  className="rounded-xl border border-white/[0.08] bg-white/[0.04] p-2 text-slate-300 transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:text-white lg:hidden"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
 
-                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[1.15rem] border border-white/[0.08] bg-white/[0.04] p-[3px] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[0.8rem] border border-white/[0.08] bg-white/[0.04] p-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                   {guildIconUrl ? (
-                    <img src={guildIconUrl} alt={t('dashboard.shell.guildIconAlt')} className="h-full w-full rounded-xl object-cover" />
+                    <img src={guildIconUrl} alt={t('dashboard.shell.guildIconAlt')} className="h-full w-full rounded-[0.6rem] object-cover" />
                   ) : (
-                    <Logo size="sm" withText={false} frameClassName="h-full w-full rounded-xl border-0 bg-transparent shadow-none" />
+                    <Logo size="sm" withText={false} frameClassName="h-full w-full rounded-[0.6rem] border-0 bg-transparent shadow-none" />
                   )}
                 </div>
 
-                <div className="min-w-0">
-                  <h1 className="break-words text-2xl font-bold tracking-tight text-white">
+                <div className="min-w-0 hidden sm:block">
+                  <h1 className="truncate text-lg font-bold tracking-tight text-white">
                     {selectedGuild?.guildName ?? t('dashboard.shell.selectServer')}
                   </h1>
-                  <p className="mt-1 text-sm text-slate-400">
-                    {t('dashboard.shell.headerDescription')}
-                  </p>
                 </div>
               </div>
 
-              <div className="flex min-w-0 flex-col gap-3 xl:w-auto xl:items-end">
-                <div className="flex flex-wrap items-center gap-3">
-                  {/* User chip — glassmorphic */}
-                  {isAuthenticated && user ? (
-                    <div className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] px-4 py-2 backdrop-blur-sm">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm uppercase overflow-hidden">
-                        {user.user_metadata?.avatar_url ? (
-                          <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
-                        ) : (
-                          (user.user_metadata?.full_name || user.email)?.[0] ?? 'U'
-                        )}
-                      </div>
-                      <div className="hidden sm:block">
-                        <p className="text-sm font-semibold text-white">
-                           {user.user_metadata?.full_name || user.email}
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={onLogin}
-                      className="flex items-center gap-3 rounded-2xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 backdrop-blur-sm hover:bg-indigo-500/20 transition-all duration-300"
-                    >
-                      <Sparkles className="h-4 w-4 text-indigo-300" />
-                      <span className="text-sm font-semibold text-white">
-                        {t('dashboardAuth.authCard.cta')}
-                      </span>
-                    </button>
-                  )}
-
-                  {/* Invite CTA — uses btn-premium-primary (same as Navbar's "Añadir a Discord") */}
-                  {showInviteCta && (
-                    <a href={inviteUrl} target="_blank" rel="noopener noreferrer" className="btn-premium-primary !py-2.5 !px-4 !text-xs !rounded-xl">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      <span>{t('dashboard.inviteBot.cta')}</span>
-                    </a>
-                  )}
-
-                  {/* Sync button — glassmorphic */}
-                  <button
-                    type="button"
-                    onClick={onSync}
-                    disabled={isSyncing || !isAuthenticated}
-                    className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:shadow-[0_0_16px_rgba(255,255,255,0.03)] disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-                    {isSyncing ? t('dashboard.actions.syncingNow') : t('dashboard.actions.resyncNow')}
-                  </button>
-
-                  <div className="hidden sm:block">
-                    <LanguageSelector />
+              {/* Right Side: Search, Language, Sync, Profile */}
+              <div className="flex flex-shrink-0 items-center gap-3">
+                {/* Search Bar / Cmd+K trigger */}
+                <button 
+                  type="button"
+                  onClick={() => {
+                    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
+                  }}
+                  className="hidden md:flex items-center justify-between w-56 lg:w-64 px-3 py-1.5 rounded-xl bg-[#030408]/50 border border-white/[0.06] text-white/40 text-sm hover:bg-white/[0.04] hover:border-white/[0.12] hover:text-white/60 transition-all duration-200 cursor-pointer group shadow-inner"
+                >
+                  <div className="flex items-center gap-2">
+                    <Search className="h-4 w-4" />
+                    <span className="truncate">{t('dashboard.commandPalette.placeholder') || "Search..."}</span>
                   </div>
-                  
-                  {/* Cmd+K interactive trigger */}
-                  <button 
-                    type="button"
-                    onClick={() => {
-                      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }));
-                    }}
-                    title={t('dashboard.commandPalette.placeholder') || "Search..."}
-                    className="hidden md:flex items-center justify-center p-2 rounded-xl bg-white/[0.02] border border-white/[0.05] text-white/50 text-[11px] font-mono ml-2 hover:bg-white/[0.06] hover:text-white transition-colors cursor-pointer"
-                  >
-                    <kbd className="opacity-70 mr-1 font-sans">{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl'}</kbd> 
-                    <kbd className="opacity-70 font-sans">K</kbd>
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0 ml-2">
+                    <kbd className="px-1.5 py-0.5 rounded-md bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm">{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Ctrl'}</kbd> 
+                    <kbd className="px-1.5 py-0.5 rounded-md bg-white/[0.08] text-[10px] font-sans group-hover:bg-white/[0.15] transition-colors shadow-sm">K</kbd>
+                  </div>
+                </button>
+
+                {/* Invite CTA */}
+                {showInviteCta && (
+                  <a href={inviteUrl} target="_blank" rel="noopener noreferrer" className="btn-premium-primary hidden md:flex !py-1.5 !px-3 !text-xs !rounded-lg">
+                    <Sparkles className="h-3 w-3" />
+                    <span>{t('dashboard.inviteBot.cta')}</span>
+                  </a>
+                )}
+
+                {/* Language (Compact) */}
+                <div className="hidden sm:block">
+                  <LanguageSelector />
                 </div>
+
+                {/* Sync button */}
+                <button
+                  type="button"
+                  onClick={onSync}
+                  disabled={isSyncing || !isAuthenticated}
+                  title={isSyncing ? t('dashboard.actions.syncingNow') : t('dashboard.actions.resyncNow')}
+                  className="flex items-center justify-center h-8 w-8 rounded-full border border-white/[0.08] bg-white/[0.02] text-slate-300 transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.08] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]"
+                >
+                  <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                </button>
+
+                {/* User chip */}
+                {isAuthenticated && user ? (
+                  <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] p-1 pr-3 backdrop-blur-md shadow-sm transition-colors hover:bg-white/[0.04]">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-[10px] uppercase overflow-hidden ring-1 ring-white/10">
+                      {user.user_metadata?.avatar_url ? (
+                        <img src={user.user_metadata.avatar_url} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        (user.user_metadata?.full_name || user.email)?.[0] ?? 'U'
+                      )}
+                    </div>
+                    <span className="text-xs font-semibold text-slate-200 hidden sm:block truncate max-w-[100px]">
+                      {user.user_metadata?.full_name || user.email}
+                    </span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={onLogin}
+                    className="flex items-center justify-center h-8 w-8 rounded-full border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all duration-300"
+                    title={t('dashboardAuth.authCard.cta')}
+                  >
+                    <Sparkles className="h-4 w-4 text-indigo-300" />
+                  </button>
+                )}
               </div>
             </div>
           </motion.header>
