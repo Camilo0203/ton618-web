@@ -1656,8 +1656,8 @@ export const en = {
             hero: {
                 eyebrow: 'Premium Upgrade',
                 title: 'Choose Your',
-                titleAccent: 'Operational Plan',
-                description: 'Free gets you started. Pro unlocks the full toolkit. Enterprise includes white-glove onboarding.',
+                titleAccent: 'Premium Plan',
+                description: 'Support TON618 with a donation or unlock monthly, yearly, or lifetime Premium.',
                 cta: 'View plans',
             },
             trust: {

@@ -1,148 +1,143 @@
 export const PRICING_CONFIG = {
-  free: {
-    key: 'free',
-    name: { en: 'Free', es: 'Free' },
+  donation_2: {
+    key: 'donation_2',
+    category: 'donation',
+    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    badge: { en: 'Donation', es: 'Donacion' },
     description: {
-      en: 'Install the base layer and prove the workflow.',
-      es: 'Instala la base y valida el flujo.',
+      en: 'A small boost to keep TON618 growing.',
+      es: 'Un apoyo pequeno para seguir haciendo crecer TON618.',
     },
-    price: {
-      monthly: { amount: 0, display: '$0' },
-      yearly: { amount: 0, display: '$0' },
-    },
-    period: {
-      monthly: { en: '/mo', es: '/mes' },
-      yearly: { en: '/mo', es: '/mes' },
-    },
+    price: { amount: 2, display: '$2.00' },
+    period: { en: '', es: '' },
     features: {
-      en: [
-        'Basic setup essentials',
-        'Simple tickets',
-        'Verification',
-        'Basic operational metrics',
-      ],
-      es: [
-        'Setup base esencial',
-        'Tickets simples',
-        'Verificacion',
-        'Metricas operativas basicas',
-      ],
+      en: ['Supports development', 'Helps hosting costs', 'No premium access included'],
+      es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
-    cta: { en: 'Start free', es: 'Empezar gratis' },
-    ctaType: 'invite' as const,
+    cta: { en: 'Donate $2', es: 'Donar $2' },
+    whopKey: 'donation' as const,
     popular: false,
   },
-  pro: {
-    key: 'pro',
-    name: { en: 'Pro operativo', es: 'Pro operativo' },
+  donation_5: {
+    key: 'donation_5',
+    category: 'donation',
+    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    badge: { en: 'Donation', es: 'Donacion' },
     description: {
-      en: 'For staff teams that need inbox, SLA and guided decisions.',
-      es: 'Para staffs que necesitan inbox, SLA y decisiones guiadas.',
+      en: 'Support new features and faster improvements.',
+      es: 'Apoya nuevas funciones y mejoras mas rapidas.',
     },
-    price: {
-      monthly: { amount: 9.99, display: '$9.99' },
-      yearly: { amount: 89.99, display: '$89.99' },
-    },
-    period: {
-      monthly: { en: '/mo', es: '/mes' },
-      yearly: { en: '/year', es: '/año' },
-    },
-    billingCycle: {
-      monthly: { en: 'billed monthly', es: 'facturado mensual' },
-      yearly: { en: 'billed annually', es: 'facturado anual' },
-    },
-    effectiveMonthly: {
-      yearly: { amount: 7.5, display: '$7.50' },
-    },
-    yearlyDiscount: { en: 'Save 25% · BEST VALUE', es: 'Ahorra 25% · MEJOR VALOR' },
+    price: { amount: 5, display: '$5.00' },
+    period: { en: '', es: '' },
     features: {
-      en: [
-        'Everything in Free',
-        'Advanced web inbox',
-        'Macros, SLA and escalation',
-        'Live playbooks and incident mode',
-        'Operational analytics and backups',
-      ],
-      es: [
-        'Todo en Free',
-        'Inbox web avanzado',
-        'Macros, SLA y escalado',
-        'Playbooks vivos e incident mode',
-        'Analitica operativa y backups',
-      ],
+      en: ['Supports development', 'Helps hosting costs', 'No premium access included'],
+      es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
-    cta: { en: 'Contact for Pro', es: 'Contactar para Pro' },
-    ctaType: 'pricing' as const,
-    popular: true,
-    popularLabel: { en: 'Core plan', es: 'Plan core' },
+    cta: { en: 'Donate $5', es: 'Donar $5' },
+    whopKey: 'donation' as const,
+    popular: false,
   },
-  enterprise: {
-    key: 'enterprise',
-    name: { en: 'Enterprise', es: 'Enterprise' },
+  donation_10: {
+    key: 'donation_10',
+    category: 'donation',
+    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    badge: { en: 'Donation', es: 'Donacion' },
     description: {
-      en: 'Custom limits, dedicated support, and bespoke integrations.',
-      es: 'Límites personalizados, soporte dedicado e integraciones a medida.',
+      en: 'A stronger contribution for the bot roadmap.',
+      es: 'Un aporte mas fuerte para el roadmap del bot.',
     },
-    price: {
-      monthly: { amount: null, display: 'Custom' },
-      yearly: { amount: null, display: 'Custom' },
-    },
-    period: {
-      monthly: { en: '', es: '' },
-      yearly: { en: '', es: '' },
-    },
+    price: { amount: 10, display: '$10.00' },
+    period: { en: '', es: '' },
     features: {
-      en: [
-        'Everything in Pro',
-        'Custom operational limits',
-        'Dedicated success manager',
-        'White-label options',
-        'SLA guarantees',
-      ],
-      es: [
-        'Todo en Pro',
-        'Límites operativos personalizados',
-        'Manager de éxito dedicado',
-        'Opciones marca blanca',
-        'Garantías de SLA',
-      ],
+      en: ['Supports development', 'Helps hosting costs', 'No premium access included'],
+      es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
-    cta: { en: 'Contact Sales', es: 'Contactar Ventas' },
-    ctaType: 'contact' as const,
+    cta: { en: 'Donate $10', es: 'Donar $10' },
+    whopKey: 'donation' as const,
+    popular: false,
+  },
+  donation_25: {
+    key: 'donation_25',
+    category: 'donation',
+    name: { en: 'Support TON618 Bot', es: 'Support TON618 Bot' },
+    badge: { en: 'Donation', es: 'Donacion' },
+    description: {
+      en: 'Top-tier support for TON618 development.',
+      es: 'Apoyo top para el desarrollo de TON618.',
+    },
+    price: { amount: 25, display: '$25.00' },
+    period: { en: '', es: '' },
+    features: {
+      en: ['Supports development', 'Helps hosting costs', 'No premium access included'],
+      es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
+    },
+    cta: { en: 'Donate $25', es: 'Donar $25' },
+    whopKey: 'donation' as const,
+    popular: false,
+  },
+  lifetime: {
+    key: 'lifetime',
+    category: 'premium',
+    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    badge: { en: 'Lifetime', es: 'De por vida' },
+    description: {
+      en: 'Premium access forever with one payment.',
+      es: 'Acceso premium para siempre con un solo pago.',
+    },
+    price: { amount: 79.99, display: '$79.99' },
+    period: { en: 'lifetime', es: 'de por vida' },
+    features: {
+      en: ['All premium features', 'One-time payment', 'Lifetime access', 'Priority improvements'],
+      es: ['Todas las funciones premium', 'Pago unico', 'Acceso de por vida', 'Mejoras prioritarias'],
+    },
+    cta: { en: 'Get lifetime', es: 'Comprar de por vida' },
+    whopKey: 'lifetime' as const,
+    popular: true,
+  },
+  yearly: {
+    key: 'yearly',
+    category: 'premium',
+    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    badge: { en: 'Yearly', es: 'Anual' },
+    description: {
+      en: 'Premium access billed once per year.',
+      es: 'Acceso premium facturado una vez al ano.',
+    },
+    price: { amount: 39.99, display: '$39.99' },
+    period: { en: '/ year', es: '/ ano' },
+    features: {
+      en: ['All premium features', 'Annual billing', 'Cancel future renewals', 'Priority support'],
+      es: ['Todas las funciones premium', 'Facturacion anual', 'Cancela futuras renovaciones', 'Soporte prioritario'],
+    },
+    cta: { en: 'Choose yearly', es: 'Elegir anual' },
+    whopKey: 'pro_yearly' as const,
+    popular: false,
+  },
+  monthly: {
+    key: 'monthly',
+    category: 'premium',
+    name: { en: 'TON618 Bot Premium', es: 'TON618 Bot Premium' },
+    badge: { en: 'Monthly', es: 'Mensual' },
+    description: {
+      en: 'Premium access with a monthly subscription.',
+      es: 'Acceso premium con suscripcion mensual.',
+    },
+    price: { amount: 4.99, display: '$4.99' },
+    period: { en: '/ month', es: '/ mes' },
+    features: {
+      en: ['All premium features', 'Monthly billing', 'Flexible subscription', 'Priority support'],
+      es: ['Todas las funciones premium', 'Facturacion mensual', 'Suscripcion flexible', 'Soporte prioritario'],
+    },
+    cta: { en: 'Choose monthly', es: 'Elegir mensual' },
+    whopKey: 'pro_monthly' as const,
     popular: false,
   },
 } as const;
 
+export const donationPlanKeys = ['donation_2', 'donation_5', 'donation_10', 'donation_25'] as const;
+export const premiumPlanKeys = ['lifetime', 'yearly', 'monthly'] as const;
+
 export type PricingPlanKey = keyof typeof PRICING_CONFIG;
-export type BillingCycle = 'monthly' | 'yearly';
-export type CTAType = 'invite' | 'pricing' | 'contact';
-
-export function getPlanPrice(planKey: PricingPlanKey, cycle: BillingCycle): number | null {
-  return PRICING_CONFIG[planKey].price[cycle].amount;
-}
-
-export function getPlanPriceDisplay(planKey: PricingPlanKey, cycle: BillingCycle): string {
-  return PRICING_CONFIG[planKey].price[cycle].display;
-}
-
-type PlanConfig = typeof PRICING_CONFIG[PricingPlanKey];
-type PeriodConfig = { monthly: Record<string, string>; yearly: Record<string, string> };
-
-function hasPeriod(config: PlanConfig): config is PlanConfig & { period: PeriodConfig } {
-  return 'period' in config && 
-    typeof config.period === 'object' && 
-    config.period !== null &&
-    'monthly' in config.period &&
-    'yearly' in config.period;
-}
-
-export function getPlanPeriod(planKey: PricingPlanKey, cycle: BillingCycle, lang: 'en' | 'es'): string {
-  const planConfig = PRICING_CONFIG[planKey];
-  if (hasPeriod(planConfig) && cycle in planConfig.period) {
-    const cyclePeriod = planConfig.period[cycle];
-    if (typeof cyclePeriod === 'object' && lang in cyclePeriod) {
-      return cyclePeriod[lang];
-    }
-  }
-  return '';
-}
+export type BillingPlanKey = 'pro_monthly' | 'pro_yearly' | 'lifetime';
+export type DonationPlanKey = typeof donationPlanKeys[number];
+export type PremiumPlanKey = typeof premiumPlanKeys[number];

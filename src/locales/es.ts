@@ -1418,8 +1418,8 @@ export const es = {
             hero: {
                 eyebrow: 'Mejora Premium',
                 title: 'Elige Tu',
-                titleAccent: 'Plan Operativo',
-                description: 'Free te inicia. Pro desbloquea el toolkit completo. Enterprise incluye onboarding white-glove.',
+                titleAccent: 'Plan Premium',
+                description: 'Apoya TON618 con una donacion o desbloquea Premium mensual, anual o de por vida.',
                 cta: 'Ver planes',
             },
             trust: {
