@@ -26,6 +26,7 @@ import type {
 } from '../types';
 import { getCategoryOptions, getChannelOptions, getRoleOptions } from '../utils';
 import { findMissingSelections, flattenFormErrors, getInventoryState } from '../validation';
+import ProLock from '../components/ProLock';
 
 type TicketsModuleValues = z.infer<typeof ticketsSettingsSchema>;
 
@@ -205,7 +206,8 @@ export default function TicketsModule({
       </PanelCard>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <PanelCard title={t('dashboard.tickets.escalation.title')} description={t('dashboard.tickets.escalation.desc')}>
+        <ProLock plan={config.generalSettings.opsPlan}>
+          <PanelCard title={t('dashboard.tickets.escalation.title')} description={t('dashboard.tickets.escalation.desc')}>
           <div className="grid gap-5 md:grid-cols-2">
             <FieldShell label={t('dashboard.tickets.escalation.roleLabel')} error={errors.slaEscalationRoleId?.message}>
               <select
@@ -261,76 +263,79 @@ export default function TicketsModule({
             </FieldShell>
           </div>
         </PanelCard>
+        </ProLock>
 
-        <PanelCard title={t('dashboard.tickets.advanced.title')} description={t('dashboard.tickets.advanced.desc')}>
-          <div className="space-y-6">
-            <div>
-              <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.slaOverrides')}</p>
-              <div className="mt-3 grid gap-4 md:grid-cols-2">
-                {priorityLabels.map(([key, label]) => (
-                  <label key={key} className="block">
-                    <span className="mb-2 block text-sm text-slate-300">{label}</span>
-                    <input
-                      type="number"
-                      min={0}
-                      max={10080}
-                      value={slaOverridesPriority[key] ?? 0}
-                      onChange={(event) => {
-                        const next = { ...watch('slaOverridesPriority') };
-                        const value = Number(event.target.value) || 0;
-                        if (value > 0) next[key] = value;
-                        else delete next[key];
-                        setValue('slaOverridesPriority', next, { shouldDirty: true });
-                      }}
-                      className="w-full rounded-2xl border dashboard-module-select"
-                    />
-                  </label>
-                ))}
+        <ProLock plan={config.generalSettings.opsPlan}>
+          <PanelCard title={t('dashboard.tickets.advanced.title')} description={t('dashboard.tickets.advanced.desc')}>
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.slaOverrides')}</p>
+                <div className="mt-3 grid gap-4 md:grid-cols-2">
+                  {priorityLabels.map(([key, label]) => (
+                    <label key={key} className="block">
+                      <span className="mb-2 block text-sm text-slate-300">{label}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={10080}
+                        value={slaOverridesPriority[key] ?? 0}
+                        onChange={(event) => {
+                          const next = { ...watch('slaOverridesPriority') };
+                          const value = Number(event.target.value) || 0;
+                          if (value > 0) next[key] = value;
+                          else delete next[key];
+                          setValue('slaOverridesPriority', next, { shouldDirty: true });
+                        }}
+                        className="w-full rounded-2xl border dashboard-module-select"
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.pausedCategories')}</p>
+                <div className="mt-3 grid gap-3">
+                  {categoryOptions.length ? (
+                    categoryOptions.map((category) => {
+                      const checked = incidentPausedCategories.includes(category.value);
+                      return (
+                        <label
+                          key={category.value}
+                          className="flex items-start gap-3 rounded-3xl border dashboard-module-card p-4"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={(event) => {
+                              const next = new Set(watch('incidentPausedCategories'));
+                              if (event.target.checked) next.add(category.value);
+                              else next.delete(category.value);
+                              setValue('incidentPausedCategories', Array.from(next), { shouldDirty: true });
+                            }}
+                            className="dashboard-module-checkbox mt-1"
+                          />
+                          <span>
+                            <span className="block font-semibold text-white">{category.label}</span>
+                            {category.description ? (
+                              <span className="mt-1 block text-sm text-slate-300">
+                                {category.description}
+                              </span>
+                            ) : null}
+                          </span>
+                        </label>
+                      );
+                    })
+                  ) : (
+                    <div className="rounded-3xl border dashboard-module-empty p-5 text-sm text-slate-500">
+                      {t('dashboard.tickets.advanced.noCategories')}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-
-            <div>
-              <p className="text-sm font-semibold text-slate-200">{t('dashboard.tickets.advanced.pausedCategories')}</p>
-              <div className="mt-3 grid gap-3">
-                {categoryOptions.length ? (
-                  categoryOptions.map((category) => {
-                    const checked = incidentPausedCategories.includes(category.value);
-                    return (
-                      <label
-                        key={category.value}
-                        className="flex items-start gap-3 rounded-3xl border dashboard-module-card p-4"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={(event) => {
-                            const next = new Set(watch('incidentPausedCategories'));
-                            if (event.target.checked) next.add(category.value);
-                            else next.delete(category.value);
-                            setValue('incidentPausedCategories', Array.from(next), { shouldDirty: true });
-                          }}
-                          className="dashboard-module-checkbox mt-1"
-                        />
-                        <span>
-                          <span className="block font-semibold text-white">{category.label}</span>
-                          {category.description ? (
-                            <span className="mt-1 block text-sm text-slate-300">
-                              {category.description}
-                            </span>
-                          ) : null}
-                        </span>
-                      </label>
-                    );
-                  })
-                ) : (
-                  <div className="rounded-3xl border dashboard-module-empty p-5 text-sm text-slate-500">
-                    {t('dashboard.tickets.advanced.noCategories')}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </PanelCard>
+          </PanelCard>
+        </ProLock>
       </div>
     </form>
   );

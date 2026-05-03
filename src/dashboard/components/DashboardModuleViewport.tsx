@@ -56,6 +56,7 @@ interface DashboardModuleViewportProps {
   setSelectedGuildId: (guildId: string) => void;
   syncGuildAccess: () => void;
   isSyncing: boolean;
+  isAuthenticated: boolean;
   snapshot: GuildDashboardSnapshot | undefined;
   snapshotErrorMessage: string;
   isSnapshotLoading: boolean;
@@ -116,6 +117,7 @@ export default function DashboardModuleViewport({
   setSelectedGuildId,
   syncGuildAccess,
   isSyncing,
+  isAuthenticated,
   snapshot,
   snapshotErrorMessage,
   isSnapshotLoading,
@@ -176,7 +178,7 @@ export default function DashboardModuleViewport({
     );
   }
 
-  if (!selectedGuild) {
+  if (!selectedGuild && isAuthenticated) {
     return (
       <StateCard
         eyebrow={t('dashboard.states.noSelectedGuild.eyebrow')}
@@ -257,7 +259,7 @@ export default function DashboardModuleViewport({
     && requestConfigChangeErrorSection === activeConfigSection;
 
 
-  return (
+  const viewportContent = (
     <AnimatePresence mode="wait">
       <motion.div
         key={activeSection}
@@ -268,191 +270,230 @@ export default function DashboardModuleViewport({
       >
         <Suspense fallback={<ModuleFallback activeSection={activeSection} />}>
           <div className="space-y-6">
-        <DashboardDegradationNotice failures={partialFailures} />
-        {showConfigError ? (
-          <div
-            className="rounded-[1.55rem] border dashboard-module-notice-danger"
-            role="alert"
-            aria-live="polite"
-          >
-            <p className="font-semibold">{t('dashboard.shell.configSaveError')}</p>
-            <p className="mt-2 text-sm text-current/85">{requestConfigChangeErrorMessage}</p>
+            <DashboardDegradationNotice failures={partialFailures} />
+            {showConfigError ? (
+              <div
+                className="rounded-[1.55rem] border dashboard-module-notice-danger"
+                role="alert"
+                aria-live="polite"
+              >
+                <p className="font-semibold">{t('dashboard.shell.configSaveError')}</p>
+                <p className="mt-2 text-sm text-current/85">{requestConfigChangeErrorMessage}</p>
+              </div>
+            ) : null}
+
+            {activeSection === 'overview' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.overview')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <OverviewModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  events={snapshot.events}
+                  metrics={snapshot.metrics}
+                  mutations={snapshot.mutations}
+                  backups={snapshot.backups}
+                  syncStatus={snapshot.syncStatus}
+                  workspace={snapshot.ticketWorkspace}
+                  playbooks={snapshot.playbooks}
+                  onSectionChange={onSectionChange}
+                  sectionStates={sectionStates}
+                  checklist={checklist}
+                  quickActions={quickActions}
+                  partialFailures={partialFailures}
+                  isGuildAccessFresh={isGuildAccessFresh}
+                  onTicketAction={onTicketAction}
+                />
+              </ErrorBoundary>
+            ) : null}
+
+            {activeSection === 'general' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.general')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <GeneralModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'general')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSectionChange={onSectionChange}
+                  onSave={(values) =>
+                    onConfigSave('general', {
+                      generalSettings: values.generalSettings,
+                      dashboardPreferences: values.dashboardPreferences,
+                    })
+                  }
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'server_roles' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.server_roles')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <ServerRolesModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'server_roles_channels')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('server_roles_channels', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'tickets' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.tickets')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <TicketsModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'tickets')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('tickets', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'verification' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.verification')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <VerificationModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'verification')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('verification', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'welcome' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.welcome')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <WelcomeModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'welcome')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('welcome', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'suggestions' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.suggestions')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <SuggestionsModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'suggestions')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('suggestions', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'modlogs' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.modlogs')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <ModlogsModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'modlogs')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('modlogs', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'commands' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.commands')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <CommandsModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'commands')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('commands', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'system' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.system')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <SystemModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  backups={snapshot.backups}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'system')}
+                  backupMutation={backupMutation}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  isRequestingBackup={requestBackupActionPending}
+                  onSave={(values) => onConfigSave('system', values)}
+                  onCreateBackup={onCreateBackup}
+                  onRestoreBackup={onRestoreBackup}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'activity' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.activity')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <ActivityModule
+                  guild={selectedGuild!}
+                  events={snapshot.events}
+                  mutations={snapshot.mutations}
+                  partialFailure={activityFailure}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'analytics' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.analytics')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <AnalyticsModule
+                  guild={selectedGuild!}
+                  metrics={snapshot.metrics}
+                  playbooks={snapshot.playbooks}
+                  config={snapshot.config}
+                  partialFailure={metricsFailure}
+                />
+              </ErrorBoundary>
+            ) : null}
           </div>
-        ) : null}
-
-        {activeSection === 'overview' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.overview')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <OverviewModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              events={snapshot.events}
-              metrics={snapshot.metrics}
-              mutations={snapshot.mutations}
-              backups={snapshot.backups}
-              syncStatus={snapshot.syncStatus}
-              workspace={snapshot.ticketWorkspace}
-              playbooks={snapshot.playbooks}
-              onSectionChange={onSectionChange}
-              sectionStates={sectionStates}
-              checklist={checklist}
-              quickActions={quickActions}
-              partialFailures={partialFailures}
-              isGuildAccessFresh={isGuildAccessFresh}
-              onTicketAction={onTicketAction}
-            />
-          </ErrorBoundary>
-        ) : null}
-
-        {activeSection === 'general' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.general')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <GeneralModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'general')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSectionChange={onSectionChange}
-              onSave={(values) =>
-                onConfigSave('general', {
-                  generalSettings: values.generalSettings,
-                  dashboardPreferences: values.dashboardPreferences,
-                })
-              }
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'server_roles' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.server_roles')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <ServerRolesModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'server_roles_channels')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('server_roles_channels', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'tickets' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.tickets')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <TicketsModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'tickets')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('tickets', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'verification' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.verification')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <VerificationModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'verification')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('verification', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'welcome' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.welcome')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <WelcomeModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'welcome')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('welcome', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'suggestions' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.suggestions')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <SuggestionsModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'suggestions')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('suggestions', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'modlogs' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.modlogs')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <ModlogsModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'modlogs')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('modlogs', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'commands' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.commands')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <CommandsModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              inventory={snapshot.inventory}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'commands')}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              onSave={(values) => onConfigSave('commands', values)}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'system' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.system')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <SystemModule
-              guild={selectedGuild}
-              config={snapshot.config}
-              backups={snapshot.backups}
-              mutation={getLatestMutationForSection(snapshot.mutations, 'system')}
-              backupMutation={backupMutation}
-              syncStatus={snapshot.syncStatus}
-              isSaving={requestConfigChangePending}
-              isRequestingBackup={requestBackupActionPending}
-              onSave={(values) => onConfigSave('system', values)}
-              onCreateBackup={onCreateBackup}
-              onRestoreBackup={onRestoreBackup}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'activity' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.activity')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <ActivityModule
-              guild={selectedGuild}
-              events={snapshot.events}
-              mutations={snapshot.mutations}
-              partialFailure={activityFailure}
-            />
-          </ErrorBoundary>
-        ) : null}
-        {activeSection === 'analytics' ? (
-          <ErrorBoundary moduleLabel={t('dashboard.sections.analytics')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
-            <AnalyticsModule
-              guild={selectedGuild}
-              metrics={snapshot.metrics}
-              playbooks={snapshot.playbooks}
-              config={snapshot.config}
-              partialFailure={metricsFailure}
-            />
-          </ErrorBoundary>
-        ) : null}
-      </div>
         </Suspense>
       </motion.div>
     </AnimatePresence>
   );
+
+  if (!isAuthenticated) {
+    return (
+      <div className="relative">
+        <div className="pointer-events-none select-none blur-xl opacity-40 grayscale-[0.5]">
+          {viewportContent}
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-2xl shadow-2xl">
+            <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-2xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 mb-6">
+              <RefreshCcw className="h-8 w-8 animate-pulse" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-3">
+              {t('dashboard.dashboardAuth.authCard.cardTitle')}
+            </h2>
+            <p className="text-slate-300 mb-8 text-sm leading-relaxed">
+              {t('dashboard.dashboardAuth.authCard.cardDescription')}
+            </p>
+            <button
+              onClick={syncGuildAccess}
+              className="btn-premium-primary w-full py-4 px-6 text-base rounded-[1.2rem] shadow-lg shadow-indigo-500/20"
+            >
+              <RefreshCcw className="h-5 w-5" />
+              <span>{t('dashboard.dashboardAuth.authCard.cta')}</span>
+            </button>
+            <div className="mt-6 flex items-center justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              <span>Secure Sync</span>
+              <span className="h-1 w-1 rounded-full bg-slate-700" />
+              <span>Discord OAuth</span>
+              <span className="h-1 w-1 rounded-full bg-slate-700" />
+              <span>No Config Loss</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return viewportContent;
 }

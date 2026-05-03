@@ -239,8 +239,10 @@ export default function DashboardDemoPage() {
         guilds={[demoDashboardGuild]}
         selectedGuild={demoDashboardGuild}
         activeSection={activeSection}
+        isAuthenticated={true}
         onSectionChange={setActiveSection}
         onGuildChange={() => undefined}
+        onLogin={() => undefined}
         onSync={() => {
           setIsSyncing(true);
           setTimeout(() => {
@@ -274,6 +276,7 @@ export default function DashboardDemoPage() {
           setSelectedGuildId={() => undefined}
           syncGuildAccess={() => undefined}
           isSyncing={isSyncing}
+          isAuthenticated={true}
           snapshot={snapshot}
           snapshotErrorMessage=""
           isSnapshotLoading={false}

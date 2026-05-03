@@ -1145,8 +1145,12 @@ export const es = {
                     configTitle: 'Configuracion de demo cambiada',
                     configDesc: 'La seccion {{section}} se actualizo en el entorno simulado.',
                     restoreTitle: 'Restauracion de demo iniciada',
-                    restoreDesc: 'Restaurando backup {{backupId}} en el entorno simulado.',
                 },
+            },
+            pro: {
+                lockedTitle: 'Función Premium',
+                lockedDesc: 'Esta característica requiere el plan {{plan}} para operar en producción.',
+                upgradeCta: 'Actualizar a PRO ahora'
             },
             analytics: {
                 noComparison: 'Sin comparacion',

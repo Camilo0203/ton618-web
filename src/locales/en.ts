@@ -1416,8 +1416,12 @@ export const en = {
                     eyebrow: 'Snapshots', title: 'Daily detail', desc: 'Readable fallback to inspect each day when the general comparison is not enough.',
                     modulesActive_one: '{{count}} active module', modulesActive_other: '{{count}} active modules', noModules: 'No modules reported that day',
                     uptimeLabel: 'uptime', commands: 'Commands', tickets: 'Tickets', frt: 'FRT', sla: 'SLA', slaBreaches: '{{count}} breaches',
-                    empty: 'Not enough daily snapshots yet to show historical detail.'
-                }
+                },
+            },
+            pro: {
+                lockedTitle: 'Premium Feature',
+                lockedDesc: 'This feature requires the {{plan}} plan to operate in production.',
+                upgradeCta: 'Upgrade to PRO now'
             },
             shell: {
                 brandDescription: 'Task navigation to configure, review, and operate the server.',

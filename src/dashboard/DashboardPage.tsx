@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { config } from '../config';
 import StarfieldBackground from '../components/StarfieldBackground';
-import AuthCard from './components/AuthCard';
 import DashboardAccessStage, {
   DashboardAccessStatusPill,
   type DashboardAccessProgressStep,
@@ -42,7 +41,6 @@ import {
 type DashboardEntryStage =
   | 'auth-loading'
   | 'auth-error'
-  | 'login'
   | 'guilds-loading'
   | 'guilds-error'
   | 'empty-guilds'
@@ -180,15 +178,13 @@ function DashboardLivePage({
     ? 'auth-loading'
     : authQuery.isError
       ? 'auth-error'
-      : !isAuthenticated
-        ? 'login'
-        : guildsQuery.isLoading
-          ? 'guilds-loading'
-          : guildsQuery.isError
-            ? 'guilds-error'
-            : !guilds.length
-              ? 'empty-guilds'
-              : 'shell';
+      : guildsQuery.isLoading && isAuthenticated
+        ? 'guilds-loading'
+        : guildsQuery.isError && isAuthenticated
+          ? 'guilds-error'
+          : !guilds.length && isAuthenticated
+            ? 'empty-guilds'
+            : 'shell';
   const displayEntryStage = useMinimumDisplayState({
     value: actualEntryStage,
     getKey: (stage) => stage,
@@ -198,7 +194,6 @@ function DashboardLivePage({
   const resolvedEntryStage = (
     actualEntryStage === 'auth-error'
     || actualEntryStage === 'guilds-error'
-    || actualEntryStage === 'login'
     || actualEntryStage === 'empty-guilds'
   )
     ? actualEntryStage
@@ -336,18 +331,6 @@ function DashboardLivePage({
     );
   }
 
-  if (resolvedEntryStage === 'login') {
-    return renderEntryStage(
-      <AuthCard
-        canUseDashboard={canUseDashboard}
-        isLoading={signIn.isPending}
-        errorMessage={signIn.error instanceof Error ? signIn.error.message : undefined}
-        onLogin={() => signIn.mutate(selectedGuildId ?? requestedGuildId)}
-      />,
-      'max-w-[42rem]',
-    );
-  }
-
   if (resolvedEntryStage === 'guilds-loading') {
     return renderEntryStage(
       <DashboardAccessStage
@@ -469,12 +452,14 @@ function DashboardLivePage({
     <>
       {pageHelmet}
       <DashboardShell
-        user={authState.user!}
+        user={authState.user}
+        isAuthenticated={isAuthenticated}
         guilds={guilds}
         selectedGuild={selectedGuild}
         activeSection={activeSection}
         onSectionChange={setActiveSection}
         onGuildChange={setSelectedGuildId}
+        onLogin={() => signIn.mutate(selectedGuildId ?? requestedGuildId)}
         onSync={syncGuildAccess}
         onLogout={() => signOut.mutate()}
         isSyncing={syncGuilds.isPending}
@@ -499,6 +484,7 @@ function DashboardLivePage({
             setSelectedGuildId={setSelectedGuildId}
             syncGuildAccess={syncGuildAccess}
             isSyncing={syncGuilds.isPending}
+            isAuthenticated={isAuthenticated}
             snapshot={snapshot}
             snapshotErrorMessage={snapshotErrorMessage}
             isSnapshotLoading={snapshotQuery.isLoading}

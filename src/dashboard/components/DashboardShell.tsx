@@ -32,12 +32,14 @@ const GLASS_HEADER =
   'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-2xl border border-white/[0.08] shadow-[0_18px_55px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.04)]';
 
 interface DashboardShellProps {
-  user: User;
+  user: User | null;
+  isAuthenticated: boolean;
   guilds: DashboardGuild[];
   selectedGuild: DashboardGuild | null;
   activeSection: DashboardSectionId;
   onSectionChange: (section: DashboardSectionId) => void;
   onGuildChange: (guildId: string) => void;
+  onLogin: () => void;
   onSync: () => void;
   onLogout: () => void;
   isSyncing: boolean;
@@ -53,8 +55,10 @@ interface SidebarProps {
   guilds: DashboardGuild[];
   selectedGuild: DashboardGuild | null;
   activeSection: DashboardSectionId;
+  isAuthenticated: boolean;
   onSectionChange: (section: DashboardSectionId) => void;
   onGuildChange: (guildId: string) => void;
+  onLogin: () => void;
   onLogout: () => void;
   closeOnNavigate?: () => void;
 }
@@ -63,8 +67,10 @@ function SidebarContent({
   guilds,
   selectedGuild,
   activeSection,
+  isAuthenticated,
   onSectionChange,
   onGuildChange,
+  onLogin,
   onLogout,
   closeOnNavigate,
 }: SidebarProps) {
@@ -131,11 +137,12 @@ function SidebarContent({
             <select
               id="guild-select"
               value={selectedGuild?.guildId ?? ''}
+              disabled={!isAuthenticated}
               onChange={(event) => {
                 onGuildChange(event.target.value);
                 closeOnNavigate?.();
               }}
-              className="mt-4 w-full rounded-xl border border-white/[0.08] bg-[#06081a]/80 px-3 py-2.5 text-sm font-medium text-slate-200 outline-none backdrop-blur-sm transition-all duration-200 focus:border-indigo-400/50 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.12)]"
+              className="mt-4 w-full rounded-xl border border-white/[0.08] bg-[#06081a]/80 px-3 py-2.5 text-sm font-medium text-slate-200 outline-none backdrop-blur-sm transition-all duration-200 focus:border-indigo-400/50 focus:shadow-[0_0_0_3px_rgba(99,102,241,0.12)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {!selectedGuild ? (
                 <option value="">{t('dashboard.shell.selectServer')}</option>
@@ -207,14 +214,25 @@ function SidebarContent({
             <div className="sm:hidden flex justify-center pb-2 border-b border-white/[0.05]">
               <LanguageSelector />
             </div>
-            <button
-              type="button"
-              onClick={onLogout}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-500/25 bg-rose-500/[0.08] px-4 py-2 text-sm font-semibold text-rose-300 transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/[0.14] hover:shadow-[0_0_20px_rgba(244,63,94,0.1)]"
-            >
-              <LogOut className="h-4 w-4" />
-              {t('dashboard.shell.logout')}
-            </button>
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={onLogout}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-rose-500/25 bg-rose-500/[0.08] px-4 py-2 text-sm font-semibold text-rose-300 transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/[0.14] hover:shadow-[0_0_20px_rgba(244,63,94,0.1)]"
+              >
+                <LogOut className="h-4 w-4" />
+                {t('dashboard.shell.logout')}
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onLogin}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.08] px-4 py-2 text-sm font-semibold text-indigo-300 transition-all duration-200 hover:border-indigo-400/40 hover:bg-indigo-500/[0.14] hover:shadow-[0_0_20px_rgba(99,102,241,0.1)]"
+              >
+                <Sparkles className="h-4 w-4" />
+                {t('dashboard.dashboardAuth.authCard.cta')}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -224,11 +242,13 @@ function SidebarContent({
 
 export default function DashboardShell({
   user,
+  isAuthenticated,
   guilds,
   selectedGuild,
   activeSection,
   onSectionChange,
   onGuildChange,
+  onLogin,
   onSync,
   onLogout,
   isSyncing,
@@ -276,8 +296,10 @@ export default function DashboardShell({
               guilds={guilds}
               selectedGuild={selectedGuild}
               activeSection={activeSection}
+              isAuthenticated={isAuthenticated}
               onSectionChange={onSectionChange}
               onGuildChange={onGuildChange}
+              onLogin={onLogin}
               onLogout={onLogout}
             />
           </div>
@@ -327,16 +349,28 @@ export default function DashboardShell({
               <div className="flex min-w-0 flex-col gap-3 xl:w-auto xl:items-end">
                 <div className="flex flex-wrap items-center gap-3">
                   {/* User chip — glassmorphic */}
-                  <div className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] px-4 py-2 backdrop-blur-sm">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm">
-                      {user.email?.[0]?.toUpperCase() ?? 'U'}
+                  {isAuthenticated && user ? (
+                    <div className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.025] px-4 py-2 backdrop-blur-sm">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-sm">
+                        {user.email?.[0]?.toUpperCase() ?? 'U'}
+                      </div>
+                      <div className="hidden sm:block">
+                        <p className="text-sm font-semibold text-white">
+                           {user.email}
+                        </p>
+                      </div>
                     </div>
-                    <div className="hidden sm:block">
-                      <p className="text-sm font-semibold text-white">
-                         {user.email}
-                      </p>
-                    </div>
-                  </div>
+                  ) : (
+                    <button
+                      onClick={onLogin}
+                      className="flex items-center gap-3 rounded-2xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 backdrop-blur-sm hover:bg-indigo-500/20 transition-all duration-300"
+                    >
+                      <Sparkles className="h-4 w-4 text-indigo-300" />
+                      <span className="text-sm font-semibold text-white">
+                        {t('dashboard.dashboardAuth.authCard.cta')}
+                      </span>
+                    </button>
+                  )}
 
                   {/* Invite CTA — uses btn-premium-primary (same as Navbar's "Añadir a Discord") */}
                   {showInviteCta && (
@@ -350,8 +384,8 @@ export default function DashboardShell({
                   <button
                     type="button"
                     onClick={onSync}
-                    disabled={isSyncing}
-                    className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:shadow-[0_0_16px_rgba(255,255,255,0.03)] disabled:opacity-50"
+                    disabled={isSyncing || !isAuthenticated}
+                    className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:border-white/[0.15] hover:bg-white/[0.07] hover:shadow-[0_0_16px_rgba(255,255,255,0.03)] disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <RefreshCcw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
                     {isSyncing ? t('dashboard.actions.syncingNow') : t('dashboard.actions.resyncNow')}
@@ -395,7 +429,9 @@ export default function DashboardShell({
             >
               <SidebarContent
                 guilds={guilds} selectedGuild={selectedGuild} activeSection={activeSection}
-                onSectionChange={onSectionChange} onGuildChange={onGuildChange} onLogout={onLogout}
+                isAuthenticated={isAuthenticated}
+                onSectionChange={onSectionChange} onGuildChange={onGuildChange} 
+                onLogin={onLogin} onLogout={onLogout}
                 closeOnNavigate={() => setMobileOpen(false)}
               />
               <button
