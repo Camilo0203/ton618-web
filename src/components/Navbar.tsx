@@ -64,6 +64,7 @@ function Navbar() {
   ];
 
   const utilityLinks = [
+    { href: '/dashboard', label: t('nav.dashboard'), external: false },
     config.docsUrl ? { href: config.docsUrl, label: t('nav.docs'), external: true } : { href: '/docs', label: t('nav.docs'), external: false },
     { href: '/pricing', label: t('nav.pricing', { defaultValue: 'Pricing' }), external: false },
     config.statusUrl ? { href: config.statusUrl, label: t('nav.status'), external: true } : null,

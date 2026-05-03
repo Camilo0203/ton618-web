@@ -19,6 +19,7 @@ export const en = {
             closeMenu: 'Close navigation menu',
             homeAria: 'Go to home',
             primaryAria: 'Primary navigation',
+            dashboard: 'Dashboard',
         },
         languageSelector: {
             triggerLabel: 'Change language',
