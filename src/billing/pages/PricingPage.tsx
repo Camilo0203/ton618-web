@@ -111,10 +111,8 @@ export default function PricingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/5 to-black"></div>
       </div>
 
-      <div className="relative z-10 pt-44">
-        <Navbar />
       {showFounding && foundingSpotsLeft > 0 && (
-        <div className="mx-auto mt-6 w-full max-w-[1200px] px-4 pointer-events-none flex justify-center">
+        <div className="fixed top-[120px] left-0 right-0 z-[85] mx-auto w-full max-w-[1200px] px-4 pointer-events-none flex justify-center">
           <div className="pointer-events-auto flex items-center justify-between gap-4 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(20,20,40,0.6)] px-6 py-2.5 text-sm shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-[12px] transition-all duration-300">
             <p className="text-slate-200 font-medium">{t('billing.foundingOffer.text', { spots: foundingSpotsLeft })}</p>
             <button
@@ -130,6 +128,9 @@ export default function PricingPage() {
           </div>
         </div>
       )}
+
+      <div className="relative z-10 pt-44">
+        <Navbar />
       <PricingHero />
       <main className="mx-auto max-w-6xl px-4 py-12">
 
