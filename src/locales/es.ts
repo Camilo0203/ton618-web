@@ -1237,7 +1237,19 @@ export const es = {
                     notConfigured: 'No configurado'
                 },
                 defaultServerAlt: 'Servidor',
-                defaultUserAlt: 'Usuario'
+                defaultUserAlt: 'Usuario',
+                commandPalette: {
+                    placeholder: 'Buscar modulos...',
+                    empty: 'No se encontraron resultados.',
+                    groupLabel: 'Modulos'
+                }
+            },
+            toast: {
+                configSaved: '{{label}} guardado',
+                backupScheduled: 'Backup programado correctamente',
+                backupPermissionError: 'Verifica los permisos de backup primero',
+                restoreStarted: 'Restauracion iniciada',
+                restoreError: 'Error al restaurar backup',
             },
             actions: {
                 retryValidation: 'Reintentar validación',
@@ -1401,6 +1413,13 @@ export const es = {
                 title: 'Elige Tu',
                 titleAccent: 'Plan Operativo',
                 description: 'Free te inicia. Pro desbloquea el toolkit completo. Enterprise incluye onboarding white-glove.',
+                cta: 'Ver planes',
+            },
+            trust: {
+                secure: { title: 'Pago seguro' },
+                instant: { title: 'Activacion instantanea' },
+                whop: { title: 'Powered by Whop' },
+                guarantee: { title: 'Garantia de 7 dias' },
             },
             manual: {
                 title: 'Activacion Manual en Discord',
@@ -1439,6 +1458,7 @@ export const es = {
             socialProof: {
                 label: 'Prueba social',
                 description: 'Unete a 100+ servidores que ya usan TON618',
+                emptyState: 'De confianza para comunidades de Discord en todo el mundo',
             },
             foundingOffer: {
                 text: '🚀 Oferta Founding Member — Los primeros 50 suscriptores obtienen 50% de descuento para siempre. Quedan {{spots}} lugares.',
@@ -1530,6 +1550,13 @@ export const es = {
                 titlePayment: '¡Pago Exitoso!',
                 descriptionDonation: 'Tu generosa donacion ayuda a mantener TON618 funcionando. ¡Gracias!',
                 descriptionPayment: '¡Gracias por mejorar a TON618 {{plan}}! El premium de tu servidor ya fue activado.',
+                planLabels: {
+                    pro_monthly: 'Pro Mensual',
+                    pro_yearly: 'Pro Anual',
+                    lifetime: 'Acceso de por vida',
+                    donate: 'Donacion',
+                    default: 'Premium',
+                },
                 whatsNext: '¿Que sigue?',
                 steps: {
                     s1: 'Tu pago se completo correctamente en Whop.',
@@ -1577,6 +1604,144 @@ export const es = {
                 permissionDenied: 'Permiso denegado',
                 needManageServer: 'Necesitas permiso de Administrar Servidor para mejorar este servidor',
             },
+            pricingCards: {
+                planType: {
+                    subscription: 'Suscripcion',
+                    oneTime: 'Pago unico',
+                },
+                billingCycle: {
+                    monthly: 'mes',
+                    yearly: 'ano',
+                    forever: 'de por vida',
+                },
+                badges: {
+                    bestValue: 'Ahorra 25% · MEJOR VALOR',
+                    launchOffer: 'Oferta de lanzamiento',
+                },
+                cancelAnytime: 'Cancela cuando quieras',
+                serverRequired: 'Requiere seleccion de servidor despues del pago',
+                loading: 'Cargando...',
+                launchPriceNote: '⏳ Precio de lanzamiento — puede aumentar con el crecimiento',
+                monthly: {
+                    name: 'Pro Mensual',
+                    description: 'Ideal para comunidades en crecimiento',
+                    cta: 'Comenzar',
+                    features: [
+                        'Hasta 50 comandos personalizados',
+                        '20 configuraciones de auto-rol',
+                        '10 plantillas de mensaje de bienvenida',
+                        'Herramientas avanzadas de moderacion',
+                        'Constructor de embeds personalizado',
+                        'Soporte prioritario',
+                        'Dashboard de analitica del servidor',
+                        'Cancela cuando quieras',
+                    ],
+                },
+                yearly: {
+                    name: 'Pro Anual',
+                    description: 'Mejor valor para servidores consolidados',
+                    cta: 'Comenzar',
+                    features: [
+                        'Todo en Mensual',
+                        'Ahorra $20 al ano',
+                        'Solicitudes de funciones prioritarias',
+                        'Acceso anticipado a nuevas funciones',
+                        'Canal de soporte dedicado',
+                        'Estado personalizado del bot (proximamente)',
+                        'Analitica avanzada',
+                        'Facturacion anual',
+                    ],
+                },
+                lifetime: {
+                    name: 'Acceso de por vida',
+                    description: 'Pago unico, premium para siempre',
+                    cta: 'Comenzar',
+                    features: [
+                        'Todo en Pro',
+                        '100 comandos personalizados',
+                        '50 configuraciones de auto-rol',
+                        '20 plantillas de mensaje de bienvenida',
+                        'Actualizaciones de por vida',
+                        'Soporte VIP',
+                        'Funciones exclusivas',
+                        'Sin pagos recurrentes',
+                        'Correcciones de bugs prioritarias',
+                    ],
+                },
+            },
+        },
+        docs: {
+            pageTitle: 'Documentacion | TON618',
+            metaDescription: 'Referencia de comandos y documentacion de TON618. Setup, tickets, verificacion, stats y operaciones del staff.',
+            hero: {
+                badge: 'Referencia de Comandos',
+                titlePrefix: 'TON618',
+                titleSuffix: 'Documentacion',
+                subtitle: 'Referencia rapida de todos los slash commands de TON618. Todas las operaciones ocurren dentro de Discord — no se necesita dashboard externo.',
+            },
+            proActivation: {
+                title: 'Flujo de Activacion Pro',
+                steps: {
+                    openTicket: { title: 'Abrir Ticket', description: 'Unete al servidor de soporte y abre un ticket de facturacion con tu comprobante de pago' },
+                    receiveCode: { title: 'Recibir Codigo', description: 'Tras la verificacion, recibiras un codigo de activacion por DM con instrucciones' },
+                    redeem: { title: 'Canjear', description: 'Ejecuta /pro redeem <codigo> en tu servidor como propietario del servidor' },
+                    enjoyPro: { title: 'Disfrutar Pro', description: 'Las funciones premium se activan instantaneamente en tu servidor' },
+                },
+            },
+            commands: {
+                setup: {
+                    title: 'Setup y Configuracion',
+                    description: 'Comandos iniciales de configuracion del servidor',
+                    cmds: { setup: 'Asistente interactivo de setup para canales, roles y permisos', language: 'Cambiar idioma del servidor (English/Espanol)', configCenter: 'Abrir panel de configuracion' },
+                },
+                tickets: {
+                    title: 'Tickets y Soporte',
+                    description: 'Comandos de gestion de tickets de soporte',
+                    cmds: { ticket: 'Crear o gestionar tickets de soporte', panel: 'Publicar panel de tickets en un canal', staff: 'Cola del staff y asignacion de tickets' },
+                },
+                verification: {
+                    title: 'Verificacion',
+                    description: 'Verificacion de miembros y control de acceso',
+                    cmds: { verify: 'Panel de verificacion y filtrado de miembros', panel: 'Publicar panel de verificacion' },
+                },
+                analytics: {
+                    title: 'Stats y Analitica',
+                    description: 'Metricas del servidor y datos operativos',
+                    cmds: { stats: 'Ver estadisticas y metricas del servidor', audit: 'Registro de auditoria e historial de moderacion', debug: 'Diagnosticos tecnicos' },
+                },
+                premium: {
+                    title: 'Premium',
+                    description: 'Activar y gestionar suscripcion Pro',
+                    cmds: { redeem: 'Activar Pro usando tu codigo de activacion (solo propietario del servidor)' },
+                },
+            },
+            quickLinks: {
+                title: '¿Necesitas mas ayuda?',
+                description: 'Unete a nuestro servidor de soporte para asistencia personalizada o consulta la pagina de metricas en vivo.',
+                backToHome: 'Volver al inicio',
+                supportServer: 'Servidor de soporte',
+            },
+        },
+        comingSoon: {
+            title: 'Proximamente | TON618',
+            badge: 'Beta privada',
+            headlinePrefix: 'Dashboard',
+            headlineSuffix: 'Proximamente',
+            description: 'El dashboard web esta actualmente en beta privada. Por ahora, todas las operaciones se realizan dentro de Discord con slash commands.',
+            backToHome: 'Volver al inicio',
+            joinSupport: 'Unirse al servidor de soporte',
+            footer: {
+                discordFirst: 'Operaciones Discord-first',
+                slashReady: 'Slash commands listos',
+            },
+        },
+        errorBoundary: {
+            title: 'Algo salio mal',
+            description: 'Encontramos un error inesperado. Nuestro equipo ha sido notificado y estamos trabajando en una solucion.',
+            errorDetails: 'Detalles del error (Solo dev)',
+            tryAgain: 'Intentar de nuevo',
+            reloadPage: 'Recargar pagina',
+            goHome: 'Ir al inicio',
         },
     },
 };
