@@ -1468,7 +1468,7 @@ export const es = {
                 emptyState: 'De confianza para comunidades de Discord en todo el mundo',
             },
             foundingOffer: {
-                text: '🚀 Oferta Founding Member — Los primeros 50 suscriptores obtienen 50% de descuento para siempre. Quedan {{spots}} lugares.',
+                text: 'Oferta Founding — Entra al soporte, abre un ticket y envia tu Server ID para reclamar el codigo FOUNDING50. Quedan {{spots}} lugares.',
                 dismissAriaLabel: 'Cerrar oferta de miembro fundador',
             },
             lifetimeUrgency: '⏳ Precio de lanzamiento — puede aumentar con el crecimiento',

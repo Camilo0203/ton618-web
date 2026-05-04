@@ -15,7 +15,7 @@ export const PRICING_CONFIG = {
       es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
     cta: { en: 'Donate $2', es: 'Donar $2' },
-    whopKey: 'donation' as const,
+    whopKey: 'donation_2' as const,
     popular: false,
   },
   donation_5: {
@@ -34,7 +34,7 @@ export const PRICING_CONFIG = {
       es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
     cta: { en: 'Donate $5', es: 'Donar $5' },
-    whopKey: 'donation' as const,
+    whopKey: 'donation_5' as const,
     popular: false,
   },
   donation_10: {
@@ -53,7 +53,7 @@ export const PRICING_CONFIG = {
       es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
     cta: { en: 'Donate $10', es: 'Donar $10' },
-    whopKey: 'donation' as const,
+    whopKey: 'donation_10' as const,
     popular: false,
   },
   donation_25: {
@@ -72,7 +72,7 @@ export const PRICING_CONFIG = {
       es: ['Apoya el desarrollo', 'Ayuda con costos de hosting', 'No incluye acceso premium'],
     },
     cta: { en: 'Donate $25', es: 'Donar $25' },
-    whopKey: 'donation' as const,
+    whopKey: 'donation_25' as const,
     popular: false,
   },
   lifetime: {
@@ -139,5 +139,6 @@ export const premiumPlanKeys = ['lifetime', 'yearly', 'monthly'] as const;
 
 export type PricingPlanKey = keyof typeof PRICING_CONFIG;
 export type BillingPlanKey = 'pro_monthly' | 'pro_yearly' | 'lifetime';
+export type DonationCheckoutKey = 'donation_2' | 'donation_5' | 'donation_10' | 'donation_25';
 export type DonationPlanKey = typeof donationPlanKeys[number];
 export type PremiumPlanKey = typeof premiumPlanKeys[number];

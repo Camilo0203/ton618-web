@@ -9,7 +9,7 @@ import { FAQSection } from '../components/FAQSection';
 import { GuildSelector } from '../components/GuildSelector';
 import { SocialProof } from '../components/SocialProof';
 import { PricingHero } from '../components/PricingHero';
-import { PRICING_CONFIG, donationPlanKeys, premiumPlanKeys, type BillingPlanKey, type PricingPlanKey } from '../../config/pricing';
+import { PRICING_CONFIG, donationPlanKeys, premiumPlanKeys, type BillingPlanKey, type DonationCheckoutKey, type PricingPlanKey } from '../../config/pricing';
 import { fetchBillingGuilds } from '../api';
 import { supabase } from '../../lib/supabaseClient';
 import { config, getAbsoluteAssetUrl, getCanonicalUrl } from '../../config';
@@ -22,6 +22,13 @@ const WHOP_LINKS: Record<BillingPlanKey, string> = {
   pro_monthly: `${WHOP_BASE}/${config.whopPlanMonthly || 'plan_yI6fFUFSaIMf5'}`,
   pro_yearly: `${WHOP_BASE}/${config.whopPlanYearly || 'plan_8SKj3v4lL6XEF'}`,
   lifetime: `${WHOP_BASE}/${config.whopPlanLifetime || 'plan_nuXvSWVBzZHWf'}`,
+};
+
+const DONATION_LINKS: Record<DonationCheckoutKey, string> = {
+  donation_2: config.whopDonation2 ? `${WHOP_BASE}/${config.whopDonation2}` : config.donationUrl,
+  donation_5: config.whopDonation5 ? `${WHOP_BASE}/${config.whopDonation5}` : config.donationUrl,
+  donation_10: config.whopDonation10 ? `${WHOP_BASE}/${config.whopDonation10}` : config.donationUrl,
+  donation_25: config.whopDonation25 ? `${WHOP_BASE}/${config.whopDonation25}` : config.donationUrl,
 };
 
 export default function PricingPage() {
@@ -54,12 +61,13 @@ export default function PricingPage() {
   const handlePlanSelect = async (planKey: PricingPlanKey) => {
     const plan = PRICING_CONFIG[planKey];
 
-    if (plan.whopKey === 'donation') {
-      if (!config.donationUrl) {
-        toast.error(lang === 'es' ? 'El link de donacion aun no esta configurado.' : 'Donation link is not configured yet.');
+    if (plan.category === 'donation') {
+      const donationLink = DONATION_LINKS[plan.whopKey];
+      if (!donationLink) {
+        toast.error(lang === 'es' ? 'El checkout de esta donacion aun no esta configurado.' : 'This donation checkout is not configured yet.');
         return;
       }
-      window.location.href = config.donationUrl;
+      window.location.href = donationLink;
       return;
     }
 

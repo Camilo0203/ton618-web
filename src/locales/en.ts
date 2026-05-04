@@ -1706,7 +1706,7 @@ export const en = {
                 emptyState: 'Trusted by growing Discord communities worldwide',
             },
             foundingOffer: {
-                text: '🚀 Founding Member Offer — First 50 subscribers get 50% off forever. {{spots}} spots left.',
+                text: 'Founding offer — Join support, open a ticket, and send your Server ID to claim code FOUNDING50. {{spots}} spots left.',
                 dismissAriaLabel: 'Dismiss founding member offer',
             },
             lifetimeUrgency: '⏳ Launch price — may increase as we grow',
