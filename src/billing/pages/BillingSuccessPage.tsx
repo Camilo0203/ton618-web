@@ -10,7 +10,9 @@ export default function BillingSuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const planKey = searchParams.get('plan_key') || '';
-  const planLabel = t(`billing.success.planLabels.${planKey}`) || t('billing.success.planLabels.default');
+  const planLabel = planKey && t(`billing.success.planLabels.${planKey}`, { defaultValue: '' })
+    ? t(`billing.success.planLabels.${planKey}`)
+    : t('billing.success.planLabels.default');
   const isDonation = planKey === 'donate';
 
   return (

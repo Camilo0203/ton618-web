@@ -196,9 +196,9 @@ export default function WelcomeModule({
                     title: welcomeTitle || 'Welcome to the server!',
                     description: welcomeMessage || 'We are glad to have you here. Please read the rules.',
                     color: welcomeColor || '#5865F2',
-                    footer: welcomeFooter,
-                    thumbnail: welcomeThumbnail,
-                    image: welcomeBanner,
+                    footer: welcomeFooter ?? undefined,
+                    thumbnail: welcomeThumbnail ?? undefined,
+                    image: welcomeBanner ?? undefined,
                   }}
                 />
               </div>
@@ -270,8 +270,8 @@ export default function WelcomeModule({
                   title: goodbyeTitle || 'Goodbye!',
                   description: goodbyeMessage || 'We are sad to see you go.',
                   color: goodbyeColor || '#ED4245',
-                  footer: goodbyeFooter,
-                  thumbnail: goodbyeThumbnail,
+                  footer: goodbyeFooter ?? undefined,
+                  thumbnail: goodbyeThumbnail ?? undefined,
                 }}
               />
             </div>

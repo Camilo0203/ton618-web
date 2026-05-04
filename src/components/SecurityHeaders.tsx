@@ -14,12 +14,11 @@ export function SecurityHeaders() {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https: blob:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.supabase.co https://discord.com https://api.discord.gg",
-    "frame-src 'none'",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://discord.com https://api.discord.gg https://*.whop.com https://ton618-bot.squareweb.app",
+    "frame-src https://whop.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'",
     "upgrade-insecure-requests",
   ].join('; ');
 
@@ -27,9 +26,6 @@ export function SecurityHeaders() {
     <Helmet>
       {/* Content Security Policy */}
       <meta httpEquiv="Content-Security-Policy" content={cspDirectives} />
-      
-      {/* Prevent clickjacking */}
-      <meta httpEquiv="X-Frame-Options" content="DENY" />
       
       {/* Prevent MIME type sniffing */}
       <meta httpEquiv="X-Content-Type-Options" content="nosniff" />

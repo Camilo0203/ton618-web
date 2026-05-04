@@ -10,7 +10,7 @@ test.describe('TON618 Web Final Validation', () => {
     const main = page.locator('#main-content');
     await expect(main).toBeVisible();
     
-    const hero = page.locator('section').first(); // Hero section
+    const hero = page.locator('#main-content section').first(); // Hero section
     await expect(hero).toBeVisible();
 
     await page.screenshot({ path: 'black_screen_768.png' });

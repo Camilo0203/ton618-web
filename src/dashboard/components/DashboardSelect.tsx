@@ -29,17 +29,62 @@ export default function DashboardSelect({
   className,
 }: DashboardSelectProps) {
   const formContext = useFormContext();
-  
-  // Si tenemos name y estamos dentro de un FormProvider, usamos react-hook-form
+
+  if (name && formContext) {
+    return (
+      <DashboardFormSelect
+        name={name}
+        options={options}
+        placeholder={placeholder}
+        disabled={disabled}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <DashboardSelectView
+      value={manualValue}
+      onChange={manualOnChange}
+      options={options}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={className}
+    />
+  );
+}
+
+function DashboardFormSelect({
+  name,
+  options,
+  placeholder,
+  disabled,
+  className,
+}: Required<Pick<DashboardSelectProps, 'name' | 'options' | 'placeholder' | 'disabled'>> & Pick<DashboardSelectProps, 'className'>) {
   const {
-    field: { value: formValue, onChange: formOnChange },
-  } = (name && formContext) 
-    ? useController({ name, control: formContext.control })
-    : { field: { value: manualValue, onChange: manualOnChange } };
+    field: { value, onChange },
+  } = useController({ name });
 
-  const value = formValue ?? manualValue;
-  const onChange = formOnChange ?? manualOnChange;
+  return (
+    <DashboardSelectView
+      value={value}
+      onChange={onChange}
+      options={options}
+      placeholder={placeholder}
+      disabled={disabled}
+      className={className}
+    />
+  );
+}
 
+function DashboardSelectView({
+  value,
+  onChange,
+  options,
+  placeholder,
+  disabled,
+  className,
+}: Omit<DashboardSelectProps, 'name'>) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedOption = options.find((opt) => opt.value === value);
@@ -98,7 +143,7 @@ export default function DashboardSelect({
                       key={option.value}
                       type="button"
                       onClick={() => {
-                        onChange(option.value);
+                        onChange?.(option.value);
                         setIsOpen(false);
                       }}
                       className={cn(

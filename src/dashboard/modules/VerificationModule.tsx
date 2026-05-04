@@ -228,7 +228,7 @@ export default function VerificationModule({
                   title: panelTitle || 'Verification',
                   description: panelDescription || 'Click the button below to verify your account.',
                   color: panelColor || '#5865F2',
-                  image: panelImage,
+                  image: panelImage ?? undefined,
                 }}
               />
             </div>

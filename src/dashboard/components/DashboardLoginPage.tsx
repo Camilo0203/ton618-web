@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ShieldCheck } from 'lucide-react';
 import { useSignInWithDiscord } from '../hooks/useDashboardData';
-import { config } from '../../config';
 
 interface DashboardLoginPageProps {
   requestedGuildId?: string | null;

@@ -136,6 +136,7 @@ export function getDashboardSectionStates(
   mutations: GuildConfigMutation[],
   _playbooks: PlaybookWorkspaceSnapshot | null = null,
 ): DashboardSectionState[] {
+  void _playbooks;
   const channels = config.serverRolesChannelsSettings;
   const tickets = config.ticketsSettings;
   const verification = config.verificationSettings;
@@ -466,6 +467,16 @@ export function getDashboardQuickActions(
       description: findState('tickets')?.summary ?? i18n.t('dashboard.checklist.actions.tickets.desc'),
       sectionId: 'tickets',
       priority: 95,
+    });
+  }
+
+  if (findState('inbox')?.status !== 'active') {
+    actions.push({
+      id: 'review-inbox',
+      label: i18n.t('dashboard.checklist.actions.inbox.label'),
+      description: findState('inbox')?.summary ?? i18n.t('dashboard.checklist.actions.inbox.desc'),
+      sectionId: 'inbox',
+      priority: 90,
     });
   }
 

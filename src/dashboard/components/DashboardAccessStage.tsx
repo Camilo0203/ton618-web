@@ -3,15 +3,13 @@ import clsx from 'clsx';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   AlertTriangle,
-  Check,
   CheckCircle2,
   Loader2,
   Sparkles,
   type LucideIcon,
 } from 'lucide-react';
 import Logo from '../../components/Logo';
-import { config } from '../../config';
-import { dashboardEase, fadeUpVariants } from '../motion';
+import { fadeUpVariants } from '../motion';
 
 export type DashboardAccessStageVariant = 'loading' | 'success' | 'warning' | 'error';
 export type DashboardAccessStageTone = 'brand' | 'success' | 'warning' | 'danger';
@@ -119,22 +117,6 @@ const toneStyles: Record<
   },
 };
 
-const panelVariants = {
-  hidden: {
-    opacity: 0,
-    y: 18,
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.42,
-      ease: dashboardEase,
-      delay: 0.06,
-    },
-  },
-};
-
 export function DashboardAccessStatusPill({
   label,
   tone = 'brand',
@@ -156,44 +138,6 @@ export function DashboardAccessStatusPill({
   );
 }
 
-function DashboardAccessStepIndicator({
-  state,
-  shouldReduceMotion,
-}: {
-  state: DashboardAccessStepState;
-  shouldReduceMotion: boolean;
-}) {
-  if (state === 'complete') {
-    return (
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/24 bg-emerald-400/10 text-emerald-100">
-        <Check className="h-4 w-4" />
-      </span>
-    );
-  }
-
-  if (state === 'active') {
-    return (
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-indigo-400/24 bg-indigo-400/10 text-indigo-100">
-        <Loader2 className={clsx('h-4 w-4', shouldReduceMotion ? undefined : 'animate-spin motion-reduce:animate-none')} />
-      </span>
-    );
-  }
-
-  if (state === 'error') {
-    return (
-      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-rose-400/24 bg-rose-400/10 text-rose-100">
-        <AlertTriangle className="h-4 w-4" />
-      </span>
-    );
-  }
-
-  return (
-    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400">
-      <span className="h-2.5 w-2.5 rounded-full bg-current opacity-75" />
-    </span>
-  );
-}
-
 export default function DashboardAccessStage({
   variant = 'loading',
   tone,
@@ -201,17 +145,11 @@ export default function DashboardAccessStage({
   title,
   description,
   statusText,
-  progressLabel,
-  progressDescription,
-  progressSteps = [],
-  statusPill,
   actions,
   icon,
-  brandLabel = `${config.botName} Dashboard`,
 }: DashboardAccessStageProps) {
   const shouldReduceMotion = useReducedMotion();
   const resolvedTone = tone ?? toneByVariant[variant];
-  const styles = toneStyles[resolvedTone];
   const Icon = icon ?? variantIcons[variant];
 
   return (
@@ -275,7 +213,7 @@ export default function DashboardAccessStage({
         ) : variant === 'loading' ? (
           <div className="mt-12 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
             <Loader2 className="h-3.5 w-3.5 animate-spin text-[#5865F2]" />
-            <span>{eyebrow}</span>
+            <span className={toneStyles[resolvedTone].eyebrow}>{eyebrow}</span>
           </div>
         ) : null}
       </div>

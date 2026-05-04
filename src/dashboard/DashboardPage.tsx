@@ -244,6 +244,7 @@ function DashboardLivePage({
 
   const isAccessFresh = checkIsAccessFresh(syncStatus?.updatedAt ?? null);
   const handleTicketAction = async (action: string, _payload: unknown) => {
+    void _payload;
     // TODO: Implement actual ticket action handling via dashboard API
     // This requires implementing the dashboard ticket action RPC
     toast.info(t('dashboard.ticketActionNotImplemented', { action, defaultValue: `Ticket action "${action}" is not yet available. Please use Discord for ticket operations.` }));

@@ -64,7 +64,7 @@ export default function PricingPage() {
     if (plan.category === 'donation') {
       const donationLink = DONATION_LINKS[plan.whopKey];
       if (!donationLink) {
-        toast.error(lang === 'es' ? 'El checkout de esta donacion aun no esta configurado.' : 'This donation checkout is not configured yet.');
+        toast.error(lang === 'es' ? 'El checkout de esta donación aún no está configurado.' : 'This donation checkout is not configured yet.');
         return;
       }
       window.location.href = donationLink;

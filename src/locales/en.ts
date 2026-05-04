@@ -29,6 +29,12 @@ export const en = {
             loadingTitle: 'Loading experience',
             loadingDescription: 'Preparing TON618 and navigation.',
         },
+        cookies: {
+            title: 'Cookie consent',
+            message: 'We use cookies and analytics to improve your experience. By continuing, you agree to our use of cookies.',
+            accept: 'Accept',
+            privacy: 'Privacy Policy',
+        },
         landing: {
             skipToContent: 'Skip to content',
         },

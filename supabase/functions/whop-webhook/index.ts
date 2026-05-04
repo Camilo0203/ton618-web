@@ -46,7 +46,7 @@ async function sha256(input: string): Promise<string> {
 
 function mapWhopPlanToPlanKey(planId: string): 'pro_monthly' | 'pro_yearly' | 'lifetime' {
   // Allow overriding plan IDs via environment variables so they aren't hardcoded in the repo.
-  // @ts-ignore: Deno is available in the Supabase Edge Runtime
+  // @ts-expect-error: Deno is available in the Supabase Edge Runtime
   const planMap: Record<string, 'pro_monthly' | 'pro_yearly' | 'lifetime'> = {
     [Deno.env.get('WHOP_PLAN_MONTHLY') || 'plan_yI6fFUFSaIMf5']: 'pro_monthly',
     [Deno.env.get('WHOP_PLAN_YEARLY') || 'plan_8SKj3v4lL6XEF']: 'pro_yearly',
@@ -55,7 +55,7 @@ function mapWhopPlanToPlanKey(planId: string): 'pro_monthly' | 'pro_yearly' | 'l
   return planMap[planId] ?? 'pro_monthly';
 }
 
-// @ts-ignore: Deno is available in the Supabase Edge Runtime
+// @ts-expect-error: Deno is available in the Supabase Edge Runtime
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: getCorsHeaders(req.headers.get('origin')) });

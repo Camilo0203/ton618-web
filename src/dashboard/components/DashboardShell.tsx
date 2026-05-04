@@ -25,7 +25,6 @@ import { config, getDiscordInviteUrl } from '../../config';
 import Logo from '../../components/Logo';
 import LanguageSelector from '../../components/LanguageSelector';
 import CommandPalette from './CommandPalette';
-import { usePrefetchSnapshot } from '../hooks/usePrefetchSnapshot';
 
 /* ─── Glass tokens (matching Navbar scrolled state) ─── */
 const GLASS_SIDEBAR =
@@ -79,7 +78,6 @@ function SidebarContent({
   closeOnNavigate,
 }: SidebarProps) {
   const { t } = useTranslation();
-  const prefetchSnapshot = usePrefetchSnapshot();
   const dashboardBrandLabel = `${config.botName} Dashboard`;
   const sectionMetaMap = new Map(dashboardSections.map((section) => [section.id, section]));
 

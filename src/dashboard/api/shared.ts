@@ -487,7 +487,6 @@ export function debugAuthLog(event: string, payload?: Record<string, unknown>, l
   if (!import.meta.env.DEV) {
     return;
   }
-  // eslint-disable-next-line no-console
   const logFn = level === 'error' ? console.error : console.log;
   const sanitizedPayload = sanitizeLogPayload(payload);
   logFn(`[dashboard-auth] ${event}`, sanitizedPayload);

@@ -122,6 +122,8 @@ function shouldRetryDashboardRequest(failureCount: number, error: unknown) {
     '401',
     '403',
     '404',
+    'auth session missing',
+    'session missing',
     'invalid',
     'malformed',
   ];
