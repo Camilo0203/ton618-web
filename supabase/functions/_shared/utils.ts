@@ -4,6 +4,8 @@
 const ALLOWED_ORIGINS = [
   'https://ton618.app',
   'https://www.ton618.app',
+  'https://ton618bot.xyz',
+  'https://www.ton618bot.xyz',
   'https://ton618-web.squareweb.app',
   'https://ton618.squareweb.app',
   'http://localhost:5173',
