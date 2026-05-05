@@ -63,7 +63,20 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
       Promise.all([client.auth.getSession(), client.auth.getUser()]),
     );
 
+  const isSessionMissingError = (error: unknown): boolean => {
+    if (!error) return false;
+    const msg = (error instanceof Error ? error.message : String(error)).toLowerCase();
+    return msg.includes('auth session missing') || msg.includes('session missing');
+  };
+
   if (sessionError) {
+    if (isSessionMissingError(sessionError)) {
+      debugAuthLog('getDashboardSession:unauthenticated', {
+        stage: 'session',
+        reason: 'no_active_session',
+      });
+      return { session: null, user: null };
+    }
     debugAuthLog('getDashboardSession:error', {
       stage: 'session',
       message: createDashboardError(
@@ -81,6 +94,13 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
   }
 
   if (userError) {
+    if (isSessionMissingError(userError)) {
+      debugAuthLog('getDashboardSession:unauthenticated', {
+        stage: 'user',
+        reason: 'no_active_session',
+      });
+      return { session: null, user: null };
+    }
     debugAuthLog('getDashboardSession:error', {
       stage: 'user',
       message: createDashboardError(
@@ -95,6 +115,10 @@ export async function getDashboardSession(): Promise<DashboardSessionState> {
       userError,
       i18n.t('dashboardAuth.errors.userLoadFailed'),
     );
+  }
+
+  if (!sessionData.session) {
+    return { session: null, user: null };
   }
 
   debugAuthLog('getDashboardSession:success', {

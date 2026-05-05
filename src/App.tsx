@@ -37,6 +37,19 @@ function AuthCallbackRedirect() {
   return null;
 }
 
+function DomainRedirect() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const hostname = window.location.hostname;
+    if (hostname === 'dash.ton618bot.xyz' || hostname.startsWith('dash.')) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [navigate]);
+
+  return <LandingPage />;
+}
+
 function AppLoadingFallback() {
   const { t } = useTranslation();
 
@@ -89,7 +102,7 @@ export default function App() {
       <AuthCallbackRedirect />
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<DomainRedirect />} />
           {LEGAL_DOCUMENT_TYPES.map((type) => (
             <Route key={type} path={`/${type}`} element={<LegalPage type={type} />} />
           ))}
