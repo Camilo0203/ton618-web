@@ -118,7 +118,7 @@ function SidebarContent({
           </Link>
 
           {/* ── Active guild block ── */}
-          <div className="relative z-[1] mt-4 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-4 backdrop-blur-sm">
+          <div className="relative z-[10] mt-4 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-4 backdrop-blur-sm">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
