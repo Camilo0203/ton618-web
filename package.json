@@ -23,6 +23,7 @@
     "deploy": "npm run build && git add dist/ && (git diff-index --quiet HEAD || git commit -m \"deploy: build dist for Square Cloud\") && git push origin main"
   },
   "dependencies": {
+    "@ton618/shared": "file:../ton618-shared",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^10.45.0",
     "@supabase/supabase-js": "^2.57.4",
