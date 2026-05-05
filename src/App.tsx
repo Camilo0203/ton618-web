@@ -1,5 +1,5 @@
-import { Suspense, lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Suspense, lazy, useEffect } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Toaster } from 'sonner';
@@ -19,6 +19,23 @@ const PricingPage = lazy(() => import('./billing/pages/PricingPage'));
 const BillingSuccessPage = lazy(() => import('./billing/pages/BillingSuccessPage'));
 const BillingCancelPage = lazy(() => import('./billing/pages/BillingCancelPage'));
 const StatusPage = lazy(() => import('./pages/StatusPage'));
+
+function AuthCallbackRedirect() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const code = searchParams.get('code');
+    const hasAuthError = searchParams.get('error') || searchParams.get('error_description');
+
+    if ((code || hasAuthError) && location.pathname !== '/auth/callback') {
+      navigate(`/auth/callback${location.search}${location.hash}`, { replace: true });
+    }
+  }, [location, navigate]);
+
+  return null;
+}
 
 function AppLoadingFallback() {
   const { t } = useTranslation();
@@ -69,6 +86,7 @@ export default function App() {
       <SecurityHeaders />
       <Toaster theme="dark" position="bottom-right" richColors />
       <RouteScrollManager />
+      <AuthCallbackRedirect />
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
           <Route path="/" element={<LandingPage />} />
