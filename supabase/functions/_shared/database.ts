@@ -1,5 +1,14 @@
-// Database utilities for billing system
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+/* Database utilities for billing system
+ *
+ * NOTE: This file is imported by Vitest (Node) for edge-function handler tests.
+ * Node can't load remote `https://esm.sh/...` modules via the default ESM loader.
+ * Therefore we must avoid top-level remote imports and only load supabase-js dynamically at runtime.
+ */
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+
+declare const Deno: {
+  env: { get: (k: string) => string | undefined };
+};
 
 export interface User {
   discord_user_id: string;

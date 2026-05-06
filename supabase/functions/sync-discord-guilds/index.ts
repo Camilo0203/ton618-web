@@ -1,9 +1,20 @@
-import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
-import { createClient } from 'npm:@supabase/supabase-js@2';
+let createClient: typeof import('@supabase/supabase-js') | undefined;
+
+async function getSupabaseCreateClient() {
+  const mod = await import('https://esm.sh/@supabase/supabase-js@2');
+  // @ts-expect-error - esm.sh typing mismatch in editor
+  return mod.createClient as typeof import('@supabase/supabase-js').createClient;
+}
 import { getCorsHeaders } from '../_shared/utils.ts';
 
-const DISCORD_ADMINISTRATOR = 8n;
-const DISCORD_MANAGE_GUILD = 32n;
+ // Deno global is provided by Supabase Edge runtime.
+ declare const Deno: {
+   env: { get: (k: string) => string | undefined };
+   serve: (handler: any) => void;
+ };
+
+ const DISCORD_ADMINISTRATOR = 8n;
+ const DISCORD_MANAGE_GUILD = 32n;
 
 interface DiscordGuild {
   id: string;
@@ -99,7 +110,7 @@ function resolveDiscordUserId(user: {
   return providerId ?? subject ?? identityProviderId ?? identitySubject ?? identityId;
 }
 
-async function fetchDiscordResource<T>(
+export async function fetchDiscordResource<T>(
   path: string,
   token: string,
   authScheme: 'Bearer' | 'Bot' = 'Bearer',
@@ -117,7 +128,7 @@ async function fetchDiscordResource<T>(
   return await response.json() as T;
 }
 
-async function resolveManageableGuildsWithBotToken(
+export async function resolveManageableGuildsWithBotToken(
   adminClient: ReturnType<typeof createClient>,
   discordUserId: string,
   botToken: string,
@@ -177,7 +188,21 @@ async function resolveManageableGuildsWithBotToken(
   return manageableGuilds;
 }
 
-Deno.serve(async (request: Request) => {
+export function createSupabaseAuthClient(supabaseUrl: string, supabaseAnonKey: string, authHeader: string) {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    global: {
+      headers: {
+        Authorization: authHeader,
+      },
+    },
+  });
+}
+
+export function createSupabaseAdminClient(supabaseUrl: string, supabaseServiceRoleKey: string) {
+  return createClient(supabaseUrl, supabaseServiceRoleKey);
+}
+
+export async function handleRequest(request: Request): Promise<Response> {
   const requestOrigin = request.headers.get('origin');
   const corsHeaders = getCorsHeaders(requestOrigin);
 
@@ -210,6 +235,8 @@ Deno.serve(async (request: Request) => {
       });
     }
 
+    const createClient = await getSupabaseCreateClient();
+    // @ts-expect-error - editor typing mismatch
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
         headers: {
@@ -272,6 +299,7 @@ Deno.serve(async (request: Request) => {
       return hasManageablePermissions(permissionsRaw, Boolean(guild.owner));
     });
 
+    // @ts-expect-error - editor typing mismatch
     const adminClient = createClient(supabaseUrl, supabaseServiceRoleKey);
     const nowIso = new Date().toISOString();
     const discordUserId = discordUser.id;
@@ -313,7 +341,7 @@ Deno.serve(async (request: Request) => {
       throw installedError;
     }
 
-    const installedById = new Map(
+    const installedById = new Map<string, InstalledGuildRow>(
       (installedGuilds ?? []).map((guild: InstalledGuildRow) => [guild.guild_id, guild] as const),
     );
 
@@ -399,4 +427,8 @@ Deno.serve(async (request: Request) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}
+
+if (typeof Deno !== 'undefined' && typeof Deno.serve === 'function') {
+  Deno.serve(handleRequest);
+}

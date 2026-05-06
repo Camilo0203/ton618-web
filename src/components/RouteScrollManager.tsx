@@ -8,6 +8,11 @@ export default function RouteScrollManager() {
   useLayoutEffect(() => {
     const route = location.pathname + location.search + location.hash;
 
+    const locale =
+      document.documentElement.lang ||
+      window.localStorage.getItem('i18nextLng') ||
+      'en';
+
     // Breadcrumbs for better Sentry triage
     if (import.meta.env.VITE_SENTRY_DSN) {
       Sentry.addBreadcrumb({
@@ -16,10 +21,12 @@ export default function RouteScrollManager() {
         level: 'info',
       });
       Sentry.setTag('route', location.pathname);
+      Sentry.setTag('locale', locale);
       Sentry.setContext('navigation', {
         path: location.pathname,
         search: location.search,
         hash: location.hash,
+        locale,
       });
     }
 

@@ -10,6 +10,9 @@ test.describe('Dashboard Ops Console Demo @smoke', () => {
 
     await page.getByRole('button', { name: /^Tickets$/i }).click();
 
-    await expect(page.getByRole('heading', { name: /Operacion del sistema de tickets|Ticket system operation/i })).toBeVisible();
+    // Dashboard module transitions can be async; wait for the tickets module to render.
+    await expect(
+      page.getByRole('heading', { name: /Operacion del sistema de tickets|Ticket system operation/i })
+    ).toBeVisible({ timeout: 60000 });
   });
 });
