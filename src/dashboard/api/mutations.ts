@@ -77,6 +77,8 @@ export async function requestGuildConfigChange(
   const { data, error } = await callRequestGuildConfigChangeRpc(resolvedGuildId, section, payload);
 
   if (error) {
+    // eslint-disable-next-line no-console
+    console.error('requestGuildConfigChange RPC error:', error);
     throw createDashboardError(
       `rpc.request_guild_config_change.${resolvedGuildId}.${section}`,
       error,

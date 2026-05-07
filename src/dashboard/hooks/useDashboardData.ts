@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabaseClient';
 import {
-  createCustomerPortalSession,
-  createGuildCheckoutSession,
   fetchDashboardGuilds,
   fetchGuildBillingEntitlement,
   fetchGuildDashboardSnapshot,
@@ -18,7 +16,6 @@ import {
 import { dashboardQueryKeys } from '../constants';
 import type {
   ConfigMutationSectionId,
-  DashboardBillingInterval,
   GuildDashboardSnapshot,
   TicketDashboardActionId,
 } from '../types';
@@ -302,19 +299,6 @@ export function useGuildBilling(guildId: string | null, enabled: boolean) {
     enabled: enabled && Boolean(guildId),
     staleTime: 30_000,
     retry: shouldRetryDashboardRequest,
-  });
-}
-
-export function useCreateCheckoutSession(guildId: string | null) {
-  return useMutation({
-    mutationFn: (billingInterval: DashboardBillingInterval) =>
-      createGuildCheckoutSession(guildId ?? '', billingInterval),
-  });
-}
-
-export function useCreateCustomerPortalSession(guildId: string | null) {
-  return useMutation({
-    mutationFn: () => createCustomerPortalSession(guildId ?? ''),
   });
 }
 

@@ -14,11 +14,7 @@ export {
   syncDiscordGuilds,
 } from './api/auth';
 export { fetchDashboardGuilds } from './api/guilds';
-export {
-  createCustomerPortalSession,
-  createGuildCheckoutSession,
-  fetchGuildBillingEntitlement,
-} from './api/billing';
+export { fetchGuildBillingEntitlement } from './api/billing';
 export { fetchGuildDashboardSnapshot } from './api/snapshot';
 export {
   requestGuildBackupAction,

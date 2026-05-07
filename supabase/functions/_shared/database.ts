@@ -4,7 +4,8 @@
  * Node can't load remote `https://esm.sh/...` modules via the default ESM loader.
  * Therefore we must avoid top-level remote imports and only load supabase-js dynamically at runtime.
  */
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+// @ts-expect-error Deno runtime requires npm: prefix; Node TS does not resolve it
+import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js';
 
 declare const Deno: {
   env: { get: (k: string) => string | undefined };

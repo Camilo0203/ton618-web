@@ -78,15 +78,6 @@ export interface GuildBillingEntitlement {
   updatedAt: string | null;
 }
 
-export interface CheckoutSessionResult {
-  url: string;
-  expiresAt: string | null;
-}
-
-export interface CustomerPortalSessionResult {
-  url: string;
-}
-
 export interface GeneralSettings {
   language: 'es' | 'en';
   commandMode: 'mention' | 'prefix';
