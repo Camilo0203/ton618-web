@@ -68,7 +68,7 @@ serve(async (req) => {
   }
 
   const rawBody = await req.text();
-  const signature = req.headers.get("x-tebex-signature") || "";
+  const signature = req.headers.get("x-signature") || req.headers.get("x-tebex-signature") || "";
 
   if (!await verifySignature(rawBody, signature)) {
     return new Response(JSON.stringify({ error: "Invalid signature" }), {
@@ -88,6 +88,13 @@ serve(async (req) => {
   }
 
   const eventType = payload.type || payload.event || "unknown";
+
+  if (eventType === "validation.webhook") {
+    return new Response(
+      JSON.stringify({ id: payload.id }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
   if (eventType !== "payment.completed" && eventType !== "payment.success") {
     return new Response(
