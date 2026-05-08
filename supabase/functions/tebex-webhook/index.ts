@@ -53,6 +53,13 @@ async function assignDiscordRole(userId: string, roleId: string) {
 }
 
 serve(async (req) => {
+  if (req.method === "GET") {
+    return new Response(JSON.stringify({ status: "ok", webhook: "tebex" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
