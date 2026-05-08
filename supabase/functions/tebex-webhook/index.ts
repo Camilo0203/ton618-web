@@ -68,14 +68,6 @@ serve(async (req) => {
   }
 
   const rawBody = await req.text();
-  const signature = req.headers.get("x-signature") || req.headers.get("x-tebex-signature") || "";
-
-  if (!await verifySignature(rawBody, signature)) {
-    return new Response(JSON.stringify({ error: "Invalid signature" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
 
   let payload;
   try {
@@ -94,6 +86,15 @@ serve(async (req) => {
       JSON.stringify({ id: payload.id }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
+  }
+
+  const signature = req.headers.get("x-signature") || req.headers.get("x-tebex-signature") || "";
+
+  if (!await verifySignature(rawBody, signature)) {
+    return new Response(JSON.stringify({ error: "Invalid signature" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
   if (eventType !== "payment.completed" && eventType !== "payment.success") {
