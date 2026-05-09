@@ -15,7 +15,10 @@ const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
-const PricingPage = lazy(() => import('./billing/pages/PricingPage'));
+function TebexRedirect() {
+  useEffect(() => { window.location.replace('https://ton618-bot-webshop.tebex.io/'); }, []);
+  return null;
+}
 const BillingSuccessPage = lazy(() => import('./billing/pages/BillingSuccessPage'));
 const BillingCancelPage = lazy(() => import('./billing/pages/BillingCancelPage'));
 const StatusPage = lazy(() => import('./pages/StatusPage'));
@@ -107,7 +110,7 @@ export default function App() {
             <Route key={type} path={`/${type}`} element={<LegalPage type={type} />} />
           ))}
           <Route path="/docs" element={<DocsPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/pricing" element={<TebexRedirect />} />
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />
           <Route path="/status" element={<StatusPage />} />
