@@ -40,17 +40,37 @@ function AuthCallbackRedirect() {
   return null;
 }
 
-function DomainRedirect() {
+const DASH_HOSTNAME = 'dash.ton618bot.xyz';
+
+function isDashDomain() {
+  const h = window.location.hostname;
+  return h === DASH_HOSTNAME || h.startsWith('dash.');
+}
+
+function RootRoute() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const hostname = window.location.hostname;
-    if (hostname === 'dash.ton618bot.xyz' || hostname.startsWith('dash.')) {
+    if (isDashDomain()) {
       navigate('/dashboard', { replace: true });
     }
   }, [navigate]);
 
+  if (isDashDomain()) return null;
   return <LandingPage />;
+}
+
+function DashboardRoute() {
+  useEffect(() => {
+    if (!isDashDomain() && window.location.hostname !== 'localhost') {
+      window.location.replace(
+        `https://${DASH_HOSTNAME}/dashboard${window.location.search}${window.location.hash}`
+      );
+    }
+  }, []);
+
+  if (!isDashDomain() && window.location.hostname !== 'localhost') return null;
+  return <DashboardPage />;
 }
 
 function AppLoadingFallback() {
@@ -105,7 +125,7 @@ export default function App() {
       <AuthCallbackRedirect />
       <Suspense fallback={<AppLoadingFallback />}>
         <Routes>
-          <Route path="/" element={<DomainRedirect />} />
+          <Route path="/" element={<RootRoute />} />
           {LEGAL_DOCUMENT_TYPES.map((type) => (
             <Route key={type} path={`/${type}`} element={<LegalPage type={type} />} />
           ))}
@@ -114,7 +134,7 @@ export default function App() {
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />
           <Route path="/status" element={<StatusPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard" element={<DashboardRoute />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
