@@ -2,9 +2,11 @@
 // Crea un basket de Tebex server-side y retorna el ident para el modal de Tebex.js
 // Evita errores de CORS al llamar la Headless API desde el storefront.
 
-const TEBEX_TOKEN   = Deno.env.get("TEBEX_PUBLIC_TOKEN") || "12ws8-71d9005ff427c9afbed0f6b9cd3c31b2b6869f2b";
-const TEBEX_API     = "https://headless.tebex.io/api";
-const ALLOWED_ORIGIN = "https://store.ton618bot.xyz";
+const TEBEX_PROJECT_ID  = Deno.env.get("TEBEX_PROJECT_ID")  || "1815416";
+const TEBEX_PRIVATE_KEY = Deno.env.get("TEBEX_PRIVATE_KEY") || "PSRlWAAR44Y4nRTS8NQaM5qbQpVaDL7x";
+const TEBEX_API         = "https://checkout.tebex.io/api/v1";
+const TEBEX_AUTH        = "Basic " + btoa(`${TEBEX_PROJECT_ID}:${TEBEX_PRIVATE_KEY}`);
+const ALLOWED_ORIGIN    = "https://store.ton618bot.xyz";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin":  ALLOWED_ORIGIN,
@@ -34,21 +36,21 @@ Deno.serve(async (req) => {
     const origin = ALLOWED_ORIGIN;
 
     // 1) Crear basket limpio
-    const basketRes = await fetch(`${TEBEX_API}/accounts/${TEBEX_TOKEN}/baskets`, {
+    const basketRes = await fetch(`${TEBEX_API}/baskets`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json", Authorization: TEBEX_AUTH },
       body: JSON.stringify({ complete_url: origin + "/#premium", cancel_url: origin + "/#premium" }),
     });
     const basketData = await basketRes.json();
-    const ident = basketData?.data?.ident;
+    const ident = basketData?.ident ?? basketData?.data?.ident;
     if (!ident) {
       return json({ error: "basket_creation_failed", detail: basketData }, 502);
     }
 
     // 2) Agregar paquete
-    const addRes = await fetch(`${TEBEX_API}/accounts/${TEBEX_TOKEN}/baskets/${ident}/packages`, {
+    const addRes = await fetch(`${TEBEX_API}/baskets/${ident}/packages`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: { "Content-Type": "application/json", Accept: "application/json", Authorization: TEBEX_AUTH },
       body: JSON.stringify({ package_id: pkgId, quantity: 1 }),
     });
     if (!addRes.ok) {
