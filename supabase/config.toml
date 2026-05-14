@@ -1,3 +1,6 @@
+[functions.tebex-checkout]
+verify_jwt = false
+
 [functions.sync-discord-guilds]
 verify_jwt = false
 
