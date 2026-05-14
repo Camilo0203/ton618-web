@@ -4,7 +4,7 @@
 
 const TEBEX_PROJECT_ID  = Deno.env.get("TEBEX_PROJECT_ID")  || "1815416";
 const TEBEX_PRIVATE_KEY = Deno.env.get("TEBEX_PRIVATE_KEY") || "PSRlWAAR44Y4nRTS8NQaM5qbQpVaDL7x";
-const TEBEX_API         = "https://checkout.tebex.io/api/v1";
+const TEBEX_API         = "https://checkout.tebex.io/api";
 const TEBEX_AUTH        = "Basic " + btoa(`${TEBEX_PROJECT_ID}:${TEBEX_PRIVATE_KEY}`);
 const ALLOWED_ORIGIN    = "https://store.ton618bot.xyz";
 
@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
     const basketData = await basketRes.json();
     const ident = basketData?.ident ?? basketData?.data?.ident;
     if (!ident) {
-      return json({ error: "basket_creation_failed", detail: basketData }, 502);
+      return json({ error: "basket_creation_failed", httpStatus: basketRes.status, detail: basketData }, 502);
     }
 
     // 2) Agregar paquete
