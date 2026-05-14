@@ -33,6 +33,16 @@ Deno.serve(async (req) => {
   try {
     const origin = ALLOWED_ORIGIN;
 
+    // 0) Verificar que el paquete existe en el headless store
+    const pkgVerifyRes = await fetch(`${TEBEX_API}/accounts/${TEBEX_TOKEN}/packages/${pkgId}`, {
+      headers: { Accept: "application/json" },
+    });
+    const pkgVerifyData = await pkgVerifyRes.json();
+    if (!pkgVerifyRes.ok) {
+      return json({ error: "package_not_in_headless_store", httpStatus: pkgVerifyRes.status, requestedId: pkgId, detail: pkgVerifyData }, 400);
+    }
+    const confirmedPkgId = pkgVerifyData?.data?.id ?? pkgId;
+
     // 1) Crear basket limpio
     const basketRes = await fetch(`${TEBEX_API}/accounts/${TEBEX_TOKEN}/baskets`, {
       method: "POST",
@@ -50,7 +60,7 @@ Deno.serve(async (req) => {
     const addRes = await fetch(`${TEBEX_API}/baskets/${ident}/packages`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ package_id: pkgId, quantity: 1 }),
+      body: JSON.stringify({ package_id: confirmedPkgId, quantity: 1 }),
     });
     if (!addRes.ok) {
       const detail = await addRes.text();
