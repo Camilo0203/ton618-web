@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
     }
 
     // 2) Agregar paquete
-    const addRes = await fetch(`${TEBEX_API}/baskets/${ident}/packages`, {
+    const addRes = await fetch(`${TEBEX_API}/accounts/${TEBEX_TOKEN}/baskets/${ident}/packages`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({ package_id: pkgId, quantity: 1 }),
