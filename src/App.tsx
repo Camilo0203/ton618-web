@@ -16,7 +16,7 @@ const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
 function TebexRedirect() {
-  useEffect(() => { window.location.replace('https://ton618-bot-webshop.tebex.io/'); }, []);
+  useEffect(() => { window.location.replace('https://store.ton618bot.xyz/'); }, []);
   return null;
 }
 const BillingSuccessPage = lazy(() => import('./billing/pages/BillingSuccessPage'));
