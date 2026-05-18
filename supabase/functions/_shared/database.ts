@@ -354,10 +354,13 @@ export class BillingDatabase {
   // ============================================
 
   async checkWebhookEventExists(eventHash: string): Promise<boolean> {
+    // Solo bloqueamos si el evento fue procesado con ÉXITO (processed = true).
+    // Si processed = false (falló o está en vuelo), el reintento del proveedor debe pasar.
     const { data, error } = await this.supabase
       .from('webhook_events')
       .select('id')
       .eq('event_hash', eventHash)
+      .eq('processed', true)
       .maybeSingle();
 
     if (error) throw error;
@@ -372,8 +375,21 @@ export class BillingDatabase {
       .single();
 
     if (error) {
-      // Check if duplicate
       if (error.code === '23505') {
+        // Clave duplicada en event_hash. Diferenciar dos casos:
+        // A) processed = false → el evento falló antes, este es un reintento válido.
+        //    Devolvemos la fila existente para que el handler la use como base.
+        // B) processed = true  → duplicado real (ya se processó con éxito), bloquear.
+        const { data: existing } = await this.supabase
+          .from('webhook_events')
+          .select('*')
+          .eq('event_hash', event.event_hash!)
+          .eq('processed', false)
+          .maybeSingle();
+
+        if (existing) {
+          return existing as WebhookEvent;
+        }
         throw new Error('DUPLICATE_EVENT');
       }
       throw error;
@@ -436,9 +452,10 @@ export class BillingDatabase {
       };
     }
 
-    // Check if expired
+    // Check if expired — sólo evaluar estado, NO mutar en un método de lectura (NF6).
+    // Dos reads concurrentes del mismo guild lanzarían dos deactivateGuildSubscription
+    // sobre el mismo id (race condition). La expiración real se delega al cron.
     if (subscription.ends_at && new Date(subscription.ends_at) < new Date()) {
-      await this.deactivateGuildSubscription(subscription.id);
       return {
         has_premium: false,
         plan_key: null,

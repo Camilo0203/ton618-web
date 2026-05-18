@@ -19,10 +19,16 @@ export async function handleRequest(req: Request): Promise<Response> {
     return errorResponse('Method not allowed', 405);
   }
 
-  // --- Bot API Key validation ---
-  const botApiKey = req.headers.get('X-Bot-Api-Key');
+  // --- Bot API Key validation (timing-safe) ---
+  const botApiKey = req.headers.get('X-Bot-Api-Key') ?? '';
   const expectedApiKey = requireEnv('BOT_API_KEY');
-  if (!botApiKey || botApiKey !== expectedApiKey) {
+  const encoder = new TextEncoder();
+  const a = encoder.encode(botApiKey.padEnd(256, '\0'));
+  const b = encoder.encode(expectedApiKey.padEnd(256, '\0'));
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  const authorized = diff === 0 && botApiKey.length === expectedApiKey.length;
+  if (!authorized) {
     return errorResponse('Unauthorized', 401);
   }
 
