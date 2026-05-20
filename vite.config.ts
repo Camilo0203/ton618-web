@@ -18,7 +18,9 @@ export default defineConfig(({ mode }) => {
     server: {
       allowedHosts: [
         '.squareweb.app',
-        'ton618-web.squareweb.app'
+        'ton618-web.squareweb.app',
+        '.ton618bot.xyz',
+        'ton618bot.xyz'
       ]
     },
     test: {
