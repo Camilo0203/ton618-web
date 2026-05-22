@@ -1,8 +1,8 @@
 module.exports = {
   apps: [{
     name: 'ton618-web',
-    script: './node_modules/.bin/serve',
-    args: '-s dist -l 3000 -n',
+    script: 'serve',
+    args: ['-s', 'dist', '-l', '3000', '-n'],
     cwd: './',
     instances: 1,
     autorestart: true,

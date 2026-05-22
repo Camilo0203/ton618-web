@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
 
   return {
+    base: '/',
     server: {
       allowedHosts: [
         '.squareweb.app',

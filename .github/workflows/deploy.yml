@@ -1,46 +1,22 @@
-name: Deploy to Square Cloud
+name: Deploy to VPS
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
-    name: Build & Deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-        env:
-          VITE_BOT_NAME: ${{ secrets.VITE_BOT_NAME }}
-          VITE_DISCORD_CLIENT_ID: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
-          VITE_DISCORD_PERMISSIONS: ${{ secrets.VITE_DISCORD_PERMISSIONS }}
-          VITE_SUPPORT_SERVER_URL: ${{ secrets.VITE_SUPPORT_SERVER_URL }}
-          VITE_SITE_URL: ${{ secrets.VITE_SITE_URL }}
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_ENABLE_DASHBOARD: ${{ secrets.VITE_ENABLE_DASHBOARD }}
-          VITE_BILLING_BETA_MODE: ${{ secrets.VITE_BILLING_BETA_MODE }}
-          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-          VITE_DONATION_URL: ${{ secrets.VITE_DONATION_URL }}
-          VITE_CONTACT_EMAIL: ${{ secrets.VITE_CONTACT_EMAIL }}
-
-      - name: Deploy to Square Cloud
-        uses: squarecloudofc/github-action@v2
-        with:
-          token: ${{ secrets.SQUARE_TOKEN }}
-          command: commit ${{ secrets.SQUARE_WEB_APP_ID }} --restart
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /opt/ton618/ton618-web
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart ton618-web || pm2 start npm --name ton618-web -- start
