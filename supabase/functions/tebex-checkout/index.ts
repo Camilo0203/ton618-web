@@ -2,7 +2,7 @@
 // Crea un basket de Tebex server-side y retorna el ident para el modal de Tebex.js
 // Evita errores de CORS al llamar la Headless API desde el storefront.
 
-const TEBEX_TOKEN    = Deno.env.get("TEBEX_PUBLIC_TOKEN") || "12ws8-71d9005ff427c9afbed0f6b9cd3c31b2b6869f2b";
+const TEBEX_TOKEN    = Deno.env.get("TEBEX_PUBLIC_TOKEN") || "";
 const TEBEX_API      = "https://headless.tebex.io/api";
 const ALLOWED_ORIGIN = "https://store.ton618bot.xyz";
 
@@ -29,6 +29,7 @@ Deno.serve(async (req) => {
   const url   = new URL(req.url);
   const pkgId = parseInt(url.searchParams.get("pkg") ?? "", 10);
   if (!pkgId) return json({ error: "missing pkg" }, 400);
+  if (!TEBEX_TOKEN) return json({ error: "checkout_unavailable" }, 503);
 
   try {
     const origin = ALLOWED_ORIGIN;
