@@ -23,12 +23,12 @@
     "deploy": "npm run build && git add dist/ && (git diff-index --quiet HEAD || git commit -m \"deploy: build dist for Square Cloud\") && git push origin main"
   },
   "dependencies": {
-    "@ton618/shared": "file:../ton618-shared",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^10.45.0",
     "@supabase/supabase-js": "^2.57.4",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-virtual": "^3.13.23",
+    "@ton618/shared": "file:../ton618-shared",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "clsx": "^2.1.1",
@@ -50,7 +50,7 @@
     "tailwindcss": "^3.4.1",
     "terser": "^5.46.1",
     "vhost": "^3.0.2",
-    "vite": "^5.4.2",
+    "vite": "^8.0.16",
     "web-vitals": "^5.1.0",
     "zod": "^4.3.6"
   },
