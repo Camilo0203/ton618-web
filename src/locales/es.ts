@@ -1432,7 +1432,7 @@ export const es = {
             trust: {
                 secure: { title: 'Pago seguro' },
                 instant: { title: 'Activación instantánea' },
-                whop: { title: 'Powered by Whop' },
+                whop: { title: 'Checkout seguro con Tebex' },
                 guarantee: { title: 'Garantia de 7 dias' },
             },
             manual: {
@@ -1508,7 +1508,7 @@ export const es = {
             },
             trustSignals: {
                 eyebrow: 'Proteccion',
-                poweredBy: 'Powered by Whop',
+                poweredBy: 'Pagos procesados por Tebex',
                 manual: {
                     title: 'Manual',
                     description: 'Owner activa',
@@ -1574,8 +1574,8 @@ export const es = {
                 },
                 whatsNext: '¿Qué sigue?',
                 steps: {
-                    s1: 'Tu pago se completó correctamente en Whop.',
-                    s2: 'Recibirás un correo de confirmación enviado por Whop.',
+                    s1: 'Tu pago se completó correctamente mediante Tebex.',
+                    s2: 'Revisa tus mensajes directos de Discord para ver tu código de activación.',
                     s3: 'Accede al panel de tu servidor para configurar características premium',
                     s4: 'Administra tu suscripción contactando soporte',
                     s1Donation: 'Tu donación ha sido registrada — ¡gracias!',

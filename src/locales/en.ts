@@ -1669,7 +1669,7 @@ export const en = {
             trust: {
                 secure: { title: 'Secure payment' },
                 instant: { title: 'Instant activation' },
-                whop: { title: 'Powered by Whop' },
+                whop: { title: 'Secure checkout by Tebex' },
                 guarantee: { title: '7-Day Money-Back Guarantee' },
             },
             manual: {
@@ -1745,7 +1745,7 @@ export const en = {
             },
             trustSignals: {
                 eyebrow: 'Purchase Protection',
-                poweredBy: 'Powered by Whop',
+                poweredBy: 'Payments processed by Tebex',
                 manual: {
                     title: 'Manual',
                     description: 'Owner-activated',
@@ -1769,7 +1769,7 @@ export const en = {
                 questions: {
                     q1: {
                         question: 'How do I upgrade my server to premium?',
-                        answer: 'Select your plan on the pricing page, choose the server you want to upgrade, and complete checkout securely through Whop. Premium activates automatically after payment confirmation.'
+                        answer: 'Choose a plan in the TON618 Tebex store, complete checkout with Discord, then activate the one-time code sent by DM using /premium activate in your server.'
                     },
                     q2: {
                         question: 'Can I cancel my subscription anytime?',
@@ -1810,8 +1810,8 @@ export const en = {
                 },
                 whatsNext: "What's Next?",
                 steps: {
-                    s1: 'Your payment was completed successfully in Whop.',
-                    s2: 'You will receive a confirmation email from Whop shortly.',
+                    s1: 'Your payment was completed successfully through Tebex.',
+                    s2: 'Check your Discord DMs for your one-time activation code.',
                     s3: "Access your server's dashboard to configure premium features",
                     s4: 'Manage your subscription by contacting support',
                     s1Donation: 'Your donation has been recorded — thank you!',

@@ -47,9 +47,9 @@ function getFallbackLegalDocumentContent(
           title: 'Refund Policy',
           summary: 'TON618 Pro is billed as a self-serve subscription. Refund requests are reviewed manually and applied when billing errors, duplicate charges or activation failures are confirmed.',
           metaDescription: 'TON618 refund policy for Pro subscriptions and paid beta billing.',
-          lastUpdated: '2026-04-03',
+          lastUpdated: '2026-06-12',
           highlights: [
-            'Subscription renewals are managed through the Whop customer portal.',
+            'Subscription renewals and cancellations are managed through Tebex.',
             'Duplicate charges and failed activations are prioritized for remediation or refund.',
             'Supporter status is recognition only and does not purchase premium features.',
           ],
@@ -57,11 +57,11 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'How refunds are evaluated',
               body: [
-                'TON618 Pro is sold as a subscription attached to a Discord server. We review refund requests manually because activation depends on Whop, Supabase and the Discord control plane staying aligned.',
+                'TON618 Pro is sold through Tebex and activated on a Discord server with a one-time purchase code. We review refund requests manually because Tebex, the entitlement service and Discord must remain aligned.',
                 'Refunds are generally approved when we confirm an operational billing error, such as duplicate charges, checkout succeeding without Pro activation, or a technical issue that blocks the paid features during the first days of service.',
               ],
               points: [
-                'Please include the Whop receipt email and the affected guild ID when contacting support.',
+                'Please include the Tebex transaction ID, the Discord account used at checkout and the affected guild ID.',
                 'Cancelling a subscription stops future renewals but does not automatically refund the current billing period.',
               ],
             },
@@ -82,9 +82,9 @@ function getFallbackLegalDocumentContent(
           title: 'Politica de reembolsos',
           summary: 'TON618 Pro se cobra como suscripcion self-serve. Las solicitudes de reembolso se revisan manualmente y se aprueban cuando confirmamos errores de cobro, cargos duplicados o fallos reales de activacion.',
           metaDescription: 'Politica de reembolsos de TON618 para suscripciones Pro y billing de beta pagada.',
-          lastUpdated: '2026-04-03',
+          lastUpdated: '2026-06-12',
           highlights: [
-            'Las renovaciones y cancelaciones se gestionan desde el portal de Whop.',
+            'Las renovaciones y cancelaciones se gestionan desde Tebex.',
             'Los cargos duplicados y las activaciones fallidas se atienden con prioridad.',
             'Supporter es reconocimiento y no compra funciones premium.',
           ],
@@ -92,11 +92,11 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'Como evaluamos los reembolsos',
               body: [
-                'TON618 Pro se vende como una suscripcion ligada a un servidor de Discord. Revisamos cada solicitud manualmente porque la activacion depende de Whop, Supabase y el control plane del bot funcionando de forma consistente.',
+                'TON618 Pro se vende mediante Tebex y se activa en un servidor de Discord con un codigo de compra de un solo uso. Revisamos cada solicitud manualmente porque Tebex, el servicio de membresias y Discord deben mantenerse sincronizados.',
                 'Normalmente aprobamos reembolsos cuando confirmamos un error operativo de billing, por ejemplo cargos duplicados, checkout exitoso sin activacion de Pro o una falla tecnica que impide usar las funciones pagadas durante los primeros dias del servicio.',
               ],
               points: [
-                'Incluye el correo del recibo de Whop y el ID del servidor afectado al escribirnos.',
+                'Incluye el ID de transaccion de Tebex, la cuenta de Discord usada en la compra y el ID del servidor afectado.',
                 'Cancelar la suscripcion evita renovaciones futuras, pero no reembolsa automaticamente el periodo actual.',
               ],
             },
@@ -121,9 +121,9 @@ function getFallbackLegalDocumentContent(
           title: 'Billing Contact',
           summary: 'Questions about invoices, failed activations, taxes or manual overrides for the paid beta should be sent through the official billing support channels listed here.',
           metaDescription: 'TON618 billing support contact details for paid beta customers.',
-          lastUpdated: '2026-04-03',
+          lastUpdated: '2026-06-12',
           highlights: [
-            'Billing incidents should include the guild ID and the Whop receipt email when possible.',
+            'Billing incidents should include the guild ID and Tebex transaction ID when possible.',
             'Manual entitlement overrides are used only for support remediation, beta grants or enterprise onboarding.',
           ],
           sections: [
@@ -140,7 +140,7 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'What to include',
               body: [
-                'To speed up support, send the guild ID, the Discord account that manages the server, the billing interval purchased, and the Whop receipt or payment intent ID when available.',
+                'To speed up support, send the guild ID, the Discord account used at checkout, the plan purchased and the Tebex transaction ID.',
               ],
               points: [
                 'We may request extra verification before changing commercial entitlements.',
@@ -154,9 +154,9 @@ function getFallbackLegalDocumentContent(
           title: 'Contacto de billing',
           summary: 'Las dudas sobre facturas, activaciones fallidas, impuestos o overrides manuales de la beta pagada deben enviarse por los canales oficiales de soporte comercial listados aqui.',
           metaDescription: 'Canales de contacto de billing de TON618 para clientes de la beta pagada.',
-          lastUpdated: '2026-04-03',
+          lastUpdated: '2026-06-12',
           highlights: [
-            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el correo del recibo de Whop.',
+            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el ID de transaccion de Tebex.',
             'Los overrides manuales solo se usan para soporte, grants de beta o onboarding enterprise.',
           ],
           sections: [
@@ -173,7 +173,7 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'Que informacion incluir',
               body: [
-                'Para acelerar la atencion, manda el ID del servidor, la cuenta de Discord que lo administra, el intervalo de billing comprado y el recibo o payment intent ID de Whop si lo tienes.',
+                'Para acelerar la atencion, manda el ID del servidor, la cuenta de Discord usada en la compra, el plan adquirido y el ID de transaccion de Tebex.',
               ],
               points: [
                 'Podemos pedir verificacion adicional antes de cambiar entitlements comerciales.',
