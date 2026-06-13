@@ -1816,7 +1816,7 @@ export const en = {
                 },
                 protected: {
                     title: 'Protected',
-                    description: '7-day guarantee',
+                    description: 'Refund review available',
                 },
                 support: {
                     title: 'Support',
@@ -1833,7 +1833,7 @@ export const en = {
                     },
                     q2: {
                         question: 'Can I cancel my subscription anytime?',
-                        answer: 'Yes. For monthly and yearly subscriptions, cancel anytime by contacting support. Premium features remain active until the end of your billing period.',
+                        answer: 'Yes. For monthly and yearly subscriptions, manage cancellation through Tebex or contact support. Premium remains active until the end of the paid billing period.',
                     },
                     q3: {
                         question: "What's the difference between Lifetime and subscriptions?",
@@ -1841,11 +1841,11 @@ export const en = {
                     },
                     q4: {
                         question: 'Can I upgrade multiple servers?',
-                        answer: 'Yes. Each server requires its own premium subscription. You can purchase premium for as many servers as you manage directly from the pricing page.'
+                        answer: 'Yes. Each server requires its own premium plan. You can purchase additional activation codes from the official TON618 store on Tebex.'
                     },
                     q5: {
                         question: 'Is my payment information secure?',
-                        answer: 'Payment methods are handled through established payment processors. We never store your payment information on our servers.',
+                        answer: 'Tebex processes payments securely. TON618 never receives or stores your card details.',
                     },
                     q6: {
                         question: 'What happens if I cancel my subscription?',

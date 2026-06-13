@@ -93,7 +93,7 @@ export const es = {
                     cta: 'Donar',
                     disclaimer: 'Las donaciones son voluntarias y apoyan el desarrollo. No activan funciones premium.',
                     info1: 'Las donaciones apoyan el desarrollo y los costos del servidor',
-                    info2: 'Contactanos a través del servidor de soporte para organizar una donación',
+                    info2: 'Contáctanos a través del servidor de soporte para coordinar una donación',
                     info3: 'Recibirás una confirmación de agradecimiento después de donar',
                 },
             },
@@ -1631,11 +1631,11 @@ export const es = {
                 processing: 'Procesando...',
             },
             trustSignals: {
-                eyebrow: 'Proteccion',
+                eyebrow: 'Protección',
                 poweredBy: 'Pagos procesados por Tebex',
                 manual: {
                     title: 'Manual',
-                    description: 'Owner activa',
+                    description: 'Activado por el propietario',
                 },
                 flexible: {
                     title: 'Flexible',
@@ -1643,11 +1643,11 @@ export const es = {
                 },
                 protected: {
                     title: 'Protegido',
-                    description: '7 dias garantia',
+                    description: 'Revisión de reembolsos',
                 },
                 support: {
                     title: 'Soporte',
-                    description: 'Discord ayuda',
+                    description: 'Soporte por Discord',
                 },
             },
             faq: {
@@ -1655,7 +1655,7 @@ export const es = {
                 title: 'Todo lo que necesitas saber',
                 questions: {
                     q1: {
-                        question: '¿Como mejoro mi servidor a premium?',
+                        question: '¿Cómo mejoro mi servidor a premium?',
                         answer: 'Elige un plan en la tienda oficial de TON618 en Tebex, completa el checkout con Discord y activa el código enviado por DM usando /premium activate en el servidor que administras.',
                     },
                     q2: {
@@ -1667,11 +1667,11 @@ export const es = {
                         answer: 'Acceso de por vida es pago único, sin cargos recurrentes, premium para siempre. Las suscripciones requieren pagos recurrentes pero se pueden cancelar en cualquier momento.',
                     },
                     q4: {
-                        question: '¿Puedo mejorar multiples servidores?',
+                        question: '¿Puedo mejorar múltiples servidores?',
                         answer: 'Sí. Cada servidor requiere su propio plan PRO. Puedes comprar códigos adicionales desde la tienda oficial de TON618 en Tebex.',
                     },
                     q5: {
-                        question: '¿Mi informacion de pago es segura?',
+                        question: '¿Mi información de pago es segura?',
                         answer: 'Tebex procesa el pago de forma segura. TON618 no almacena los datos de tu tarjeta en sus servidores.',
                     },
                     q6: {
@@ -1679,8 +1679,8 @@ export const es = {
                         answer: 'Las características premium permanecen activas hasta el final de tu periodo de facturación actual. Después, tu servidor vuelve al plan gratuito.',
                     },
                 },
-                stillHaveQuestions: '¿Aun tienes preguntas?',
-                getInTouch: 'Contactanos',
+                stillHaveQuestions: '¿Aún tienes preguntas?',
+                getInTouch: 'Contáctanos',
             },
             success: {
                 metaTitle: 'Pago exitoso - TON618',
@@ -1825,7 +1825,7 @@ export const es = {
                     openTicket: { title: 'Comprar en Tebex', description: 'Elige un plan y completa el checkout en la tienda oficial de TON618 en Tebex' },
                     receiveCode: { title: 'Recibir Código', description: 'Tras confirmar el pago, recibirás un código de activación de un solo uso por DM de Discord' },
                     redeem: { title: 'Activar', description: 'Ejecuta /premium activate <codigo> en tu servidor como propietario' },
-                    enjoyPro: { title: 'Disfrutar Pro', description: 'Las funciones premium se activan instantaneamente en tu servidor' },
+                    enjoyPro: { title: 'Disfrutar PRO', description: 'Las funciones premium quedan activas en tu servidor al validar el código' },
                 },
             },
             commands: {
