@@ -1,16 +1,10 @@
-let createClient: typeof import('@supabase/supabase-js') | undefined;
-
-async function getSupabaseCreateClient() {
-  const mod = await import('https://esm.sh/@supabase/supabase-js@2');
-  // @ts-expect-error - esm.sh typing mismatch in editor
-  return mod.createClient as typeof import('@supabase/supabase-js').createClient;
-}
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { getCorsHeaders } from '../_shared/utils.ts';
 
  // Deno global is provided by Supabase Edge runtime.
  declare const Deno: {
    env: { get: (k: string) => string | undefined };
-   serve: (handler: any) => void;
+   serve: (handler: (request: Request) => Response | Promise<Response>) => void;
  };
 
  const DISCORD_ADMINISTRATOR = 8n;
@@ -129,7 +123,7 @@ export async function fetchDiscordResource<T>(
 }
 
 export async function resolveManageableGuildsWithBotToken(
-  adminClient: ReturnType<typeof createClient>,
+  adminClient: SupabaseClient,
   discordUserId: string,
   botToken: string,
 ): Promise<DiscordGuild[]> {
@@ -235,8 +229,6 @@ export async function handleRequest(request: Request): Promise<Response> {
       });
     }
 
-    const createClient = await getSupabaseCreateClient();
-    // @ts-expect-error - editor typing mismatch
     const authClient = createClient(supabaseUrl, supabaseAnonKey, {
       global: {
         headers: {
@@ -299,7 +291,6 @@ export async function handleRequest(request: Request): Promise<Response> {
       return hasManageablePermissions(permissionsRaw, Boolean(guild.owner));
     });
 
-    // @ts-expect-error - editor typing mismatch
     const adminClient = createClient(supabaseUrl, supabaseServiceRoleKey);
     const nowIso = new Date().toISOString();
     const discordUserId = discordUser.id;

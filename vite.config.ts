@@ -86,9 +86,6 @@ ${siteUrl ? `Sitemap: ${siteUrl}/sitemap.xml` : '# Set VITE_SITE_URL to emit the
         },
       },
     ],
-    esbuild: {
-      drop: isProd ? ['console', 'debugger'] : [],
-    },
     optimizeDeps: {
       include: ['lucide-react'],
     },

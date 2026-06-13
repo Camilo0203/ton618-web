@@ -9,6 +9,7 @@ import RouteScrollManager from './components/RouteScrollManager';
 import SecurityHeaders from './components/SecurityHeaders';
 import LandingPage from './pages/LandingPage';
 import { LEGAL_DOCUMENT_TYPES } from './lib/legalDocuments';
+import { config } from './config';
 
 const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
@@ -16,7 +17,7 @@ const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
 function TebexRedirect() {
-  useEffect(() => { window.location.replace('https://store.ton618bot.xyz/'); }, []);
+  useEffect(() => { window.location.replace(config.tebexStoreUrl); }, []);
   return null;
 }
 const BillingSuccessPage = lazy(() => import('./billing/pages/BillingSuccessPage'));

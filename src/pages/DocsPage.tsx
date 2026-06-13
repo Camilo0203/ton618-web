@@ -73,7 +73,7 @@ export default function DocsPage() {
       title: t('docs.commands.premium.title'),
       description: t('docs.commands.premium.description'),
       commands: [
-        { name: '/pro redeem <code>', desc: t('docs.commands.premium.cmds.redeem') },
+        { name: '/premium activate <code>', desc: t('docs.commands.premium.cmds.redeem') },
       ]
     }
   ];

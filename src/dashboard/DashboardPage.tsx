@@ -346,10 +346,10 @@ function DashboardLivePage({
               <div className="mt-8 flex items-center justify-center gap-5 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500/80">
                 <div className="flex items-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
-                  <span>OAuth2 Seguro</span>
+                  <span>{t('dashboardAuth.authCard.secureOauth')}</span>
                 </div>
                 <span className="h-1 w-1 rounded-full bg-slate-700" />
-                <span>Sin Pérdida de Datos</span>
+                <span>{t('dashboardAuth.authCard.noDataLoss')}</span>
               </div>
             </div>
           </div>

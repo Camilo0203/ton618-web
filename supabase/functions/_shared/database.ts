@@ -1,11 +1,6 @@
-/* Database utilities for billing system
- *
- * NOTE: This file is imported by Vitest (Node) for edge-function handler tests.
- * Node can't load remote `https://esm.sh/...` modules via the default ESM loader.
- * Therefore we must avoid top-level remote imports and only load supabase-js dynamically at runtime.
- */
-// @ts-expect-error Deno runtime requires npm: prefix; Node TS does not resolve it
-import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js';
+/* Database utilities for billing system */
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { selectValidSubscription } from './subscriptionValidity';
 
 declare const Deno: {
   env: { get: (k: string) => string | undefined };
@@ -86,15 +81,19 @@ export interface WebhookEvent {
   created_at: string;
 }
 
-export function createSupabaseClient(): SupabaseClient {
-  const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+export function createSupabaseClient(
+  url?: string,
+  key?: string,
+  options?: Parameters<typeof createClient>[2],
+): SupabaseClient {
+  const supabaseUrl = url ?? Deno.env.get('SUPABASE_URL');
+  const supabaseKey = key ?? Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
   }
 
-  return createClient(supabaseUrl, supabaseKey, {
+  return createClient(supabaseUrl, supabaseKey, options ?? {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
@@ -225,20 +224,7 @@ export class BillingDatabase {
     
     if (!data || data.length === 0) return null;
 
-    // Filter to only include subscriptions that are:
-    // 1. Active, OR
-    // 2. Cancelled but still in grace period (ends_at is in the future)
-    const now = new Date();
-    const validSubscriptions = data.filter((sub: GuildSubscription) => {
-      if (sub.status === 'active') return true;
-      if (sub.status === 'cancelled' && sub.ends_at) {
-        return new Date(sub.ends_at) > now;
-      }
-      return false;
-    });
-
-    // Return the most recent valid subscription
-    return validSubscriptions.length > 0 ? validSubscriptions[0] : null;
+    return selectValidSubscription(data);
   }
 
   async deactivateGuildSubscription(id: string): Promise<GuildSubscription> {

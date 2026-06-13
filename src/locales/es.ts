@@ -721,6 +721,10 @@ export const es = {
                 cta: 'Continuar con Discord',
                 trustLine: 'Cifrado seguro - Sincronización de servidores - Acceso con Supabase',
                 trustFooter: 'TON618 mantiene el branding y el flujo oficial de Discord OAuth',
+                secureOauth: 'OAuth2 seguro',
+                noDataLoss: 'Sin pérdida de datos',
+                selectPlaceholder: 'Seleccionar...',
+                noOptions: 'No hay opciones disponibles',
             },
             state: {
                 preparing: 'Preparando autenticación con Discord...',
@@ -792,6 +796,26 @@ export const es = {
             degradationNotice: {
                 title: 'Algunos datos del panel están degradados',
                 description: 'El resto del panel sigue disponible mientras recuperamos estas fuentes.',
+            },
+            config: {
+                validationSummary: 'Hay elementos por revisar antes de guardar',
+                resetButton: 'Restablecer',
+            },
+            mutationBanner: {
+                noChanges: 'No hay cambios pendientes en esta sección. El bot sigue mostrando el último estado aplicado.',
+                pendingBadge: 'Pendiente',
+                pendingTitle: 'Aplicación pendiente',
+                requestCreated: '{{summary}}. Solicitud creada el {{requestedAt}}.',
+                pendingDesc: 'El bridge del bot la procesará en el siguiente ciclo. Estado del bridge: {{status}}.',
+                failedBadge: 'Fallido',
+                failedTitle: 'La última solicitud falló',
+                failedDesc: 'El bot reportó un error al intentar aplicar el cambio.',
+                supersededBadge: 'Reemplazada',
+                supersededTitle: 'La última solicitud fue reemplazada',
+                appliedBadge: 'Aplicado',
+                appliedTitle: 'Aplicado por el bot',
+                appliedDescSummary: '{{summary}}. Solicitud creada el {{requestedAt}}.',
+                appliedDesc: 'Confirmado el {{date}}.',
             },
             checklist: {
                 roles: {
@@ -914,6 +938,105 @@ export const es = {
                     postMacro: 'publicar la macro',
                     setPriority: 'actualizar la prioridad',
                     fallback: 'ejecutar la accion'
+                },
+                detail: {
+                    eyebrow: 'Detalle del ticket',
+                    desc: 'Ticket {{id}} - {{user}}',
+                    bridgeWarning: 'Estado del bridge: {{status}}. Los cambios pueden tardar.',
+                    attrs: {
+                        status: 'Estado',
+                        statusActive: 'Activo',
+                        statusInactive: 'Inactivo',
+                        priority: 'Prioridad',
+                        priorityNote: 'La prioridad afecta el SLA y el escalado.',
+                        sla: 'SLA',
+                        slaNote: 'Objetivo de SLA: {{time}}',
+                        category: 'Categoría'
+                    },
+                    customer: {
+                        eyebrow: 'Cliente',
+                        title: 'Perfil del cliente',
+                        user: 'Usuario',
+                        claimOwner: 'Reclamado por',
+                        assignee: 'Asignado a',
+                        memoryLabel: 'Memoria operativa',
+                        memoryEmpty: 'Todavía no hay memoria de este cliente.',
+                        firstResponse: 'Primera respuesta',
+                        lastCustomer: 'Último mensaje del cliente',
+                        lastStaff: 'Último mensaje del staff',
+                        created: 'Creado',
+                        lastSync: 'Última sincronización'
+                    },
+                    timeline: {
+                        eyebrow: 'Cronología',
+                        title: 'Cronología de la conversación',
+                        eventsCount: '{{count}} eventos',
+                        systemActor: 'Sistema',
+                        empty: 'Todavía no hay eventos en la cronología.'
+                    },
+                    ops: {
+                        eyebrow: 'Operaciones',
+                        statusTitle: 'Gestión del estado',
+                        statusLabel: 'Estado',
+                        applyStatus: 'Aplicar estado',
+                        priorityLabel: 'Prioridad',
+                        updatePriority: 'Actualizar prioridad',
+                        reopen: 'Reabrir ticket',
+                        close: 'Cerrar ticket',
+                        closeReason: 'Cerrado desde el dashboard',
+                        tagsEyebrow: 'Etiquetas',
+                        tagsTitle: 'Etiquetas del ticket',
+                        removeTag: 'Quitar etiqueta {{tag}}',
+                        noTags: 'Sin etiquetas',
+                        tagPlaceholder: 'Escribe una etiqueta...',
+                        addTag: 'Agregar etiqueta',
+                        noteEyebrow: 'Nota interna',
+                        noteTitle: 'Agregar nota',
+                        notePlaceholder: 'Escribe una nota interna...',
+                        shortcutHint: 'Ctrl+Enter para guardar',
+                        saveNote: 'Guardar nota',
+                        replyEyebrow: 'Respuesta',
+                        replyTitle: 'Responder al cliente',
+                        replyPlaceholder: 'Escribe tu respuesta...',
+                        sendReply: 'Enviar respuesta',
+                        macrosEyebrow: 'Macros',
+                        macrosTitle: 'Respuestas preparadas',
+                        selectMacro: 'Selecciona una macro',
+                        macroConfirm: 'Revisé esta respuesta antes de publicarla.',
+                        postMacro: 'Publicar macro',
+                        macroEmptySelection: 'Selecciona una macro para previsualizar su contenido.',
+                        noMacros: 'No hay macros disponibles para este servidor.',
+                        macroInternal: 'Interna',
+                        macroPublic: 'Cliente'
+                    },
+                    history: {
+                        eyebrow: 'Historial',
+                        title: 'Historial del cliente',
+                        client: 'Cliente',
+                        lastTicket: 'Último ticket',
+                        openCount: '{{count}} abiertos',
+                        closedCount: '{{count}} cerrados',
+                        currentTicket: 'Actual',
+                        openDetail: 'Abrir',
+                        empty: 'No hay historial disponible.'
+                    },
+                    recommendations: {
+                        eyebrow: 'Playbooks activos',
+                        title: 'Acciones guiadas para este ticket',
+                        postMacro: 'Publicar macro: {{label}}',
+                        setStatus: 'Cambiar estado a {{status}}',
+                        setPriority: 'Cambiar prioridad a {{priority}}',
+                        confirm: 'Confirmar recomendación',
+                        confirmButton: 'Confirmar',
+                        dismissButton: 'Descartar',
+                        assistiveDraft: 'Borrador de respuesta sugerido'
+                    },
+                    actions: {
+                        claim: 'Reclamar',
+                        unclaim: 'Liberar',
+                        assignSelf: 'Asignarme',
+                        unassign: 'Desasignar'
+                    }
                 }
             },
             overview: {
@@ -1152,6 +1275,7 @@ export const es = {
                     configTitle: 'Configuracion de demo cambiada',
                     configDesc: 'La seccion {{section}} se actualizo en el entorno simulado.',
                     restoreTitle: 'Restauracion de demo iniciada',
+                    restoreDesc: 'Restaurando el backup {{backupId}} en el entorno simulado.',
                 },
             },
             pro: {
@@ -1431,17 +1555,17 @@ export const es = {
             },
             trust: {
                 secure: { title: 'Pago seguro' },
-                instant: { title: 'Activación instantánea' },
-                whop: { title: 'Checkout seguro con Tebex' },
-                guarantee: { title: 'Garantia de 7 dias' },
+                instant: { title: 'Entrega rápida del código' },
+                tebex: { title: 'Checkout seguro con Tebex' },
+                guarantee: { title: 'Revisión de reembolsos disponible' },
             },
             manual: {
-                title: 'Activación manual en Discord',
-                description: 'TON618 V1 usa activación manual. Después de verificar el pago, recibirás un código de activación por DM.',
+                title: 'Activación segura en Discord',
+                description: 'Cuando Tebex confirma el pago, el bot envía un código de activación de un solo uso por mensaje directo de Discord.',
                 stepsTitle: 'Como obtener Pro:',
-                step1: 'Haz clic en el plan para abrir el servidor de soporte',
-                step2: 'Paga manualmente y abre un ticket con tu server ID y comprobante',
-                step3: 'Recibe el código por DM, luego ejecuta /pro redeem <codigo> en tu servidor',
+                step1: 'Elige un plan en la tienda oficial de TON618 en Tebex',
+                step2: 'Completa el checkout seguro de Tebex con tu cuenta de Discord',
+                step3: 'Recibe el código por DM y ejecuta /premium activate en el servidor que administras',
             },
             auth: {
                 title: 'Inicia sesion con Discord',
@@ -1532,11 +1656,11 @@ export const es = {
                 questions: {
                     q1: {
                         question: '¿Como mejoro mi servidor a premium?',
-                        answer: 'Haz clic en el plan Pro o Enterprise para unirte al servidor de soporte. Paga manualmente y abre un ticket con tu server ID y comprobante. El owner te enviará un código de activación por DM. Luego ejecuta /pro redeem <codigo> en tu servidor como owner.',
+                        answer: 'Elige un plan en la tienda oficial de TON618 en Tebex, completa el checkout con Discord y activa el código enviado por DM usando /premium activate en el servidor que administras.',
                     },
                     q2: {
                         question: '¿Puedo cancelar mi suscripción en cualquier momento?',
-                        answer: 'Sí. Para suscripciones mensuales y anuales, cancela cuando quieras contactando soporte. Las características premium permanecen activas hasta el final de tu periodo de facturación.',
+                        answer: 'Sí. Para suscripciones mensuales y anuales, gestiona la cancelación desde Tebex o contacta a soporte. PRO permanece activo hasta el final del periodo pagado.',
                     },
                     q3: {
                         question: '¿Cuál es la diferencia entre Acceso de por vida y suscripciones?',
@@ -1544,11 +1668,11 @@ export const es = {
                     },
                     q4: {
                         question: '¿Puedo mejorar multiples servidores?',
-                        answer: 'Sí. Cada servidor requiere su propia suscripción premium. Puedes comprar premium para todos los servidores que administres a través del proceso manual.',
+                        answer: 'Sí. Cada servidor requiere su propio plan PRO. Puedes comprar códigos adicionales desde la tienda oficial de TON618 en Tebex.',
                     },
                     q5: {
                         question: '¿Mi informacion de pago es segura?',
-                        answer: 'Los metodos de pago se manejan a traves de procesadores de pago establecidos. Nosotros nunca almacenamos tu informacion de pago en nuestros servidores.',
+                        answer: 'Tebex procesa el pago de forma segura. TON618 no almacena los datos de tu tarjeta en sus servidores.',
                     },
                     q6: {
                         question: '¿Qué pasa si cancelo mi suscripción?',
@@ -1564,7 +1688,7 @@ export const es = {
                 titleDonation: '¡Gracias por tu donación!',
                 titlePayment: '¡Pago exitoso!',
                 descriptionDonation: 'Tu generosa donación ayuda a mantener TON618 funcionando. ¡Gracias!',
-                descriptionPayment: '¡Gracias por mejorar a TON618 {{plan}}! El premium de tu servidor ya fue activado.',
+                descriptionPayment: '¡Gracias por comprar TON618 {{plan}}! Revisa Discord para encontrar tu código de activación.',
                 planLabels: {
                     pro_monthly: 'Pro Mensual',
                     pro_yearly: 'Pro Anual',
@@ -1576,8 +1700,8 @@ export const es = {
                 steps: {
                     s1: 'Tu pago se completó correctamente mediante Tebex.',
                     s2: 'Revisa tus mensajes directos de Discord para ver tu código de activación.',
-                    s3: 'Accede al panel de tu servidor para configurar características premium',
-                    s4: 'Administra tu suscripción contactando soporte',
+                    s3: 'Ejecuta /premium activate en el servidor de Discord que administras.',
+                    s4: 'Administra la facturación recurrente desde Tebex o contacta a soporte si necesitas ayuda.',
                     s1Donation: 'Tu donación ha sido registrada — ¡gracias!',
                 },
                 goToDashboard: 'Ir al Dashboard',
@@ -1604,17 +1728,17 @@ export const es = {
             },
             toasts: {
                 selectPlan: '¡Plan seleccionado!',
-                selectPlanDesc: 'Abriendo servidor de soporte...',
+                selectPlanDesc: 'Abriendo checkout seguro de Tebex...',
                 signInError: 'Error al iniciar sesion con Discord',
                 inviteError: 'URL de invitacion no configurada',
                 contactError: 'URL de contacto no configurada',
-                pleaseSignIn: 'Inicio de sesion no requerido para compra manual',
-                needAuthDesc: 'Haz clic en el boton del plan para abrir el servidor de soporte',
+                pleaseSignIn: 'La identidad de Discord se completa de forma segura durante el checkout de Tebex',
+                needAuthDesc: 'Haz clic en el botón del plan para abrir Tebex',
                 missingInfo: 'Informacion incompleta',
                 selectPlanAndServer: 'Por favor selecciona un plan para continuar',
-                creatingCheckout: 'Abriendo servidor de soporte...',
-                redirecting: 'Redirigiendo al servidor de soporte...',
-                checkoutFailed: 'No se pudo abrir el servidor de soporte',
+                creatingCheckout: 'Creando checkout seguro de Tebex...',
+                redirecting: 'Redirigiendo a Tebex...',
+                checkoutFailed: 'No se pudo abrir el checkout de Tebex',
                 serverHasPremium: 'El servidor ya tiene premium',
                 serverHasPremiumDesc: 'Este servidor ya tiene una suscripcion premium activa',
                 permissionDenied: 'Permiso denegado',
@@ -1698,9 +1822,9 @@ export const es = {
             proActivation: {
                 title: 'Flujo de Activación Pro',
                 steps: {
-                    openTicket: { title: 'Abrir Ticket', description: 'Unete al servidor de soporte y abre un ticket de facturacion con tu comprobante de pago' },
-                    receiveCode: { title: 'Recibir Código', description: 'Tras la verificación, recibirás un código de activación por DM con instrucciones' },
-                    redeem: { title: 'Canjear', description: 'Ejecuta /pro redeem <codigo> en tu servidor como propietario del servidor' },
+                    openTicket: { title: 'Comprar en Tebex', description: 'Elige un plan y completa el checkout en la tienda oficial de TON618 en Tebex' },
+                    receiveCode: { title: 'Recibir Código', description: 'Tras confirmar el pago, recibirás un código de activación de un solo uso por DM de Discord' },
+                    redeem: { title: 'Activar', description: 'Ejecuta /premium activate <codigo> en tu servidor como propietario' },
                     enjoyPro: { title: 'Disfrutar Pro', description: 'Las funciones premium se activan instantaneamente en tu servidor' },
                 },
             },

@@ -39,7 +39,11 @@ export default function InboxMacroPanel(props: InboxMacroPanelProps) {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="dashboard-status-pill-compact dashboard-neutral-pill">{props.selectedMacro.label}</span>
                   <span className="dashboard-status-pill-compact dashboard-neutral-pill">{getMacroVisibilityLabel(props.selectedMacro, props.t)}</span>
-                  {props.selectedMacro.isSystem ? <span className="dashboard-status-pill-compact dashboard-neutral-pill">System</span> : null}
+                  {props.selectedMacro.isSystem ? (
+                    <span className="dashboard-status-pill-compact dashboard-neutral-pill">
+                      {props.t('dashboard.inbox.visibility.system')}
+                    </span>
+                  ) : null}
                 </div>
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-slate-300">{props.selectedMacro.content}</p>
               </div>

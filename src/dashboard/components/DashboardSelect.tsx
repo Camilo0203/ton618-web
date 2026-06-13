@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Check } from 'lucide-react';
 import { useController, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { cn } from '../utils';
 
 interface Option {
@@ -24,18 +25,20 @@ export default function DashboardSelect({
   value: manualValue,
   onChange: manualOnChange,
   options,
-  placeholder = 'Seleccionar...',
+  placeholder,
   disabled = false,
   className,
 }: DashboardSelectProps) {
+  const { t } = useTranslation();
   const formContext = useFormContext();
+  const resolvedPlaceholder = placeholder || t('dashboardAuth.authCard.selectPlaceholder');
 
   if (name && formContext) {
     return (
       <DashboardFormSelect
         name={name}
         options={options}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         disabled={disabled}
         className={className}
       />
@@ -47,7 +50,7 @@ export default function DashboardSelect({
       value={manualValue}
       onChange={manualOnChange}
       options={options}
-      placeholder={placeholder}
+      placeholder={resolvedPlaceholder}
       disabled={disabled}
       className={className}
     />
@@ -85,6 +88,7 @@ function DashboardSelectView({
   disabled,
   className,
 }: Omit<DashboardSelectProps, 'name'>) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedOption = options.find((opt) => opt.value === value);
@@ -166,7 +170,9 @@ function DashboardSelectView({
                   );
                 })
               ) : (
-                <div className="px-3.5 py-3 text-sm text-slate-500 italic">No hay opciones disponibles</div>
+                <div className="px-3.5 py-3 text-sm text-slate-500 italic">
+                  {t('dashboardAuth.authCard.noOptions')}
+                </div>
               )}
             </div>
           </motion.div>

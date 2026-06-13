@@ -1,9 +1,4 @@
-// Billing module exports
-export * from './types';
-export * from './api';
-export * from './hooks/useBillingGuilds';
-export * from './components/PlanCard';
-export * from './components/GuildSelector';
-export * from './pages/PricingPage';
+// Tebex checkout lives at store.ton618bot.xyz. These local pages only handle
+// optional return URLs from the hosted storefront.
 export * from './pages/BillingSuccessPage';
 export * from './pages/BillingCancelPage';
