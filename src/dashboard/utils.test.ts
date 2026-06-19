@@ -237,11 +237,11 @@ describe('getDashboardSectionStates', () => {
     const tickets = getState(states, 'tickets');
 
     expect(roles.messages).toContain('Falta elegir el canal donde se publicará el panel de tickets.');
-    expect(roles.messages).toContain('Aún no has seleccionado un rol de staff.');
+    expect(roles.messages).toContain('Aún no has seleccionado un rol de soporte.');
     expect(roles.messages).toContain('Falta definir el rol administrador del bot.');
     expect(tickets.messages).toContain('Falta elegir el canal de tickets.');
     expect(tickets.messages).toContain('Define un SLA base para saber cuándo un ticket necesita seguimiento.');
-    expect(tickets.messages).toContain('La autoasignación está activa, pero todavía no existe un rol de staff base.');
+    expect(tickets.messages).toContain('La autoasignación está activa, pero todavía no existe un rol base de soporte.');
     expect(tickets.messages).toContain('El escalado de SLA está activo pero no tiene rol ni canal de aviso.');
     expect(tickets.messages).toContain('El reporte diario está activo pero no tiene canal asignado.');
   });

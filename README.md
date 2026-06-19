@@ -8,7 +8,7 @@ Frontend de landing publica y dashboard operativo para TON618, construido con Vi
 - Dashboard operativo en `/dashboard` con auth via Supabase + Discord.
 - Callback OAuth endurecido en `/auth/callback`.
 - Snapshot del dashboard con degradacion parcial para `activity`, `metrics`, `ticket events` y `ticket macros`.
-- Sistema de billing con Stripe (checkout + webhook), planes monthly/yearly/lifetime/donate, y control plane en Supabase.
+- Compra de PRO mediante la tienda oficial de Tebex, activacion por codigo en Discord y proyeccion del entitlement a Supabase.
 
 ## Scripts
 
@@ -39,6 +39,7 @@ Variables recomendadas:
 - `VITE_GITHUB_URL`
 - `VITE_TWITTER_URL`
 - `VITE_DASHBOARD_URL`
+- `VITE_TEBEX_STORE_URL`
 
 Usa `.env.example` como base local.
 
@@ -60,14 +61,15 @@ Migraciones relevantes:
 - `supabase/migrations/20260313220000_add_ticket_workspace.sql`
 - `supabase/migrations/20260406000000_create_billing_tables.sql`
 - `supabase/migrations/20260406000001_create_rls_policies.sql`
+- `supabase/migrations/20260612000000_add_tebex_provider_and_entitlements.sql`
 
-Edge Functions requeridas:
+Edge Function requerida:
 
 - `supabase/functions/sync-discord-guilds`
-- `supabase/functions/billing-create-checkout`
-- `supabase/functions/billing-webhook`
-- `supabase/functions/billing-guild-status`
-- `supabase/functions/billing-get-guilds`
+
+El checkout publico no se crea desde Supabase. La compra se completa en Tebex y
+`ton618-bot` procesa el webhook firmado, entrega el codigo por DM y sincroniza
+el entitlement despues de `/premium activate`.
 
 ## Configuracion de OAuth (Discord + Supabase)
 
@@ -81,10 +83,8 @@ El login del dashboard esta delegado a Supabase, el cual se conecta con Discord.
    - Ve a *Authentication* > *URL Configuration* y añade tu URL local (`http://localhost:5173/**`) o tu URL de produccion a las **Redirect URLs**.
 3. **Edge Functions:** 
    - Despliega `sync-discord-guilds` configurando previamente `DISCORD_BOT_TOKEN` en los secretos de Supabase.
-   - Despliega las funciones de billing: `billing-create-checkout`, `billing-webhook`, `billing-guild-status` y `billing-get-guilds`.
-   - Configura los secretos de Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY`.
-   - Configura los Price IDs: `STRIPE_PRICE_PRO_MONTHLY`, `STRIPE_PRICE_PRO_YEARLY`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_DONATE`.
-   - Configura `BOT_API_KEY` (debe coincidir con el bot para autenticacion de `billing-guild-status`).
+   - Configura `VITE_TEBEX_STORE_URL` con la tienda oficial.
+   - Mantiene `TEBEX_SECRET_KEY` y los IDs de paquetes solo en el entorno privado de `ton618-bot`.
 
 Finalmente, manten al bot publicando latidos constantes hacia `bot_stats`, `bot_guilds`, `guild_metrics_daily` y las tablas operativas del dashboard para que el panel luzca actualizado.
 
@@ -98,5 +98,5 @@ Finalmente, manten al bot publicando latidos constantes hacia `bot_stats`, `bot_
 - Deuda tecnica resuelta: `docs/technical-debt-resolved.md`
 - Revision tecnica Codex: `docs/technical-review-codex.md`
 - Verificacion final: `docs/final-verification-report.md`
-- Setup de Stripe: `docs/STRIPE_SETUP.md`
+- Checklist activo de Tebex: `docs/billing-beta-launch-checklist.md`
 - Backend de billing completo: `docs/BILLING_BACKEND_COMPLETE.md`

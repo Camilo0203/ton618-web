@@ -1,62 +1,95 @@
-# Billing Beta Launch Checklist
+# Tebex Billing Launch Checklist
 
-## Whop
+This is the active commercial launch checklist for TON618. Tebex is the only
+public payment provider.
 
-- [ ] Crear producto `TON618 Bot Pro` en Whop.
-- [ ] Crear plan `Pro Monthly` por `USD 9.99` (recurring).
-- [ ] Crear plan `Pro Yearly` por `USD 99.99` (recurring).
-- [ ] Crear plan `Lifetime` por `USD 299.99` (one-time).
-- [ ] Crear plan `Donation` (one-time, variable).
-- [ ] Guardar los `plan_id` reales para monthly, yearly, lifetime y donate.
-- [ ] Configurar webhook con eventos `membership.went_active` y `membership.went_inactive`.
-- [ ] Configurar URL de webhook: `https://<tu-proyecto>.supabase.co/functions/v1/whop-webhook`.
+## Tebex store
 
-## Supabase
+- [ ] Confirm the official store is `https://store.ton618bot.xyz/`.
+- [ ] Confirm package `7434172` maps to `pro_monthly`.
+- [ ] Confirm package `7434175` maps to `pro_yearly`.
+- [ ] Confirm package `7434185` maps to `lifetime`.
+- [ ] Confirm every package checkout requires the buyer's Discord identity.
+- [ ] Confirm prices, taxes, renewal terms and payment methods in Tebex.
+- [ ] Confirm monthly and yearly cancellation instructions are visible.
 
-- [ ] Aplicar `supabase/migrations/20260406000000_create_billing_tables.sql`.
-- [ ] Aplicar `supabase/migrations/20260406000001_create_rls_policies.sql`.
-- [ ] Cargar secretos en Edge Functions: `WHOP_WEBHOOK_SECRET`, `BOT_API_KEY`, `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`.
-- [ ] Cargar IDs de planes en Edge Functions: `WHOP_PLAN_MONTHLY`, `WHOP_PLAN_YEARLY`, `WHOP_PLAN_LIFETIME`.
-- [ ] Desplegar `sync-discord-guilds`.
-- [ ] Desplegar `whop-webhook`.
-- [ ] Desplegar `billing-guild-status`.
-- [ ] Desplegar `billing-get-guilds`.
-- [ ] Confirmar que `guild_subscriptions` responde para un guild de prueba.
+## Webhook
 
-## Web
+- [ ] Configure `https://bot.ton618bot.xyz/webhook-tebex` as the production
+      endpoint.
+- [ ] Confirm `GET https://bot.ton618bot.xyz/webhook-tebex/health` returns JSON
+      and an unsigned `POST` returns `401`, not `404`, HTML or a Cloudflare
+      challenge.
+- [ ] Store `TEBEX_SECRET_KEY` only in the production environment.
+- [ ] Complete Tebex's `validation.webhook` handshake.
+- [ ] Enable `payment.completed` and `recurring-payment.renewed`.
+- [ ] Enable `payment.refunded`, `payment.dispute.lost` and
+      `recurring-payment.ended`.
+- [ ] Confirm valid events receive a `2xx` response.
+- [ ] Confirm invalid signatures are rejected and logged without exposing
+      secrets.
+- [ ] Rotate the webhook secret if it has ever appeared in Git history,
+      documentation, screenshots or chat logs.
 
-- [ ] Ejecutar `npm run env:check -- --mode=production`.
-- [ ] Ejecutar `npm run verify`.
-- [ ] Ejecutar `npm run test:unit`.
-- [ ] Ejecutar `npm run test:e2e:smoke`.
-- [ ] Definir en `.env` de producción: `VITE_WHOP_PLAN_MONTHLY`, `VITE_WHOP_PLAN_YEARLY`, `VITE_WHOP_PLAN_LIFETIME`.
+## Data and activation
 
-## Bot
+- [ ] Apply `supabase/migrations/20260612000000_add_tebex_provider_and_entitlements.sql`.
+- [ ] Confirm the bot can create and read idempotent Tebex activation codes.
+- [ ] Confirm `/premium activate <code>` is restricted to the server owner.
+- [ ] Confirm one code cannot activate more than one server.
+- [ ] Confirm the Tebex entitlement is projected to Supabase after activation.
+- [ ] Confirm a refund or ended subscription revokes only the matching Tebex
+      entitlement and cannot remove a newer or manual plan.
 
-- [ ] Definir `SUPABASE_URL`.
-- [ ] Definir `SUPABASE_SERVICE_ROLE_KEY`.
-- [ ] Definir `OWNER_ID`.
-- [ ] Mantener `DASHBOARD_BRIDGE_INTERVAL_MS=60000` para beta.
-- [ ] Ejecutar `npm run env:check -- --mode=production`.
-- [ ] Ejecutar `npm test`.
+## Store theme
 
-## Smoke manual
+- [ ] Upload a ZIP generated only from the current `tebex-theme` directory.
+- [ ] Confirm monthly, yearly and lifetime buttons open their direct official
+      Tebex package pages.
+- [ ] Confirm English and Spanish render correctly on home, basket, account and
+      completion pages.
+- [ ] Confirm the completion page tells the buyer to check Discord DMs and run
+      `/premium activate`.
+- [ ] Confirm no page promises activation before the code is validated.
 
-- [ ] Login con Discord.
-- [ ] Sync de guilds exitoso.
-- [ ] Guild stale bloquea checkout hasta re-sync.
-- [ ] Guild fresco con bot instalado abre checkout de Whop.
-- [ ] Pago en test mode completa `membership.went_active`.
-- [ ] `guild_subscriptions` queda `active` con `premium_enabled=true`.
-- [ ] Dashboard muestra `Pro` en menos de `60s`.
-- [ ] El bot refleja `Pro` consultando `billing-guild-status`.
-- [ ] Cancelacion marca `cancel_at_period_end=true` y premium sigue activo hasta `ends_at`.
-- [ ] Lifetime purchase activa premium permanente sin `ends_at`.
-- [ ] Donation se registra sin activar premium.
+## Automated checks
+
+From `ton618-bot`:
+
+```bash
+node --test tests/tebex-webhook.test.js tests/pro-code-service.test.js tests/pro-redeem-codes.test.js tests/premium-command.test.js tests/pro-store.test.js
+npm test
+git diff --check
+```
+
+From `ton618-web`:
+
+```bash
+npm test
+npm run lint
+npm run typecheck
+npm run build
+git diff --check
+```
+
+## Manual purchase smoke test
+
+- [ ] Complete one Tebex test purchase with a real Discord test account.
+- [ ] Confirm the bot sends exactly one activation code by Discord DM.
+- [ ] Activate the code in a test server owned by that account.
+- [ ] Confirm `/premium status` and the dashboard show the expected PRO plan.
+- [ ] Replay the same webhook and confirm no duplicate code or duration.
+- [ ] Test with DMs closed, reopen them, retry delivery and confirm the same
+      pending code is reused.
+- [ ] Test one renewal and confirm the existing server entitlement is extended.
+- [ ] Test one refund and confirm only the matching entitlement is revoked.
+- [ ] Test lifetime and confirm it has no expiration date.
 
 ## Go / no-go
 
-- [ ] No hay fallos criticos abiertos.
-- [ ] No hay Session Replay activo en dashboard.
-- [ ] No hay metricas seed visibles en la landing.
-- [ ] El soporte sabe usar el runbook de override y el runbook de incidentes.
+- [ ] No production secret is present in tracked files or the release diff.
+- [ ] The Tebex webhook secret has been rotated after any historical exposure.
+- [ ] The Tebex migration is applied in production.
+- [ ] The complete purchase, activation, renewal and refund smoke test passes.
+- [ ] Support knows how to identify a Tebex transaction and recover a pending
+      activation without creating a second entitlement.

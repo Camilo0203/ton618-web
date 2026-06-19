@@ -44,14 +44,14 @@ describe('CommandPreview', () => {
 
     expect(html).toContain('Cómo Usar TON618');
     expect(html).toContain('Flujo actual');
-    expect(html).toContain('El orden real de rollout');
-    expect(html).toContain('English y Español se eligen en el onboarding');
+    expect(html).toContain('El orden real del lanzamiento');
+    expect(html).toContain('El inglés y el español se eligen durante la configuración inicial');
     expect(html).toContain('Elige el idioma del servidor');
     expect(html).toContain('Activa /ticket y /verify');
     expect(html).toContain('Corre el flujo diario y el control');
     expect(html).toContain('Comandos clave');
-    expect(html).toContain('Staff');
-    expect(html).toContain('Admin / Owner');
+    expect(html).toContain('Equipo');
+    expect(html).toContain('Administrador / Propietario');
     expect(html).not.toContain('/help');
     expect(html).not.toContain('/poll');
     expect(html).not.toContain('/suggest');

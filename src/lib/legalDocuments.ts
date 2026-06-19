@@ -45,8 +45,8 @@ function getFallbackLegalDocumentContent(
       ? {
           type,
           title: 'Refund Policy',
-          summary: 'TON618 Pro is billed as a self-serve subscription. Refund requests are reviewed manually and applied when billing errors, duplicate charges or activation failures are confirmed.',
-          metaDescription: 'TON618 refund policy for Pro subscriptions and paid beta billing.',
+          summary: 'TON618 PRO plans are sold through Tebex. Refund requests are reviewed manually when billing errors, duplicate charges or activation failures are confirmed.',
+          metaDescription: 'TON618 refund policy for PRO subscriptions and lifetime purchases made through Tebex.',
           lastUpdated: '2026-06-12',
           highlights: [
             'Subscription renewals and cancellations are managed through Tebex.',
@@ -57,7 +57,7 @@ function getFallbackLegalDocumentContent(
             {
               heading: 'How refunds are evaluated',
               body: [
-                'TON618 Pro is sold through Tebex and activated on a Discord server with a one-time purchase code. We review refund requests manually because Tebex, the entitlement service and Discord must remain aligned.',
+                'TON618 PRO is sold through Tebex and activated on a Discord server with a one-time activation code. We review refund requests manually because Tebex, the entitlement service and Discord must remain aligned.',
                 'Refunds are generally approved when we confirm an operational billing error, such as duplicate charges, checkout succeeding without Pro activation, or a technical issue that blocks the paid features during the first days of service.',
               ],
               points: [
@@ -71,7 +71,7 @@ function getFallbackLegalDocumentContent(
                 'We do not automatically refund a period only because the subscription was no longer needed, the bot was removed from the guild after activation, or the team decided not to continue using the product after the service was delivered.',
               ],
               points: [
-                'Enterprise agreements follow their own commercial terms.',
+                'Lifetime purchases are reviewed under the same billing-error and activation-failure criteria.',
                 'Supporter recognition is not a paid feature bundle and is outside this refund policy.',
               ],
             },
@@ -79,35 +79,35 @@ function getFallbackLegalDocumentContent(
         }
       : {
           type,
-          title: 'Politica de reembolsos',
-          summary: 'TON618 Pro se cobra como suscripcion self-serve. Las solicitudes de reembolso se revisan manualmente y se aprueban cuando confirmamos errores de cobro, cargos duplicados o fallos reales de activacion.',
-          metaDescription: 'Politica de reembolsos de TON618 para suscripciones Pro y billing de beta pagada.',
+          title: 'Política de reembolsos',
+          summary: 'Los planes PRO de TON618 se venden mediante Tebex. Las solicitudes de reembolso se revisan manualmente cuando confirmamos errores de cobro, cargos duplicados o fallos de activación.',
+          metaDescription: 'Política de reembolsos de TON618 para suscripciones PRO y compras de por vida realizadas mediante Tebex.',
           lastUpdated: '2026-06-12',
           highlights: [
             'Las renovaciones y cancelaciones se gestionan desde Tebex.',
             'Los cargos duplicados y las activaciones fallidas se atienden con prioridad.',
-            'Supporter es reconocimiento y no compra funciones premium.',
+            'El estado de colaborador es un reconocimiento y no compra funciones premium.',
           ],
           sections: [
             {
-              heading: 'Como evaluamos los reembolsos',
+              heading: 'Cómo evaluamos los reembolsos',
               body: [
-                'TON618 Pro se vende mediante Tebex y se activa en un servidor de Discord con un codigo de compra de un solo uso. Revisamos cada solicitud manualmente porque Tebex, el servicio de membresias y Discord deben mantenerse sincronizados.',
-                'Normalmente aprobamos reembolsos cuando confirmamos un error operativo de billing, por ejemplo cargos duplicados, checkout exitoso sin activacion de Pro o una falla tecnica que impide usar las funciones pagadas durante los primeros dias del servicio.',
+                'TON618 PRO se vende mediante Tebex y se activa en un servidor de Discord con un código de activación de un solo uso. Revisamos cada solicitud manualmente porque Tebex, el servicio de membresías y Discord deben mantenerse sincronizados.',
+                'Normalmente aprobamos reembolsos cuando confirmamos un error de cobro, por ejemplo cargos duplicados, un pago completado sin activación de PRO o una falla técnica que impide usar las funciones pagadas durante los primeros días del servicio.',
               ],
               points: [
-                'Incluye el ID de transaccion de Tebex, la cuenta de Discord usada en la compra y el ID del servidor afectado.',
-                'Cancelar la suscripcion evita renovaciones futuras, pero no reembolsa automaticamente el periodo actual.',
+                'Incluye el ID de transacción de Tebex, la cuenta de Discord usada en la compra y el ID del servidor afectado.',
+                'Cancelar la suscripción evita renovaciones futuras, pero no reembolsa automáticamente el periodo actual.',
               ],
             },
             {
-              heading: 'Lo que no se reembolsa automaticamente',
+              heading: 'Lo que no se reembolsa automáticamente',
               body: [
-                'No reembolsamos de forma automatica un periodo solo porque el equipo dejo de necesitar la herramienta, desinstalo el bot despues de activarlo o decidio no continuar usando el producto una vez entregado el servicio.',
+                'No reembolsamos automáticamente un periodo solo porque el equipo dejó de necesitar la herramienta, desinstaló el bot después de activarlo o decidió no continuar usando el producto una vez entregado el servicio.',
               ],
               points: [
-                'Los acuerdos Enterprise siguen sus propios terminos comerciales.',
-                'El estado Supporter no es un paquete de funciones pagadas y queda fuera de esta politica.',
+                'Las compras de por vida se revisan con los mismos criterios de error de cobro y fallo de activación.',
+                'El estado de colaborador no es un paquete de funciones pagadas y queda fuera de esta política.',
               ],
             },
           ],
@@ -119,12 +119,12 @@ function getFallbackLegalDocumentContent(
       ? {
           type,
           title: 'Billing Contact',
-          summary: 'Questions about invoices, failed activations, taxes or manual overrides for the paid beta should be sent through the official billing support channels listed here.',
-          metaDescription: 'TON618 billing support contact details for paid beta customers.',
+          summary: 'Questions about invoices, failed activations, taxes or entitlement corrections should be sent through the official billing support channels listed here.',
+          metaDescription: 'TON618 billing support contact details for customers who purchased through Tebex.',
           lastUpdated: '2026-06-12',
           highlights: [
             'Billing incidents should include the guild ID and Tebex transaction ID when possible.',
-            'Manual entitlement overrides are used only for support remediation, beta grants or enterprise onboarding.',
+            'Manual entitlement corrections are used only for verified support remediation.',
           ],
           sections: [
             {
@@ -144,40 +144,40 @@ function getFallbackLegalDocumentContent(
               ],
               points: [
                 'We may request extra verification before changing commercial entitlements.',
-                'Enterprise rollouts are coordinated directly with the project owner.',
+                'Never send full card details or passwords through support.',
               ],
             },
           ],
         }
       : {
           type,
-          title: 'Contacto de billing',
-          summary: 'Las dudas sobre facturas, activaciones fallidas, impuestos o overrides manuales de la beta pagada deben enviarse por los canales oficiales de soporte comercial listados aqui.',
-          metaDescription: 'Canales de contacto de billing de TON618 para clientes de la beta pagada.',
+          title: 'Contacto de facturación',
+          summary: 'Las dudas sobre facturas, activaciones fallidas, impuestos o correcciones de acceso deben enviarse por los canales oficiales de soporte comercial indicados aquí.',
+          metaDescription: 'Canales de contacto de facturación de TON618 para clientes que compraron mediante Tebex.',
           lastUpdated: '2026-06-12',
           highlights: [
-            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el ID de transaccion de Tebex.',
-            'Los overrides manuales solo se usan para soporte, grants de beta o onboarding enterprise.',
+            'Los incidentes de cobro deben incluir el ID del servidor y, si existe, el ID de transacción de Tebex.',
+            'Las correcciones manuales de acceso solo se usan para resolver casos de soporte verificados.',
           ],
           sections: [
             {
               heading: 'La mejor forma de escribirnos',
               body: [
-                'Usa el servidor de soporte para problemas urgentes de activacion y usa email para facturas, impuestos, revisiones de reembolsos o correcciones de cuenta. Entre mas contexto envies, mas rapido podremos ubicar la compra y el servidor.',
+                'Usa el servidor de soporte para problemas urgentes de activación y el correo electrónico para facturas, impuestos, revisiones de reembolsos o correcciones de cuenta. Cuanto más contexto envíes, más rápido podremos ubicar la compra y el servidor.',
               ],
               points: [
                 'Canal de soporte: servidor oficial de Discord',
-                'Email comercial: la direccion publicada en el footer de este sitio',
+                'Correo comercial: la dirección publicada en el pie de página de este sitio',
               ],
             },
             {
-              heading: 'Que informacion incluir',
+              heading: 'Qué información incluir',
               body: [
-                'Para acelerar la atencion, manda el ID del servidor, la cuenta de Discord usada en la compra, el plan adquirido y el ID de transaccion de Tebex.',
+                'Para acelerar la atención, envía el ID del servidor, la cuenta de Discord usada en la compra, el plan adquirido y el ID de transacción de Tebex.',
               ],
               points: [
-                'Podemos pedir verificacion adicional antes de cambiar entitlements comerciales.',
-                'Los despliegues Enterprise se coordinan directamente con el owner del proyecto.',
+                'Podemos pedir verificación adicional antes de corregir el acceso comercial.',
+                'Nunca envíes datos completos de tarjetas ni contraseñas por soporte.',
               ],
             },
           ],

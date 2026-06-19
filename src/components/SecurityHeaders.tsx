@@ -14,7 +14,7 @@ export function SecurityHeaders() {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https: blob:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://discord.com https://api.discord.gg https://headless.tebex.io https://checkout.tebex.io https://store.ton618bot.xyz https://ton618-bot.squareweb.app",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://discord.com https://api.discord.gg https://headless.tebex.io https://checkout.tebex.io https://store.ton618bot.xyz",
     "frame-src https://checkout.tebex.io",
     "object-src 'none'",
     "base-uri 'self'",

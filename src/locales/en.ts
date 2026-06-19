@@ -320,10 +320,10 @@ export const en = {
             titleAccent: 'Ideal Plan',
             description: 'From communities just starting out to enterprise servers with thousands of members.',
             toggle: { monthly: 'Monthly', yearly: 'Yearly' },
-            yearlyDiscount: 'Save 25% · BEST VALUE',
+            yearlyDiscount: 'Save 37% · BEST VALUE',
             free: { name: 'Free', description: 'Install the base' },
             pro: { name: 'Pro', badge: 'Popular', description: 'For serious operations', cta: 'View plans' },
-            enterprise: { name: 'Enterprise', description: 'Guided rollout' },
+            enterprise: { name: 'Lifetime', description: 'One-time permanent access' },
             plans: {
                 free: {
                     name: 'Free',
@@ -335,7 +335,7 @@ export const en = {
                 },
                 pro: {
                     name: 'Pro',
-                    price: { monthly: '$9.99', yearly: '$89.99' },
+                    price: { monthly: '$7.99', yearly: '$59.99' },
                     period: '/mo',
                     desc: 'For teams that need more.',
                     cta: 'Contact for Pro',
@@ -343,12 +343,12 @@ export const en = {
                     features: ['Everything in Free', 'Unlimited flows', 'Live analytics', 'Ticket system', 'Expanded setup tooling', 'Priority support'],
                 },
                 enterprise: {
-                    name: 'Enterprise',
-                    price: { monthly: '$29', yearly: '$23' },
-                    period: '/mo',
-                    desc: 'For large-scale servers.',
-                    cta: 'Contact sales',
-                    features: ['Everything in Pro', 'Dedicated API', 'Guaranteed SLA', 'Guided onboarding', 'Multi-server', '24/7 support'],
+                    name: 'Lifetime',
+                    price: { monthly: '$79.99', yearly: '$79.99' },
+                    period: 'one time',
+                    desc: 'Permanent PRO access with one payment.',
+                    cta: 'View on Tebex',
+                    features: ['Everything in Pro', 'No renewals', 'Permanent access', 'Priority support'],
                 },
             },
         },
@@ -1667,7 +1667,7 @@ export const en = {
                 system: { label: 'Bot system', description: 'Backups, sync and technical health.' },
                 activity: { label: 'Recent activity', description: 'Changes, queue and recent events.' },
                 analytics: { label: 'Analytics', description: 'Real usage, tickets and performance.' },
-                billing: { label: 'Billing', description: 'Plans, subscriptions and paid beta controls.' },
+                billing: { label: 'Billing', description: 'Plans, subscriptions and PRO entitlement controls.' },
             },
             taskGroups: {
                 home: { label: 'Home', description: 'Server operational landing and next steps.' },
@@ -1748,7 +1748,7 @@ export const en = {
             toggle: {
                 monthly: 'Monthly',
                 yearly: 'Yearly',
-                discount: 'Save 25% · BEST VALUE',
+                discount: 'Save 37% · BEST VALUE',
             },
             plans: {
                 free: {
@@ -1928,7 +1928,7 @@ export const en = {
                     forever: 'lifetime',
                 },
                 badges: {
-                    bestValue: 'Save 25% · BEST VALUE',
+                    bestValue: 'Save 37% · BEST VALUE',
                     launchOffer: 'Launch Offer',
                 },
                 cancelAnytime: 'Cancel anytime',
@@ -1956,7 +1956,7 @@ export const en = {
                     cta: 'Get Started',
                     features: [
                         'Everything in Monthly',
-                        'Save $20 per year',
+                        'Save $35.89 per year',
                         'Priority feature requests',
                         'Early access to new features',
                         'Dedicated support channel',
@@ -1998,7 +1998,7 @@ export const en = {
                     openTicket: { title: 'Purchase in Tebex', description: 'Choose a plan and complete checkout in the official TON618 Tebex store' },
                     receiveCode: { title: 'Receive Code', description: 'After payment confirmation, you will receive a one-time activation code by Discord DM' },
                     redeem: { title: 'Activate', description: 'Run /premium activate <code> in your server as the server owner' },
-                    enjoyPro: { title: 'Enjoy Pro', description: 'Premium features are instantly activated on your server' },
+                    enjoyPro: { title: 'Enjoy PRO', description: 'Premium features become active on your server after the code is validated' },
                 },
             },
             commands: {

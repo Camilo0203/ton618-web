@@ -1,73 +1,56 @@
-# Runbook: Pago entró pero Pro no activó
+# Runbook: pago Tebex completado pero PRO no activado
 
 ## Sintoma
 
-El usuario completa Stripe Checkout, pero el dashboard o el bot siguen mostrando `Free`.
+El usuario completo el checkout de Tebex, pero no recibio el codigo o el
+servidor sigue mostrando `Free`.
 
 ## Triage rapido
 
-1. Identificar `guild_id`, `discord_user_id`, `provider_customer_id` y hora exacta del pago.
-2. Confirmar si el dashboard muestra `?checkout=success`.
-3. Verificar si el usuario sigue teniendo `user_guild_access` fresco para ese guild.
+1. Solicitar ID de transaccion Tebex, ID del usuario de Discord, ID del servidor y hora del pago.
+2. Confirmar que el paquete comprado es mensual, anual o de por vida.
+3. Confirmar que la cuenta usada en Tebex corresponde al usuario de Discord.
 
 ## Cadena de verificacion
 
-### 1. Stripe
+### 1. Tebex
 
-- Confirmar existencia de `subscription_created` o `order_created`.
-- Verificar que el `custom_data.guild_id` del checkout es correcto.
-- Confirmar que el evento fue enviado al webhook.
+- Confirmar que el pago esta completado y que el webhook fue entregado.
+- Confirmar que el evento tiene una identidad de Discord valida.
+- Confirmar que el package ID coincide con el mapa configurado en el bot.
 
-### 2. Webhook
+### 2. Webhook del bot
 
-- Buscar `event_id` en `webhook_events`.
-- Si no existe, el problema es de entrega o firma HMAC.
-- Si existe con `processed=false`, revisar el error y reintentar el evento.
+- Revisar los logs de `ton618-bot` para el evento Tebex.
+- Un `401` indica firma invalida; un challenge de Cloudflare indica que la
+  solicitud nunca llego al bot.
+- Reintentar el evento solo despues de corregir la causa. La idempotencia debe
+  reutilizar el mismo codigo pendiente.
 
-### 3. Suscripcion persistida
+### 3. Entrega del codigo
 
-- Revisar `guild_subscriptions` por `guild_id`.
-- Confirmar `status='active'` y `premium_enabled=true`.
-- Para subscriptions: confirmar `renews_at` vigente.
-- Para lifetime: confirmar `lifetime=true` y `ends_at=null`.
+- Si los mensajes directos estaban cerrados, pedir al usuario que los habilite.
+- Reintentar la entrega y confirmar que no se crea un segundo codigo.
+- Nunca publicar el codigo en logs o canales publicos.
 
-### 4. Proyeccion al bot
+### 4. Activacion
 
-- Confirmar que el bot tiene `SUPABASE_URL` y `BOT_API_KEY`.
-- Verificar que `billing-guild-status` devuelve `has_premium=true`.
-- Revisar cache TTL (5 minutos por defecto).
-- Invalidar cache manualmente si es necesario.
+- El propietario del servidor ejecuta `/premium activate <codigo>`.
+- Confirmar `/premium status`.
+- Confirmar una fila Tebex activa en `guild_subscriptions`.
+- Confirmar que `guild_effective_entitlements` refleja `effective_plan='pro'`.
 
-## Acciones comunes
+## Recuperacion segura
 
-### Webhook no procesado
+Si el pago es valido pero la entrega automatica sigue fallando:
 
-1. Verificar firma HMAC con `STRIPE_WEBHOOK_SECRET`.
-2. Reenviar el evento desde el Stripe Dashboard.
-3. Confirmar que `webhook_events` cambia a `processed=true`.
-
-### Suscripcion persistida pero premium no activo
-
-1. Revisar `status`, `premium_enabled`, `ends_at` y `plan_key`.
-2. Corregir la fila afectada solo si hay evidencia clara del valor correcto.
-3. Confirmar que `premium_enabled=true`.
-
-### Premium correcto pero bot sigue en `free`
-
-1. Invalidar cache premium del bot para ese `guild_id`.
-2. Verificar que `BOT_API_KEY` coincide entre bot y Supabase.
-3. Revisar logs del bot para errores de `premiumService`.
-
-## Compensacion manual
-
-Si el pago es valido y el cliente sigue bloqueado:
-
-1. Actualizar `guild_subscriptions` manualmente con `premium_enabled=true`.
-2. Documentar motivo, actor y hora en notas internas.
-3. Monitorear que el estado se mantenga correcto en renovaciones futuras.
+1. Recuperar el codigo pendiente con herramientas privadas de soporte.
+2. No crear un entitlement duplicado.
+3. Usar `/debug entitlements` solo como override documentado y temporal.
+4. Registrar actor, motivo, transaccion y servidor afectado.
 
 ## Cierre
 
-- Registrar causa raiz.
-- Registrar tiempo total hasta restauracion.
-- Si fue fallo sistemico, ejecutar el rollback de billing hasta tener fix verificado.
+- Confirmar que bot y dashboard muestran el mismo plan.
+- Registrar causa raiz y tiempo de recuperacion.
+- Probar renovacion o reembolso si el incidente afecta eventos de ciclo de vida.

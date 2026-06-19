@@ -56,9 +56,9 @@ export default function LandingPage() {
         offers: {
           '@type': 'AggregateOffer',
           priceCurrency: 'USD',
-          lowPrice: '9',
-          highPrice: '84',
-          offerCount: '2',
+          lowPrice: '7.99',
+          highPrice: '79.99',
+          offerCount: '3',
         },
       },
       {
