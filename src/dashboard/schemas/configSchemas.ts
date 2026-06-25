@@ -318,6 +318,59 @@ export const modlogSettingsSchema = z.object({
   }
 });
 
+export const automodSettingsSchema = z.object({
+  enabled: z.boolean(),
+  preset: z.enum(['off', 'balanced', 'strict']),
+  blockInvites: z.boolean(),
+  blockLinks: z.boolean(),
+  blockSpam: z.boolean(),
+  blockMassMentions: z.boolean(),
+  blockCaps: z.boolean(),
+  scamProtection: z.boolean(),
+  regexProtection: z.boolean(),
+  logChannelId: discordIdSchema,
+  alertRoleId: discordIdSchema,
+}).superRefine((value, context) => {
+  if (value.enabled && value.preset === 'off') {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Selecciona balanced o strict si AutoMod esta activo.',
+      path: ['preset'],
+    });
+  }
+});
+
+export const musicSettingsSchema = z.object({
+  enabled: z.boolean(),
+  defaultVolume: z.number().int().min(1).max(100),
+  maxFreeQueue: z.number().int().min(1).max(50),
+  maxProQueue: z.number().int().min(10).max(500),
+  maxFreeDurationMinutes: z.number().int().min(1).max(60),
+  maxProDurationMinutes: z.number().int().min(10).max(720),
+  allowSpotify: z.boolean(),
+  allowPlaylists: z.boolean(),
+  allowFilters: z.boolean(),
+  djRoleId: discordIdSchema,
+  announceNowPlaying: z.boolean(),
+  disconnectOnEmpty: z.boolean(),
+}).superRefine((value, context) => {
+  if (value.maxProQueue <= value.maxFreeQueue) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'El limite PRO debe ser mayor que el limite FREE.',
+      path: ['maxProQueue'],
+    });
+  }
+
+  if (value.maxProDurationMinutes <= value.maxFreeDurationMinutes) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'La duracion PRO debe ser mayor que la duracion FREE.',
+      path: ['maxProDurationMinutes'],
+    });
+  }
+});
+
 export const commandRateLimitOverrideSchema = z.object({
   maxActions: z.number().int().min(1).max(50),
   windowSeconds: z.number().int().min(1).max(300),

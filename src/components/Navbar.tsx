@@ -17,10 +17,7 @@ function Navbar() {
   const canInvite = Boolean(inviteUrl);
 
   const navbarClassName = useMemo(
-    () =>
-      scrolled
-        ? 'bg-[rgba(20,20,40,0.6)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.08)] shadow-[0_8px_32px_rgba(0,0,0,0.3)]'
-        : 'bg-[rgba(20,20,40,0.4)] backdrop-blur-[12px] border border-[rgba(255,255,255,0.04)] shadow-none',
+    () => (scrolled ? 'ton-navbar-scrolled' : 'ton-navbar-top'),
     [scrolled]
   );
 
@@ -66,10 +63,14 @@ function Navbar() {
   const utilityLinks = [
     { href: '/dashboard', label: t('nav.dashboard'), external: false },
     config.docsUrl ? { href: config.docsUrl, label: t('nav.docs'), external: true } : { href: '/docs', label: t('nav.docs'), external: false },
+    { href: '/commands', label: t('nav.commands'), external: false },
     { href: '/pricing', label: t('nav.pricing', { defaultValue: 'Pricing' }), external: false },
     config.statusUrl ? { href: config.statusUrl, label: t('nav.status'), external: true } : null,
     config.supportServerUrl ? { href: config.supportServerUrl, label: t('nav.support'), external: true } : null,
   ].filter(Boolean) as { href: string; label: string; external: boolean }[];
+  const desktopUtilityLinks = utilityLinks.filter((link) =>
+    ['/dashboard', '/docs', '/commands', '/pricing'].includes(link.href)
+  );
 
   function renderUtilityLink(link: { href: string; label: string; external: boolean }) {
     const isInternal = link.href.startsWith('/');
@@ -102,22 +103,22 @@ function Navbar() {
   }
 
   return (
-    <nav className={`fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-4' : 'py-5 md:py-6'}`} aria-label={t('nav.primaryAria')}>
+    <nav className={`ton-navbar fixed left-0 right-0 top-0 z-[90] transition-[padding] duration-300 ${scrolled ? 'py-3' : 'py-3 md:py-4'}`} aria-label={t('nav.primaryAria')}>
       <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6">
-        <div className={`relative flex items-center justify-between overflow-visible rounded-[20px] px-4 py-3 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-6 ${navbarClassName}`}>
+        <div className={`ton-navbar-shell relative flex items-center justify-between overflow-visible px-4 py-2.5 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 md:px-5 ${navbarClassName}`}>
           <div className="flex min-w-0 items-center gap-6 lg:gap-10">
             <Link to="/" className="flex min-w-0 items-center gap-3 group" aria-label={t('nav.homeAria')}>
               <Logo
-                size="lg"
-                withText={false}
+                size="xs"
                 className="transition-transform duration-300 group-hover:scale-[1.01]"
-                frameClassName="h-[4.7rem] w-[4.7rem] md:h-[5.1rem] md:w-[5.1rem]"
-                imageClassName="transition-transform duration-300 group-hover:scale-[1.82]"
+                frameClassName="h-10 w-10"
+                imageClassName="transition-transform duration-300 group-hover:scale-[1.76]"
+                textClassName="text-base normal-case tracking-[-0.04em]"
               />
             </Link>
 
-            <div className="hidden items-center gap-7 xl:flex">
-              {navLinks.map((link) => (
+            <div className="hidden items-center gap-6 xl:flex">
+              {navLinks.slice(0, 3).map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
@@ -133,7 +134,7 @@ function Navbar() {
           <div className="hidden items-center gap-5 lg:flex">
             {utilityLinks.length > 0 ? (
               <div className="hidden items-center gap-4 xl:flex">
-                {utilityLinks.map(renderUtilityLink)}
+                {desktopUtilityLinks.map(renderUtilityLink)}
               </div>
             ) : null}
 
@@ -163,7 +164,7 @@ function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-200 transition-colors duration-200 hover:border-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
+              className="ton-icon-button rounded-xl p-2 text-slate-200 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
               aria-label={mobileMenuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"
@@ -185,7 +186,7 @@ function Navbar() {
               id="mobile-navigation"
               className="relative z-[95] overflow-hidden pt-2"
             >
-              <div className="cinematic-glass flex flex-col gap-6 rounded-[1.75rem] border-white/10 p-6 shadow-3xl shadow-black">
+              <div className="ton-mobile-menu cinematic-glass flex flex-col gap-5 p-5 shadow-3xl shadow-black">
                 <div className="grid gap-4">
                   {navLinks.map((link) => (
                     <a
@@ -201,19 +202,37 @@ function Navbar() {
 
                 {utilityLinks.length > 0 ? (
                   <div className="grid gap-3">
-                    {utilityLinks.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target={link.href.startsWith('#') ? undefined : '_blank'}
-                        rel={link.href.startsWith('#') ? undefined : 'noopener noreferrer'}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition-[background-color,border-color,color] duration-200 hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80"
-                      >
-                        <span>{link.label}</span>
-                        {link.href.startsWith('#') ? null : <ExternalLink className="h-4 w-4" />}
-                      </a>
-                    ))}
+                    {utilityLinks.map((link) => {
+                      const isInternal = link.href.startsWith('/');
+                      const className = "inline-flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition-[background-color,border-color,color] duration-200 hover:border-white/15 hover:bg-white/[0.05] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/80";
+
+                      if (isInternal) {
+                        return (
+                          <Link
+                            key={link.label}
+                            to={link.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={className}
+                          >
+                            <span>{link.label}</span>
+                          </Link>
+                        );
+                      }
+
+                      return (
+                        <a
+                          key={link.label}
+                          href={link.href}
+                          target={link.external ? '_blank' : undefined}
+                          rel={link.external ? 'noopener noreferrer' : undefined}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className={className}
+                        >
+                          <span>{link.label}</span>
+                          {link.external ? <ExternalLink className="h-4 w-4" /> : null}
+                        </a>
+                      );
+                    })}
                   </div>
                 ) : null}
 

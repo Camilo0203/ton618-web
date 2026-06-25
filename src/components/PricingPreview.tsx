@@ -1,12 +1,39 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Zap, Crown, Users } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Crown, Lock, Users, Zap } from 'lucide-react';
 import { instantReveal, motionViewport, sectionIntro, withDelay, motionStagger } from '../lib/motion';
 
+const planCopy = {
+  en: {
+    freeLabel: 'FREE gives you the base',
+    proLabel: 'PRO unlocks the serious server layer',
+    rows: [
+      ['Music', '10 queue, 5 min tracks, 80% volume', '200 queue, 6h tracks, Spotify, playlists, filters'],
+      ['Tickets', 'Basic panels and support flow', 'Custom panels, custom embeds, SLA, smart pings, auto-close'],
+      ['Verification', '5 questions and basic anti-raid', '20 questions, risk escalation, emoji captcha, stricter age rules'],
+      ['Community', 'Basic polls, suggestions and giveaways', 'Advanced requirements, comments, auto threads and bonus entries'],
+      ['Operations', 'Basic setup and status', 'Analytics, playbooks, incident mode and priority support'],
+    ],
+  },
+  es: {
+    freeLabel: 'FREE te da la base',
+    proLabel: 'PRO desbloquea la capa seria del servidor',
+    rows: [
+      ['Música', 'Cola 10, canciones 5 min, volumen 80%', 'Cola 200, canciones 6h, Spotify, playlists y filtros'],
+      ['Tickets', 'Paneles base y flujo de soporte', 'Paneles personalizados, embeds, SLA, smart pings y auto-cierre'],
+      ['Verificación', '5 preguntas y anti-raid básico', '20 preguntas, risk escalation, captcha emoji y reglas de antigüedad'],
+      ['Comunidad', 'Polls, sugerencias y sorteos básicos', 'Requisitos avanzados, comentarios, hilos auto y bonus entries'],
+      ['Operación', 'Setup y estado básico', 'Analytics, playbooks, modo incidente y soporte prioritario'],
+    ],
+  },
+} as const;
+
 export default function PricingPreview() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const shouldReduceMotion = useReducedMotion();
+  const language = i18n.language.startsWith('es') ? 'es' : 'en';
+  const comparison = planCopy[language];
   
   const reveal = shouldReduceMotion ? instantReveal : sectionIntro;
   const cardReveal = shouldReduceMotion ? instantReveal : withDelay(sectionIntro, motionStagger.tight);
@@ -92,6 +119,42 @@ export default function PricingPreview() {
               </span>
             </div>
             <p className="text-xl font-semibold text-white">{t('pricing.enterprise.description')}</p>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={cardReveal}
+          initial="hidden"
+          whileInView="show"
+          viewport={motionViewport}
+          className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025]"
+        >
+          <div className="grid border-b border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-[0.18em] text-slate-400 md:grid-cols-[1fr_1.25fr_1.45fr]">
+            <div className="px-4 py-3">{t('pricing.tag')}</div>
+            <div className="flex items-center gap-2 px-4 py-3">
+              <Lock className="h-3.5 w-3.5" />
+              {comparison.freeLabel}
+            </div>
+            <div className="flex items-center gap-2 px-4 py-3 text-indigo-200">
+              <Crown className="h-3.5 w-3.5" />
+              {comparison.proLabel}
+            </div>
+          </div>
+
+          <div className="divide-y divide-white/8">
+            {comparison.rows.map(([area, free, pro]) => (
+              <div key={area} className="grid gap-0 md:grid-cols-[1fr_1.25fr_1.45fr]">
+                <div className="px-4 py-4 text-sm font-black text-white">{area}</div>
+                <div className="flex gap-2 px-4 py-4 text-sm leading-6 text-slate-400">
+                  <Zap className="mt-1 h-4 w-4 flex-none text-slate-500" />
+                  <span>{free}</span>
+                </div>
+                <div className="flex gap-2 border-t border-white/8 px-4 py-4 text-sm font-semibold leading-6 text-indigo-100 md:border-l md:border-t-0 md:border-white/8">
+                  <CheckCircle2 className="mt-1 h-4 w-4 flex-none text-emerald-300" />
+                  <span>{pro}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>

@@ -1073,7 +1073,7 @@ export const es = {
                 moderation: { title: 'Perfil general de moderación', desc: 'Sirve como intención operativa para el sistema y deja claro qué nivel de intervención espera el equipo.', relaxed: { label: 'Relajado', desc: 'Más flexible y con menos intervención automática.' }, balanced: { label: 'Balanceado', desc: 'Equilibrio entre protección y comodidad.' }, strict: { label: 'Estricto', desc: 'Más disciplina y menos tolerancia al ruido.' } },
                 prefs: { eyebrow: 'Panel', title: 'Preferencias del equipo', desc: 'Ajustes de presentación para que el equipo vuelva directamente a la tarea que más usa.', defaultSection: 'Pantalla inicial', compactMode: { label: 'Modo compacto', desc: 'Reduce la densidad visual para sesiones largas de moderación.' }, advancedCards: { label: 'Tarjetas avanzadas', desc: 'Muestra contexto adicional, recomendaciones y salud operativa ampliada.' }, notice: 'Los cambios se envían a una cola auditada. El bot los aplica y los confirma después en la vista Resumen.' },
                 launchpad: { eyebrow: 'Puesta en marcha', title: 'Salida a producción en 10 minutos', desc: 'Este bloque resume la configuración mínima para abrir la beta con un equipo real.', ready: 'Listo', pending: 'Pendiente', done: 'Hecho', cta: 'Abrir módulo', rolesLabel: 'Asignar el rol de soporte y el canal del panel de tickets', slaLabel: 'Configurar el SLA de tickets' },
-                sections: { overview: 'Inicio', inbox: 'Bandeja de soporte', playbooks: 'Guías activas', general: 'Configuración inicial', server_roles: 'Roles y canales', tickets: 'Tickets', verification: 'Verificación de acceso', welcome: 'Bienvenida', suggestions: 'Sugerencias de la comunidad', modlogs: 'Registro de moderación', commands: 'Comandos', system: 'Sistema del bot', activity: 'Actividad reciente', analytics: 'Analítica' }
+                sections: { overview: 'Inicio', inbox: 'Bandeja de soporte', playbooks: 'Guías activas', general: 'Configuración inicial', server_roles: 'Roles y canales', tickets: 'Tickets', verification: 'Verificación de acceso', welcome: 'Bienvenida', suggestions: 'Sugerencias de la comunidad', modlogs: 'Registro de moderación', automod: 'AutoMod', music: 'Música', commands: 'Comandos', system: 'Sistema del bot', activity: 'Actividad reciente', analytics: 'Analítica' }
             },
             serverRoles: {
                 onboarding: { eyebrow: 'Configuración inicial', title: 'Instala el bot para publicar canales y roles en el panel', desc: 'Este módulo usa el inventario real del servidor. Cuando el bot esté dentro, cargaremos los canales, roles y paneles disponibles.' },
@@ -1490,6 +1490,8 @@ export const es = {
                 welcome: { label: 'Bienvenida', description: 'Entrada, despedida y autoroles.' },
                 suggestions: { label: 'Sugerencias de la comunidad', description: 'Canales, revisión y comentarios.' },
                 modlogs: { label: 'Registro de moderación', description: 'Eventos del equipo y trazabilidad.' },
+                automod: { label: 'AutoMod', description: 'Filtros contra spam, links, scams y abuso.' },
+                music: { label: 'Música', description: 'Colas, volumen, Spotify, playlists y límites FREE/PRO.' },
                 commands: { label: 'Comandos', description: 'Disponibilidad y límites de uso.' },
                 system: { label: 'Sistema del bot', description: 'Respaldos, sincronización y salud técnica.' },
                 activity: { label: 'Actividad reciente', description: 'Cambios, cola y eventos recientes.' },
@@ -1511,6 +1513,7 @@ export const es = {
                 'setup-basics': { label: 'Ajustes básicos', description: 'Idioma, zona horaria y modo de comandos.' },
                 'setup-roles': { label: 'Roles y canales', description: 'Conecta el equipo, los registros y los canales principales.' },
                 'setup-permissions': { label: 'Permisos', description: 'Ajusta disponibilidad y límites de comandos.' },
+                'setup-music': { label: 'Música', description: 'Controla colas, volumen y funciones premium.' },
                 'community-welcome': { label: 'Bienvenida', description: 'Entrada, despedida y autorol.' },
                 'community-verification': { label: 'Verificación', description: 'Acceso seguro y protección de ingreso.' },
                 'community-suggestions': { label: 'Sugerencias', description: 'Canal comunitario y revisión interna.' },
@@ -1521,7 +1524,7 @@ export const es = {
                 'support-macros': { label: 'Macros', description: 'Acceso rápido desde la bandeja.' },
                 'support-sla': { label: 'SLA', description: 'Objetivos de respuesta y alertas.' },
                 'moderation-log': { label: 'Registro', description: 'Eventos que quedan guardados.' },
-                'moderation-rules': { label: 'Automatización', description: 'Controles técnicos desde sistema.' },
+                'moderation-rules': { label: 'AutoMod', description: 'Filtros automáticos contra abuso y spam.' },
                 'moderation-staff': { label: 'Acciones del equipo', description: 'Actividad y cambios recientes.' },
                 'system-sync': { label: 'Sincronización', description: 'Señal de actividad, cola y puente.' },
                 'system-backups': { label: 'Respaldos', description: 'Copias y restauración.' },

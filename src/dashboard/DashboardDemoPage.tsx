@@ -22,6 +22,8 @@ type SectionConfigKey =
   | 'welcomeSettings'
   | 'suggestionSettings'
   | 'modlogSettings'
+  | 'automodSettings'
+  | 'musicSettings'
   | 'commandSettings'
   | 'systemSettings';
 
@@ -32,6 +34,8 @@ const CONFIG_SECTION_MAP: Record<Exclude<ConfigMutationSectionId, 'general'>, Se
   welcome: 'welcomeSettings',
   suggestions: 'suggestionSettings',
   modlogs: 'modlogSettings',
+  automod: 'automodSettings',
+  music: 'musicSettings',
   commands: 'commandSettings',
   system: 'systemSettings',
 };

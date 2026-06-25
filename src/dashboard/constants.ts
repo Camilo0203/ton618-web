@@ -6,8 +6,10 @@ import {
   Compass,
   LayoutGrid,
   MessageSquareQuote,
+  Music2,
   Settings2,
   Shield,
+  ShieldAlert,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -98,6 +100,18 @@ export const dashboardSections: DashboardSectionMeta[] = [
     icon: ShieldCheck,
   },
   {
+    id: 'automod',
+    label: 'dashboard.sections.automod.label',
+    description: 'dashboard.sections.automod.description',
+    icon: ShieldAlert,
+  },
+  {
+    id: 'music',
+    label: 'dashboard.sections.music.label',
+    description: 'dashboard.sections.music.description',
+    icon: Music2,
+  },
+  {
     id: 'commands',
     label: 'dashboard.sections.commands.label',
     description: 'dashboard.sections.commands.description',
@@ -168,7 +182,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
     label: 'dashboard.taskGroups.setup.label',
     description: 'dashboard.taskGroups.setup.description',
     icon: Compass,
-    sections: ['general', 'server_roles', 'commands'],
+    sections: ['general', 'server_roles', 'commands', 'music'],
     shortcuts: [
       {
         id: 'setup-basics',
@@ -187,6 +201,12 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
         label: 'dashboard.shortcuts.setup-permissions.label',
         description: 'dashboard.shortcuts.setup-permissions.description',
         sectionId: 'commands',
+      },
+      {
+        id: 'setup-music',
+        label: 'dashboard.shortcuts.setup-music.label',
+        description: 'dashboard.shortcuts.setup-music.description',
+        sectionId: 'music',
       },
     ],
   },
@@ -249,7 +269,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
     label: 'dashboard.taskGroups.moderation.label',
     description: 'dashboard.taskGroups.moderation.description',
     icon: ShieldCheck,
-    sections: ['modlogs', 'activity'],
+    sections: ['modlogs', 'automod', 'activity'],
     shortcuts: [
       {
         id: 'moderation-log',
@@ -261,7 +281,7 @@ export const dashboardTaskGroups: DashboardTaskGroup[] = [
         id: 'moderation-rules',
         label: 'dashboard.shortcuts.moderation-rules.label',
         description: 'dashboard.shortcuts.moderation-rules.description',
-        sectionId: 'system',
+        sectionId: 'automod',
       },
       {
         id: 'moderation-staff',
@@ -318,6 +338,8 @@ export const dashboardSectionToMutationSection: Record<
   welcome: 'welcome',
   suggestions: 'suggestions',
   modlogs: 'modlogs',
+  automod: 'automod',
+  music: 'music',
   commands: 'commands',
   system: 'system',
   activity: null,

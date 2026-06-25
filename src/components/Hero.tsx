@@ -168,7 +168,7 @@ export default function Hero() {
     <section
       id="top"
       aria-labelledby="hero-heading"
-      className="relative flex min-h-[95dvh] items-start justify-center overflow-hidden bg-[#000] pb-16 pt-24 md:pt-28 lg:pt-32"
+      className="ton-hero relative flex min-h-[95dvh] items-start justify-center overflow-hidden bg-[#000] pb-16 pt-24 md:pt-28 lg:pt-32"
     >
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <StarfieldBackground />
@@ -250,7 +250,7 @@ export default function Hero() {
               variants={heroTitleReveal}
               initial="hidden"
               animate="show"
-              className="mb-6 text-[clamp(3rem,11vw,6.5rem)] font-black leading-[0.86] tracking-tightest uppercase"
+              className="ton-hero-title mb-6 text-[clamp(3rem,11vw,6.5rem)] font-black leading-[0.86] tracking-tightest uppercase"
             >
               {t('hero.titleMain')} <br />
               <span className="headline-accent headline-accent-solid">{t('hero.titleAccent')}</span>
@@ -309,7 +309,7 @@ export default function Hero() {
             variants={heroAsideReveal}
             initial="hidden"
             animate="show"
-            className="cinematic-glass relative overflow-hidden rounded-[1.75rem] border-white/10 p-6 md:p-8"
+            className="ton-hero-panel cinematic-glass relative overflow-hidden p-6 md:p-8"
             aria-label={t('hero.highlightsAria')}
           >
             <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent opacity-80"></div>

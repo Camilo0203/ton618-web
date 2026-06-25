@@ -9,6 +9,8 @@ export type DashboardSectionId =
   | 'welcome'
   | 'suggestions'
   | 'modlogs'
+  | 'automod'
+  | 'music'
   | 'commands'
   | 'system'
   | 'activity'
@@ -39,6 +41,8 @@ export type ConfigMutationSectionId =
   | 'welcome'
   | 'suggestions'
   | 'modlogs'
+  | 'automod'
+  | 'music'
   | 'commands'
   | 'system';
 
@@ -219,6 +223,35 @@ export interface ModlogSettings {
   logVoice: boolean;
 }
 
+export interface AutomodSettings {
+  enabled: boolean;
+  preset: 'off' | 'balanced' | 'strict';
+  blockInvites: boolean;
+  blockLinks: boolean;
+  blockSpam: boolean;
+  blockMassMentions: boolean;
+  blockCaps: boolean;
+  scamProtection: boolean;
+  regexProtection: boolean;
+  logChannelId: string | null;
+  alertRoleId: string | null;
+}
+
+export interface MusicSettings {
+  enabled: boolean;
+  defaultVolume: number;
+  maxFreeQueue: number;
+  maxProQueue: number;
+  maxFreeDurationMinutes: number;
+  maxProDurationMinutes: number;
+  allowSpotify: boolean;
+  allowPlaylists: boolean;
+  allowFilters: boolean;
+  djRoleId: string | null;
+  announceNowPlaying: boolean;
+  disconnectOnEmpty: boolean;
+}
+
 export interface CommandRateLimitOverride {
   maxActions: number;
   windowSeconds: number;
@@ -253,6 +286,8 @@ export interface GuildConfig {
   welcomeSettings: WelcomeSettings;
   suggestionSettings: SuggestionSettings;
   modlogSettings: ModlogSettings;
+  automodSettings: AutomodSettings;
+  musicSettings: MusicSettings;
   commandSettings: CommandSettings;
   systemSettings: SystemSettings;
   dashboardPreferences: DashboardPreferences;

@@ -4,18 +4,26 @@
 @layer base {
   :root {
     /* ── Color palette ── */
-    --color-bg-deep:      #010103;
+    --color-bg-deep:      #02030a;
     --color-bg-base:      #05060f;
-    --color-bg-surface:   #0a0c1a;
-    --color-bg-elevated:  #0f1229;
+    --color-bg-surface:   #0b0d1c;
+    --color-bg-elevated:  #11142a;
 
-    --color-primary:      #4f46e5;
+    --color-primary:      #6366f1;
     --color-secondary:    #8b5cf6;
     --color-accent:       #22d3ee;
 
     --color-text-main:    #f8fafc;
+    --color-text-soft:    #cbd5e1;
+    --color-text-muted:   #94a3b8;
     --color-text-dim:     #64748b;
     --color-text-ghost:   #334155;
+    --color-line:         rgba(148, 163, 184, 0.14);
+    --brand-gradient:     linear-gradient(135deg, #6366f1, #8b5cf6);
+    --brand-gradient-text: linear-gradient(100deg, #a5b4fc, #c084fc 46%, #67e8f9);
+    --surface-gradient:   linear-gradient(150deg, rgba(17, 20, 42, 0.84), rgba(7, 8, 22, 0.9));
+    --shadow-brand:       0 10px 28px rgba(99, 102, 241, 0.26);
+    --shadow-surface:     0 24px 70px rgba(0, 0, 0, 0.38);
 
     /* ── Typography ── */
     --font-heading:       'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;

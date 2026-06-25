@@ -5,7 +5,9 @@ import {
   defaultGuildInventory,
   defaultGuildSyncStatus,
   defaultLegacyProtectionSettings,
+  defaultAutomodSettings,
   defaultModlogSettings,
+  defaultMusicSettings,
   defaultServerRolesChannelsSettings,
   defaultSuggestionSettings,
   defaultSystemSettings,
@@ -50,6 +52,8 @@ interface GuildConfigRow {
   welcome_settings?: unknown;
   suggestion_settings?: unknown;
   modlog_settings?: unknown;
+  automod_settings?: unknown;
+  music_settings?: unknown;
   command_settings?: unknown;
   system_settings?: unknown;
   moderation_settings?: unknown;
@@ -332,6 +336,11 @@ export function normalizeGuildConfig(
     return createDefaultGuildConfig(guildId);
   }
 
+  const systemSettingsRecord =
+    row.system_settings && typeof row.system_settings === 'object' && !Array.isArray(row.system_settings)
+      ? (row.system_settings as Record<string, unknown>)
+      : {};
+
   const parsed = guildConfigSchema.safeParse({
     guildId: row.guild_id ?? guildId,
     generalSettings:
@@ -348,6 +357,16 @@ export function normalizeGuildConfig(
     welcomeSettings: row.welcome_settings ?? defaultWelcomeSettings,
     suggestionSettings: row.suggestion_settings ?? defaultSuggestionSettings,
     modlogSettings: row.modlog_settings ?? defaultModlogSettings,
+    automodSettings:
+      row.automod_settings ??
+      systemSettingsRecord.automodSettings ??
+      systemSettingsRecord.automod_settings ??
+      defaultAutomodSettings,
+    musicSettings:
+      row.music_settings ??
+      systemSettingsRecord.musicSettings ??
+      systemSettingsRecord.music_settings ??
+      defaultMusicSettings,
     commandSettings:
       row.command_settings && typeof row.command_settings === 'object' && !Array.isArray(row.command_settings)
         ? {

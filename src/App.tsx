@@ -16,6 +16,7 @@ const AuthCallbackPage = lazy(() => import('./dashboard/AuthCallbackPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const DocsPage = lazy(() => import('./pages/DocsPage'));
+const CommandsPage = lazy(() => import('./pages/CommandsPage'));
 function TebexRedirect() {
   useEffect(() => { window.location.replace(config.tebexStoreUrl); }, []);
   return null;
@@ -131,6 +132,7 @@ export default function App() {
             <Route key={type} path={`/${type}`} element={<LegalPage type={type} />} />
           ))}
           <Route path="/docs" element={<DocsPage />} />
+          <Route path="/commands" element={<CommandsPage />} />
           <Route path="/pricing" element={<TebexRedirect />} />
           <Route path="/billing/success" element={<BillingSuccessPage />} />
           <Route path="/billing/cancel" element={<BillingCancelPage />} />

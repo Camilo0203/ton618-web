@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Sparkles, Shield, Zap, Users } from 'lucide-react';
 import { getDiscordInviteUrl } from '../config';
-import Logo from './Logo';
+import DiscordLogoIcon from './icons/DiscordLogoIcon';
 import { instantReveal, motionViewport, motionStagger, sectionIntro, withDelay } from '../lib/motion';
 
 export default function FinalCTA() {
@@ -74,12 +74,7 @@ export default function FinalCTA() {
                 rel="noopener noreferrer"
                 className="btn-premium-primary group text-base !px-10 !py-5 sm:text-lg sm:!py-6"
               >
-                <Logo
-                  size="xs"
-                  withText={false}
-                  frameClassName="border-black/5 bg-white/10 shadow-none"
-                  imageClassName="scale-[1.02]"
-                />
+                <DiscordLogoIcon className="h-6 w-6 text-white" />
                 <span>{t('final.cta')}</span>
                 <Sparkles
                   className={`h-5 w-5 ${shouldReduceMotion ? '' : 'transition-transform duration-200 group-hover:rotate-12'}`}
@@ -92,12 +87,7 @@ export default function FinalCTA() {
                 className="btn-premium-primary cursor-not-allowed text-base opacity-60 !px-10 !py-5 sm:text-lg sm:!py-6"
                 title={t('final.unavailable')}
               >
-                <Logo
-                  size="xs"
-                  withText={false}
-                  frameClassName="border-black/5 bg-white/10 shadow-none"
-                  imageClassName="scale-[1.02]"
-                />
+                <DiscordLogoIcon className="h-6 w-6 text-white" />
                 <span>{t('final.cta')}</span>
                 <Sparkles className="h-5 w-5" />
               </button>

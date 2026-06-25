@@ -81,6 +81,18 @@ function mergeOptimisticConfig(
         modlogSettings: payload as typeof config.modlogSettings,
       };
       break;
+    case 'automod':
+      nextConfig = {
+        ...config,
+        automodSettings: payload as typeof config.automodSettings,
+      };
+      break;
+    case 'music':
+      nextConfig = {
+        ...config,
+        musicSettings: payload as typeof config.musicSettings,
+      };
+      break;
     case 'commands':
       nextConfig = {
         ...config,

@@ -35,6 +35,8 @@ const VerificationModule = lazy(() => import('../modules/VerificationModule'));
 const WelcomeModule = lazy(() => import('../modules/WelcomeModule'));
 const SuggestionsModule = lazy(() => import('../modules/SuggestionsModule'));
 const ModlogsModule = lazy(() => import('../modules/ModlogsModule'));
+const AutomodModule = lazy(() => import('../modules/AutomodModule'));
+const MusicModule = lazy(() => import('../modules/MusicModule'));
 const CommandsModule = lazy(() => import('../modules/CommandsModule'));
 const SystemModule = lazy(() => import('../modules/SystemModule'));
 const ActivityModule = lazy(() => import('../modules/ActivityModule'));
@@ -245,6 +247,10 @@ export default function DashboardModuleViewport({
         return 'suggestions';
       case 'modlogs':
         return 'modlogs';
+      case 'automod':
+        return 'automod';
+      case 'music':
+        return 'music';
       case 'commands':
         return 'commands';
       case 'system':
@@ -398,6 +404,32 @@ export default function DashboardModuleViewport({
                   syncStatus={snapshot.syncStatus}
                   isSaving={requestConfigChangePending}
                   onSave={(values) => onConfigSave('modlogs', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'automod' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.automod.label')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <AutomodModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'automod')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('automod', values)}
+                />
+              </ErrorBoundary>
+            ) : null}
+            {activeSection === 'music' ? (
+              <ErrorBoundary moduleLabel={t('dashboard.sections.music.label')} guildId={selectedGuild?.guildId} onRetry={refetchSnapshot}>
+                <MusicModule
+                  guild={selectedGuild!}
+                  config={snapshot.config}
+                  inventory={snapshot.inventory}
+                  mutation={getLatestMutationForSection(snapshot.mutations, 'music')}
+                  syncStatus={snapshot.syncStatus}
+                  isSaving={requestConfigChangePending}
+                  onSave={(values) => onConfigSave('music', values)}
                 />
               </ErrorBoundary>
             ) : null}

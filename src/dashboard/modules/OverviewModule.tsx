@@ -175,6 +175,42 @@ export default function OverviewModule({
   const openTickets = workspace.inbox.filter((ticket) => ticket.isOpen);
   const breachedTickets = openTickets.filter((ticket) => ticket.slaState === 'breached');
   const warningTickets = openTickets.filter((ticket) => ticket.slaState === 'warning');
+  const isSpanish = i18n.language.startsWith('es');
+  const sectionStatus = (sectionId: DashboardSectionId) =>
+    sectionStates.find((section) => section.sectionId === sectionId)?.status ?? 'not_configured';
+  const launchSteps = [
+    {
+      id: 'general' as DashboardSectionId,
+      label: isSpanish ? 'Bot instalado y datos sincronizados' : 'Bot installed and data synced',
+      description: isSpanish ? 'Confirma permisos, idioma y datos base del servidor.' : 'Confirm permissions, language and baseline server data.',
+      complete: guild.botInstalled,
+    },
+    {
+      id: 'tickets' as DashboardSectionId,
+      label: isSpanish ? 'Soporte preparado' : 'Support flow ready',
+      description: isSpanish ? 'Activa paneles de tickets, staff y tiempos SLA.' : 'Enable ticket panels, staff routing and SLA timing.',
+      complete: ['active', 'basic'].includes(sectionStatus('tickets')),
+    },
+    {
+      id: 'verification' as DashboardSectionId,
+      label: isSpanish ? 'Entrada segura' : 'Secure member entry',
+      description: isSpanish ? 'Configura verificación para controlar nuevos miembros.' : 'Configure verification to control new members.',
+      complete: ['active', 'basic'].includes(sectionStatus('verification')),
+    },
+    {
+      id: 'modlogs' as DashboardSectionId,
+      label: isSpanish ? 'Logs de moderación' : 'Moderation logs',
+      description: isSpanish ? 'Deja auditoría y acciones de staff visibles.' : 'Keep audit trails and staff actions visible.',
+      complete: ['active', 'basic'].includes(sectionStatus('modlogs')),
+    },
+    {
+      id: 'commands' as DashboardSectionId,
+      label: isSpanish ? 'Comandos y módulos publicados' : 'Commands and modules published',
+      description: isSpanish ? 'Revisa permisos de comandos, música y herramientas premium.' : 'Review command permissions, music and premium tools.',
+      complete: ['active', 'basic'].includes(sectionStatus('commands')),
+    },
+  ];
+  const launchComplete = launchSteps.filter((step) => step.complete).length;
 
 
   const syncFacts = [
@@ -203,6 +239,70 @@ export default function OverviewModule({
           failures={partialFailures}
           title={t('dashboard.overview.degraded')}
         />
+
+        <PanelCard
+          eyebrow={isSpanish ? 'Ruta de lanzamiento' : 'Launch path'}
+          title={isSpanish ? 'Deja este servidor listo para producción' : 'Get this server production-ready'}
+          description={
+            isSpanish
+              ? 'Un repaso rápido de las áreas que más impacto tienen antes de anunciar TON618 a tu comunidad.'
+              : 'A quick pass over the areas that matter most before you announce TON618 to your community.'
+          }
+          variant="soft"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl border border-indigo-400/20 bg-indigo-500/10 text-indigo-200">
+                <ListChecks className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-indigo-200">
+                  {launchComplete}/{launchSteps.length}
+                </p>
+                <p className="text-sm text-slate-400">
+                  {isSpanish ? 'bloques listos para lanzar' : 'blocks ready for launch'}
+                </p>
+              </div>
+            </div>
+            <div className="h-2 min-w-[180px] flex-1 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400"
+                style={{ width: `${Math.round((launchComplete / launchSteps.length) * 100)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {launchSteps.map((step) => (
+              <button
+                key={step.id}
+                type="button"
+                onClick={() => onSectionChange(step.id)}
+                className={`group rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:border-indigo-300/30 hover:bg-indigo-500/[0.06] ${
+                  step.complete
+                    ? 'border-emerald-400/20 bg-emerald-500/[0.045]'
+                    : 'border-white/[0.07] bg-white/[0.025]'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span
+                    className={`mt-0.5 grid h-7 w-7 flex-none place-items-center rounded-xl border ${
+                      step.complete
+                        ? 'border-emerald-400/30 bg-emerald-400/10 text-emerald-200'
+                        : 'border-indigo-400/20 bg-indigo-500/10 text-indigo-200'
+                    }`}
+                  >
+                    {step.complete ? <CheckCircle2 className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
+                  </span>
+                  <span>
+                    <span className="block text-sm font-bold text-white">{step.label}</span>
+                    <span className="mt-1 block text-xs leading-5 text-slate-400">{step.description}</span>
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </PanelCard>
 
         <PanelCard
           eyebrow={t('dashboard.overview.center.eyebrow')}

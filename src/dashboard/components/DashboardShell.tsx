@@ -28,9 +28,9 @@ import CommandPalette from './CommandPalette';
 
 /* ─── Glass tokens (matching Navbar scrolled state) ─── */
 const GLASS_SIDEBAR =
-  'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-2xl border border-white/[0.08] shadow-[0_18px_55px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.04)]';
+  'ton-dashboard-sidebar backdrop-blur-2xl';
 const GLASS_HEADER =
-  'bg-[linear-gradient(180deg,rgba(5,6,15,0.88),rgba(5,6,15,0.72))] backdrop-blur-2xl border border-white/[0.08] shadow-[0_18px_55px_rgba(0,0,0,0.52),inset_0_1px_0_rgba(255,255,255,0.04)]';
+  'ton-dashboard-header backdrop-blur-2xl';
 
 interface DashboardShellProps {
   user: User | null;
@@ -86,7 +86,7 @@ function SidebarContent({
       variants={fadeUpVariants}
       initial="hidden"
       animate="show"
-      className={`relative flex h-full min-h-0 flex-col overflow-hidden text-white rounded-[1.75rem] p-2 ${GLASS_SIDEBAR}`}
+      className={`relative flex h-full min-h-0 flex-col overflow-hidden text-white p-2 ${GLASS_SIDEBAR}`}
     >
       {/* Ambient glow — matching Navbar radial accent */}
       <div className="pointer-events-none absolute -right-16 -top-8 h-52 w-52 rounded-full bg-indigo-500/[0.07] blur-3xl" />
@@ -289,7 +289,7 @@ export default function DashboardShell({
   }, []);
 
   return (
-    <div ref={shellRef} className="dashboard-shell text-white min-h-screen bg-[#02030a] mouse-glow">
+    <div ref={shellRef} className="dashboard-shell ton-dashboard text-white min-h-screen bg-[#02030a] mouse-glow">
       {/* STARFIELD BACKGROUND — same as landing Hero */}
       <div className="pointer-events-none absolute inset-0 z-0 select-none">
         <StarfieldBackground />
@@ -297,11 +297,11 @@ export default function DashboardShell({
       </div>
 
       {/* ── Layout grid ── */}
-      <div className="relative z-[1] mx-auto grid max-w-[1760px] gap-5 px-4 py-4 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-6 2xl:grid-cols-[320px_minmax(0,1fr)]">
+      <div className="relative z-[1] mx-auto grid max-w-[1600px] gap-4 px-3 py-3 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-5 2xl:grid-cols-[292px_minmax(0,1fr)]">
 
         {/* ── Sidebar (desktop) ── */}
         <aside className="hidden min-h-0 lg:block">
-          <div className="sticky top-4 h-[calc(100dvh-2rem)] min-h-0 max-h-[calc(100dvh-2rem)]">
+          <div className="sticky top-3 h-[calc(100dvh-1.5rem)] min-h-0 max-h-[calc(100dvh-1.5rem)]">
             <SidebarContent
               guilds={guilds}
               selectedGuild={selectedGuild}
@@ -322,7 +322,7 @@ export default function DashboardShell({
             variants={fadeUpVariants}
             initial="hidden"
             animate="show"
-            className={`relative overflow-hidden rounded-[1.75rem] p-5 ${GLASS_HEADER}`}
+            className={`relative overflow-hidden p-4 ${GLASS_HEADER}`}
           >
             {/* Subtle radial accent — top right cyan like Navbar */}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,189,248,0.04),transparent_32%)]" />
@@ -426,7 +426,7 @@ export default function DashboardShell({
             </div>
           </motion.header>
 
-          <main id="dashboard-main-content" tabIndex={-1} className="mt-5 pb-10">
+          <main id="dashboard-main-content" tabIndex={-1} className="mt-4 pb-8">
             {children}
           </main>
         </div>

@@ -1257,7 +1257,7 @@ export const en = {
                 moderation: { title: 'General moderation preset', desc: 'Acts as an operational intent for the backend and makes clear what level of intervention the staff expects.', relaxed: { label: 'Relaxed', desc: 'More flexible and less automatic intervention.' }, balanced: { label: 'Balanced', desc: 'Balance between protection and comfort.' }, strict: { label: 'Strict', desc: 'More discipline and less tolerance to noise.' } },
                 prefs: { eyebrow: 'Dashboard', title: 'Team preferences', desc: 'Presentation settings so the team goes straight back to their most used task.', defaultSection: 'Initial screen', compactMode: { label: 'Compact mode', desc: 'Reduces visual density for long moderation sessions.' }, advancedCards: { label: 'Advanced cards', desc: 'Shows extra context, recommendations, and extended operational health.' }, notice: 'Changes are sent to an audited queue. The bot applies and confirms them later in the Overview view.' },
                 launchpad: { eyebrow: 'Launchpad', title: 'Production launch in 10 minutes', desc: 'This block summarizes the minimum setup to open the beta with real staff.', ready: 'Ready', pending: 'Pending', done: 'Done', cta: 'Open module', rolesLabel: 'Assign support role and ticket panel channel', slaLabel: 'Configure ticket SLA' },
-                sections: { overview: 'Overview', inbox: 'Support inbox', playbooks: 'Live playbooks', general: 'Initial configuration', server_roles: 'Roles and channels', tickets: 'Tickets', verification: 'Access verification', welcome: 'Welcome', suggestions: 'Community suggestions', modlogs: 'Moderation logs', commands: 'Commands', system: 'Bot system', activity: 'Recent activity', analytics: 'Analytics' }
+                sections: { overview: 'Overview', inbox: 'Support inbox', playbooks: 'Live playbooks', general: 'Initial configuration', server_roles: 'Roles and channels', tickets: 'Tickets', verification: 'Access verification', welcome: 'Welcome', suggestions: 'Community suggestions', modlogs: 'Moderation logs', automod: 'AutoMod', music: 'Music', commands: 'Commands', system: 'Bot system', activity: 'Recent activity', analytics: 'Analytics' }
             },
             serverRoles: {
                 onboarding: { eyebrow: 'Onboarding', title: 'Install the bot to publish channels and roles on the dashboard', desc: 'This module uses real server inventory. When the bot is inside, we will load channels, roles, and available panels.' },
@@ -1663,6 +1663,8 @@ export const en = {
                 welcome: { label: 'Welcome', description: 'Greeting, farewell and autoroles.' },
                 suggestions: { label: 'Community suggestions', description: 'Channels, review and feedback.' },
                 modlogs: { label: 'Moderation log', description: 'Staff events and traceability.' },
+                automod: { label: 'AutoMod', description: 'Filters for spam, links, scams, and abuse.' },
+                music: { label: 'Music', description: 'Queues, volume, Spotify, playlists, and FREE/PRO limits.' },
                 commands: { label: 'Commands', description: 'Availability and usage limits.' },
                 system: { label: 'Bot system', description: 'Backups, sync and technical health.' },
                 activity: { label: 'Recent activity', description: 'Changes, queue and recent events.' },
@@ -1684,6 +1686,7 @@ export const en = {
                 'setup-basics': { label: 'Basic settings', description: 'Language, timezone and command mode.' },
                 'setup-roles': { label: 'Roles & channels', description: 'Connect staff, logs and main channels.' },
                 'setup-permissions': { label: 'Permissions', description: 'Adjust availability and command limits.' },
+                'setup-music': { label: 'Music', description: 'Control queues, volume, and premium features.' },
                 'community-welcome': { label: 'Welcome', description: 'Greeting, farewell and autorole.' },
                 'community-verification': { label: 'Verification', description: 'Secure access and entry protection.' },
                 'community-suggestions': { label: 'Suggestions', description: 'Community channel and internal review.' },
@@ -1694,7 +1697,7 @@ export const en = {
                 'support-macros': { label: 'Macros', description: 'Quick access from the inbox.' },
                 'support-sla': { label: 'SLA', description: 'Response targets and alerts.' },
                 'moderation-log': { label: 'Log', description: 'Events that are recorded.' },
-                'moderation-rules': { label: 'Automation', description: 'Technical controls from system.' },
+                'moderation-rules': { label: 'AutoMod', description: 'Automatic filters against abuse and spam.' },
                 'moderation-staff': { label: 'Staff actions', description: 'Activity and recent changes.' },
                 'system-sync': { label: 'Sync', description: 'Heartbeat, queue and bridge.' },
                 'system-backups': { label: 'Backups', description: 'Copies and restoration.' },

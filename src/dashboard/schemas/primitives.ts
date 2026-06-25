@@ -10,6 +10,8 @@ export const dashboardSectionIds = [
   'welcome',
   'suggestions',
   'modlogs',
+  'automod',
+  'music',
   'commands',
   'system',
   'activity',
@@ -26,6 +28,8 @@ export const configMutationSectionIds = [
   'welcome',
   'suggestions',
   'modlogs',
+  'automod',
+  'music',
   'commands',
   'system',
 ] as const satisfies readonly ConfigMutationSectionId[];

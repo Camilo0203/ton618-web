@@ -1,6 +1,7 @@
 import type {
   CommandRateLimitOverride,
   CommandSettings,
+  AutomodSettings,
   DashboardPreferences,
   GeneralSettings,
   GuildConfig,
@@ -8,6 +9,7 @@ import type {
   GuildSyncStatus,
   LegacyProtectionSettings,
   ModlogSettings,
+  MusicSettings,
   ServerRolesChannelsSettings,
   SuggestionSettings,
   SystemSettings,
@@ -159,6 +161,35 @@ export const defaultModlogSettings: ModlogSettings = {
   logVoice: false,
 };
 
+export const defaultAutomodSettings: AutomodSettings = {
+  enabled: false,
+  preset: 'balanced',
+  blockInvites: true,
+  blockLinks: false,
+  blockSpam: true,
+  blockMassMentions: true,
+  blockCaps: false,
+  scamProtection: true,
+  regexProtection: false,
+  logChannelId: null,
+  alertRoleId: null,
+};
+
+export const defaultMusicSettings: MusicSettings = {
+  enabled: true,
+  defaultVolume: 80,
+  maxFreeQueue: 10,
+  maxProQueue: 200,
+  maxFreeDurationMinutes: 5,
+  maxProDurationMinutes: 360,
+  allowSpotify: true,
+  allowPlaylists: true,
+  allowFilters: true,
+  djRoleId: null,
+  announceNowPlaying: true,
+  disconnectOnEmpty: true,
+};
+
 export const defaultCommandRateLimitOverride: CommandRateLimitOverride = {
   maxActions: 4,
   windowSeconds: 20,
@@ -192,6 +223,8 @@ export const defaultGuildConfig: Omit<GuildConfig, 'guildId'> = {
   welcomeSettings: defaultWelcomeSettings,
   suggestionSettings: defaultSuggestionSettings,
   modlogSettings: defaultModlogSettings,
+  automodSettings: defaultAutomodSettings,
+  musicSettings: defaultMusicSettings,
   commandSettings: defaultCommandSettings,
   systemSettings: defaultSystemSettings,
   dashboardPreferences: defaultDashboardPreferences,

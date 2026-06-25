@@ -23,6 +23,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.*.example
 *.backup
 *.bak
 .env.billing.prod
